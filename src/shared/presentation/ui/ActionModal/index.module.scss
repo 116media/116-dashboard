@@ -1,0 +1,7 @@
+@use "@/shared/presentation/styles/dimensions" as dimensions;
+
+.actionModal {
+    &__footer {
+        margin-top: dimensions.$padding;
+    }
+}
