@@ -5,7 +5,9 @@ import {
     IconFileTextOutlined,
     IconFireFilled,
     IconHomeFilled,
+    IconSafetyOutlined,
     IconSettingOutlined,
+    IconUnlockOutlined,
     IconUserAddOutlined,
     IconUserOutlined,
     IconVideoCameraFilled
@@ -17,6 +19,8 @@ import {
     ARTICLE_PATH,
     CONTENT_PATH,
     OVERVIEW_PATH,
+    PERMISSIONS_PATH,
+    ROLES_PATH,
     SETTING_PATH,
     USER_PATH,
     VIDEO_PATH
@@ -53,5 +57,7 @@ export const NAVIGATION_ITEMS: INavigationItem[] = [
     { path: ADS_POPUP_PATH, label: "Popups", icon: IconCommentOutlined },
     { path: ADMIN_PATH, label: "Administrateurs", icon: IconUserAddOutlined },
     { path: USER_PATH, label: "Utilisateurs", icon: IconUserOutlined },
+    { path: ROLES_PATH, label: "Rôles", icon: IconSafetyOutlined },
+    { path: PERMISSIONS_PATH, label: "Permissions", icon: IconUnlockOutlined },
     { path: SETTING_PATH, label: "Paramètres", icon: IconSettingOutlined }
 ];
