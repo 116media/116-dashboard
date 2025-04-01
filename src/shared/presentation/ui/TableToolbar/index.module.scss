@@ -1,0 +1,5 @@
+@use "@/shared/presentation/styles/dimensions" as dimensions;
+
+.tableToolbar {
+    margin-bottom: dimensions.$padding;
+}
