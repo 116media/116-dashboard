@@ -44,5 +44,7 @@ export const ADS_BANNER_PATH = "/ads/banners";
 export const ADS_POPUP_PATH = "/ads/popups";
 export const ADMIN_PATH = "/admins";
 export const USER_PATH = "/users";
+export const ROLES_PATH = "/roles";
+export const PERMISSIONS_PATH = "/permissions";
 
 export const NOT_FOUND_PATH = "/page-introuvable";
