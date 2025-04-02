@@ -1,5 +1,5 @@
 import type { FormInstance } from "antd";
-import { Button, Form, Input, Modal } from "antd";
+import { Form, Input } from "antd";
 import { type FC, useEffect, useState } from "react";
 import type { IProfile } from "@/platform/settings/domain/entities/IProfile";
 import type { IUpdateAccountCredentials } from "@/platform/settings/presentation/model/IUpdateAccountCredentials";
@@ -7,17 +7,20 @@ import { SettingsValidator } from "@/platform/settings/presentation/utils/valida
 import type { Failure } from "@/shared/domain/failures/failure";
 import { COUNTRY_LIST, type ICountryObject } from "@/shared/infrastructure/constants/countries";
 import CountrySelect from "@/shared/presentation/ui/CountrySelect";
+import CreateEditModal from "@/shared/presentation/ui/CreateEditModal";
 import ErrorAlert from "@/shared/presentation/ui/ErrorAlert";
+
 import styles from "./index.module.scss";
 
 interface IAccountInfoModalProps {
     isOpen: boolean;
-    onClose: () => void;
-    form: FormInstance<IUpdateAccountCredentials>;
     loading: boolean;
-    error: Failure | null | undefined;
-    onSubmit: (values: IUpdateAccountCredentials) => void;
+    onClose: () => void;
     user: IProfile | null;
+    success: string | null;
+    error: Failure | null | undefined;
+    form: FormInstance<IUpdateAccountCredentials>;
+    onSubmit: (values: IUpdateAccountCredentials) => void;
 }
 
 const AccountInfoModal: FC<IAccountInfoModalProps> = ({
@@ -26,6 +29,7 @@ const AccountInfoModal: FC<IAccountInfoModalProps> = ({
     form,
     loading,
     error,
+    success,
     onSubmit,
     user
 }) => {
@@ -51,29 +55,27 @@ const AccountInfoModal: FC<IAccountInfoModalProps> = ({
     }, [isOpen, user, form]);
 
     return (
-        <Modal
+        <CreateEditModal
             width={520}
             open={isOpen}
-            destroyOnHidden
-            onCancel={onClose}
-            className={styles.modal}
-            title="Modifier les informations du compte"
-            footer={[
-                <Button danger key="cancel" onClick={onClose}>
-                    Annuler
-                </Button>,
-                <Button
-                    key="submit"
-                    htmlType="submit"
-                    type="primary"
-                    loading={loading}
-                    onClick={() => form.submit()}
-                >
-                    Mettre à jour
-                </Button>
-            ]}
+            success={success}
+            loading={loading}
+            onClose={onClose}
+            formContext="EDIT"
+            onSuccessClose={onClose}
+            onSubmit={() => form.submit()}
+            title={{
+                create: "",
+                edit: "Modifier les informations du compte"
+            }}
         >
-            <Form form={form} layout="vertical" size="large" onFinish={onSubmit}>
+            <Form
+                form={form}
+                layout="vertical"
+                size="large"
+                onFinish={onSubmit}
+                className={styles.modal}
+            >
                 <Form.Item name="email" label="Adresse e-mail">
                     <Input disabled />
                 </Form.Item>
@@ -104,7 +106,7 @@ const AccountInfoModal: FC<IAccountInfoModalProps> = ({
 
                 <ErrorAlert error={error} showIcon closable banner={false} />
             </Form>
-        </Modal>
+        </CreateEditModal>
     );
 };
 
