@@ -13,6 +13,14 @@ import { changePasswordAction, getRolesAction } from "./security.action";
 import { settingsInitialState } from "./state";
 import type { SettingsStateKey } from "./type";
 
+/**
+ * Redux slice for the settings module.
+ *
+ * @description
+ * Manages state for profile operations, account updates, avatar
+ * uploads, password changes, and roles/permissions display.
+ * Uses the shared ActionWrapper* reducer helpers.
+ */
 export const settingsSlice = createSlice({
     name: SliceName.Settings,
     initialState: settingsInitialState,
