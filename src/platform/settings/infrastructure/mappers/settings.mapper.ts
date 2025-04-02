@@ -21,8 +21,8 @@ export const SettingsMapper = {
             isActive: dto.isActive,
             isDeleted: dto.isDeleted,
             permissions: dto.permissions.map(AuthMapper.permissionFromDto),
-            createdAt: dto.createdAt ?? null,
-            updatedAt: dto.updatedAt ?? null
+            createdAt: dto.createdAt,
+            updatedAt: dto.updatedAt
         };
     },
 
