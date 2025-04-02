@@ -4,13 +4,13 @@
 .page {
     display: flex;
     min-height: calc(100vh - 120px);
-    border-radius: 8px;
+    
+    &__content {
+        flex: 1;
+        overflow-y: auto;
+        background: colors.$white;
+        padding: dimensions.$padding;
+        border-radius: dimensions.$border-radius;
+    }
 }
 
-.content {
-    flex: 1;
-    overflow-y: auto;
-    background: colors.$white;
-    padding: dimensions.$padding;
-    border-radius: dimensions.$border-radius;
-}
