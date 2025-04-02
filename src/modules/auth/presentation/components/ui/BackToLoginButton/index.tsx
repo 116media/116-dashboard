@@ -2,7 +2,7 @@ import { Button } from "antd";
 import type { FC } from "react";
 import { useNavigate } from "react-router";
 import { authSlice } from "@/modules/auth/presentation/store";
-import { LOGIN_PATH } from "@/shared/infrastructure/constants/paths";
+import { LOGIN_PATH } from "@/shared/presentation/constants/paths";
 import { useAppDispatch } from "@/shared/presentation/store/store";
 import { IconArrowLeftOutlined } from "@/shared/presentation/ui/Icons";
 
