@@ -1,5 +1,7 @@
 import { combineReducers } from "@reduxjs/toolkit";
 import authReducer from "@/modules/auth/presentation/store";
+import permissionsReducer from "@/modules/permissions/presentation/store";
+import rolesReducer from "@/modules/roles/presentation/store";
 import sessionReducer from "@/platform/session/presentation/store";
 import settingsReducer from "@/platform/settings/presentation/store";
 
@@ -13,8 +15,10 @@ import settingsReducer from "@/platform/settings/presentation/store";
  */
 export const rootReducer = combineReducers({
     auth: authReducer,
+    session: sessionReducer,
     settings: settingsReducer,
-    session: sessionReducer
+    roles: rolesReducer,
+    permissions: permissionsReducer
 });
 
 /**
