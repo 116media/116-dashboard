@@ -7,6 +7,6 @@ export interface IRoleWithPermissions {
     isActive: boolean;
     isDeleted: boolean;
     permissions: IPermission[];
-    createdAt: string | null;
-    updatedAt: string | null;
+    createdAt?: string | null;
+    updatedAt?: string | null;
 }
