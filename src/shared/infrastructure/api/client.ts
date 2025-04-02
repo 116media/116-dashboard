@@ -4,10 +4,10 @@ import { Api } from "@/shared/infrastructure/api/generated/116.api";
 import type { IApiProblemDetails } from "@/shared/infrastructure/api/type";
 import { apiErrors } from "@/shared/infrastructure/constants/api";
 import { API_URL, CLIENT_APP } from "@/shared/infrastructure/constants/common";
-import { LOGIN_PATH } from "@/shared/infrastructure/constants/paths";
 import { accessTokenExpiryInterceptor } from "@/shared/infrastructure/interceptors/access-token-expiry.interceptor";
 import { deviceIdInterceptor } from "@/shared/infrastructure/interceptors/device-id.interceptor";
 import { refreshTokenExpiryInterceptor } from "@/shared/infrastructure/interceptors/refresh-token-expiry.interceptor";
+import { LOGIN_PATH } from "@/shared/presentation/constants/paths";
 import { persistor } from "@/shared/presentation/store/store";
 
 /**
@@ -131,7 +131,7 @@ const errorHandler = async (error: AxiosError<IApiProblemDetails>): Promise<neve
         title: "Erreur réseau",
         status: 0,
         detail: "Une erreur réseau est survenue. Veuillez vérifier votre connexion.",
-        instance: error.config?.url ?? null
+        instance: error.config?.url
     } as IApiProblemDetails);
 };
 
