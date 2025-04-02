@@ -6,10 +6,18 @@ import container from "@/shared/infrastructure/service.locator.ts";
 import type { AppDispatch } from "@/shared/presentation/store/thunk.type";
 import { sessionSlice } from ".";
 
+/**
+ * Async thunk to fetch the current authenticated user's profile.
+ *
+ * @description
+ * Calls `getProfileUseCase` to retrieve the user data from the API.
+ * The result is stored in `session.currentUser` via ActionWrapperFulfilled.
+ */
 export const getCurrentUserAction = createAsyncThunk<IUser, void, { rejectValue: Failure }>(
     ActionType.SessionCurrentUser,
     async (_, { rejectWithValue }) => {
         const result = await container.cradle.getProfileUseCase.execute();
+
         if (!result.ok) return rejectWithValue(result.error);
         return result.value;
     }
