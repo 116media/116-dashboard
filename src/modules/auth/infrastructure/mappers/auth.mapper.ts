@@ -102,13 +102,13 @@ export const AuthMapper = {
             isVerified: dto.isVerified,
             isActive: dto.isActive,
             avatar: dto.avatar ? this.fileFromDto(dto.avatar) : null,
-            countryName: dto.countryName ?? null,
-            countryIsoCode: dto.countryIsoCode ?? null,
-            countryDialCode: dto.countryDialCode ?? null,
-            partialPhoneNumber: dto.partialPhoneNumber ?? null,
-            fullPhoneNumber: dto.fullPhoneNumber ?? null,
-            createdAt: dto.createdAt ?? null,
-            updatedAt: dto.updatedAt ?? null
+            countryName: dto.countryName,
+            countryIsoCode: dto.countryIsoCode,
+            countryDialCode: dto.countryDialCode,
+            partialPhoneNumber: dto.partialPhoneNumber,
+            fullPhoneNumber: dto.fullPhoneNumber,
+            createdAt: dto.createdAt,
+            updatedAt: dto.updatedAt
         };
     },
 
