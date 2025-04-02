@@ -32,8 +32,8 @@ export const SessionMapper = {
     sessionFromDto(dto: SessionDto): ISession {
         return {
             id: dto.id,
-            ipAddress: dto.ipAddress ?? null,
-            userAgent: dto.userAgent ?? null,
+            ipAddress: dto.ipAddress,
+            userAgent: dto.userAgent,
             browser: dto.browser as ESessionBrowser,
             device: dto.device as ESessionDevice,
             platform: dto.platform as ESessionPlatform,
@@ -41,7 +41,7 @@ export const SessionMapper = {
             expiresAt: dto.expiresAt,
             isActive: dto.isActive,
             isCurrent: dto.isCurrent,
-            createdAt: dto.createdAt ?? null
+            createdAt: dto.createdAt
         };
     },
 
