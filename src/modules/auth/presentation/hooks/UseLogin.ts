@@ -4,7 +4,7 @@ import type { ILoginCredentials } from "@/modules/auth/presentation/model/ILogin
 import { loginAction, resetLoginAction } from "@/modules/auth/presentation/store/login.action";
 import { setCurrentUserAction } from "@/platform/session/presentation/store/currentuser.action";
 import type { Failure } from "@/shared/domain/failures/failure";
-import { OVERVIEW_PATH } from "@/shared/infrastructure/constants/paths";
+import { OVERVIEW_PATH } from "@/shared/presentation/constants/paths";
 import { useAppDispatch, useAppSelector } from "@/shared/presentation/store/store";
 
 const { useForm } = Form;
