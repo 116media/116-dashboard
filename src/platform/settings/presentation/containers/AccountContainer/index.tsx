@@ -3,12 +3,12 @@ import type { FC } from "react";
 import { useSignOut } from "@/modules/auth/presentation/hooks/UseSignOut";
 import { useSignOutAll } from "@/modules/auth/presentation/hooks/UseSignOutAll";
 import SettingsCard from "@/platform/settings/presentation/components/ui/SettingsCard";
-import SettingsPageHeader from "@/platform/settings/presentation/components/ui/SettingsPageHeader";
 import {
     IconExclamationCircleOutlined,
     IconLogoutOutlined,
     IconSettingOutlined
 } from "@/shared/presentation/ui/Icons";
+import PageHeader from "@/shared/presentation/ui/PageHeader";
 import styles from "./index.module.scss";
 
 const { Text } = Typography;
@@ -28,10 +28,10 @@ const AccountContainer: FC = () => {
 
     return (
         <div>
-            <SettingsPageHeader
+            <PageHeader
                 icon={<IconSettingOutlined />}
                 title="Compte"
-                description="Gérez la déconnexion de vos appareils."
+                subtitle="Gérez la déconnexion de vos appareils."
             />
             <SettingsCard title="Déconnexion" subtitle="Gérez vos sessions de connexion">
                 <Flex vertical gap={16}>
