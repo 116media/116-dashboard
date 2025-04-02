@@ -8,10 +8,19 @@ import container from "@/shared/infrastructure/service.locator.ts";
 export const resetSignOutAction = () =>
     authSlice.actions.clear({ context: ActionType.AuthSignOut });
 
+/**
+ * Async thunk to sign out from the current device.
+ *
+ * @description
+ * Invalidates the current session on the server via
+ * `signOutUseCase`. The backend reads the refresh token
+ * from the HttpOnly cookie.
+ */
 export const signOutAction = createAsyncThunk<ISignOutResponse, void, { rejectValue: Failure }>(
     ActionType.AuthSignOut,
     async (_, { rejectWithValue }) => {
         const result = await container.cradle.signOutUseCase.execute();
+
         if (!result.ok) return rejectWithValue(result.error);
         return result.value;
     }
