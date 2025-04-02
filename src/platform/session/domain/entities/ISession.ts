@@ -22,8 +22,8 @@ import type { ESessionPlatform } from "@/platform/session/domain/enums/ESessionP
  */
 export interface ISession {
     id: string;
-    ipAddress: string | null;
-    userAgent: string | null;
+    ipAddress?: string | null;
+    userAgent?: string | null;
     browser: ESessionBrowser;
     device: ESessionDevice;
     platform: ESessionPlatform;
@@ -31,5 +31,5 @@ export interface ISession {
     expiresAt: string;
     isActive: boolean;
     isCurrent: boolean;
-    createdAt: string | null;
+    createdAt?: string | null;
 }
