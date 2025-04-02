@@ -1,6 +1,5 @@
 import { Typography } from "antd";
 import type { FC } from "react";
-import { Helmet, HelmetProvider } from "react-helmet-async";
 import { APP_NAME } from "@/shared/infrastructure/constants/common";
 
 const { Title } = Typography;
@@ -18,12 +17,10 @@ const { Title } = Typography;
  */
 const OverviewPage: FC = () => {
     return (
-        <HelmetProvider>
-            <Helmet>
-                <title>Accueil | {APP_NAME}</title>
-            </Helmet>
+        <>
+            <title>{`Accueil | ${APP_NAME}`}</title>
             <Title level={3}>Accueil</Title>
-        </HelmetProvider>
+        </>
     );
 };
 
