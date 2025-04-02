@@ -13,6 +13,14 @@ import { getSessionsAction, revokeSessionAction } from "./session.action";
 import { sessionInitialState } from "./state";
 import type { SessionStateKey } from "./type";
 
+/**
+ * Redux slice for the session module.
+ *
+ * @description
+ * Manages state for the current user profile, active sessions,
+ * and session revocation. Uses the shared ActionWrapper* reducer
+ * helpers for consistent async state handling.
+ */
 export const sessionSlice = createSlice({
     name: SliceName.Session,
     initialState: sessionInitialState,
