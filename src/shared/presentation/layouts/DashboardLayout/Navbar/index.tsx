@@ -1,8 +1,8 @@
 import { Badge, Breadcrumb, Button, Flex, Layout } from "antd";
 import type { FC } from "react";
 import { useLocation } from "react-router";
-import { NAVIGATION_ITEMS } from "@/shared/infrastructure/constants/navigation";
-import { OVERVIEW_PATH } from "@/shared/infrastructure/constants/paths";
+import { NAVIGATION_ITEMS } from "@/shared/presentation/constants/navigation";
+import { OVERVIEW_PATH } from "@/shared/presentation/constants/paths";
 import { IconBellFilled, IconHomeFilled, IconMenuOutlined } from "@/shared/presentation/ui/Icons";
 
 import styles from "./index.module.scss";
