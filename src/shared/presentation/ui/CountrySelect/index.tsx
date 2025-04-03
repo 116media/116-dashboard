@@ -3,7 +3,6 @@ import type { FC } from "react";
 import { COUNTRY_LIST } from "@/shared/infrastructure/constants/countries";
 import styles from "./index.module.scss";
 
-const { Option } = Select;
 const { Text } = Typography;
 
 /**
@@ -59,7 +58,7 @@ const CountrySelect: FC<ICountrySelectProps> = ({
             placeholder={placeholder}
         >
             {COUNTRY_LIST.map((c) => (
-                <Option value={c.name} key={c.name} label={c.name}>
+                <option value={c.name} key={c.name} label={c.name}>
                     <Flex align="center" justify="space-between">
                         <Flex gap={6} align="center">
                             <img
@@ -71,7 +70,7 @@ const CountrySelect: FC<ICountrySelectProps> = ({
                         </Flex>
                         <Text className={styles.countrySelect__name}>{c.name}</Text>
                     </Flex>
-                </Option>
+                </option>
             ))}
         </Select>
     );
