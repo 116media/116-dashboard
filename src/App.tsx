@@ -6,7 +6,7 @@ import { type FC, useEffect } from "react";
 import { Provider } from "react-redux";
 import { BrowserRouter, useRoutes } from "react-router";
 import { PersistGate } from "redux-persist/integration/react";
-import { Theme } from "@/shared/infrastructure/constants/theme";
+import { Theme } from "@/shared/presentation/constants/theme";
 import { persistor, store } from "@/shared/presentation/store/store";
 import { NavigationProgress } from "@/shared/presentation/ui/NavigationProgress";
 import { PageLoader } from "@/shared/presentation/ui/PageLoader";
