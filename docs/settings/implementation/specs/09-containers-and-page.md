@@ -22,7 +22,7 @@
 
 ### `src/platform/settings/presentation/hooks/UseUpdateAccount.ts`
 
-- [ ] Define return type: `{ form, loading, error: Failure | null | undefined, isOpen, open, close, onSubmit }`
+- [ ] Define return type: `{ form, loading, error: Failure | null | undefined, success: string | null, isOpen, open, close, onSubmit }`
 - [ ] `useState` for `isOpen` (modal state)
 - [ ] `useForm<IUpdateAccountCredentials>()` for form instance
 - [ ] Select from `settings.updateAccount` state
@@ -34,7 +34,7 @@
   - Derive `countryFlag`, `phoneISOCode`, `phoneDialCode` from the `country` state object
   - Destructure `countryName`, `email`, `userName`, `phonePartial` from `formValues`
   - Dispatch `updateAccountAction({ email, userName, countryName, countryFlag, phonePartial, phoneISOCode, phoneDialCode })`
-  - On `fulfilled.match(result)`: close modal, `showNotification(SettingsNotification.profileUpdateSuccess)`, dispatch `setCurrentUserAction(result.payload)` to sync
+  - On `fulfilled.match(result)`: set `success` to `SettingsNotification.profileUpdateSuccess.description`, dispatch `setCurrentUserAction(result.payload)` to sync — the modal displays `FormSuccessResult` and does **not** close automatically (the user closes it via `onSuccessClose`)
   - On rejection: no extra code — the error is already in Redux, `<ErrorAlert>` in `AccountInfoModal` renders it
 - [ ] `useEffect`: pre-populate form when `isOpen` changes (read profile from `session.currentUser`)
 
@@ -178,8 +178,7 @@
   - `"security"` → `SecurityContainer`
   - `"notification"` → `NotificationContainer`
   - `"account"` → `AccountContainer`
-- [ ] Keep `Helmet` with "Paramètres | {APP_NAME}"
-- [ ] Wrap in `HelmetProvider`
+- [ ] Use React 19 native `<title>` element: `<title>{\`Paramètres - ${TextTransform.capitalCase(activeTab)} | ${APP_NAME}\`}</title>` — no `HelmetProvider` or `Helmet` needed
 
 ### `src/platform/settings/presentation/pages/SettingsPage/index.module.scss` (create)
 

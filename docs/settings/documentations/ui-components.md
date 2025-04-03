@@ -166,13 +166,13 @@ const SettingsPage: FC = () => {
     const [activeTab, setActiveTab] = useState<SettingsTab>("profile");
 
     return (
-        <HelmetProvider>
-            <Helmet><title>Paramètres | {APP_NAME}</title></Helmet>
+        <>
+            <title>{`Paramètres - ${TextTransform.capitalCase(activeTab)} | ${APP_NAME}`}</title>
             <div className={styles.settingsPage}>
                 <SettingsSidebar activeTab={activeTab} onChange={setActiveTab} />
                 <SettingsContent activeTab={activeTab} />
             </div>
-        </HelmetProvider>
+        </>
     );
 };
 ```
@@ -263,7 +263,7 @@ Following the auth module pattern, each operation gets its own custom hook:
 | Hook | Purpose | Returns |
 | --- | --- | --- |
 | `useProfile` | Fetches and provides profile data | `{ profile, loading, error, fetchProfile }` |
-| `useUpdateAccount` | Account info modal form logic | `{ form, loading, error, isOpen, open, close, onSubmit }` |
+| `useUpdateAccount` | Account info modal form logic | `{ form, loading, error, success, isOpen, open, close, onSubmit }` |
 | `useUpdateAvatar` | Avatar upload logic | `{ loading, error, onUpload }` |
 
 ### Security Hooks
