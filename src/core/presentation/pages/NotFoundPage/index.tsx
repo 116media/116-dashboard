@@ -3,10 +3,10 @@ import { Button, Flex, Layout, Space, Typography } from "antd";
 import type { FC } from "react";
 import { Helmet, HelmetProvider } from "react-helmet-async";
 import notFound from "@/assets/lottie/404_anim.lottie";
-import { IconHomeOutlined } from "@/shared/components/Icons/Icons";
 import { APP_NAME } from "@/shared/lib/constants/common";
 import { DASHBOARD_PATH } from "@/shared/lib/constants/paths";
 import { LottieUtils } from "@/shared/lib/utils/lottie/lottie.utils";
+import { IconHomeOutlined } from "@/shared/ui/Icons";
 
 import styles from "./index.module.scss";
 
