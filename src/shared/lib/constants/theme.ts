@@ -37,6 +37,10 @@ export const Colors = {
     Background: "#f0f2f5"
 } as const;
 
+export const Spacing = {
+    Padding: 24
+};
+
 /**
  * Ant Design theme configuration.
  *
@@ -46,29 +50,31 @@ export const Colors = {
  */
 export const Theme: ThemeConfig = {
     token: {
+        borderRadius: 6,
         colorPrimary: Colors.BrandPrimary,
         colorSuccess: Colors.Success,
         colorError: Colors.Error,
         colorWarning: Colors.Warning,
-        borderRadius: 6,
         colorBgLayout: Colors.Background,
-        fontFamily: "'Montserrat', sans-serif"
+        fontFamily: "'Outfit', sans-serif"
     },
     components: {
         Layout: {
-            bodyBg: Colors.Background
+            bodyBg: Colors.Background,
+            siderBg: Colors.BrandBackgroundDark,
+            headerBg: Colors.White,
+            headerHeight: 64,
+            headerPadding: `0 ${Spacing.Padding}px`
         },
         Button: {
-            paddingContentVertical: 32,
-            paddingContentHorizontal: 32,
-            colorText: Colors.BrandSecondary,
-            fontWeight: 500
+            fontWeight: 500,
+            contentFontSizeLG: 14,
+            colorText: Colors.BrandSecondary
         },
         Form: {
             labelColor: `${Colors.BrandBackgroundDark}b3`,
             labelRequiredMarkColor: Colors.Error,
-            labelFontSize: 12,
-            labelHeight: "0 !important"
+            labelFontSize: 12
         },
         Select: {
             fontSizeLG: 14
