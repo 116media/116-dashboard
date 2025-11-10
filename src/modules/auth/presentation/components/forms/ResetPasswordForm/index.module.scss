@@ -1,0 +1,20 @@
+@use "@/shared/styles/dimensions.scss" as dimensions;
+@use "@/shared/styles/colors.scss" as colors;
+
+.resetPasswordForm {
+    & [class~="ant-form-item"]{
+        margin-bottom: dimensions.$padding * 0.5;
+    }
+    
+    & &__submitButton {
+        margin: dimensions.$padding * 0.5 0;
+    }
+
+    & &__backToLogin {
+        a {
+            &:hover {
+                color: colors.$white !important;
+            }
+        }
+    }
+}
