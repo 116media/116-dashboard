@@ -2,10 +2,10 @@ import { Card } from "antd";
 import type { FC, ReactNode } from "react";
 import { useSelector } from "react-redux";
 import type { IRootState } from "@/core/presentation/store/root.reducer";
-import { ForgotPasswordForm } from "@/modules/auth/presentation/components/ForgotPasswordForm/ForgotPassword.Form";
-import { ResetPasswordForm } from "@/modules/auth/presentation/components/ResetPasswordForm/ResetPassword.Form";
-import { VerifyOtpForgotPasswordForm } from "@/modules/auth/presentation/components/VerifyOtpForgotPasswordForm/VerifyOtpForgotPasswordForm";
-import { Logo } from "@/shared/components/Logo/Logo";
+import { ForgotPasswordContainer } from "@/modules/auth/presentation/containers/ForgotPasswordContainer";
+import { ResetPasswordContainer } from "@/modules/auth/presentation/containers/ResetPasswordContainer";
+import { VerifyOtpContainer } from "@/modules/auth/presentation/containers/VerifyOtpContainer";
+import { Logo } from "@/shared/ui/Logo";
 
 import styles from "./index.module.scss";
 
@@ -21,9 +21,9 @@ type ForgotPasswordStep = "resetPassword" | "verifyOtp" | "forgotPassword";
  * in a centered card layout.
  *
  * Implements a three-step flow:
- * 1. ForgotPasswordForm - User enters email address
- * 2. VerifyOtpForgotPasswordForm - User enters 6-digit OTP code
- * 3. ResetPasswordForm - User sets new password
+ * 1. ForgotPasswordContainer - User enters email address
+ * 2. VerifyOtpContainer - User enters 6-digit OTP code
+ * 3. ResetPasswordContainer - User sets new password
  *
  * @returns The forgot password page
  */
@@ -45,9 +45,9 @@ const ForgotPasswordPage: FC = () => {
      * Step configuration object
      */
     const steps: Record<ForgotPasswordStep, ReactNode> = {
-        resetPassword: <ResetPasswordForm email={email} />,
-        verifyOtp: <VerifyOtpForgotPasswordForm email={email} />,
-        forgotPassword: <ForgotPasswordForm />
+        resetPassword: <ResetPasswordContainer email={email} />,
+        verifyOtp: <VerifyOtpContainer email={email} />,
+        forgotPassword: <ForgotPasswordContainer />
     };
 
     /**

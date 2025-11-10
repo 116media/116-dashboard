@@ -1,7 +1,7 @@
 import { lazy } from "react";
 import { FORGOT_PASSWORD_PATH } from "@/shared/lib/constants/paths";
 
-const ForgotPasswordPage = lazy(() => import("./ForgotPassword.Page"));
+const ForgotPasswordPage = lazy(() => import("."));
 
 /**
  * Forgot password page route configuration.
