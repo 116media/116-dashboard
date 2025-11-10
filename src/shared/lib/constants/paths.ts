@@ -9,7 +9,7 @@
  * - Login page (root path)
  *
  * **Main Application Routes:**
- * - Dashboard: Home page after authentication
+ * - Overview: Home page after authentication (stats, charts, summaries)
  * - Settings: User preferences and configuration
  *
  * **Content Management Routes:**
@@ -31,7 +31,7 @@
 
 export const LOGIN_PATH = "/";
 export const FORGOT_PASSWORD_PATH = "/forgot-password";
-export const DASHBOARD_PATH = "/dashboard";
+export const OVERVIEW_PATH = "/overview";
 export const SETTING_PATH = "/settings";
 export const CONTENT_PATH = "/contents";
 export const VIDEO_PATH = "/videos";
