@@ -1,7 +1,7 @@
 import { lazy } from "react";
 import { LOGIN_PATH } from "@/shared/lib/constants/paths";
 
-const LoginPage = lazy(() => import("./Login.Page"));
+const LoginPage = lazy(() => import("."));
 
 /**
  * Login page route configuration.

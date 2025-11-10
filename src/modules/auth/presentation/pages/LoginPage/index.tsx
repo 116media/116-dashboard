@@ -1,8 +1,8 @@
 import { Card } from "antd";
 import type { FC } from "react";
-import FormHeader from "@/modules/auth/presentation/components/FormHeader/Form.Header";
-import { LoginForm } from "@/modules/auth/presentation/components/LoginForm/Login.Form";
-import { Logo } from "@/shared/components/Logo/Logo";
+import FormHeader from "@/modules/auth/presentation/components/ui/FormHeader";
+import { LoginContainer } from "@/modules/auth/presentation/containers/LoginContainer";
+import { Logo } from "@/shared/ui/Logo";
 
 import styles from "./index.module.scss";
 
@@ -26,7 +26,7 @@ const LoginPage: FC = () => {
                     title="Bon retour"
                     subtitle="Ah, vous voilà! Remplissez vos informations."
                 />
-                <LoginForm />
+                <LoginContainer />
             </Card>
         </div>
     );
