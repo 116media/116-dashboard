@@ -1,0 +1,5 @@
+@use "@/shared/styles/dimensions.scss" as dimensions;
+
+.errorAlert {
+    margin: dimensions.$padding 0;
+}
