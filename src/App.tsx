@@ -7,13 +7,13 @@ import { Provider } from "react-redux";
 import { BrowserRouter, Route, Routes } from "react-router";
 import { PersistGate } from "redux-persist/integration/react";
 import { AuthLayoutLoading } from "@/core/presentation/layouts/AuthLayout/AuthLayout.Loading";
-import { NotFoundPage } from "@/core/presentation/pages/NotFoundPage/NotFound.Page";
+import { NotFoundPage } from "@/core/presentation/pages/NotFoundPage";
 import { persistor, store } from "@/core/presentation/store/store";
-import ForgotPasswordPage from "@/modules/auth/presentation/pages/ForgotPasswordPage/ForgotPassword.Page";
-import LoginPage from "@/modules/auth/presentation/pages/LoginPage/Login.Page";
-import { NavigationProgress } from "@/shared/components/NavigationProgress/NavigationProgress";
+import ForgotPasswordPage from "@/modules/auth/presentation/pages/ForgotPasswordPage";
+import LoginPage from "@/modules/auth/presentation/pages/LoginPage";
 import { FORGOT_PASSWORD_PATH, LOGIN_PATH } from "@/shared/lib/constants/paths";
 import { Theme } from "@/shared/lib/constants/theme";
+import { NavigationProgress } from "@/shared/ui/NavigationProgress";
 
 const App: FC = () => {
     /**
