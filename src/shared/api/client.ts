@@ -3,6 +3,7 @@ import { persistor } from "@/core/presentation/store/store";
 import { authErrors } from "@/modules/auth/infrastructure/constants/api";
 import { AuthStorageService } from "@/modules/auth/infrastructure/storage/authstorage.service";
 import { Api } from "@/shared/api/generated/116.api";
+import { deviceIdInterceptor } from "@/shared/api/interceptors/device-id.interceptor";
 import type { IApiProblemDetails } from "@/shared/api/type";
 import { apiErrors } from "@/shared/lib/constants/api";
 import { API_URL, isServer } from "@/shared/lib/constants/common";
@@ -93,5 +94,7 @@ const errorHandler = async (error: AxiosError<IApiProblemDetails>): Promise<neve
         detail: "Network error occurred. Please check your connection."
     } as IApiProblemDetails);
 };
+
+apiClient.instance.interceptors.request.use(deviceIdInterceptor);
 
 apiClient.instance.interceptors.response.use(responseHandler, errorHandler);
