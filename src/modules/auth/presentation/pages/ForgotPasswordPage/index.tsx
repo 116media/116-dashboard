@@ -1,7 +1,6 @@
 import { Card } from "antd";
 import type { FC, ReactNode } from "react";
-import { useSelector } from "react-redux";
-import type { IRootState } from "@/core/presentation/store/root.reducer";
+import { useAppSelector } from "@/core/presentation/store/store";
 import { ForgotPasswordContainer } from "@/modules/auth/presentation/containers/ForgotPasswordContainer";
 import { ResetPasswordContainer } from "@/modules/auth/presentation/containers/ResetPasswordContainer";
 import { VerifyOtpContainer } from "@/modules/auth/presentation/containers/VerifyOtpContainer";
@@ -28,12 +27,12 @@ type ForgotPasswordStep = "resetPassword" | "verifyOtp" | "forgotPassword";
  * @returns The forgot password page
  */
 const ForgotPasswordPage: FC = () => {
-    const { fetched: forgotPasswordFetched, data: forgotPasswordData } = useSelector(
-        ({ auth: { forgotPassword } }: IRootState) => forgotPassword
+    const { fetched: forgotPasswordFetched, data: forgotPasswordData } = useAppSelector(
+        ({ auth: { forgotPassword } }) => forgotPassword
     );
 
-    const { fetched: verifyOtpFetched, data: verifyOtpData } = useSelector(
-        ({ auth: { verifyOtp } }: IRootState) => verifyOtp
+    const { fetched: verifyOtpFetched, data: verifyOtpData } = useAppSelector(
+        ({ auth: { verifyOtp } }) => verifyOtp
     );
 
     const isVerifyOtpSuccess = Boolean(verifyOtpFetched && verifyOtpData?.isSuccess);
