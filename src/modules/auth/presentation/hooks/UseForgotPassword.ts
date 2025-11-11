@@ -1,8 +1,6 @@
 import type { FormInstance } from "antd";
 import { Form } from "antd";
-import { useSelector } from "react-redux";
-import type { IRootState } from "@/core/presentation/store/root.reducer";
-import { useAppDispatch } from "@/core/presentation/store/store";
+import { useAppDispatch, useAppSelector } from "@/core/presentation/store/store";
 import type { IForgotPasswordCredentials } from "@/modules/auth/presentation/model/IForgotPasswordCredentials";
 import {
     forgotPasswordAction,
@@ -43,8 +41,8 @@ export const useForgotPassword = (): IUseForgotPassword => {
 
     const [form] = useForm<IForgotPasswordCredentials>();
 
-    const { error, loading, fetched, data } = useSelector(
-        ({ auth: { forgotPassword } }: IRootState) => forgotPassword
+    const { error, loading, fetched, data } = useAppSelector(
+        ({ auth: { forgotPassword } }) => forgotPassword
     );
 
     const isSuccess = Boolean(fetched && data.isSuccess);
