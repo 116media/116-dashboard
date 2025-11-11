@@ -1,5 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { useDispatch } from "react-redux";
+import type { TypedUseSelectorHook } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import logger from "redux-logger";
 import {
     FLUSH,
@@ -12,28 +13,50 @@ import {
     REHYDRATE
 } from "redux-persist";
 import storage from "redux-persist/es/storage";
+import { encryptTransform } from "redux-persist-transform-encrypt";
+import { AuthStorageService } from "@/modules/auth/infrastructure/storage/authstorage.service";
+import { LOGIN_PATH } from "@/shared/lib/constants/paths";
+import type { IRootState } from "./root.reducer";
 import { rootReducer } from "./root.reducer";
 import type { AppDispatch } from "./thunk.type";
 
 const isDevMode = import.meta.env.DEV;
 
 /**
+ * AES-256 encryption transform for redux-persist.
+ *
+ * @description
+ * Encrypts persisted state before writing to localStorage and decrypts on rehydration.
+ * If decryption fails (tampered data), clears all auth data and redirects to login.
+ */
+const encryptor = encryptTransform({
+    secretKey: import.meta.env.VITE_PERSIST_SECRET_KEY,
+    onError: () => {
+        persistor.purge();
+        AuthStorageService.clearToken();
+        window.location.href = LOGIN_PATH;
+    }
+});
+
+/**
  * Redux Persist configuration object.
  *
  * @remarks
  * - Persists only whitelisted reducers to browser localStorage
+ * - Uses AES-256 encryption via redux-persist-transform-encrypt
  * - Uses version 1 for migration compatibility
- * - Currently whitelisted: ["users"]
+ * - Currently whitelisted: ["auth"]
  * - Other slices are transient and reset on page reload
  */
 const persistConfig = {
     key: "root",
     version: 1,
     storage,
-    whitelist: ["auth"]
+    whitelist: ["auth"],
+    transforms: [encryptor]
 };
 
-const persistedReducer = persistReducer(persistConfig, rootReducer);
+const persistedReducer = persistReducer<ReturnType<typeof rootReducer>>(persistConfig, rootReducer);
 
 /**
  * Configured Redux store instance.
@@ -87,3 +110,15 @@ export const persistor = persistStore(store);
  * ```
  */
 export const useAppDispatch = (): AppDispatch => useDispatch<AppDispatch>();
+
+/**
+ * Type-safe selector hook for accessing Redux state.
+ *
+ * @returns Typed selector with IRootState inference
+ *
+ * @example
+ * ```typescript
+ * const token = useAppSelector((state) => state.auth.login.data?.token);
+ * ```
+ */
+export const useAppSelector: TypedUseSelectorHook<IRootState> = useSelector;
