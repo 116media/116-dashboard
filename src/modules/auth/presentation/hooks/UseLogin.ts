@@ -1,12 +1,10 @@
 import { Form, type FormInstance } from "antd";
-import { useSelector } from "react-redux";
 import { useNavigate } from "react-router";
-import type { IRootState } from "@/core/presentation/store/root.reducer";
-import { useAppDispatch } from "@/core/presentation/store/store";
+import { useAppDispatch, useAppSelector } from "@/core/presentation/store/store";
 import type { ILoginCredentials } from "@/modules/auth/presentation/model/ILoginCredentials";
 import { loginAction, resetLoginAction } from "@/modules/auth/presentation/store/login.action";
 import type { IApiProblemDetails } from "@/shared/api/type";
-import { DASHBOARD_PATH } from "@/shared/lib/constants/paths";
+import { OVERVIEW_PATH } from "@/shared/lib/constants/paths";
 
 const { useForm } = Form;
 
@@ -38,7 +36,7 @@ export const useLogin = (): IUseLogin => {
 
     const [form] = useForm<ILoginCredentials>();
 
-    const { error, loading } = useSelector(({ auth: { login } }: IRootState) => login);
+    const { error, loading } = useAppSelector(({ auth: { login } }) => login);
 
     /**
      * Handles login form submission.
@@ -55,7 +53,7 @@ export const useLogin = (): IUseLogin => {
         if (loginAction.rejected.match(result)) form.resetFields();
 
         if (loginAction.fulfilled.match(result)) {
-            navigate(DASHBOARD_PATH, { replace: true });
+            navigate(OVERVIEW_PATH, { replace: true });
         }
     };
 
