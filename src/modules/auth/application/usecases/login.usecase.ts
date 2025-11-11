@@ -22,8 +22,7 @@ interface ILoginUseCase extends IUseCase<ILoginCredentials, IAuthResponse> {}
  * Orchestrates the login flow:
  * 1. Authenticates user via repository
  * 2. Stores authentication token in localStorage
- * 3. Stores user data in localStorage
- * 4. Returns authentication response
+ * 3. Returns authentication response (user data persisted via encrypted redux-persist)
  *
  * @remarks
  * Part of the application layer in Clean Architecture.
@@ -46,10 +45,7 @@ export class LoginUseCase implements ILoginUseCase {
      */
     async execute(credentials: ILoginCredentials): Promise<IAuthResponse> {
         const response = await this.authRepository.login(credentials);
-
-        // Store authentication data
         AuthStorageService.setToken(response.token);
-        AuthStorageService.setUser(response.user);
 
         return response;
     }
