@@ -1,0 +1,17 @@
+@use "@/shared/styles/dimensions.scss" as dimensions;
+
+.pageLoader {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+
+    &__lottie{
+        padding: dimensions.$padding * 2.5;
+        mix-blend-mode: difference;
+        opacity: 0.1;
+        
+        width: 36rem;
+        height: 36rem;
+    }
+}
