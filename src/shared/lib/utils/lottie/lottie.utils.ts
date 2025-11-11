@@ -25,9 +25,11 @@ export const LottieUtils = {
         loop: true,
         autoplay: true,
         src: animationPath,
+        backgroundColor: "transparent",
         renderConfig: {
             freezeOnOffscreen: true,
-            autoResize: true
+            autoResize: true,
+            quality: 5
         },
         layout: {
             fit: "fill"
