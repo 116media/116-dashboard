@@ -4,7 +4,7 @@ import type { FC } from "react";
 import { Helmet, HelmetProvider } from "react-helmet-async";
 import notFound from "@/assets/lottie/404_anim.lottie";
 import { APP_NAME } from "@/shared/lib/constants/common";
-import { DASHBOARD_PATH } from "@/shared/lib/constants/paths";
+import { OVERVIEW_PATH } from "@/shared/lib/constants/paths";
 import { LottieUtils } from "@/shared/lib/utils/lottie/lottie.utils";
 import { IconHomeOutlined } from "@/shared/ui/Icons";
 
@@ -37,18 +37,21 @@ export const NotFoundPage: FC = () => {
                     <title>Page introuvable | {APP_NAME}</title>
                 </Helmet>
 
-                <Space direction="vertical" align="center" size="large">
+                <Space orientation="vertical" align="center" size="large">
                     <DotLottieReact className={styles.notFound__lottie} {...lottieOptions} />
 
                     <Flex justify="center">
                         <Title data-text="title">Oops! Page non trouvée</Title>
                     </Flex>
-
-                    <a href={DASHBOARD_PATH} rel="noopener">
-                        <Button size="large" type="primary" icon={<IconHomeOutlined />}>
-                            Retour à l'Accueil
-                        </Button>
-                    </a>
+                    <Button
+                        size="large"
+                        type="primary"
+                        rel="noopener"
+                        href={OVERVIEW_PATH}
+                        icon={<IconHomeOutlined />}
+                    >
+                        Retour à l'Accueil
+                    </Button>
                 </Space>
             </Content>
         </HelmetProvider>
