@@ -1,6 +1,6 @@
 import type { FC } from "react";
 import { APP_NAME } from "@/shared/lib/constants/common";
-import { DASHBOARD_PATH } from "@/shared/lib/constants/paths";
+import { OVERVIEW_PATH } from "@/shared/lib/constants/paths";
 
 /**
  * Props for the Logo component.
@@ -27,7 +27,7 @@ interface ILogoProps {
  */
 export const Logo: FC<ILogoProps> = ({ className, canRedirect = false }) =>
     canRedirect ? (
-        <a aria-label={`${APP_NAME}-logo`} href={DASHBOARD_PATH}>
+        <a aria-label={`${APP_NAME}-logo`} href={OVERVIEW_PATH}>
             <div className={className} />
         </a>
     ) : (
