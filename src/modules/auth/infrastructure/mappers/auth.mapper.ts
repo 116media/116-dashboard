@@ -118,7 +118,7 @@ export const AuthMapper = {
      */
     authResponseFromDto(response: AdminLoginResponse): IAuthResponse {
         return {
-            token: response.token,
+            token: response.accessToken,
             user: this.userFromDto(response.user)
         };
     },
