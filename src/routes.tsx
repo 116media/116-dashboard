@@ -1,0 +1,80 @@
+import { lazy } from "react";
+import type { RouteObject } from "react-router";
+import { Navigate } from "react-router";
+import { GuestRoute } from "@/core/presentation/components/GuestRoute";
+import { ProtectedRoute } from "@/core/presentation/components/ProtectedRoute";
+import { AuthLayout } from "@/core/presentation/layouts/AuthLayout";
+import { DashboardLayout } from "@/core/presentation/layouts/DashboardLayout";
+import { NotFoundPage } from "@/core/presentation/pages/NotFoundPage";
+import {
+    ADMIN_PATH,
+    ADS_BANNER_PATH,
+    ADS_POPUP_PATH,
+    ARTICLE_PATH,
+    CONTENT_PATH,
+    FORGOT_PASSWORD_PATH,
+    LOGIN_PATH,
+    NOT_FOUND_PATH,
+    OVERVIEW_PATH,
+    SETTING_PATH,
+    USER_PATH,
+    VIDEO_PATH
+} from "@/shared/lib/constants/paths";
+
+const LoginPage = lazy(() => import("@/modules/auth/presentation/pages/LoginPage"));
+const ForgotPasswordPage = lazy(
+    () => import("@/modules/auth/presentation/pages/ForgotPasswordPage")
+);
+const OverviewPage = lazy(() => import("@/modules/overview/presentation/pages/OverviewPage"));
+const SettingsPage = lazy(() => import("@/modules/settings/presentation/pages/SettingsPage"));
+const ContentsPage = lazy(() => import("@/modules/contents/presentation/pages/ContentsPage"));
+const VideosPage = lazy(() => import("@/modules/videos/presentation/pages/VideosPage"));
+const ArticlesPage = lazy(() => import("@/modules/articles/presentation/pages/ArticlesPage"));
+const AdsBannerPage = lazy(() => import("@/modules/ads/presentation/pages/AdsBannerPage"));
+const AdsPopupPage = lazy(() => import("@/modules/ads/presentation/pages/AdsPopupPage"));
+const AdminsPage = lazy(() => import("@/modules/users/presentation/pages/AdminsPage"));
+const UsersPage = lazy(() => import("@/modules/users/presentation/pages/UsersPage"));
+
+const guestRoutes: RouteObject[] = [
+    {
+        element: <GuestRoute />,
+        children: [
+            {
+                element: <AuthLayout />,
+                children: [
+                    { path: LOGIN_PATH, element: <LoginPage /> },
+                    { path: FORGOT_PASSWORD_PATH, element: <ForgotPasswordPage /> }
+                ]
+            }
+        ]
+    }
+];
+
+const protectedRoutes: RouteObject[] = [
+    {
+        element: <ProtectedRoute />,
+        children: [
+            {
+                element: <DashboardLayout />,
+                children: [
+                    { path: OVERVIEW_PATH, element: <OverviewPage /> },
+                    { path: SETTING_PATH, element: <SettingsPage /> },
+                    { path: CONTENT_PATH, element: <ContentsPage /> },
+                    { path: VIDEO_PATH, element: <VideosPage /> },
+                    { path: ARTICLE_PATH, element: <ArticlesPage /> },
+                    { path: ADS_BANNER_PATH, element: <AdsBannerPage /> },
+                    { path: ADS_POPUP_PATH, element: <AdsPopupPage /> },
+                    { path: ADMIN_PATH, element: <AdminsPage /> },
+                    { path: USER_PATH, element: <UsersPage /> }
+                ]
+            }
+        ]
+    }
+];
+
+const errorRoutes: RouteObject[] = [
+    { path: NOT_FOUND_PATH, element: <NotFoundPage /> },
+    { path: "*", element: <Navigate to={NOT_FOUND_PATH} replace /> }
+];
+
+export const routes: RouteObject[] = [...guestRoutes, ...protectedRoutes, ...errorRoutes];
