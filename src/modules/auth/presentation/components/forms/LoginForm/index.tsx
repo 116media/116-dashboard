@@ -3,10 +3,10 @@ import { Button, Form, Input } from "antd";
 import type { FC } from "react";
 import type { ILoginCredentials } from "@/modules/auth/presentation/model/ILoginCredentials";
 import { LoginValidator } from "@/modules/auth/presentation/utils/validators/login.validator";
-import type { IApiProblemDetails } from "@/shared/api/type";
-import { FORGOT_PASSWORD_PATH } from "@/shared/lib/constants/paths";
-import ErrorAlert from "@/shared/ui/ErrorAlert";
-import { IconLockOutlined, IconMailOutlined } from "@/shared/ui/Icons";
+import type { IApiProblemDetails } from "@/shared/infrastructure/api/type";
+import { FORGOT_PASSWORD_PATH } from "@/shared/infrastructure/constants/paths";
+import ErrorAlert from "@/shared/presentation/ui/ErrorAlert";
+import { IconLockOutlined, IconMailOutlined } from "@/shared/presentation/ui/Icons";
 
 import styles from "./index.module.scss";
 
