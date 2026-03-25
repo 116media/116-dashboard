@@ -5,8 +5,8 @@ import { BackToLoginButton } from "@/modules/auth/presentation/components/ui/Bac
 import FormHeader from "@/modules/auth/presentation/components/ui/FormHeader";
 import type { IVerifyOtpCredentials } from "@/modules/auth/presentation/model/IVerifyOtpCredentials";
 import { ForgotPasswordValidator } from "@/modules/auth/presentation/utils/validators/forgotpassword.validator";
-import type { IApiProblemDetails } from "@/shared/api/type";
-import ErrorAlert from "@/shared/ui/ErrorAlert";
+import type { IApiProblemDetails } from "@/shared/infrastructure/api/type";
+import ErrorAlert from "@/shared/presentation/ui/ErrorAlert";
 
 import styles from "./index.module.scss";
 
