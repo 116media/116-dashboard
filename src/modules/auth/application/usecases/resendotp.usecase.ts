@@ -1,7 +1,7 @@
-import type { IUseCase } from "@/core/application/IUseCase";
 import type { IAuthRepositoryPort } from "@/modules/auth/application/repositories/auth.repository.port";
 import type { IResendOtpResponse } from "@/modules/auth/domain/entities/IResendOtpResponse";
 import type { IResendOtpCredentials } from "@/modules/auth/presentation/model/IResendOtpCredentials";
+import type { IUseCase } from "@/shared/application/usecases/IUseCase";
 
 /**
  * Interface for the resend OTP use case.
