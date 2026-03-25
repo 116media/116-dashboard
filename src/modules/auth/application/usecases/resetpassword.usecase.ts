@@ -1,8 +1,8 @@
-import type { IUseCase } from "@/core/application/IUseCase";
 import type { IAuthRepositoryPort } from "@/modules/auth/application/repositories/auth.repository.port";
 import type { IResetPasswordResponse } from "@/modules/auth/domain/entities/IResetPasswordResponse";
 import { AuthStorageService } from "@/modules/auth/infrastructure/storage/authstorage.service";
 import type { IResetPasswordCredentials } from "@/modules/auth/presentation/model/IResetPasswordCredentials";
+import type { IUseCase } from "@/shared/application/usecases/IUseCase";
 
 /**
  * Interface for the reset password use case.
