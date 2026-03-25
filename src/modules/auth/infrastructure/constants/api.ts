@@ -1,4 +1,4 @@
-import { apiErrors } from "@/shared/lib/constants/api";
+import { apiErrors } from "@/shared/infrastructure/constants/api";
 
 /**
  * Authentication-related error codes.
