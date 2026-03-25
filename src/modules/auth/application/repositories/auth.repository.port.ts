@@ -2,6 +2,8 @@ import type { IAuthResponse } from "@/modules/auth/domain/entities/IAuthResponse
 import type { IForgotPasswordResponse } from "@/modules/auth/domain/entities/IForgotPasswordResponse";
 import type { IResendOtpResponse } from "@/modules/auth/domain/entities/IResendOtpResponse";
 import type { IResetPasswordResponse } from "@/modules/auth/domain/entities/IResetPasswordResponse";
+import type { ISignOutAllResponse } from "@/modules/auth/domain/entities/ISignOutAllResponse";
+import type { ISignOutResponse } from "@/modules/auth/domain/entities/ISignOutResponse";
 import type { IVerifyOtpResponse } from "@/modules/auth/domain/entities/IVerifyOtpResponse";
 import type { IForgotPasswordCredentials } from "@/modules/auth/presentation/model/IForgotPasswordCredentials";
 import type { ILoginCredentials } from "@/modules/auth/presentation/model/ILoginCredentials";
@@ -69,4 +71,21 @@ export interface IAuthRepositoryPort {
      * @throws {IApiProblemDetails} When the reset fails
      */
     resetPassword(credentials: IResetPasswordCredentials): Promise<IResetPasswordResponse>;
+
+    /**
+     * Signs out the current session.
+     * The backend reads the refresh token from the HttpOnly cookie.
+     *
+     * @returns {Promise<ISignOutResponse>} Success status
+     * @throws {IApiProblemDetails} When the request fails
+     */
+    signOut(): Promise<ISignOutResponse>;
+
+    /**
+     * Signs out from all devices.
+     *
+     * @returns {Promise<ISignOutAllResponse>} Success status
+     * @throws {IApiProblemDetails} When the request fails
+     */
+    signOutAll(): Promise<ISignOutAllResponse>;
 }
