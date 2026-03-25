@@ -1,8 +1,7 @@
-import type { IUseCase } from "@/core/application/IUseCase";
 import type { IAuthRepositoryPort } from "@/modules/auth/application/repositories/auth.repository.port";
 import type { IAuthResponse } from "@/modules/auth/domain/entities/IAuthResponse";
-import { AuthStorageService } from "@/modules/auth/infrastructure/storage/authstorage.service";
 import type { ILoginCredentials } from "@/modules/auth/presentation/model/ILoginCredentials";
+import type { IUseCase } from "@/shared/application/usecases/IUseCase";
 
 /**
  * Interface for the login use case.
@@ -21,8 +20,10 @@ interface ILoginUseCase extends IUseCase<ILoginCredentials, IAuthResponse> {}
  * @description
  * Orchestrates the login flow:
  * 1. Authenticates user via repository
- * 2. Stores authentication token in localStorage
- * 3. Returns authentication response (user data persisted via encrypted redux-persist)
+ * 2. Returns authentication response (user data persisted via encrypted redux-persist)
+ *
+ * Token delivery is handled by the server via HttpOnly cookies —
+ * no client-side token storage is needed.
  *
  * @remarks
  * Part of the application layer in Clean Architecture.
@@ -40,13 +41,10 @@ export class LoginUseCase implements ILoginUseCase {
      * Executes the login use case.
      *
      * @param {ILoginCredentials} credentials - Email and password
-     * @returns {Promise<IAuthResponse>} Token and user data
+     * @returns {Promise<IAuthResponse>} User data
      * @throws {IApiProblemDetails} When authentication fails
      */
     async execute(credentials: ILoginCredentials): Promise<IAuthResponse> {
-        const response = await this.authRepository.login(credentials);
-        AuthStorageService.setToken(response.token);
-
-        return response;
+        return await this.authRepository.login(credentials);
     }
 }
