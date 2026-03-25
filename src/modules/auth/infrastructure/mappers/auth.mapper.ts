@@ -5,6 +5,8 @@ import type { IPermission } from "@/modules/auth/domain/entities/IPermission";
 import type { IResendOtpResponse } from "@/modules/auth/domain/entities/IResendOtpResponse";
 import type { IResetPasswordResponse } from "@/modules/auth/domain/entities/IResetPasswordResponse";
 import type { IRole } from "@/modules/auth/domain/entities/IRole";
+import type { ISignOutAllResponse } from "@/modules/auth/domain/entities/ISignOutAllResponse";
+import type { ISignOutResponse } from "@/modules/auth/domain/entities/ISignOutResponse";
 import type { IUser } from "@/modules/auth/domain/entities/IUser";
 import type { IVerifyOtpResponse } from "@/modules/auth/domain/entities/IVerifyOtpResponse";
 import type {
@@ -12,12 +14,14 @@ import type {
     AdminLoginResponse,
     AdminResendOtpResponse,
     AdminResetPasswordResponse,
+    AdminSignOutFromAllDevicesResponse,
+    AdminSignOutResponse,
     AdminVerifyOtpResponse,
     FileDto,
     PermissionDto,
     RoleDto,
     UserResponseDto
-} from "@/shared/api/generated/116.api";
+} from "@/shared/infrastructure/api/generated/116.api";
 
 /**
  * Mapper for converting API DTOs to domain entities in the auth module.
@@ -58,7 +62,8 @@ export const AuthMapper = {
             id: dto.id,
             resource: dto.resource,
             action: dto.action,
-            description: dto.description
+            description: dto.description,
+            isActive: dto.isActive
         };
     },
 
@@ -96,11 +101,8 @@ export const AuthMapper = {
             authProvider: dto.authProvider,
             isVerified: dto.isVerified,
             isActive: dto.isActive,
-            isLoggedIn: dto.isLoggedIn,
-            lastLoginAt: dto.lastLoginAt,
             avatar: dto.avatar ? this.fileFromDto(dto.avatar) : null,
             countryName: dto.countryName ?? null,
-            countryFlagUrl: dto.countryFlagUrl ?? null,
             countryIsoCode: dto.countryIsoCode ?? null,
             countryDialCode: dto.countryDialCode ?? null,
             partialPhoneNumber: dto.partialPhoneNumber ?? null,
@@ -114,11 +116,10 @@ export const AuthMapper = {
      * Maps AdminLoginResponse to IAuthResponse domain entity.
      *
      * @param {AdminLoginResponse} response - Login response from API
-     * @returns {IAuthResponse} Mapped auth response with token and user
+     * @returns {IAuthResponse} Mapped auth response with user data
      */
     authResponseFromDto(response: AdminLoginResponse): IAuthResponse {
         return {
-            token: response.accessToken,
             user: this.userFromDto(response.user)
         };
     },
@@ -167,6 +168,30 @@ export const AuthMapper = {
      * @returns {IResetPasswordResponse} Mapped reset password response
      */
     resetPasswordResponseFromDto(response: AdminResetPasswordResponse): IResetPasswordResponse {
+        return {
+            isSuccess: response.isSuccess
+        };
+    },
+
+    /**
+     * Maps AdminSignOutResponse to ISignOutResponse domain entity.
+     *
+     * @param {AdminSignOutResponse} response - Sign out response from API
+     * @returns {ISignOutResponse} Mapped sign out response
+     */
+    signOutResponseFromDto(response: AdminSignOutResponse): ISignOutResponse {
+        return {
+            isSuccess: response.isSuccess
+        };
+    },
+
+    /**
+     * Maps AdminSignOutFromAllDevicesResponse to ISignOutAllResponse domain entity.
+     *
+     * @param {AdminSignOutFromAllDevicesResponse} response - Sign out all response from API
+     * @returns {ISignOutAllResponse} Mapped sign out all response
+     */
+    signOutAllResponseFromDto(response: AdminSignOutFromAllDevicesResponse): ISignOutAllResponse {
         return {
             isSuccess: response.isSuccess
         };
