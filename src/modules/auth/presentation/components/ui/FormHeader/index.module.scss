@@ -1,5 +1,5 @@
-@use "@/shared/styles/colors.scss" as colors;
-@use "@/shared/styles/dimensions.scss" as dimensions;
+@use "@/shared/presentation/styles/colors.scss" as colors;
+@use "@/shared/presentation/styles/dimensions.scss" as dimensions;
 
 .formHeader {
     margin: dimensions.$padding * 0.5 0 dimensions.$padding * 1.2;
