@@ -1,11 +1,6 @@
 import { lazy } from "react";
 import type { RouteObject } from "react-router";
 import { Navigate } from "react-router";
-import { GuestRoute } from "@/core/presentation/components/GuestRoute";
-import { ProtectedRoute } from "@/core/presentation/components/ProtectedRoute";
-import { AuthLayout } from "@/core/presentation/layouts/AuthLayout";
-import { DashboardLayout } from "@/core/presentation/layouts/DashboardLayout";
-import { NotFoundPage } from "@/core/presentation/pages/NotFoundPage";
 import {
     ADMIN_PATH,
     ADS_BANNER_PATH,
@@ -19,14 +14,19 @@ import {
     SETTING_PATH,
     USER_PATH,
     VIDEO_PATH
-} from "@/shared/lib/constants/paths";
+} from "@/shared/infrastructure/constants/paths";
+import { GuestRoute } from "@/shared/presentation/components/GuestRoute";
+import { ProtectedRoute } from "@/shared/presentation/components/ProtectedRoute";
+import { AuthLayout } from "@/shared/presentation/layouts/AuthLayout";
+import { DashboardLayout } from "@/shared/presentation/layouts/DashboardLayout";
+import { NotFoundPage } from "@/shared/presentation/pages/NotFoundPage";
 
 const LoginPage = lazy(() => import("@/modules/auth/presentation/pages/LoginPage"));
 const ForgotPasswordPage = lazy(
     () => import("@/modules/auth/presentation/pages/ForgotPasswordPage")
 );
 const OverviewPage = lazy(() => import("@/modules/overview/presentation/pages/OverviewPage"));
-const SettingsPage = lazy(() => import("@/modules/settings/presentation/pages/SettingsPage"));
+const SettingsPage = lazy(() => import("@/platform/settings/presentation/pages/SettingsPage"));
 const ContentsPage = lazy(() => import("@/modules/contents/presentation/pages/ContentsPage"));
 const VideosPage = lazy(() => import("@/modules/videos/presentation/pages/VideosPage"));
 const ArticlesPage = lazy(() => import("@/modules/articles/presentation/pages/ArticlesPage"));
