@@ -4,9 +4,9 @@ import type { FC } from "react";
 import { BackToLoginButton } from "@/modules/auth/presentation/components/ui/BackToLoginButton";
 import FormHeader from "@/modules/auth/presentation/components/ui/FormHeader";
 import { ResetPasswordValidator } from "@/modules/auth/presentation/utils/validators/resetpassword.validator";
-import type { IApiProblemDetails } from "@/shared/api/type";
-import ErrorAlert from "@/shared/ui/ErrorAlert";
-import { IconLockOutlined } from "@/shared/ui/Icons";
+import type { IApiProblemDetails } from "@/shared/infrastructure/api/type";
+import ErrorAlert from "@/shared/presentation/ui/ErrorAlert";
+import { IconLockOutlined } from "@/shared/presentation/ui/Icons";
 
 import styles from "./index.module.scss";
 
