@@ -6,10 +6,10 @@ import { type FC, useEffect } from "react";
 import { Provider } from "react-redux";
 import { BrowserRouter, useRoutes } from "react-router";
 import { PersistGate } from "redux-persist/integration/react";
-import { persistor, store } from "@/core/presentation/store/store";
-import { Theme } from "@/shared/lib/constants/theme";
-import { NavigationProgress } from "@/shared/ui/NavigationProgress";
-import { PageLoader } from "@/shared/ui/PageLoader";
+import { Theme } from "@/shared/infrastructure/constants/theme";
+import { persistor, store } from "@/shared/presentation/store/store";
+import { NavigationProgress } from "@/shared/presentation/ui/NavigationProgress";
+import { PageLoader } from "@/shared/presentation/ui/PageLoader";
 import { routes } from "./routes";
 
 const AppRoutes: FC = () => useRoutes(routes);
