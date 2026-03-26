@@ -5,7 +5,7 @@ import { AuthRepositoryImpl } from "@/modules/auth/infrastructure/repositories/a
 import type { ILoginCredentials } from "@/modules/auth/presentation/model/ILoginCredentials";
 import { authSlice } from "@/modules/auth/presentation/store";
 import { ActionType } from "@/modules/auth/presentation/store/constants";
-import type { IApiProblemDetails } from "@/shared/api/type";
+import type { IApiProblemDetails } from "@/shared/infrastructure/api/type";
 
 const authRepository = new AuthRepositoryImpl();
 const loginUseCase = new LoginUseCase(authRepository);
