@@ -1,12 +1,12 @@
 import type { FormInstance } from "antd";
 import { Form } from "antd";
-import { useAppDispatch, useAppSelector } from "@/core/presentation/store/store";
 import type { IForgotPasswordCredentials } from "@/modules/auth/presentation/model/IForgotPasswordCredentials";
 import {
     forgotPasswordAction,
     resetForgotPasswordAction
 } from "@/modules/auth/presentation/store/forgotpassword.action";
-import type { IApiProblemDetails } from "@/shared/api/type";
+import type { IApiProblemDetails } from "@/shared/infrastructure/api/type";
+import { useAppDispatch, useAppSelector } from "@/shared/presentation/store/store";
 
 const { useForm } = Form;
 
