@@ -6,7 +6,7 @@ import { AuthStorageService } from "@/modules/auth/infrastructure/storage/authst
 import type { IResetPasswordCredentials } from "@/modules/auth/presentation/model/IResetPasswordCredentials";
 import { authSlice } from "@/modules/auth/presentation/store";
 import { ActionType } from "@/modules/auth/presentation/store/constants";
-import type { IApiProblemDetails } from "@/shared/api/type";
+import type { IApiProblemDetails } from "@/shared/infrastructure/api/type";
 
 const authRepository = new AuthRepositoryImpl();
 const resetPasswordUseCase = new ResetPasswordUseCase(authRepository);
