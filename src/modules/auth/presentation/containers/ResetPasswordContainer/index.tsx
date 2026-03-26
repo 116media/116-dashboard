@@ -1,12 +1,12 @@
 import { type FC, useEffect } from "react";
 import { useNavigate } from "react-router";
-import { useAppDispatch } from "@/core/presentation/store/store";
 import { ResetPasswordForm } from "@/modules/auth/presentation/components/forms/ResetPasswordForm";
 import { useResetPassword } from "@/modules/auth/presentation/hooks/UseResetPassword";
 import { authSlice } from "@/modules/auth/presentation/store";
 import { AuthNotification } from "@/modules/auth/presentation/utils/notification/auth.notification";
-import { LOGIN_PATH } from "@/shared/lib/constants/paths";
-import { showNotification } from "@/shared/lib/utils/notification/notification.utils";
+import { LOGIN_PATH } from "@/shared/infrastructure/constants/paths";
+import { useAppDispatch } from "@/shared/presentation/store/store";
+import { showNotification } from "@/shared/presentation/utils/notification/notification.utils";
 
 interface IResetPasswordContainerProps {
     email: string;
