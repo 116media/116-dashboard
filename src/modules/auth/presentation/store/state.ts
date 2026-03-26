@@ -1,9 +1,11 @@
-import { createInitialState } from "@/core/presentation/store/action.wrapper";
 import type { IAuthResponse } from "@/modules/auth/domain/entities/IAuthResponse";
 import type { IForgotPasswordResponse } from "@/modules/auth/domain/entities/IForgotPasswordResponse";
 import type { IResendOtpResponse } from "@/modules/auth/domain/entities/IResendOtpResponse";
 import type { IResetPasswordResponse } from "@/modules/auth/domain/entities/IResetPasswordResponse";
+import type { ISignOutAllResponse } from "@/modules/auth/domain/entities/ISignOutAllResponse";
+import type { ISignOutResponse } from "@/modules/auth/domain/entities/ISignOutResponse";
 import type { IVerifyOtpResponse } from "@/modules/auth/domain/entities/IVerifyOtpResponse";
+import { createInitialState } from "@/shared/presentation/store/action.wrapper";
 import type { IAuthState } from "./type";
 
 /**
@@ -20,7 +22,8 @@ export const authInitialState: IAuthState = {
     verifyOtp: createInitialState<IVerifyOtpResponse>(),
     resendOtp: createInitialState<IResendOtpResponse>(),
     resetPassword: createInitialState<IResetPasswordResponse>(),
-    logout: createInitialState(),
+    signOut: createInitialState<ISignOutResponse>(),
+    signOutAll: createInitialState<ISignOutAllResponse>(),
     updateAvatar: createInitialState(),
     updateAccount: createInitialState(),
     changePassword: createInitialState()
