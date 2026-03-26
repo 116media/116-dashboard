@@ -1,17 +1,21 @@
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { createSlice } from "@reduxjs/toolkit";
+import type { IAuthResponse } from "@/modules/auth/domain/entities/IAuthResponse";
+import type { IUser } from "@/modules/auth/domain/entities/IUser";
 import {
     ActionWrapperFulfilled,
     ActionWrapperPending,
     ActionWrapperRejected,
     ActionWrapperReset,
     createInitialState
-} from "@/core/presentation/store/action.wrapper";
+} from "@/shared/presentation/store/action.wrapper";
 import { SliceName } from "./constants";
 import { forgotPasswordAction } from "./forgotpassword.action";
 import { loginAction } from "./login.action";
 import { resendOtpAction } from "./resendotp.action";
 import { resetPasswordAction } from "./resetpassword.action";
+import { signOutAction } from "./signout.action";
+import { signOutAllAction } from "./signoutall.action";
 import { authInitialState } from "./state";
 import type { IAuthState } from "./type";
 import { verifyOtpAction } from "./verifyotp.action";
@@ -48,6 +52,11 @@ export const authSlice = createSlice({
             action.payload.forEach((key) => {
                 if (state[key]) state[key] = createInitialState();
             });
+        },
+        updateUser: (state, action: PayloadAction<IUser>) => {
+            if (state.login.data) {
+                (state.login.data as IAuthResponse).user = action.payload;
+            }
         }
     },
     extraReducers: (builder) => {
@@ -71,7 +80,15 @@ export const authSlice = createSlice({
             // reset password usecase
             .addCase(resetPasswordAction.pending, ActionWrapperPending)
             .addCase(resetPasswordAction.fulfilled, ActionWrapperFulfilled)
-            .addCase(resetPasswordAction.rejected, ActionWrapperRejected);
+            .addCase(resetPasswordAction.rejected, ActionWrapperRejected)
+            // sign out
+            .addCase(signOutAction.pending, ActionWrapperPending)
+            .addCase(signOutAction.fulfilled, ActionWrapperFulfilled)
+            .addCase(signOutAction.rejected, ActionWrapperRejected)
+            // sign out all
+            .addCase(signOutAllAction.pending, ActionWrapperPending)
+            .addCase(signOutAllAction.fulfilled, ActionWrapperFulfilled)
+            .addCase(signOutAllAction.rejected, ActionWrapperRejected);
     }
 });
 
