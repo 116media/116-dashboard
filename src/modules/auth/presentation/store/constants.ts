@@ -6,7 +6,9 @@ export const ActionType = {
     AuthForgotPassword: "auth/forgotPassword",
     AuthVerifyOtp: "auth/verifyOtp",
     AuthResendOtp: "auth/resendOtp",
-    AuthResetPassword: "auth/resetPassword"
+    AuthResetPassword: "auth/resetPassword",
+    AuthSignOut: "auth/signOut",
+    AuthSignOutAll: "auth/signOutAll"
 };
 
 /**
