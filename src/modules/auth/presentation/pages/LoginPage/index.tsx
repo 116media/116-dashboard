@@ -2,7 +2,7 @@ import { Card } from "antd";
 import type { FC } from "react";
 import FormHeader from "@/modules/auth/presentation/components/ui/FormHeader";
 import { LoginContainer } from "@/modules/auth/presentation/containers/LoginContainer";
-import { Logo } from "@/shared/ui/Logo";
+import { Logo } from "@/shared/presentation/ui/Logo";
 
 import styles from "./index.module.scss";
 
