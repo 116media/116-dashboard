@@ -1,0 +1,101 @@
+@use 'dimensions.scss' as *;
+
+@mixin mediaXS {
+    @media (max-width: $sm-size) {
+        @content;
+    }
+}
+
+@mixin mediaSM {
+    @media (min-width: $sm-size) and (max-width: $md-size) {
+        @content;
+    }
+}
+
+@mixin mediaMD {
+    @media (min-width: $md-size) and (max-width: $lg-size) {
+        @content;
+    }
+}
+
+@mixin mediaLG {
+    @media (min-width: $lg-size) and (max-width: $xl-size) {
+        @content;
+    }
+}
+
+@mixin mediaXL {
+    @media (min-width: $xl-size) {
+        @content;
+    }
+}
+
+@mixin mediaXXL {
+    @media (min-width: $xxl-size) {
+        @content;
+    }
+}
+
+@mixin mediaMinMD {
+    @media screen and (min-width: #{$md-size}) {
+        @content;
+    }
+}
+
+@mixin mediaMaxLG {
+    @media screen and (max-width: #{$lg-size}) {
+        @content;
+    }
+}
+
+@mixin mediaMaxMD {
+    @media screen and (max-width: #{$md-size}) {
+        @content;
+    }
+}
+
+@mixin keyframe($animation_name) {
+    @keyframes #{$animation_name} {
+        0% {
+            min-height: 0;
+            max-height: 0;
+            display: none;
+            transform: translate(0, 0);
+        }
+
+        1% {
+            min-height: 0;
+            max-height: 0;
+            display: block;
+        }
+
+        99% {
+            min-height: none;
+            max-height: 50em;
+            display: block;
+        }
+
+        100% {
+            min-height: none;
+            max-height: none;
+            display: block;
+        }
+    }
+}
+
+@mixin animation($animation) {
+    animation: $animation 0.3s ease-in-out;
+}
+
+@mixin preventTextSelection {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+@mixin cardContentPadding {
+    padding: calc(#{$padding} * 1.2);
+}
