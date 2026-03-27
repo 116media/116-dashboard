@@ -1,0 +1,42 @@
+import type { PayloadAction } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
+import {
+    ActionWrapperFulfilled,
+    ActionWrapperPending,
+    ActionWrapperRejected,
+    ActionWrapperReset,
+    createInitialState
+} from "@/shared/presentation/store/action.wrapper";
+import { SliceName } from "./constants";
+import { getSessionsAction, revokeSessionAction } from "./session.action";
+import { sessionInitialState } from "./state";
+import type { SessionStateKey } from "./type";
+
+export const sessionSlice = createSlice({
+    name: SliceName.Session,
+    initialState: sessionInitialState,
+    reducers: {
+        clear: ActionWrapperReset,
+        purge: (state, action: PayloadAction<SessionStateKey[]>) => {
+            action.payload.forEach((key) => {
+                if (state[key]) {
+                    (state as Record<string, unknown>)[key] = createInitialState();
+                }
+            });
+        }
+    },
+    extraReducers: (builder) => {
+        builder
+            // get sessions
+            .addCase(getSessionsAction.pending, ActionWrapperPending)
+            .addCase(getSessionsAction.fulfilled, ActionWrapperFulfilled)
+            .addCase(getSessionsAction.rejected, ActionWrapperRejected)
+            // revoke session
+            .addCase(revokeSessionAction.pending, ActionWrapperPending)
+            .addCase(revokeSessionAction.fulfilled, ActionWrapperFulfilled)
+            .addCase(revokeSessionAction.rejected, ActionWrapperRejected);
+    }
+});
+
+const sessionReducer = sessionSlice.reducer;
+export default sessionReducer;
