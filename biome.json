@@ -39,7 +39,7 @@
         "includes": [
             "**",
             "**/src/**",
-            "!**/src/shared/api/generated/116Api.ts",
+            "!**/src/shared/api/generated/116.api.ts",
             "!**/src/assets/*"
         ]
     },

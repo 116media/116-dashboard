@@ -14,7 +14,7 @@
  * - Logo asset paths (light/dark themes)
  *
  * **Storage Keys:**
- * - LocalStorage keys for authentication tokens and user data
+ * - LocalStorage keys for authentication tokens and OTP codes
  * - Platform identifier
  *
  * **Runtime Checks:**
@@ -51,7 +51,6 @@ export const LOGO_DARK = "/assets/logo/dark.svg";
 
 export const API_TOKEN_STORAGE_KEY = `${APP_NAME}-token`;
 export const OTP_CODE_STORAGE_KEY = `${APP_NAME}-code`;
-export const USER_DATA_STORAGE_KEY = `${APP_NAME}-user`;
 export const PLATFORM_NAME = `${APP_NAME}-dashboard`;
 
 export const isServer = typeof window === "undefined";

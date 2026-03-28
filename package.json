@@ -12,39 +12,39 @@
         "lint:code": "biome lint --no-errors-on-unmatched",
         "lint:code:fix": "biome check --write",
         "lint:types": "tsc --noEmit",
-        "api:generate": "yarn dlx swagger-typescript-api generate -p http://localhost:5025/swagger/v1/swagger.json -o ./src/shared/api/generated/ -n 116.api.ts --axios --responses && node scripts/format-api-docs.js"
+        "api:generate": "yarn dlx swagger-typescript-api generate -p https://one16-backend.onrender.com/swagger/v1/swagger.json -o ./src/shared/api/generated/ -n 116.api.ts --axios --responses && node scripts/format-api-docs.js"
     },
     "dependencies": {
-        "@ant-design/v5-patch-for-react-19": "^1.0.3",
-        "@lottiefiles/dotlottie-react": "^0.17.4",
+        "@lottiefiles/dotlottie-react": "^0.18.7",
         "@reduxjs/toolkit": "^2.9.0",
-        "antd": "^5.27.4",
-        "antd-style": "^3.7.1",
+        "antd": "^6.3.4",
+        "antd-style": "^4.1.0",
         "axios": "^1.12.2",
         "http-status": "^2.1.0",
         "nprogress": "^0.2.0",
         "react": "^19.2.0",
         "react-dom": "^19.2.0",
-        "react-helmet-async": "^2.0.5",
+        "react-helmet-async": "^3.0.0",
         "react-redux": "^9.2.0",
         "react-router": "^7.9.3",
         "redux-logger": "^4.0.0",
         "redux-persist": "^6.0.0",
+        "redux-persist-transform-encrypt": "^5.1.1",
         "sass": "^1.93.2",
         "web-vitals": "^5.1.0"
     },
     "devDependencies": {
         "@biomejs/biome": "^2.2.5",
-        "@types/node": "^24.6.2",
+        "@types/node": "^25.5.0",
         "@types/nprogress": "^0.2.3",
         "@types/react": "^19.2.0",
         "@types/react-dom": "^19.2.0",
         "@types/redux-logger": "^3.0.13",
-        "@vitejs/plugin-react-swc": "^4.1.0",
-        "globals": "^16.4.0",
+        "@vitejs/plugin-react": "^6.0.1",
+        "globals": "^17.4.0",
         "lint-staged": "^16.2.3",
-        "typescript": "^5.9.3",
-        "vite": "^7.1.9"
+        "typescript": "^6.0.2",
+        "vite": "^8.0.2"
     },
     "packageManager": "yarn@4.9.4"
 }

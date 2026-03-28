@@ -1,8 +1,6 @@
 import type { FormInstance } from "antd";
 import { Form } from "antd";
-import { useSelector } from "react-redux";
-import type { IRootState } from "@/core/presentation/store/root.reducer";
-import { useAppDispatch } from "@/core/presentation/store/store";
+import { useAppDispatch, useAppSelector } from "@/core/presentation/store/store";
 import type { EOtpPurpose } from "@/modules/auth/domain/enums/EOtpPurpose";
 import type { IVerifyOtpCredentials } from "@/modules/auth/presentation/model/IVerifyOtpCredentials";
 import {
@@ -44,8 +42,8 @@ export const useVerifyOtp = (email: string, purpose: EOtpPurpose): IUseVerifyOtp
 
     const [form] = useForm<IVerifyOtpCredentials>();
 
-    const { error, loading, fetched, data } = useSelector(
-        ({ auth: { verifyOtp } }: IRootState) => verifyOtp
+    const { error, loading, fetched, data } = useAppSelector(
+        ({ auth: { verifyOtp } }) => verifyOtp
     );
 
     const isSuccess = Boolean(fetched && data.isSuccess);

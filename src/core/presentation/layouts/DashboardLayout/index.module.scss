@@ -1,0 +1,11 @@
+@use "@/shared/styles/colors.scss" as colors;
+@use "@/shared/styles/dimensions.scss" as dimensions;
+
+.dashboardLayout {
+    min-height: 100vh;
+
+    &__content {
+        margin: dimensions.$padding;
+        overflow-y: auto;
+    }
+}

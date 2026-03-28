@@ -9,7 +9,7 @@
     padding: dimensions.$padding;
 
     [data-text='title'] {
-        font-size: 32pt;
+        font-size: 28pt;
         
         @include mixins.mediaMaxMD {
             font-size: 18pt;
@@ -23,6 +23,7 @@
 
     &__lottie{
         padding: dimensions.$padding;
+        mix-blend-mode: screen;
 
         @include mixins.mediaLG {
             width: 24rem;

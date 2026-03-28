@@ -1,8 +1,6 @@
 import type { FormInstance } from "antd";
 import { Form } from "antd";
-import { useSelector } from "react-redux";
-import type { IRootState } from "@/core/presentation/store/root.reducer";
-import { useAppDispatch } from "@/core/presentation/store/store";
+import { useAppDispatch, useAppSelector } from "@/core/presentation/store/store";
 import type { IResetPasswordCredentials } from "@/modules/auth/presentation/model/IResetPasswordCredentials";
 import {
     resetPasswordAction,
@@ -48,8 +46,8 @@ export const useResetPassword = (email: string): IUseResetPassword => {
 
     const [form] = useForm<IFormValues>();
 
-    const { error, loading, fetched, data } = useSelector(
-        ({ auth: { resetPassword } }: IRootState) => resetPassword
+    const { error, loading, fetched, data } = useAppSelector(
+        ({ auth: { resetPassword } }) => resetPassword
     );
 
     const isSuccess = Boolean(fetched && data.isSuccess);

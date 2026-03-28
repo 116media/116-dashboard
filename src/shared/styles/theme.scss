@@ -68,6 +68,7 @@
         flex-flow: row-reverse;
         justify-content: flex-end;
         font-weight: 500;
+        height: 0 !important;
         &::before {
             padding-left: 4px;
         }
@@ -170,4 +171,8 @@ input {
         -webkit-box-orient: vertical !important;
         font-size: 9pt !important;
     }
+}
+
+[class~='ant-btn-icon']{
+    display: flex;
 }

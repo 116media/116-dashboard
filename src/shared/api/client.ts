@@ -3,12 +3,13 @@ import { persistor } from "@/core/presentation/store/store";
 import { authErrors } from "@/modules/auth/infrastructure/constants/api";
 import { AuthStorageService } from "@/modules/auth/infrastructure/storage/authstorage.service";
 import { Api } from "@/shared/api/generated/116.api";
+import { deviceIdInterceptor } from "@/shared/api/interceptors/device-id.interceptor";
 import type { IApiProblemDetails } from "@/shared/api/type";
 import { apiErrors } from "@/shared/lib/constants/api";
 import { API_URL, isServer } from "@/shared/lib/constants/common";
 import { LOGIN_PATH } from "@/shared/lib/constants/paths";
 
-const { clearAuth, getToken, getUser } = AuthStorageService;
+const { clearToken, getToken } = AuthStorageService;
 
 /**
  * Configured API client instance.
@@ -58,13 +59,12 @@ const errorHandler = async (error: AxiosError<IApiProblemDetails>): Promise<neve
             authErrors.includes(problemDetails.title as (typeof authErrors)[number])
         ) {
             const hasToken = getToken();
-            const hasUserData = getUser();
 
             // Only perform logout and redirect for previously authenticated users.
             // This prevents unnecessary redirects during login attempts where auth errors are expected.
-            if (hasToken || hasUserData) {
+            if (hasToken) {
                 persistor.purge();
-                !isServer && clearAuth();
+                !isServer && clearToken();
                 window.location.href = LOGIN_PATH;
             }
         }
@@ -93,5 +93,7 @@ const errorHandler = async (error: AxiosError<IApiProblemDetails>): Promise<neve
         detail: "Network error occurred. Please check your connection."
     } as IApiProblemDetails);
 };
+
+apiClient.instance.interceptors.request.use(deviceIdInterceptor);
 
 apiClient.instance.interceptors.response.use(responseHandler, errorHandler);
