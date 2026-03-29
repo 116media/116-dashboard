@@ -5,7 +5,11 @@ interface IChangePasswordUseCase
     extends IUseCase<{ oldPassword: string; newPassword: string }, { isSuccess: boolean }> {}
 
 export class ChangePasswordUseCase implements IChangePasswordUseCase {
-    constructor(private readonly settingsRepository: ISettingsRepositoryPort) {}
+    private readonly settingsRepository: ISettingsRepositoryPort;
+
+    constructor({ settingsRepository }: { settingsRepository: ISettingsRepositoryPort }) {
+        this.settingsRepository = settingsRepository;
+    }
 
     async execute(data: {
         oldPassword: string;
