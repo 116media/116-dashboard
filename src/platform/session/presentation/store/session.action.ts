@@ -1,16 +1,10 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { GetSessionsUseCase } from "@/platform/session/application/usecases/getsessions.usecase";
-import { RevokeSessionUseCase } from "@/platform/session/application/usecases/revokesession.usecase";
 import type { IRevokeSessionResponse } from "@/platform/session/domain/entities/IRevokeSessionResponse";
 import type { ISession } from "@/platform/session/domain/entities/ISession";
-import { SessionRepositoryImpl } from "@/platform/session/infrastructure/repositories/session.repository.impl";
 import { sessionSlice } from "@/platform/session/presentation/store";
 import { ActionType } from "@/platform/session/presentation/store/constants";
 import type { IApiProblemDetails } from "@/shared/infrastructure/api/type";
-
-const sessionRepository = new SessionRepositoryImpl();
-const getSessionsUseCase = new GetSessionsUseCase(sessionRepository);
-const revokeSessionUseCase = new RevokeSessionUseCase(sessionRepository);
+import container from "@/shared/infrastructure/service.locator.ts";
 
 export const resetGetSessionsAction = () =>
     sessionSlice.actions.clear({ context: ActionType.SessionGetSessions });
@@ -21,7 +15,7 @@ export const getSessionsAction = createAsyncThunk<
     { rejectValue: IApiProblemDetails }
 >(ActionType.SessionGetSessions, async (_, { rejectWithValue }) => {
     try {
-        return await getSessionsUseCase.execute();
+        return await container.cradle.getSessionsUseCase.execute();
     } catch (error) {
         return rejectWithValue(error as IApiProblemDetails);
     }
@@ -36,7 +30,7 @@ export const revokeSessionAction = createAsyncThunk<
     { rejectValue: IApiProblemDetails }
 >(ActionType.SessionRevokeSession, async (sessionId, { rejectWithValue }) => {
     try {
-        return await revokeSessionUseCase.execute(sessionId);
+        return await container.cradle.revokeSessionUseCase.execute(sessionId);
     } catch (error) {
         return rejectWithValue(error as IApiProblemDetails);
     }
