@@ -27,12 +27,16 @@ interface IResendOtpUseCase extends IUseCase<IResendOtpCredentials, IResendOtpRe
  * Contains business rules independent of frameworks and UI.
  */
 export class ResendOtpUseCase implements IResendOtpUseCase {
+    private readonly authRepository: IAuthRepositoryPort;
+
     /**
      * Creates an instance of ResendOtpUseCase.
      *
      * @param {IAuthRepositoryPort} authRepository - Repository for auth operations (injected)
      */
-    constructor(private readonly authRepository: IAuthRepositoryPort) {}
+    constructor({ authRepository }: { authRepository: IAuthRepositoryPort }) {
+        this.authRepository = authRepository;
+    }
 
     /**
      * Executes the resend OTP use case.
