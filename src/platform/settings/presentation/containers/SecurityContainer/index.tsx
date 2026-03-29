@@ -1,4 +1,3 @@
-import { LockOutlined } from "@ant-design/icons";
 import { Empty, Spin } from "antd";
 import { type FC, useEffect } from "react";
 import { useSessions } from "@/platform/session/presentation/hooks/UseSessions";
@@ -9,6 +8,7 @@ import SettingsCard from "@/platform/settings/presentation/components/ui/Setting
 import SettingsPageHeader from "@/platform/settings/presentation/components/ui/SettingsPageHeader";
 import { useChangePassword } from "@/platform/settings/presentation/hooks/UseChangePassword";
 import { useRoles } from "@/platform/settings/presentation/hooks/UseRoles";
+import { IconLockOutlined } from "@/shared/presentation/ui/Icons";
 
 const SecurityContainer: FC = () => {
     const changePassword = useChangePassword();
@@ -29,7 +29,7 @@ const SecurityContainer: FC = () => {
     return (
         <div>
             <SettingsPageHeader
-                icon={<LockOutlined />}
+                icon={<IconLockOutlined />}
                 title="Sécurité"
                 description="Gérez votre mot de passe, vos rôles et vos sessions actives."
             />
