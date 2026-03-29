@@ -1,3 +1,4 @@
+import { useCallback } from "react";
 import type { IRoleWithPermissions } from "@/platform/settings/domain/entities/IRoleWithPermissions";
 import { getRolesAction } from "@/platform/settings/presentation/store/security.action";
 import type { IApiProblemDetails } from "@/shared/infrastructure/api/type";
@@ -14,9 +15,9 @@ export const useRoles = (): IUseRoles => {
     const dispatch = useAppDispatch();
     const { data: roles, loading, error } = useAppSelector(({ settings: { roles } }) => roles);
 
-    const fetchRoles = () => {
+    const fetchRoles = useCallback(() => {
         dispatch(getRolesAction());
-    };
+    }, [dispatch]);
 
     return { roles: Array.isArray(roles) ? roles : [], loading, error, fetchRoles };
 };
