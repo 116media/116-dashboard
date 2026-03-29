@@ -19,6 +19,7 @@
         "@reduxjs/toolkit": "^2.9.0",
         "antd": "^6.3.4",
         "antd-style": "^4.1.0",
+        "awilix": "^13.0.3",
         "axios": "^1.12.2",
         "http-status": "^2.1.0",
         "nprogress": "^0.2.0",
