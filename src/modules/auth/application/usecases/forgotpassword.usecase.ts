@@ -28,12 +28,16 @@ interface IForgotPasswordUseCase
  * Contains business rules independent of frameworks and UI.
  */
 export class ForgotPasswordUseCase implements IForgotPasswordUseCase {
+    private readonly authRepository: IAuthRepositoryPort;
+
     /**
      * Creates an instance of ForgotPasswordUseCase.
      *
      * @param {IAuthRepositoryPort} authRepository - Repository for auth operations (injected)
      */
-    constructor(private readonly authRepository: IAuthRepositoryPort) {}
+    constructor({ authRepository }: { authRepository: IAuthRepositoryPort }) {
+        this.authRepository = authRepository;
+    }
 
     /**
      * Executes the forgot password use case.
