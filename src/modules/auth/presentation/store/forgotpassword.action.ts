@@ -1,14 +1,10 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { ForgotPasswordUseCase } from "@/modules/auth/application/usecases/forgotpassword.usecase";
 import type { IForgotPasswordResponse } from "@/modules/auth/domain/entities/IForgotPasswordResponse";
-import { AuthRepositoryImpl } from "@/modules/auth/infrastructure/repositories/auth.repository.impl";
 import type { IForgotPasswordCredentials } from "@/modules/auth/presentation/model/IForgotPasswordCredentials";
 import { authSlice } from "@/modules/auth/presentation/store";
 import { ActionType } from "@/modules/auth/presentation/store/constants";
 import type { IApiProblemDetails } from "@/shared/infrastructure/api/type";
-
-const authRepository = new AuthRepositoryImpl();
-const forgotPasswordUseCase = new ForgotPasswordUseCase(authRepository);
+import container from "@/shared/infrastructure/service.locator.ts";
 
 /**
  * Action to reset forgot password state.
@@ -38,7 +34,7 @@ export const forgotPasswordAction = createAsyncThunk<
     ActionType.AuthForgotPassword,
     async (credentials: IForgotPasswordCredentials, { rejectWithValue }) => {
         try {
-            const response = await forgotPasswordUseCase.execute(credentials);
+            const response = await container.cradle.forgotPasswordUseCase.execute(credentials);
             return response;
         } catch (error) {
             return rejectWithValue(error as IApiProblemDetails);
