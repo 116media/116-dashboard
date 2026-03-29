@@ -1,0 +1,24 @@
+@use "@/shared/presentation/styles/dimensions" as dimensions;
+
+.roleBadge {
+    cursor: pointer;
+    margin-top: calc(dimensions.$padding / 6);
+    padding: calc(dimensions.$padding * 0.5);
+    text-align: center;
+    background: none;
+    border: none;
+
+    &__compact {
+        margin-top: 0;
+        padding: 0;
+        text-align: left;
+    }
+
+    &__tag {
+        text-transform: lowercase;
+
+        span {
+            font-weight: 500;
+        }
+    }
+}
