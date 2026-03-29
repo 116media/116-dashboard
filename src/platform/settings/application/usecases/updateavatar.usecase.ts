@@ -5,7 +5,11 @@ import type { IUseCase } from "@/shared/application/usecases/IUseCase";
 interface IUpdateAvatarUseCase extends IUseCase<File, IUser> {}
 
 export class UpdateAvatarUseCase implements IUpdateAvatarUseCase {
-    constructor(private readonly settingsRepository: ISettingsRepositoryPort) {}
+    private readonly settingsRepository: ISettingsRepositoryPort;
+
+    constructor({ settingsRepository }: { settingsRepository: ISettingsRepositoryPort }) {
+        this.settingsRepository = settingsRepository;
+    }
 
     async execute(file: File): Promise<IUser> {
         return this.settingsRepository.updateAvatar(file);
