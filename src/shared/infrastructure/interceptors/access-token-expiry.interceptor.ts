@@ -1,11 +1,8 @@
 import type { AxiosError, AxiosInstance, InternalAxiosRequestConfig } from "axios";
 import HttpStatus from "http-status";
-import { RefreshTokenUseCase } from "@/platform/session/application/usecases/refresh-token.usecase";
-import { SessionRepositoryImpl } from "@/platform/session/infrastructure/repositories/session.repository.impl";
 import type { IApiProblemDetails } from "@/shared/infrastructure/api/type";
-import { LOGIN_PATH } from "@/shared/infrastructure/constants/paths";
-import { persistor } from "@/shared/presentation/store/store";
-import { REFRESH_TOKEN_EXPIRED_EVENT } from "./refresh-token-expiry.interceptor";
+import { REFRESH_TOKEN_EXPIRED_EVENT } from "@/shared/infrastructure/interceptors/refresh-token-expiry.interceptor";
+import container from "@/shared/infrastructure/service.locator.ts";
 
 interface RetryableRequestConfig extends InternalAxiosRequestConfig {
     _retry?: boolean;
@@ -33,7 +30,7 @@ const processQueue = (error: AxiosError | null) => {
  *
  * Triggers on `401 Unauthorized` responses with
  * `"AccessTokenExpiryException"`, refreshes the token using
- * {@link SessionRepositoryImpl}, and retries the original request.
+ * the DI container's `refreshTokenUseCase`, and retries the original request.
  *
  * @remarks
  *
@@ -46,8 +43,9 @@ const processQueue = (error: AxiosError | null) => {
  * After a successful refresh, the old refresh token becomes invalid.
  *
  * **Failure Handling:**
- * If refresh fails, is invalid/expired, or a network error occurs,
- * Redux is purged and the user is redirected to login.
+ * If refresh fails with a `RefreshTokenExpiryException`, a
+ * {@link REFRESH_TOKEN_EXPIRED_EVENT} is dispatched so the
+ * presentation layer can handle it (modal, purge, redirect).
  *
  * **Note:**
  * This interceptor should run BEFORE the error handler so it gets
@@ -76,21 +74,19 @@ export const accessTokenExpiryInterceptor = (instance: AxiosInstance) => {
         originalRequest._retry = true;
 
         try {
-            const useCase = new RefreshTokenUseCase(new SessionRepositoryImpl());
-            await useCase.execute();
+            await container.cradle.refreshTokenUseCase.execute();
             processQueue(null);
             return instance.request(originalRequest);
         } catch (refreshError) {
             processQueue(refreshError as AxiosError);
             const axiosError = refreshError as AxiosError<IApiProblemDetails>;
+
             const isRefreshTokenExpiry =
                 axiosError.response?.status === HttpStatus.FORBIDDEN &&
                 axiosError.response?.data?.title === "RefreshTokenExpiryException";
-                
-            if (isRefreshTokenExpiry) window.dispatchEvent(new CustomEvent(REFRESH_TOKEN_EXPIRED_EVENT));
-            else {
-                persistor.purge();
-                window.location.href = LOGIN_PATH;
+
+            if (isRefreshTokenExpiry) {
+                window.dispatchEvent(new CustomEvent(REFRESH_TOKEN_EXPIRED_EVENT));
             }
             return Promise.reject(refreshError);
         } finally {
