@@ -1,4 +1,4 @@
-import { Avatar, Badge, Button, Divider, Flex, Tag, Typography } from "antd";
+import { Avatar, Button, Divider, Flex, Typography } from "antd";
 import type { FC } from "react";
 import { useNavigate } from "react-router";
 import { useSignOut } from "@/modules/auth/presentation/hooks/UseSignOut";
@@ -10,6 +10,7 @@ import {
     IconLogoutOutlined,
     IconUserOutlined
 } from "@/shared/presentation/ui/Icons";
+import RoleBadge from "@/shared/presentation/ui/RoleBadge";
 
 import styles from "./index.module.scss";
 
@@ -56,24 +57,9 @@ export const SettingsDropdownMenu: FC = () => {
                 </Text>
                 <Text type="secondary">{user?.email}</Text>
 
-                <div className={styles.settingsDropdownMenu__role}>
-                    <Tag
-                        variant="outlined"
-                        className={styles.settingsDropdownMenu__role}
-                        onClick={() => navigate(SETTING_PATH)}
-                    >
-                        {user?.roles?.[0]?.name}
-                    </Tag>
-
-                    {user?.roles?.length >= 1 && (
-                        <Badge
-                            size="small"
-                            color="volcano"
-                            offset={[-6, -20]}
-                            count={user.roles.length}
-                        />
-                    )}
-                </div>
+                {user?.roles && (
+                    <RoleBadge roles={user.roles} onClick={() => navigate(SETTING_PATH)} />
+                )}
             </Flex>
 
             <Divider size="small" />
