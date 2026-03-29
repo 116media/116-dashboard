@@ -1,5 +1,5 @@
 import { APP_NAME } from "@/shared/infrastructure/constants/common";
 
 export const DEVICE_ID_STORAGE_KEY = `${APP_NAME}-device-id`;
-export const SESSION_EXPIRED_STORAGE_KEY = `${APP_NAME}-session-expired`;
+
 export const X_DEVICE_ID_HEADER = "X-Device-Id";
