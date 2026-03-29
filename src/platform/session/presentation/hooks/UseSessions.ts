@@ -1,4 +1,5 @@
 import { Modal } from "antd";
+import { useCallback } from "react";
 import type { ISession } from "@/platform/session/domain/entities/ISession";
 import {
     getSessionsAction,
@@ -29,27 +30,30 @@ export const useSessions = (): IUseSessions => {
         ({ session: { revokeSession } }) => revokeSession
     );
 
-    const fetchSessions = () => {
+    const fetchSessions = useCallback(() => {
         dispatch(getSessionsAction());
-    };
+    }, [dispatch]);
 
-    const onRevoke = (sessionId: string) => {
-        Modal.confirm({
-            title: "Révoquer la session",
-            content:
-                "Êtes-vous sûr de vouloir révoquer cette session ? L'appareil sera déconnecté immédiatement.",
-            okText: "Révoquer",
-            okButtonProps: { danger: true },
-            cancelText: "Annuler",
-            async onOk() {
-                const result = await dispatch(revokeSessionAction(sessionId));
-                if (revokeSessionAction.fulfilled.match(result)) {
-                    fetchSessions();
-                    showNotification(SettingsNotification.sessionRevokeSuccess);
+    const onRevoke = useCallback(
+        (sessionId: string) => {
+            Modal.confirm({
+                title: "Révoquer la session",
+                content:
+                    "Êtes-vous sûr de vouloir révoquer cette session ? L'appareil sera déconnecté immédiatement.",
+                okText: "Révoquer",
+                okButtonProps: { danger: true },
+                cancelText: "Annuler",
+                async onOk() {
+                    const result = await dispatch(revokeSessionAction(sessionId));
+                    if (revokeSessionAction.fulfilled.match(result)) {
+                        dispatch(getSessionsAction());
+                        showNotification(SettingsNotification.sessionRevokeSuccess);
+                    }
                 }
-            }
-        });
-    };
+            });
+        },
+        [dispatch]
+    );
 
     return {
         error,
