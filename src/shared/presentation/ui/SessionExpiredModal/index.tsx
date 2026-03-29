@@ -11,7 +11,7 @@ import { persistor } from "@/shared/presentation/store/store";
  *
  * @description
  * Listens for the {@link REFRESH_TOKEN_EXPIRED_EVENT} custom DOM event
- * dispatched by the refresh token expiry interceptor, then shows a
+ * dispatched by the token expiry interceptors, then shows a
  * non-dismissible modal informing the user their session has expired.
  *
  * On OK, Redux state is purged and the user is redirected to the login page.
@@ -46,7 +46,7 @@ const SessionExpiredModal: FC = () => {
             open={isOpen}
             centered
             closable={false}
-            maskClosable={false}
+            mask={{ closable: false }}
             keyboard={false}
             title="Session expirée"
             okText="OK"
