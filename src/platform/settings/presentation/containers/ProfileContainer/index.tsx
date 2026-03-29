@@ -1,5 +1,4 @@
-import { CameraOutlined, UserOutlined } from "@ant-design/icons";
-import { Avatar, Button, Spin } from "antd";
+import { Avatar, Button, Skeleton } from "antd";
 import { type FC, useEffect, useRef } from "react";
 import AccountInfoModal from "@/platform/settings/presentation/components/forms/AccountInfoModal";
 import SettingsCard from "@/platform/settings/presentation/components/ui/SettingsCard";
@@ -8,7 +7,14 @@ import SettingsPageHeader from "@/platform/settings/presentation/components/ui/S
 import { useProfile } from "@/platform/settings/presentation/hooks/UseProfile";
 import { useUpdateAccount } from "@/platform/settings/presentation/hooks/UseUpdateAccount";
 import { useUpdateAvatar } from "@/platform/settings/presentation/hooks/UseUpdateAvatar";
+import {
+    IconCameraOutlined,
+    IconEnvironmentOutlined,
+    IconUserOutlined
+} from "@/shared/presentation/ui/Icons";
+import RoleBadge from "@/shared/presentation/ui/RoleBadge";
 import styles from "./index.module.scss";
+import ProfileContainerLoading from "./ProfileContainer.Loading";
 
 const ProfileContainer: FC = () => {
     const { profile, loading, fetchProfile } = useProfile();
@@ -42,56 +48,62 @@ const ProfileContainer: FC = () => {
             : null;
 
     if (loading) {
-        return (
-            <div className={styles.loader}>
-                <Spin />
-            </div>
-        );
+        return <ProfileContainerLoading />;
     }
 
     return (
         <div>
             <SettingsPageHeader
-                icon={<UserOutlined />}
+                icon={<IconUserOutlined />}
                 title="Profil"
                 description="Gérez vos informations personnelles et votre photo de profil."
             />
             <SettingsCard title="Profil">
-                <div className={styles.avatarSection}>
-                    <div className={styles.avatarWrapper}>
-                        <Spin spinning={avatarLoading}>
+                <div className={styles.profileContainer__avatarSection}>
+                    <div className={styles.profileContainer__avatarWrapper}>
+                        <Skeleton
+                            loading={avatarLoading}
+                            active
+                            avatar={{ size: 80, shape: "square" }}
+                            paragraph={false}
+                            title={false}
+                        >
                             <Avatar
-                                size={64}
-                                shape="circle"
+                                size={80}
+                                shape="square"
                                 src={profile?.avatar?.storageUrl}
-                                icon={!profile?.avatar && <UserOutlined />}
+                                icon={!profile?.avatar && <IconUserOutlined />}
                             >
                                 {!profile?.avatar && getInitials()}
                             </Avatar>
-                        </Spin>
+                        </Skeleton>
                     </div>
-                    <div className={styles.avatarInfo}>
-                        <span className={styles.userName}>{profile?.userName}</span>
-                        <span className={styles.role}>{profile?.roles?.[0]?.name}</span>
+                    <div className={styles.profileContainer__avatarInfo}>
+                        <span className={styles.profileContainer__userName}>
+                            {profile?.userName}
+                        </span>
+                        {profile?.roles && <RoleBadge compact roles={profile.roles} />}
                         {profile?.countryName && (
-                            <span className={styles.location}>{profile.countryName}</span>
+                            <span className={styles.profileContainer__location}>
+                                <IconEnvironmentOutlined /> {profile.countryName}
+                            </span>
                         )}
                     </div>
-                    <Button icon={<CameraOutlined />} onClick={handleAvatarClick}>
+                    <Button icon={<IconCameraOutlined />} onClick={handleAvatarClick}>
                         Modifier
                     </Button>
                     <input
-                        ref={fileInputRef}
+                        hidden
                         type="file"
                         accept="image/*"
-                        hidden
+                        ref={fileInputRef}
                         onChange={handleFileChange}
                     />
                 </div>
             </SettingsCard>
 
             <SettingsCard title="Informations du compte" onEdit={updateAccount.open}>
-                <div className={styles.fieldsGrid}>
+                <div className={styles.profileContainer__fieldsGrid}>
                     <SettingsField label="Pseudo" value={profile?.userName} />
                     <SettingsField label="Email" value={profile?.email} />
                     <SettingsField label="Pays" value={profile?.countryName} />
