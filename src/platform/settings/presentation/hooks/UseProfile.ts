@@ -1,3 +1,4 @@
+import { useCallback } from "react";
 import type { IUser } from "@/modules/auth/domain/entities/IUser";
 import { authSlice } from "@/modules/auth/presentation/store";
 import { getProfileAction } from "@/platform/settings/presentation/store/profile.action";
@@ -19,12 +20,12 @@ export const useProfile = (): IUseProfile => {
         error
     } = useAppSelector(({ settings: { profile } }) => profile);
 
-    const fetchProfile = async () => {
+    const fetchProfile = useCallback(async () => {
         const result = await dispatch(getProfileAction());
         if (getProfileAction.fulfilled.match(result)) {
             dispatch(authSlice.actions.updateUser(result.payload));
         }
-    };
+    }, [dispatch]);
 
     return { profile, loading, error, fetchProfile };
 };
