@@ -30,12 +30,16 @@ interface ILoginUseCase extends IUseCase<ILoginCredentials, IAuthResponse> {}
  * Contains business rules independent of frameworks and UI.
  */
 export class LoginUseCase implements ILoginUseCase {
+    private readonly authRepository: IAuthRepositoryPort;
+
     /**
      * Creates an instance of LoginUseCase.
      *
      * @param {IAuthRepositoryPort} authRepository - Repository for auth operations (injected)
      */
-    constructor(private readonly authRepository: IAuthRepositoryPort) {}
+    constructor({ authRepository }: { authRepository: IAuthRepositoryPort }) {
+        this.authRepository = authRepository;
+    }
 
     /**
      * Executes the login use case.
