@@ -1,14 +1,10 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { ResendOtpUseCase } from "@/modules/auth/application/usecases/resendotp.usecase";
 import type { IResendOtpResponse } from "@/modules/auth/domain/entities/IResendOtpResponse";
-import { AuthRepositoryImpl } from "@/modules/auth/infrastructure/repositories/auth.repository.impl";
 import type { IResendOtpCredentials } from "@/modules/auth/presentation/model/IResendOtpCredentials";
 import { authSlice } from "@/modules/auth/presentation/store";
 import { ActionType } from "@/modules/auth/presentation/store/constants";
 import type { IApiProblemDetails } from "@/shared/infrastructure/api/type";
-
-const authRepository = new AuthRepositoryImpl();
-const resendOtpUseCase = new ResendOtpUseCase(authRepository);
+import container from "@/shared/infrastructure/service.locator.ts";
 
 /**
  * Action to reset resend OTP state.
@@ -36,7 +32,7 @@ export const resendOtpAction = createAsyncThunk<
     { rejectValue: IApiProblemDetails }
 >(ActionType.AuthResendOtp, async (credentials: IResendOtpCredentials, { rejectWithValue }) => {
     try {
-        const response = await resendOtpUseCase.execute(credentials);
+        const response = await container.cradle.resendOtpUseCase.execute(credentials);
         return response;
     } catch (error) {
         return rejectWithValue(error as IApiProblemDetails);
