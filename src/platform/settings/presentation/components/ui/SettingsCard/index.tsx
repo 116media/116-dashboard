@@ -1,6 +1,6 @@
-import { EditOutlined } from "@ant-design/icons";
 import { Button, Card, Typography } from "antd";
 import type { FC, ReactNode } from "react";
+import { IconEditOutlined } from "@/shared/presentation/ui/Icons";
 import styles from "./index.module.scss";
 
 const { Title } = Typography;
@@ -25,7 +25,7 @@ const SettingsCard: FC<ISettingsCardProps> = ({
                     {title}
                 </Title>
                 {onEdit && (
-                    <Button type="link" icon={<EditOutlined />} onClick={onEdit}>
+                    <Button type="link" icon={<IconEditOutlined />} onClick={onEdit}>
                         {editLabel}
                     </Button>
                 )}
