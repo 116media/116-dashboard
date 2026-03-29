@@ -30,12 +30,16 @@ interface IResetPasswordUseCase
  * Contains business rules independent of frameworks and UI.
  */
 export class ResetPasswordUseCase implements IResetPasswordUseCase {
+    private readonly authRepository: IAuthRepositoryPort;
+
     /**
      * Creates a new ResetPasswordUseCase instance.
      *
      * @param {IAuthRepositoryPort} authRepository - Repository implementation for data access
      */
-    constructor(private readonly authRepository: IAuthRepositoryPort) {}
+    constructor({ authRepository }: { authRepository: IAuthRepositoryPort }) {
+        this.authRepository = authRepository;
+    }
 
     /**
      * Executes the reset password use case.
