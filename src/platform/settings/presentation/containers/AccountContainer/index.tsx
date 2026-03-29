@@ -1,10 +1,10 @@
-import { SettingOutlined } from "@ant-design/icons";
 import { Button, Typography } from "antd";
 import type { FC } from "react";
 import { useSignOut } from "@/modules/auth/presentation/hooks/UseSignOut";
 import { useSignOutAll } from "@/modules/auth/presentation/hooks/UseSignOutAll";
 import SettingsCard from "@/platform/settings/presentation/components/ui/SettingsCard";
 import SettingsPageHeader from "@/platform/settings/presentation/components/ui/SettingsPageHeader";
+import { IconSettingOutlined } from "@/shared/presentation/ui/Icons";
 
 const { Text } = Typography;
 
@@ -15,7 +15,7 @@ const AccountContainer: FC = () => {
     return (
         <div>
             <SettingsPageHeader
-                icon={<SettingOutlined />}
+                icon={<IconSettingOutlined />}
                 title="Compte"
                 description="Gérez la déconnexion de vos appareils."
             />
