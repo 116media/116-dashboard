@@ -1,6 +1,11 @@
-import { BellOutlined, LockOutlined, SettingOutlined, UserOutlined } from "@ant-design/icons";
 import { Menu } from "antd";
 import type { FC } from "react";
+import {
+    IconBellOutlined,
+    IconLockOutlined,
+    IconSettingOutlined,
+    IconUserOutlined
+} from "@/shared/presentation/ui/Icons";
 import styles from "./index.module.scss";
 
 export type SettingsTab = "profile" | "security" | "notification" | "account";
@@ -11,17 +16,17 @@ interface ISettingsSidebarProps {
 }
 
 const SETTINGS_TABS = [
-    { key: "profile", label: "Profil", icon: <UserOutlined /> },
-    { key: "security", label: "Sécurité", icon: <LockOutlined /> },
-    { key: "notification", label: "Notifications", icon: <BellOutlined /> },
-    { key: "account", label: "Compte", icon: <SettingOutlined /> }
+    { key: "profile", label: "Profil", icon: <IconUserOutlined /> },
+    { key: "security", label: "Sécurité", icon: <IconLockOutlined /> },
+    { key: "notification", label: "Notifications", icon: <IconBellOutlined /> },
+    { key: "account", label: "Compte", icon: <IconSettingOutlined /> }
 ];
 
 const SettingsSidebar: FC<ISettingsSidebarProps> = ({ activeTab, onChange }) => {
     return (
         <div className={styles.sidebar}>
             <Menu
-                mode="inline"
+                mode="vertical"
                 selectedKeys={[activeTab]}
                 items={SETTINGS_TABS}
                 onClick={({ key }) => onChange(key as SettingsTab)}
