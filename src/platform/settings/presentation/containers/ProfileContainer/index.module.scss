@@ -1,42 +1,68 @@
-.loader {
-    display: flex;
-    justify-content: center;
-    padding: 48px;
-}
+@use "@/shared/presentation/styles/colors" as colors;
+@use "@/shared/presentation/styles/dimensions" as dimensions;
 
-.avatarSection {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-}
+.profileContainer {
+    &__avatarSection {
+        display: flex;
+        align-items: center;
+        gap: calc(dimensions.$padding / 1.5);
+    }
 
-.avatarWrapper {
-    flex-shrink: 0;
-}
+    &__avatarWrapper {
+        flex-shrink: 0;
+    }
 
-.avatarInfo {
-    display: flex;
-    flex-direction: column;
-    flex: 1;
-}
+    &__avatarInfo {
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+    }
 
-.userName {
-    font-weight: 600;
-    font-size: 16px;
-}
+    &__userName {
+        font-weight: 600;
+        font-size: 16px;
+        margin-bottom: calc(dimensions.$padding / 8);
+    }
 
-.role {
-    color: rgba(0, 0, 0, 0.45);
-    font-size: 13px;
-}
+    &__location {
+        display: flex;
+        align-items: center;
+        gap: calc(dimensions.$padding / 6);
+        margin-top: calc(dimensions.$padding / 2);
+        color: colors.$description;
+        font-size: 13px;
+    }
 
-.location {
-    color: rgba(0, 0, 0, 0.45);
-    font-size: 13px;
-}
+    &__fieldsGrid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: calc(dimensions.$padding / 1.5);
+    }
 
-.fieldsGrid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
+    &__loading {
+        [class~="ant-skeleton-title"] {
+            margin: 0 !important;
+            margin-bottom: 1rem !important;
+        }
+
+        &__avatarSection {
+            display: flex;
+            align-items: center;
+            gap: calc(dimensions.$padding / 1.5);
+        }
+        
+        &__avatarInfo {
+            flex: 1;
+        }
+        
+        &__fieldsGrid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: calc(dimensions.$padding / 1.5);
+        }
+        
+        &__spacer {
+            margin-bottom: calc(dimensions.$padding / 1.5);
+        }
+    }
 }
