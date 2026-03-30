@@ -99,7 +99,7 @@ const AccountInfoModal: FC<IAccountInfoModalProps> = ({
                     label="Téléphone"
                     rules={SettingsValidator.phonePartial("Téléphone", country?.dialCode)}
                 >
-                    <Input prefix={country?.dialCode} placeholder="Ex: 788123456" />
+                    <Input prefix={country?.dialCode} placeholder="Numéro de téléphone" />
                 </Form.Item>
 
                 <ErrorAlert error={error} showIcon closable banner={false} />
