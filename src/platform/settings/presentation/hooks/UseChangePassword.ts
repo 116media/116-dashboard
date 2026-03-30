@@ -18,6 +18,15 @@ interface IUseChangePassword {
     resetChangePassword: () => void;
 }
 
+/**
+ * Custom hook for the change password form.
+ *
+ * @description
+ * Manages form state, submission, and success notification
+ * for changing the user's password.
+ *
+ * @returns Form instance, loading/error state, and submit handler
+ */
 export const useChangePassword = (): IUseChangePassword => {
     const dispatch = useAppDispatch();
     const [form] = useForm<IChangePasswordCredentials>();
