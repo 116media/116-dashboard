@@ -1,71 +1,122 @@
-import { Collapse, Empty, Table, Tag } from "antd";
-import type { ColumnsType } from "antd/es/table";
+import { Col, Collapse, Flex, Row, Tag, Typography } from "antd";
 import type { FC } from "react";
 import type { IPermission } from "@/modules/auth/domain/entities/IPermission";
 import type { IRoleWithPermissions } from "@/platform/settings/domain/entities/IRoleWithPermissions";
+import { IconCaretRightOutlined, IconSafetyOutlined } from "@/shared/presentation/ui/Icons";
+import { TextTransform } from "@/shared/presentation/utils/text-transform/text-transform.utils";
 import styles from "./index.module.scss";
 
-interface IRoleCardProps {
-    role: IRoleWithPermissions;
+const { Text } = Typography;
+
+/** Maps permission action names to Ant Design Tag color values. */
+const ACTION_TAG_COLORS: Record<string, string> = {
+    read: "blue",
+    write: "orange",
+    delete: "red",
+    all: "default"
+};
+
+function getActionColor(action: string): string {
+    return ACTION_TAG_COLORS[action] ?? "default";
 }
 
-const columns: ColumnsType<IPermission> = [
-    {
-        title: "Ressource",
-        dataIndex: "resource",
-        width: "25%"
-    },
-    {
-        title: "Action",
-        dataIndex: "action",
-        width: "20%",
-        render: (action: string) => <Tag>{action}</Tag>
-    },
-    {
-        title: "Description",
-        dataIndex: "description",
-        width: "40%"
-    },
-    {
-        title: "Statut",
-        dataIndex: "isActive",
-        width: "15%",
-        render: (isActive: boolean) => (
-            <Tag color={isActive ? "green" : "red"}>{isActive ? "Actif" : "Inactif"}</Tag>
-        )
-    }
-];
+/**
+ * Props for the RoleCard component.
+ *
+ * @interface IRoleCardProps
+ * @property {IRoleWithPermissions} role - Role data with nested permissions
+ * @property {boolean} [defaultOpen] - Whether the panel is expanded on mount
+ */
+interface IRoleCardProps {
+    role: IRoleWithPermissions;
+    defaultOpen?: boolean;
+}
 
-const RoleCard: FC<IRoleCardProps> = ({ role }) => {
+/**
+ * Collapsible card displaying a role and its permissions.
+ *
+ * @component
+ *
+ * @description
+ * Renders a role as a Collapse panel with the role name, permission count,
+ * and active status in the header. When expanded, shows permissions in a
+ * grid layout with resource name, action tags, and description columns.
+ */
+const RoleCard: FC<IRoleCardProps> = ({ role, defaultOpen = false }) => {
+    const label = (
+        <Flex align="center" gap={12} className={styles.role__label}>
+            <IconSafetyOutlined className={styles.role__icon} />
+            <div className={styles.role__info}>
+                <Flex align="center" gap={8}>
+                    <Text strong>{TextTransform.capitalCase(role.name)}</Text>
+                    <Tag color="" variant="filled">
+                        {role.permissions.length} permission
+                        {role.permissions.length > 1 ? "s" : ""}
+                    </Tag>
+                </Flex>
+                <Text type="secondary" style={{ fontSize: 12, marginTop: 2 }}>
+                    {role.description}
+                </Text>
+            </div>
+            <Tag color={role.isActive ? "success" : "default"} variant="outlined">
+                {role.isActive ? "Actif" : "Inactif"}
+            </Tag>
+        </Flex>
+    );
+
+    const children =
+        role.permissions.length > 0 ? (
+            <Flex vertical gap={8}>
+                {role.permissions.map((perm: IPermission) => (
+                    <Row
+                        key={perm.id}
+                        gutter={12}
+                        align="middle"
+                        className={styles.role__permission}
+                    >
+                        <Col span={4}>
+                            <Text strong className={styles.role__resource}>
+                                {perm.resource}
+                            </Text>
+                        </Col>
+                        <Col span={8}>
+                            <Flex gap={6} wrap>
+                                {perm.action
+                                    .split(",")
+                                    .map((a) => a.trim())
+                                    .map((action) => (
+                                        <Tag
+                                            key={action}
+                                            color={getActionColor(action)}
+                                            variant="filled"
+                                        >
+                                            {action}
+                                        </Tag>
+                                    ))}
+                            </Flex>
+                        </Col>
+                        <Col span={12}>
+                            <Text type="secondary" className={styles.role__permDescription}>
+                                {perm.description}
+                            </Text>
+                        </Col>
+                    </Row>
+                ))}
+            </Flex>
+        ) : (
+            <Text type="secondary">Aucune permission</Text>
+        );
+
     return (
         <Collapse
-            className={styles.collapse}
-            items={[
-                {
-                    key: role.id,
-                    label: (
-                        <div className={styles.header}>
-                            <span className={styles.name}>{role.name}</span>
-                            <span className={styles.description}>{role.description}</span>
-                            <Tag color={role.isActive ? "green" : "red"}>
-                                {role.isActive ? "Actif" : "Inactif"}
-                            </Tag>
-                        </div>
-                    ),
-                    children:
-                        role.permissions.length > 0 ? (
-                            <Table
-                                columns={columns}
-                                dataSource={role.permissions}
-                                rowKey="id"
-                                size="small"
-                                pagination={false}
-                            />
-                        ) : (
-                            <Empty description="Aucune permission" />
-                        )
-                }
-            ]}
+            className={styles.role}
+            defaultActiveKey={defaultOpen ? [role.id] : []}
+            expandIcon={({ isActive }) => (
+                <IconCaretRightOutlined
+                    className={`${styles.role__chevron} ${isActive ? styles.role__chevronOpen : ""}`}
+                />
+            )}
+            items={[{ key: role.id, label, children }]}
         />
     );
 };

@@ -1,18 +1,64 @@
-.collapse {
-    margin-bottom: 8px;
-}
+@use "@/shared/presentation/styles/colors.scss" as colors;
+@use "@/shared/presentation/styles/dimensions.scss" as dimensions;
 
-.header {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
+.role {
+    border: 1px solid colors.$border-light;
+    border-radius: dimensions.$border-radius;
+    overflow: hidden;
 
-.name {
-    font-weight: 600;
-}
+    [class~="ant-collapse-header"] {
+        flex-direction: row-reverse;
+        align-items: center !important;
+        padding: calc(dimensions.$padding * 0.67) calc(dimensions.$padding * 0.83) !important;
+        background-color: colors.$white;
+    }
 
-.description {
-    color: rgba(0, 0, 0, 0.45);
-    flex: 1;
+    [class~="ant-collapse-body"] {
+        background-color: colors.$bg-subtle;
+        padding: calc(dimensions.$padding / 2) calc(dimensions.$padding * 0.83) !important;
+    }
+    
+    &__icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 2.5rem;
+        height: 2.5rem;
+        border-radius: dimensions.$border-radius;
+        background: colors.$background;
+        color: colors.$title;
+        font-size: 1.125rem;
+        flex-shrink: 0;
+    }
+
+    &__info {
+        flex: 1;
+        min-width: 0;
+    }
+
+    &__permission {
+        padding: calc(dimensions.$padding / 6) 0;
+    }
+
+    &__resource {
+        text-transform: capitalize;
+    }
+
+    &__chevron {
+        color: colors.$text-muted;
+        transition: transform 0.2s;
+        margin-left: 1rem;
+    }
+
+    &__chevronOpen {
+        transform: rotate(90deg);
+    }
+
+    &__permDescription {
+        flex: 1;
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
 }
