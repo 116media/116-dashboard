@@ -10,12 +10,36 @@
 
     &__avatarWrapper {
         flex-shrink: 0;
+        cursor: pointer;
+        position: relative;
+        border: none;
+        background: none;
+
+            [class~="ant-skeleton-avatar"]{
+                border-radius: dimensions.$border-radius !important;
+            }
+    }
+
+    &__cameraIcon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 1.5rem;
+        height: 1.5rem;
+        border-radius: dimensions.$border-radius;
+        background: colors.$primary;
+        color: colors.$white;
+        font-size: 0.75rem;
     }
 
     &__avatarInfo {
         display: flex;
         flex-direction: column;
         flex: 1;
+    }
+
+    &__location {
+        margin-top: calc(dimensions.$padding / 4);
     }
 
     &__fieldsGrid {
