@@ -9,5 +9,8 @@ export const SettingsValidator = {
 
     countryName: (name: string): Rule[] => [ValidatorUtils.required(name)],
 
-    phonePartial: (name: string): Rule[] => [ValidatorUtils.numericOnly(name)]
+    phonePartial: (name: string, phoneDialCode?: string): Rule[] => [
+        ValidatorUtils.required(name),
+        ValidatorUtils.phone(name, phoneDialCode)
+    ]
 } as const;
