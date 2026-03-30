@@ -28,21 +28,35 @@ interface ICountrySelectProps {
  * @description
  * Renders an Ant Design Select with the full country list.
  * Each option shows the country flag, dial code, and name.
- * Supports search filtering by country name.
+ * Supports search filtering by country name, dial code, and ISO code.
  */
 const CountrySelect: FC<ICountrySelectProps> = ({
     value,
     placeholder = "Sélectionner un pays",
     onChange
 }) => {
+    const filterOption = (input: string, option?: { value?: string }) => {
+        const search = input.toLowerCase();
+        const country = COUNTRY_LIST.find((c) => c.name === option?.value);
+        if (!country) return false;
+
+        return (
+            country.name.toLowerCase().includes(search) ||
+            country.dialCode.includes(search) ||
+            country.isoCode.toLowerCase().includes(search)
+        );
+    };
+
     return (
         <Select
-            value={value}
-            showSearch
             size="large"
+            value={value}
+            onChange={onChange}
+            showSearch={{
+                filterOption
+            }}
             optionLabelProp="label"
             placeholder={placeholder}
-            onChange={onChange}
         >
             {COUNTRY_LIST.map((c) => (
                 <Option value={c.name} key={c.name} label={c.name}>
