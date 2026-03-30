@@ -1,0 +1,26 @@
+@use "@/shared/presentation/styles/colors.scss" as colors;
+@use "@/shared/presentation/styles/dimensions.scss" as dimensions;
+
+.account {
+    &__icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 2.5rem;
+        height: 2.5rem;
+        border-radius: dimensions.$border-radius;
+        background: colors.$background;
+        color: colors.$title;
+        font-size: 1.125rem;
+        flex-shrink: 0;
+
+        &__danger {
+            color: colors.$error;
+        }
+    }
+
+    &__info {
+        flex: 1;
+        min-width: 0;
+    }
+}
