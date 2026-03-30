@@ -1,4 +1,4 @@
-import { Empty, Spin } from "antd";
+import { Empty, Flex, Tag } from "antd";
 import { type FC, useEffect } from "react";
 import { useSessions } from "@/platform/session/presentation/hooks/UseSessions";
 import ChangePasswordForm from "@/platform/settings/presentation/components/forms/ChangePasswordForm";
@@ -9,7 +9,19 @@ import SettingsPageHeader from "@/platform/settings/presentation/components/ui/S
 import { useChangePassword } from "@/platform/settings/presentation/hooks/UseChangePassword";
 import { useRoles } from "@/platform/settings/presentation/hooks/UseRoles";
 import { IconLockOutlined } from "@/shared/presentation/ui/Icons";
+import StateRenderer from "@/shared/presentation/ui/StateRenderer";
+import { RolesLoading, SessionsLoading } from "./SecurityContainer.Loading";
 
+/**
+ * Container for the Security tab in Settings.
+ *
+ * @component
+ *
+ * @description
+ * Manages the security page layout including password change form,
+ * roles & permissions display, and active sessions management.
+ * Fetches roles and sessions on mount.
+ */
 const SecurityContainer: FC = () => {
     const changePassword = useChangePassword();
     const { roles, loading: rolesLoading, fetchRoles } = useRoles();
@@ -40,31 +52,54 @@ const SecurityContainer: FC = () => {
                 onSubmit={changePassword.onSubmit}
             />
 
-            <SettingsCard title="Rôles & Permissions">
-                {rolesLoading ? (
-                    <Spin />
-                ) : roles.length > 0 ? (
-                    roles.map((role) => <RoleCard key={role.id} role={role} />)
-                ) : (
-                    <Empty description="Aucun rôle assigné" />
-                )}
+            <SettingsCard
+                title="Rôles & Permissions"
+                subtitle="Vos rôles assignés et les permissions associées"
+            >
+                <StateRenderer
+                    data={roles}
+                    loading={rolesLoading}
+                    skeleton={<RolesLoading />}
+                    empty={<Empty description="Aucun rôle assigné" />}
+                    render={(roles) => (
+                        <Flex vertical gap={16}>
+                            {roles.map((role, index) => (
+                                <RoleCard key={role.id} role={role} defaultOpen={index === 0} />
+                            ))}
+                        </Flex>
+                    )}
+                />
             </SettingsCard>
 
-            <SettingsCard title="Sessions actives">
-                {sessionsLoading ? (
-                    <Spin />
-                ) : sessions.length > 0 ? (
-                    sessions.map((session) => (
-                        <SessionCard
-                            key={session.id}
-                            session={session}
-                            loading={revokeLoading}
-                            onRevoke={onRevoke}
-                        />
-                    ))
-                ) : (
-                    <Empty description="Aucune session active" />
-                )}
+            <SettingsCard
+                title="Sessions actives"
+                subtitle="Appareils actuellement connectés à votre compte"
+                extra={
+                    sessions.length > 0 && (
+                        <Tag color="blue">
+                            {sessions.length} session{sessions.length > 1 ? "s" : ""}
+                        </Tag>
+                    )
+                }
+            >
+                <StateRenderer
+                    data={sessions}
+                    loading={sessionsLoading}
+                    skeleton={<SessionsLoading />}
+                    empty={<Empty description="Aucune session active" />}
+                    render={(sessions) => (
+                        <Flex vertical gap={16}>
+                            {sessions.map((session) => (
+                                <SessionCard
+                                    key={session.id}
+                                    session={session}
+                                    loading={revokeLoading}
+                                    onRevoke={onRevoke}
+                                />
+                            ))}
+                        </Flex>
+                    )}
+                />
             </SettingsCard>
         </div>
     );
