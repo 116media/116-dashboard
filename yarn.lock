@@ -12,6 +12,7 @@ __metadata:
     "@biomejs/biome": "npm:^2.2.5"
     "@lottiefiles/dotlottie-react": "npm:^0.18.7"
     "@reduxjs/toolkit": "npm:^2.9.0"
+    "@types/google-libphonenumber": "npm:^7.4.30"
     "@types/node": "npm:^25.5.0"
     "@types/nprogress": "npm:^0.2.3"
     "@types/react": "npm:^19.2.0"
@@ -23,6 +24,7 @@ __metadata:
     awilix: "npm:^13.0.3"
     axios: "npm:^1.12.2"
     globals: "npm:^17.4.0"
+    google-libphonenumber: "npm:^3.2.44"
     http-status: "npm:^2.1.0"
     lint-staged: "npm:^16.2.3"
     nprogress: "npm:^0.2.0"
@@ -1577,6 +1579,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/google-libphonenumber@npm:^7.4.30":
+  version: 7.4.30
+  resolution: "@types/google-libphonenumber@npm:7.4.30"
+  checksum: 10c0/f81803dc061b775d981a04e99dfe9ee124b9e73ced6f0298928c0ff73fea4b34bc50b9c58f3235ee5c3c08a940a27bad20fcb9f4c25ba31698f1a64b98768306
+  languageName: node
+  linkType: hard
+
 "@types/node@npm:^25.5.0":
   version: 25.5.0
   resolution: "@types/node@npm:25.5.0"
@@ -2395,6 +2404,13 @@ __metadata:
   version: 17.4.0
   resolution: "globals@npm:17.4.0"
   checksum: 10c0/2be9e8c2b9035836f13d420b22f0247a328db82967d3bebfc01126d888ed609305f06c05895914e969653af5c6ba35fd7a0920f3e6c869afa60666c810630feb
+  languageName: node
+  linkType: hard
+
+"google-libphonenumber@npm:^3.2.44":
+  version: 3.2.44
+  resolution: "google-libphonenumber@npm:3.2.44"
+  checksum: 10c0/86b1a2519fd3abb696f529f3075372e27de157431bf3deb5138e5317b357139cf8135da0d28c9c0fb7f677fcfcd69f5f215d379b61955b17b8198b0b841d9223
   languageName: node
   linkType: hard
 
