@@ -1,0 +1,16 @@
+@use "@/shared/presentation/styles/dimensions" as dimensions;
+
+.countrySelect {
+    &__flag {
+        width: 1rem;
+        height: 0.75rem;
+        border-radius: calc(dimensions.$border-radius / 4);
+    }
+
+    &__name {
+        max-width: 12rem;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+}
