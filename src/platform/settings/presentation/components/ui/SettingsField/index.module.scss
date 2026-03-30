@@ -1,9 +1,35 @@
-.field {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-}
+@use "@/shared/presentation/styles/colors.scss" as colors;
+@use "@/shared/presentation/styles/dimensions.scss" as dimensions;
 
-.label {
-    font-size: 12px;
+.settingsField {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    gap: calc(dimensions.$padding / 2);
+    padding: calc(dimensions.$padding / 2) calc(dimensions.$padding * 0.67);
+    border: 1px solid colors.$border-light;
+    border-radius: dimensions.$border-radius;
+    transition: background-color 0.2s;
+    cursor: pointer;
+
+    &:hover {
+        background-color: rgba($color: colors.$bg-hover, $alpha: 0.5);
+    }
+
+    &__icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 2.25rem;
+        height: 2.25rem;
+        border-radius: dimensions.$border-radius;
+        background: colors.$background;
+        color: colors.$title;
+        font-size: 1rem;
+        flex-shrink: 0;
+    }
+
+    &__label {
+        font-size: 0.75rem;
+    }
 }
