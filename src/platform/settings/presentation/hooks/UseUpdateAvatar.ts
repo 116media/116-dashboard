@@ -11,6 +11,16 @@ interface IUseUpdateAvatar {
     onUpload: (file: File) => void;
 }
 
+/**
+ * Custom hook for avatar upload.
+ *
+ * @description
+ * Handles file upload for the user's profile avatar. Shows a
+ * success notification and syncs the updated user with the
+ * auth store on success.
+ *
+ * @returns Loading/error state and upload handler
+ */
 export const useUpdateAvatar = (): IUseUpdateAvatar => {
     const dispatch = useAppDispatch();
     const { loading, error } = useAppSelector(({ settings: { updateAvatar } }) => updateAvatar);
