@@ -3,6 +3,15 @@ import ComingSoon from "@/platform/settings/presentation/components/ui/ComingSoo
 import SettingsPageHeader from "@/platform/settings/presentation/components/ui/SettingsPageHeader";
 import { IconBellOutlined } from "@/shared/presentation/ui/Icons";
 
+/**
+ * Container for the Notification tab in Settings.
+ *
+ * @component
+ *
+ * @description
+ * Placeholder for notification preferences. Currently displays
+ * a "coming soon" message.
+ */
 const NotificationContainer: FC = () => {
     return (
         <div>
