@@ -2,7 +2,11 @@ import { Avatar, Button, Divider, Flex, Typography } from "antd";
 import type { FC } from "react";
 import { useNavigate } from "react-router";
 import { useSignOut } from "@/modules/auth/presentation/hooks/UseSignOut";
-import { SETTING_PATH } from "@/shared/infrastructure/constants/paths";
+import {
+    SETTING_NOTIFICATION_PATH,
+    SETTING_PROFILE_PATH,
+    SETTING_SECURITY_PATH
+} from "@/shared/infrastructure/constants/paths";
 import { useAppSelector } from "@/shared/presentation/store/store";
 import {
     IconBellOutlined,
@@ -20,9 +24,19 @@ const { Text } = Typography;
  * User menu items displayed in the settings dropdown.
  */
 const USER_MENU_ITEMS = [
-    { key: "profile", label: "Mon profil", icon: IconUserOutlined, path: SETTING_PATH },
-    { key: "notifications", label: "Notifications", icon: IconBellOutlined, path: null },
-    { key: "password", label: "Changer mot de passe", icon: IconLockOutlined, path: null }
+    { key: "profile", label: "Mon profil", icon: IconUserOutlined, path: SETTING_PROFILE_PATH },
+    {
+        key: "notifications",
+        label: "Notifications",
+        icon: IconBellOutlined,
+        path: SETTING_NOTIFICATION_PATH
+    },
+    {
+        key: "password",
+        label: "Changer mot de passe",
+        icon: IconLockOutlined,
+        path: SETTING_SECURITY_PATH
+    }
 ];
 
 /**
@@ -40,8 +54,8 @@ export const SettingsDropdownMenu: FC = () => {
     const user = useAppSelector(({ auth: { login } }) => login.data?.user);
     const { loading, onSignOut } = useSignOut();
 
-    const handleMenuClick = (path: string | null) => {
-        if (path) navigate(path);
+    const handleMenuClick = (path: string) => {
+        navigate(path);
     };
 
     return (
@@ -58,7 +72,7 @@ export const SettingsDropdownMenu: FC = () => {
                 <Text type="secondary">{user?.email}</Text>
 
                 {user?.roles && (
-                    <RoleBadge roles={user.roles} onClick={() => navigate(SETTING_PATH)} />
+                    <RoleBadge roles={user.roles} onClick={() => navigate(SETTING_PROFILE_PATH)} />
                 )}
             </Flex>
 
