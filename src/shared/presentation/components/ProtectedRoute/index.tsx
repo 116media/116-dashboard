@@ -16,7 +16,7 @@ import { useAppSelector } from "@/shared/presentation/store/store";
  * @returns Child routes or a redirect to login
  */
 export const ProtectedRoute: FC = () => {
-    const user = useAppSelector(({ auth: { login } }) => login.data?.user);
+    const user = useAppSelector(({ session: { currentUser } }) => currentUser.data);
 
     if (!user) {
         return <Navigate to={LOGIN_PATH} replace />;
