@@ -54,11 +54,16 @@ const AccountInfoModal: FC<IAccountInfoModalProps> = ({
         <Modal
             width={520}
             open={isOpen}
-            footer={null}
             destroyOnHidden
             onCancel={onClose}
             className={styles.modal}
             title="Modifier les informations du compte"
+            footer={[
+                <Button danger key="cancel" onClick={onClose}>Annuler</Button>,
+                <Button key="submit" htmlType="submit" type="primary" loading={loading} onClick={() => form.submit()}>
+                    Mettre à jour
+                </Button>
+            ]}
         >
             <Form form={form} layout="vertical" size="large" onFinish={onSubmit}>
                 <Form.Item name="email" label="Adresse e-mail">
@@ -90,13 +95,6 @@ const AccountInfoModal: FC<IAccountInfoModalProps> = ({
                 </Form.Item>
 
                 <ErrorAlert error={error} showIcon closable banner={false} />
-
-                <div className={styles.modal__footer}>
-                    <Button onClick={onClose}>Annuler</Button>
-                    <Button type="primary" htmlType="submit" loading={loading}>
-                        Mettre à jour
-                    </Button>
-                </div>
             </Form>
         </Modal>
     );
