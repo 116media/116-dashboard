@@ -1,4 +1,4 @@
-import { Card, Skeleton } from "antd";
+import { Card, Flex, Skeleton } from "antd";
 import type { FC } from "react";
 import styles from "./index.module.scss";
 
@@ -28,12 +28,17 @@ const ProfileContainerLoading: FC = () => {
                 <Skeleton active title={{ width: "45%" }} paragraph={false} />
                 <div className={styles.profileContainer__loading__fieldsGrid}>
                     {Array.from({ length: 4 }, (_, i) => i + 1).map((key) => (
-                        <Skeleton
-                            active
-                            key={key}
-                            title={{ width: "20%" }}
-                            paragraph={{ rows: 1, width: "50%" }}
-                        />
+                        <Card key={key}>
+                            <Flex gap={8}>
+                                <Skeleton.Avatar active size={48} shape="square" />
+                                <Skeleton
+                                    active
+                                    key={key}
+                                    title={{ width: "40%" }}
+                                    paragraph={{ rows: 1, width: "80%" }}
+                                />
+                            </Flex>
+                        </Card>
                     ))}
                 </div>
             </Card>

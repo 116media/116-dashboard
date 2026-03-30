@@ -1,4 +1,4 @@
-import { Avatar, Button, Skeleton } from "antd";
+import { Avatar, Button, Flex, Skeleton, Typography } from "antd";
 import { type FC, useEffect, useRef } from "react";
 import AccountInfoModal from "@/platform/settings/presentation/components/forms/AccountInfoModal";
 import SettingsCard from "@/platform/settings/presentation/components/ui/SettingsCard";
@@ -10,12 +10,26 @@ import { useUpdateAvatar } from "@/platform/settings/presentation/hooks/UseUpdat
 import {
     IconCameraOutlined,
     IconEnvironmentOutlined,
+    IconMailOutlined,
+    IconMobileOutlined,
     IconUserOutlined
 } from "@/shared/presentation/ui/Icons";
 import RoleBadge from "@/shared/presentation/ui/RoleBadge";
 import styles from "./index.module.scss";
 import ProfileContainerLoading from "./ProfileContainer.Loading";
 
+const { Text } = Typography;
+
+/**
+ * Container for the Profile tab in Settings.
+ *
+ * @component
+ *
+ * @description
+ * Manages the profile page layout including avatar upload,
+ * account information display, and the account edit modal.
+ * Fetches profile data on mount.
+ */
 const ProfileContainer: FC = () => {
     const { profile, loading, fetchProfile } = useProfile();
     const updateAccount = useUpdateAccount();
@@ -38,10 +52,6 @@ const ProfileContainer: FC = () => {
         }
     };
 
-    const getInitials = () => {
-        return profile?.userName?.charAt(0)?.toUpperCase() ?? "?";
-    };
-
     const phoneDisplay =
         profile?.countryDialCode && profile?.partialPhoneNumber
             ? `${profile.countryDialCode} ${profile.partialPhoneNumber}`
@@ -54,11 +64,11 @@ const ProfileContainer: FC = () => {
     return (
         <div>
             <SettingsPageHeader
-                icon={<IconUserOutlined />}
                 title="Profil"
+                icon={<IconUserOutlined />}
                 description="Gérez vos informations personnelles et votre photo de profil."
             />
-            <SettingsCard title="Profil">
+            <SettingsCard title="Photo de profil">
                 <div className={styles.profileContainer__avatarSection}>
                     <div className={styles.profileContainer__avatarWrapper}>
                         <Skeleton
@@ -74,23 +84,31 @@ const ProfileContainer: FC = () => {
                                 src={profile?.avatar?.storageUrl}
                                 icon={!profile?.avatar && <IconUserOutlined />}
                             >
-                                {!profile?.avatar && getInitials()}
+                                {!profile?.avatar}
                             </Avatar>
                         </Skeleton>
                     </div>
                     <div className={styles.profileContainer__avatarInfo}>
-                        <span className={styles.profileContainer__userName}>
-                            {profile?.userName}
-                        </span>
-                        {profile?.roles && <RoleBadge compact roles={profile.roles} />}
+                        <Flex align="center" gap={8}>
+                            <span>{profile?.userName}</span>
+                            <span>
+                                {profile?.roles && <RoleBadge compact roles={profile.roles} />}
+                            </span>
+                        </Flex>
+                        <Text type="secondary">{profile?.email}</Text>
                         {profile?.countryName && (
                             <span className={styles.profileContainer__location}>
                                 <IconEnvironmentOutlined /> {profile.countryName}
                             </span>
                         )}
                     </div>
-                    <Button icon={<IconCameraOutlined />} onClick={handleAvatarClick}>
-                        Modifier
+                    <Button
+                        color="default"
+                        variant="filled"
+                        icon={<IconCameraOutlined />}
+                        onClick={handleAvatarClick}
+                    >
+                        Changer la photo
                     </Button>
                     <input
                         hidden
@@ -104,10 +122,26 @@ const ProfileContainer: FC = () => {
 
             <SettingsCard title="Informations du compte" onEdit={updateAccount.open}>
                 <div className={styles.profileContainer__fieldsGrid}>
-                    <SettingsField label="Pseudo" value={profile?.userName} />
-                    <SettingsField label="Email" value={profile?.email} />
-                    <SettingsField label="Pays" value={profile?.countryName} />
-                    <SettingsField label="Téléphone" value={phoneDisplay} />
+                    <SettingsField
+                        label="Pseudo"
+                        value={profile?.userName}
+                        icon={<IconUserOutlined />}
+                    />
+                    <SettingsField
+                        label="Email"
+                        value={profile?.email}
+                        icon={<IconMailOutlined />}
+                    />
+                    <SettingsField
+                        label="Pays"
+                        value={profile?.countryName}
+                        icon={<IconEnvironmentOutlined />}
+                    />
+                    <SettingsField
+                        label="Téléphone"
+                        value={phoneDisplay}
+                        icon={<IconMobileOutlined />}
+                    />
                 </div>
             </SettingsCard>
 
