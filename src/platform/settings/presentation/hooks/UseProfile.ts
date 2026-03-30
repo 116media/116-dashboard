@@ -12,6 +12,15 @@ interface IUseProfile {
     fetchProfile: () => void;
 }
 
+/**
+ * Custom hook for fetching and accessing the user profile.
+ *
+ * @description
+ * Dispatches the profile fetch action and syncs the result
+ * with the auth store. Returns profile data, loading, and error state.
+ *
+ * @returns Profile data and fetch utilities
+ */
 export const useProfile = (): IUseProfile => {
     const dispatch = useAppDispatch();
     const {
