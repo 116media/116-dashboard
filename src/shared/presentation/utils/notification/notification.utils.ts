@@ -11,7 +11,7 @@ import { notification } from "antd";
  */
 export interface INotificationConfig {
     type: "success" | "error" | "info" | "warning";
-    message: string;
+    title: string;
     description: string;
     duration?: number;
 }
@@ -29,7 +29,7 @@ export interface INotificationConfig {
 export const showNotification = (config: INotificationConfig): void => {
     notification[config.type]({
         placement: "topRight",
-        message: config.message,
+        title: config.title,
         description: config.description,
         duration: config.duration ?? 5
     });
