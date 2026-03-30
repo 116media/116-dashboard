@@ -1,4 +1,4 @@
-import { authSlice } from "@/modules/auth/presentation/store";
+import { setCurrentUserAction } from "@/platform/session/presentation/store/currentuser.action";
 import { updateAvatarAction } from "@/platform/settings/presentation/store/profile.action";
 import { SettingsNotification } from "@/platform/settings/presentation/utils/notification/settings.notification";
 import type { IApiProblemDetails } from "@/shared/infrastructure/api/type";
@@ -29,7 +29,7 @@ export const useUpdateAvatar = (): IUseUpdateAvatar => {
         const result = await dispatch(updateAvatarAction(file));
         if (updateAvatarAction.fulfilled.match(result)) {
             showNotification(SettingsNotification.avatarUpdateSuccess);
-            dispatch(authSlice.actions.updateUser(result.payload));
+            dispatch(setCurrentUserAction(result.payload));
         }
     };
 
