@@ -21,6 +21,7 @@
         "antd-style": "^4.1.0",
         "awilix": "^13.0.3",
         "axios": "^1.12.2",
+        "google-libphonenumber": "^3.2.44",
         "http-status": "^2.1.0",
         "nprogress": "^0.2.0",
         "react": "^19.2.0",
@@ -36,6 +37,7 @@
     },
     "devDependencies": {
         "@biomejs/biome": "^2.2.5",
+        "@types/google-libphonenumber": "^7.4.30",
         "@types/node": "^25.5.0",
         "@types/nprogress": "^0.2.3",
         "@types/react": "^19.2.0",
