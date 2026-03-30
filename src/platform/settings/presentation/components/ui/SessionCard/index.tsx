@@ -40,7 +40,7 @@ const deviceIconMap: Record<ESessionDevice, FC> = {
     [ESessionDevice.Console]: IconDesktopOutlined,
     [ESessionDevice.Car]: IconCarOutlined,
     [ESessionDevice.IoT]: IconApiOutlined,
-    [ESessionDevice.Unknown]: IconQuestionCircleOutlined,
+    [ESessionDevice.Unknown]: IconQuestionCircleOutlined
 };
 
 /**
