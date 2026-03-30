@@ -3,12 +3,29 @@ import type { FC } from "react";
 import type { IRole } from "@/modules/auth/domain/entities/IRole";
 import styles from "./index.module.scss";
 
+/**
+ * Props for the RoleBadge component.
+ *
+ * @interface IRoleBadgeProps
+ * @property {IRole[]} roles - Array of user roles to display
+ * @property {boolean} [compact] - Whether to use compact styling
+ * @property {() => void} [onClick] - Callback when the badge is clicked
+ */
 interface IRoleBadgeProps {
     roles: IRole[];
     compact?: boolean;
     onClick?: () => void;
 }
 
+/**
+ * Displays the user's primary role as a tag with a count badge.
+ *
+ * @component
+ *
+ * @description
+ * Shows the first role name in a tag, with a numeric badge indicating
+ * the total number of assigned roles.
+ */
 const RoleBadge: FC<IRoleBadgeProps> = ({ roles, compact, onClick }) => {
     const className = compact
         ? `${styles.roleBadge} ${styles.roleBadge__compact}`
