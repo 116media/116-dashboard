@@ -11,6 +11,15 @@ interface IUseRoles {
     fetchRoles: () => void;
 }
 
+/**
+ * Custom hook for fetching and accessing the user's roles and permissions.
+ *
+ * @description
+ * Dispatches the roles fetch action on demand. Returns the list
+ * of roles with their permissions, loading, and error state.
+ *
+ * @returns Roles data and fetch utilities
+ */
 export const useRoles = (): IUseRoles => {
     const dispatch = useAppDispatch();
     const { data: roles, loading, error } = useAppSelector(({ settings: { roles } }) => roles);
