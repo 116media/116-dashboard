@@ -59,6 +59,7 @@ export {
     PlayCircleTwoTone as IconPlayCircleTwoTone,
     PlusOutlined as IconPlusOutlined,
     QuestionCircleOutlined as IconQuestionCircleOutlined,
+    SafetyOutlined as IconSafetyOutlined,
     SearchOutlined as IconSearchOutlined,
     SettingOutlined as IconSettingOutlined,
     ShareAltOutlined as IconShareAltOutlined,
