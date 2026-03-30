@@ -18,7 +18,7 @@ const ProfileContainerLoading: FC = () => {
                             paragraph={{ rows: 1, width: "25%" }}
                         />
                     </div>
-                    <Skeleton.Button active size="default" />
+                    <Skeleton.Button active size="medium" />
                 </div>
             </Card>
 
