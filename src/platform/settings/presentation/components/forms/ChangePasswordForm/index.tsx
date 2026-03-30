@@ -9,6 +9,15 @@ import ErrorAlert from "@/shared/presentation/ui/ErrorAlert";
 import { IconLockOutlined } from "@/shared/presentation/ui/Icons";
 import styles from "./index.module.scss";
 
+/**
+ * Props for the ChangePasswordForm component.
+ *
+ * @interface IChangePasswordFormProps
+ * @property {FormInstance} form - Ant Design form instance
+ * @property {boolean} loading - Whether the submit action is in progress
+ * @property {IApiProblemDetails | null | undefined} error - API error to display
+ * @property {(values: IChangePasswordCredentials) => void} onSubmit - Form submission handler
+ */
 interface IChangePasswordFormProps {
     form: FormInstance<IChangePasswordCredentials>;
     loading: boolean;
@@ -16,9 +25,21 @@ interface IChangePasswordFormProps {
     onSubmit: (values: IChangePasswordCredentials) => void;
 }
 
+/**
+ * Inline form for changing the user's password.
+ *
+ * @component
+ *
+ * @description
+ * Renders current password, new password, and confirm password fields
+ * with validation. Displayed directly on the Security tab (no modal).
+ */
 const ChangePasswordForm: FC<IChangePasswordFormProps> = ({ form, loading, error, onSubmit }) => {
     return (
-        <SettingsCard title="Changer le mot de passe">
+        <SettingsCard
+            title="Changer le mot de passe"
+            subtitle="Mettez à jour votre mot de passe pour sécuriser votre compte"
+        >
             <div className={styles.changePasswordForm}>
                 <Form
                     form={form}
