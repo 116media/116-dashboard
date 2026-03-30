@@ -22,6 +22,16 @@ interface IUseUpdateAccount {
     onSubmit: (formValues: IUpdateAccountCredentials) => void;
 }
 
+/**
+ * Custom hook for the account info edit modal.
+ *
+ * @description
+ * Manages modal open/close state, form pre-population with current
+ * profile data, country selection, and account update submission.
+ * Syncs the updated user data with the auth store on success.
+ *
+ * @returns Modal state, form instance, and submit handler
+ */
 export const useUpdateAccount = (): IUseUpdateAccount => {
     const dispatch = useAppDispatch();
     const [form] = useForm<IUpdateAccountCredentials>();
