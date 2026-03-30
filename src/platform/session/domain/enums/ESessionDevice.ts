@@ -26,5 +26,5 @@ export enum ESessionDevice {
     Console = "Console",
     Car = "Car",
     IoT = "IoT",
-    Unknown = "Unknown",
+    Unknown = "Unknown"
 }

@@ -24,5 +24,5 @@ export enum ESessionPlatform {
     Linux = "Linux",
     Android = "Android",
     ChromeOs = "ChromeOs",
-    Unknown = "Unknown",
+    Unknown = "Unknown"
 }

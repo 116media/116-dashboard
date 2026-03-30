@@ -26,5 +26,5 @@ export enum ESessionBrowser {
     Opera = "Opera",
     GoogleSearchApp = "GoogleSearchApp",
     Samsung = "Samsung",
-    Unknown = "Unknown",
+    Unknown = "Unknown"
 }

@@ -17,5 +17,5 @@ export enum ESessionClient {
     MobileApp = "MobileApp",
     WebApp = "WebApp",
     Dashboard = "Dashboard",
-    Unknown = "Unknown",
+    Unknown = "Unknown"
 }
