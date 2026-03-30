@@ -51,7 +51,7 @@ const USER_MENU_ITEMS = [
  */
 export const SettingsDropdownMenu: FC = () => {
     const navigate = useNavigate();
-    const user = useAppSelector(({ auth: { login } }) => login.data?.user);
+    const user = useAppSelector(({ session: { currentUser } }) => currentUser.data);
     const { loading, onSignOut } = useSignOut();
 
     const handleMenuClick = (path: string) => {
