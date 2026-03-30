@@ -11,6 +11,16 @@ interface IUseSignOutAll {
     onSignOutAll: () => void;
 }
 
+/**
+ * Custom hook for signing out from all devices.
+ *
+ * @description
+ * Shows a danger confirmation modal before dispatching the sign-out-all
+ * action. On success, purges persisted Redux state and redirects to login.
+ * On failure, shows an error notification without logging out.
+ *
+ * @returns Loading state and sign-out-all handler
+ */
 export const useSignOutAll = (): IUseSignOutAll => {
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
