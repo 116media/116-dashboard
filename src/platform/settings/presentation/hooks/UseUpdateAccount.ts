@@ -1,7 +1,7 @@
 import type { FormInstance } from "antd";
 import { Form } from "antd";
 import { useEffect, useState } from "react";
-import { authSlice } from "@/modules/auth/presentation/store";
+import { setCurrentUserAction } from "@/platform/session/presentation/store/currentuser.action";
 import type { IUpdateAccountCredentials } from "@/platform/settings/presentation/model/IUpdateAccountCredentials";
 import { updateAccountAction } from "@/platform/settings/presentation/store/profile.action";
 import { SettingsNotification } from "@/platform/settings/presentation/utils/notification/settings.notification";
@@ -40,7 +40,7 @@ export const useUpdateAccount = (): IUseUpdateAccount => {
 
     const { loading, error } = useAppSelector(({ settings: { updateAccount } }) => updateAccount);
 
-    const profile = useAppSelector(({ settings: { profile } }) => profile.data);
+    const profile = useAppSelector(({ session: { currentUser } }) => currentUser.data);
 
     const selectedCountryName = useWatch("countryName", form);
 
@@ -84,7 +84,7 @@ export const useUpdateAccount = (): IUseUpdateAccount => {
         if (updateAccountAction.fulfilled.match(result)) {
             close();
             showNotification(SettingsNotification.profileUpdateSuccess);
-            dispatch(authSlice.actions.updateUser(result.payload));
+            dispatch(setCurrentUserAction(result.payload));
         }
     };
 
