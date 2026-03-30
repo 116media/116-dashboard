@@ -47,7 +47,7 @@ export const SideNav: FC = () => {
                                         icon={<Icon />}
                                         onClick={() => navigate(path)}
                                         type={isActive ? "primary" : "text"}
-                                        className={`${styles.sideNav__item} ${isActive ? styles["sideNav__item--active"] : ""}`}
+                                        className={`${styles.sideNav__item} ${isActive ? styles.sideNav__item__active : ""}`}
                                     />
                                 </Tooltip>
                             );
