@@ -19,6 +19,16 @@ interface IUseSessions {
     onRevoke: (sessionId: string) => void;
 }
 
+/**
+ * Custom hook for managing login sessions.
+ *
+ * @description
+ * Fetches the user's sessions and provides a revoke action with
+ * a confirmation modal. Refreshes the session list after a
+ * successful revoke and shows a success notification.
+ *
+ * @returns Session list, loading/error state, and revoke handler
+ */
 export const useSessions = (): IUseSessions => {
     const dispatch = useAppDispatch();
     const {
