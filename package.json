@@ -11,7 +11,7 @@
         "preview": "vite preview",
         "lint:code": "biome lint --no-errors-on-unmatched",
         "lint:code:fix": "biome check --write",
-        "lint:types": "tsc --noEmit",
+        "lint:types": "tsc --noEmit -p tsconfig.app.json",
         "api:generate": "yarn dlx swagger-typescript-api generate -p http://localhost:5025/swagger/v1/swagger.json -o ./src/shared/infrastructure/api/generated/ -n 116.api.ts --axios --responses && node scripts/format-api-docs.js"
     },
     "dependencies": {
@@ -47,7 +47,8 @@
         "globals": "^17.4.0",
         "lint-staged": "^16.2.3",
         "typescript": "^6.0.2",
-        "vite": "^8.0.2"
+        "vite": "^8.0.2",
+        "vite-plugin-checker": "^0.12.0"
     },
     "packageManager": "yarn@4.9.4"
 }
