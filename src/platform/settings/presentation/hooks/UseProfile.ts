@@ -1,7 +1,6 @@
 import { useCallback } from "react";
 import type { IUser } from "@/modules/auth/domain/entities/IUser";
-import { authSlice } from "@/modules/auth/presentation/store";
-import { getProfileAction } from "@/platform/settings/presentation/store/profile.action";
+import { getCurrentUserAction } from "@/platform/session/presentation/store/currentuser.action";
 import type { IApiProblemDetails } from "@/shared/infrastructure/api/type";
 import { useAppDispatch, useAppSelector } from "@/shared/presentation/store/store";
 
@@ -16,8 +15,8 @@ interface IUseProfile {
  * Custom hook for fetching and accessing the user profile.
  *
  * @description
- * Dispatches the profile fetch action and syncs the result
- * with the auth store. Returns profile data, loading, and error state.
+ * Dispatches getCurrentUserAction and reads from the single
+ * source of truth in session.currentUser.
  *
  * @returns Profile data and fetch utilities
  */
@@ -27,13 +26,10 @@ export const useProfile = (): IUseProfile => {
         data: profile,
         loading,
         error
-    } = useAppSelector(({ settings: { profile } }) => profile);
+    } = useAppSelector(({ session: { currentUser } }) => currentUser);
 
-    const fetchProfile = useCallback(async () => {
-        const result = await dispatch(getProfileAction());
-        if (getProfileAction.fulfilled.match(result)) {
-            dispatch(authSlice.actions.updateUser(result.payload));
-        }
+    const fetchProfile = useCallback(() => {
+        dispatch(getCurrentUserAction());
     }, [dispatch]);
 
     return { profile, loading, error, fetchProfile };
