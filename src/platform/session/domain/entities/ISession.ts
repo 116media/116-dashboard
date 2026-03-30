@@ -1,7 +1,7 @@
-import { type ESessionBrowser } from "@/platform/session/domain/enums/ESessionBrowser";
-import { type ESessionClient } from "@/platform/session/domain/enums/ESessionClient";
-import { type ESessionDevice } from "@/platform/session/domain/enums/ESessionDevice";
-import { type ESessionPlatform } from "@/platform/session/domain/enums/ESessionPlatform";
+import type { ESessionBrowser } from "@/platform/session/domain/enums/ESessionBrowser";
+import type { ESessionClient } from "@/platform/session/domain/enums/ESessionClient";
+import type { ESessionDevice } from "@/platform/session/domain/enums/ESessionDevice";
+import type { ESessionPlatform } from "@/platform/session/domain/enums/ESessionPlatform";
 
 /**
  * Session entity representing an authenticated login session.
