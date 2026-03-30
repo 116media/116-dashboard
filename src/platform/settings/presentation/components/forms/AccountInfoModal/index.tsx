@@ -59,8 +59,16 @@ const AccountInfoModal: FC<IAccountInfoModalProps> = ({
             className={styles.modal}
             title="Modifier les informations du compte"
             footer={[
-                <Button danger key="cancel" onClick={onClose}>Annuler</Button>,
-                <Button key="submit" htmlType="submit" type="primary" loading={loading} onClick={() => form.submit()}>
+                <Button danger key="cancel" onClick={onClose}>
+                    Annuler
+                </Button>,
+                <Button
+                    key="submit"
+                    htmlType="submit"
+                    type="primary"
+                    loading={loading}
+                    onClick={() => form.submit()}
+                >
                     Mettre à jour
                 </Button>
             ]}
@@ -89,7 +97,7 @@ const AccountInfoModal: FC<IAccountInfoModalProps> = ({
                 <Form.Item
                     name="phonePartial"
                     label="Téléphone"
-                    rules={SettingsValidator.phonePartial("Téléphone")}
+                    rules={SettingsValidator.phonePartial("Téléphone", country?.dialCode)}
                 >
                     <Input prefix={country?.dialCode} placeholder="Ex: 788123456" />
                 </Form.Item>
