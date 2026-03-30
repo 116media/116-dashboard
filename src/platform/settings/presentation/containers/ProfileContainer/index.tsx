@@ -1,4 +1,4 @@
-import { Avatar, Button, Flex, Skeleton, Typography } from "antd";
+import { Avatar, Badge, Button, Flex, Skeleton, Typography } from "antd";
 import { type FC, useEffect, useRef } from "react";
 import AccountInfoModal from "@/platform/settings/presentation/components/forms/AccountInfoModal";
 import SettingsCard from "@/platform/settings/presentation/components/ui/SettingsCard";
@@ -70,24 +70,37 @@ const ProfileContainer: FC = () => {
             />
             <SettingsCard title="Photo de profil">
                 <div className={styles.profileContainer__avatarSection}>
-                    <div className={styles.profileContainer__avatarWrapper}>
+                    <button
+                        type="button"
+                        onClick={handleAvatarClick}
+                        className={styles.profileContainer__avatarWrapper}
+                    >
                         <Skeleton
-                            loading={avatarLoading}
                             active
-                            avatar={{ size: 80, shape: "square" }}
-                            paragraph={false}
                             title={false}
+                            paragraph={false}
+                            loading={avatarLoading}
+                            avatar={{ size: 82, shape: "square" }}
                         >
-                            <Avatar
-                                size={80}
-                                shape="square"
-                                src={profile?.avatar?.storageUrl}
-                                icon={!profile?.avatar && <IconUserOutlined />}
+                            <Badge
+                                count={
+                                    <IconCameraOutlined
+                                        className={styles.profileContainer__cameraIcon}
+                                    />
+                                }
+                                offset={[-6, 72]}
                             >
-                                {!profile?.avatar}
-                            </Avatar>
+                                <Avatar
+                                    size={80}
+                                    shape="square"
+                                    src={profile?.avatar?.storageUrl}
+                                    icon={!profile?.avatar && <IconUserOutlined />}
+                                >
+                                    {!profile?.avatar}
+                                </Avatar>
+                            </Badge>
                         </Skeleton>
-                    </div>
+                    </button>
                     <div className={styles.profileContainer__avatarInfo}>
                         <Flex align="center" gap={8}>
                             <span>{profile?.userName}</span>
@@ -97,9 +110,13 @@ const ProfileContainer: FC = () => {
                         </Flex>
                         <Text type="secondary">{profile?.email}</Text>
                         {profile?.countryName && (
-                            <span className={styles.profileContainer__location}>
+                            <Text
+                                strong
+                                type="secondary"
+                                className={styles.profileContainer__location}
+                            >
                                 <IconEnvironmentOutlined /> {profile.countryName}
-                            </span>
+                            </Text>
                         )}
                     </div>
                     <Button
