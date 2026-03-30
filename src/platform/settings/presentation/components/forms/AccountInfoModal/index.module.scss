@@ -1,6 +1,13 @@
-.footer {
-    display: flex;
-    justify-content: flex-end;
-    gap: 8px;
-    margin-top: 16px;
+@use "@/shared/presentation/styles/dimensions" as dimensions;
+
+.modal {
+    [class~="ant-modal-container"]{
+        padding: calc(dimensions.$padding * 2) dimensions.$padding;
+    }
+
+    &__footer {
+        display: flex;
+        justify-content: flex-end;
+        gap: 0.5rem;
+    }
 }
