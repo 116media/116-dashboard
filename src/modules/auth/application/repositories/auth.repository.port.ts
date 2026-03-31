@@ -10,82 +10,71 @@ import type { ILoginCredentials } from "@/modules/auth/presentation/model/ILogin
 import type { IResendOtpCredentials } from "@/modules/auth/presentation/model/IResendOtpCredentials";
 import type { IResetPasswordCredentials } from "@/modules/auth/presentation/model/IResetPasswordCredentials";
 import type { IVerifyOtpCredentials } from "@/modules/auth/presentation/model/IVerifyOtpCredentials";
+import type { Result } from "@/shared/domain/results/result";
 
 /**
  * Repository port (interface) for authentication operations.
  *
- * @interface IAuthRepositoryPort
- *
  * @description
  * Defines the contract for authentication data access.
- *
- * Following the Ports & Adapters architecture pattern,
- * this port is implemented by infrastructure layer adapters.
- *
- * @remarks
- * This abstraction allows the application layer to remain independent
- * of specific data sources (REST API, GraphQL, mock data, etc.)
+ * All methods return `Result<T>` — errors are represented as
+ * typed `Failure` values, never thrown.
  */
 export interface IAuthRepositoryPort {
     /**
      * Authenticates a user with email and password.
      *
-     * @param {ILoginCredentials} credentials - User login credentials
-     * @returns {Promise<IAuthResponse>} Authentication response with token and user data
-     * @throws {IApiProblemDetails} When authentication fails
+     * @param credentials - User login credentials
+     * @returns `ok(IAuthResponse)` on success, `err(Failure)` on failure
      */
-    login(credentials: ILoginCredentials): Promise<IAuthResponse>;
+    login(credentials: ILoginCredentials): Promise<Result<IAuthResponse>>;
 
     /**
-     * Initiates password reset process for a user.
+     * Initiates the password reset process by sending an OTP to the user's email.
      *
-     * @param {IForgotPasswordCredentials} credentials - User email for password reset
-     * @returns {Promise<IForgotPasswordResponse>} Success status of the request
-     * @throws {IApiProblemDetails} When the request fails
+     * @param credentials - User email for password reset
+     * @returns `ok(IForgotPasswordResponse)` on success, `err(Failure)` on failure
      */
-    forgotPassword(credentials: IForgotPasswordCredentials): Promise<IForgotPasswordResponse>;
+    forgotPassword(
+        credentials: IForgotPasswordCredentials
+    ): Promise<Result<IForgotPasswordResponse>>;
 
     /**
-     * Verifies OTP code for various purposes (password reset, email verification, etc.).
+     * Verifies an OTP code for a given purpose (password reset, email verification, etc.).
      *
-     * @param {IVerifyOtpCredentials} credentials - User email, OTP code, and purpose
-     * @returns {Promise<IVerifyOtpResponse>} Success status of the verification
-     * @throws {IApiProblemDetails} When the verification fails
+     * @param credentials - User email, OTP code, and purpose
+     * @returns `ok(IVerifyOtpResponse)` on success, `err(Failure)` on failure
      */
-    verifyOtp(credentials: IVerifyOtpCredentials): Promise<IVerifyOtpResponse>;
+    verifyOtp(credentials: IVerifyOtpCredentials): Promise<Result<IVerifyOtpResponse>>;
 
     /**
-     * Resends a new OTP code for various purposes (password reset, email verification, etc.).
+     * Resends a new OTP code for a given purpose.
      *
-     * @param {IResendOtpCredentials} credentials - User email and purpose
-     * @returns {Promise<IResendOtpResponse>} Success status of the resend request
-     * @throws {IApiProblemDetails} When the request fails
+     * @param credentials - User email and purpose
+     * @returns `ok(IResendOtpResponse)` on success, `err(Failure)` on failure
      */
-    resendOtp(credentials: IResendOtpCredentials): Promise<IResendOtpResponse>;
+    resendOtp(credentials: IResendOtpCredentials): Promise<Result<IResendOtpResponse>>;
 
     /**
-     * Resets user password with email, OTP code, and new password.
+     * Resets the user's password using email, OTP code, and the new password.
      *
-     * @param {IResetPasswordCredentials} credentials - User email, OTP code, and new password
-     * @returns {Promise<IResetPasswordResponse>} Success status of the password reset
-     * @throws {IApiProblemDetails} When the reset fails
+     * @param credentials - User email, OTP code, and new password
+     * @returns `ok(IResetPasswordResponse)` on success, `err(Failure)` on failure
      */
-    resetPassword(credentials: IResetPasswordCredentials): Promise<IResetPasswordResponse>;
+    resetPassword(credentials: IResetPasswordCredentials): Promise<Result<IResetPasswordResponse>>;
 
     /**
      * Signs out the current session.
      * The backend reads the refresh token from the HttpOnly cookie.
      *
-     * @returns {Promise<ISignOutResponse>} Success status
-     * @throws {IApiProblemDetails} When the request fails
+     * @returns `ok(ISignOutResponse)` on success, `err(Failure)` on failure
      */
-    signOut(): Promise<ISignOutResponse>;
+    signOut(): Promise<Result<ISignOutResponse>>;
 
     /**
      * Signs out from all devices.
      *
-     * @returns {Promise<ISignOutAllResponse>} Success status
-     * @throws {IApiProblemDetails} When the request fails
+     * @returns `ok(ISignOutAllResponse)` on success, `err(Failure)` on failure
      */
-    signOutAll(): Promise<ISignOutAllResponse>;
+    signOutAll(): Promise<Result<ISignOutAllResponse>>;
 }
