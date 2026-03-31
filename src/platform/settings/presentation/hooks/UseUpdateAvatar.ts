@@ -1,13 +1,13 @@
 import { setCurrentUserAction } from "@/platform/session/presentation/store/currentuser.action";
 import { updateAvatarAction } from "@/platform/settings/presentation/store/profile.action";
 import { SettingsNotification } from "@/platform/settings/presentation/utils/notification/settings.notification";
-import type { IApiProblemDetails } from "@/shared/infrastructure/api/type";
+import type { Failure } from "@/shared/domain/failures/failure";
 import { useAppDispatch, useAppSelector } from "@/shared/presentation/store/store";
 import { showNotification } from "@/shared/presentation/utils/notification/notification.utils";
 
 interface IUseUpdateAvatar {
     loading: boolean;
-    error: IApiProblemDetails | null | undefined;
+    error: Failure | null | undefined;
     onUpload: (file: File) => void;
 }
 
@@ -30,6 +30,12 @@ export const useUpdateAvatar = (): IUseUpdateAvatar => {
         if (updateAvatarAction.fulfilled.match(result)) {
             showNotification(SettingsNotification.avatarUpdateSuccess);
             dispatch(setCurrentUserAction(result.payload));
+        } else if (updateAvatarAction.rejected.match(result) && result.payload) {
+            showNotification({
+                type: "error",
+                title: result.payload.title,
+                description: result.payload.detail
+            });
         }
     };
 
