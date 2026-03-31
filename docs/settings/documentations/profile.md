@@ -57,7 +57,7 @@ The "Modifier" button on the avatar card triggers a **file upload** — not a mo
 - **Input**: File picker (accept: `image/*`)
 - **Request**: `Content-Type: multipart/form-data` with `avatarFile` field
 - **Response**: `AdminUpdateAvatarResponse { user: UserResponseDto }`
-- **On success**: Update the user in the Redux auth store (`auth.login.data.user`)
+- **On success**: Dispatch `setCurrentUserAction(result.payload)` to sync `session.currentUser.data`
 
 ### Avatar Upload Flow
 
@@ -158,8 +158,8 @@ dispatch(updateAccountAction({
   ```
   Note: `email` is **never sent** — it is display-only in the modal. `countryIsoCode` and `countryDialCode` are derived from the selected country object, not from separate form fields.
 - **Response**: `AdminUpdateOwnProfileResponse { user: UserResponseDto }`
-- **On success**: Update user in auth Redux store (`auth.login.data.user`), close modal, show success notification
-- **On error**: Display error in modal via `ErrorAlert`
+- **On success**: Dispatch `setCurrentUserAction(result.payload)` to sync `session.currentUser.data`, close modal, show success notification
+- **On error**: Display inline `<ErrorAlert error={error} />` in the modal (the `Failure` is already in Redux state)
 
 ---
 
@@ -174,16 +174,16 @@ On settings page mount (Profile tab active):
 3. Response: `AdminGetOwnProfileResponse { user: UserResponseDto }`
 4. Store in settings slice: `settings.profile`
 
-### Data Sync with Auth Store
+### Data Sync with the Current User Store
 
-The settings page reads from `settings.profile.data`, but `auth.login.data.user` must be kept in sync so the sidenav, dropdown menu, and other components always show current data.
+Profile reads flow through a shared `session.currentUser` slice, which is the single source of truth for the sidenav, dropdown menu, and any other component showing the logged-in user.
 
-After every successful profile mutation (`getProfileAction`, `updateAccountAction`, `updateAvatarAction`), the hook dispatches `authSlice.actions.updateUser(updatedUser)` to sync `auth.login.data.user`.
+After every successful profile mutation (`updateAccountAction`, `updateAvatarAction`), the hook dispatches `setCurrentUserAction(result.payload)` (from `@/platform/session/presentation/store/currentuser.action`) to sync `session.currentUser.data`.
 
 This means:
-- **Settings page** reads from `settings.profile.data` (fresh from API)
-- **Sidenav / dropdown / other components** read from `auth.login.data.user` (synced after every profile operation)
-- Both always reflect the same data
+- **Settings page** (Profile tab) reads from `session.currentUser.data` (fresh from API on mount via `getCurrentUserAction`)
+- **Sidenav / dropdown / other components** read from the same `session.currentUser.data`
+- One source of truth — no divergence between the settings page and the rest of the app
 
 ---
 
