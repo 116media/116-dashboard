@@ -4,7 +4,7 @@ import type { FC } from "react";
 import { BackToLoginButton } from "@/modules/auth/presentation/components/ui/BackToLoginButton";
 import FormHeader from "@/modules/auth/presentation/components/ui/FormHeader";
 import { ResetPasswordValidator } from "@/modules/auth/presentation/utils/validators/resetpassword.validator";
-import type { IApiProblemDetails } from "@/shared/infrastructure/api/type";
+import type { Failure } from "@/shared/domain/failures/failure";
 import ErrorAlert from "@/shared/presentation/ui/ErrorAlert";
 import { IconLockOutlined } from "@/shared/presentation/ui/Icons";
 
@@ -21,7 +21,7 @@ interface IResetPasswordFormValues {
 export interface IResetPasswordFormProps {
     form: FormInstance<IResetPasswordFormValues>;
     loading: boolean;
-    error: IApiProblemDetails | null | undefined;
+    error: Failure | null | undefined;
     onSubmit: (values: IResetPasswordFormValues) => void;
 }
 
@@ -37,7 +37,7 @@ export interface IResetPasswordFormProps {
  * @param {IResetPasswordFormProps} props - Component props
  * @param {FormInstance} props.form - Ant Design form instance
  * @param {boolean} props.loading - Whether reset is in progress
- * @param {IApiProblemDetails | null} props.error - Error if any
+ * @param {Failure | null} props.error - Error if any
  * @param {Function} props.onSubmit - Form submission handler
  *
  * @returns The reset password form
