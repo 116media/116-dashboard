@@ -21,7 +21,7 @@ Retrieve the authenticated admin user's complete profile.
 }
 ```
 
-**Used in**: Profile tab — initial data load. Result is stored in `settings.profile` and also synced to `auth.login.data.user` to keep sidenav/dropdown current.
+**Used in**: Profile tab — initial data load. The dashboard actually calls this through `getCurrentUserAction`, which stores the user in `session.currentUser.data` (the shared source of truth for sidenav/dropdown).
 
 ---
 
@@ -49,7 +49,7 @@ Update the authenticated admin user's own profile information.
 }
 ```
 
-**Used in**: Profile tab — account info modal. Result synced to `auth.login.data.user`.
+**Used in**: Profile tab — account info modal. Result synced via `setCurrentUserAction` into `session.currentUser.data`.
 
 ---
 
@@ -105,9 +105,11 @@ Sign out the authenticated admin user from the current device.
 **Request body** — `AdminSignOutRequest`:
 ```ts
 {
-  refreshToken: string;
+  refreshToken: string | null;  // dashboard sends null — backend reads HttpOnly cookie
 }
 ```
+
+> **Note**: The dashboard passes `refreshToken: null`. The backend reads the refresh token from the HttpOnly cookie set at login. Only the mobile client sends the token in the body.
 
 **Response** — `AdminSignOutResponse`:
 ```ts
@@ -350,20 +352,38 @@ interface SessionDto {
 
 ## Error Handling
 
-All endpoints return `ProblemDetails` on error, which is mapped by the API client's `errorHandler` to `IApiProblemDetails`:
+All endpoints return RFC 7807 `ProblemDetails` on error. Errors flow through two layers before reaching the UI:
+
+### Layer 1 — Infrastructure: `IApiProblemDetails`
+
+The Axios error interceptor in `src/shared/infrastructure/api/client.ts` normalizes backend responses into `IApiProblemDetails`. It also handles:
+
+- **401 AuthenticationException / 403 AccountNotVerifiedException / 423 AccountInactiveException**: Purges persisted state and redirects to login
+- **400 ValidationException**: Normalizes `detail` to the first validator message while preserving the `errors` array for field-level display
+- **429 RateLimit / OtpAttemptsLimit**: Parses the `Retry-After` header into `retryAfter`
+- **Token expiry**: Silent refresh via dedicated interceptors (see `access-token-expiry.interceptor.ts` / `refresh-token-expiry.interceptor.ts`)
+- **Network errors**: Produces a structured French error with `status: 0`
+
+### Layer 2 — Domain: `Failure`
+
+Repositories catch the thrown `IApiProblemDetails` and convert it to a typed `Failure` via `ProblemMapper.toFailure()` (at `src/shared/infrastructure/mappers/problem.mapper.ts`):
 
 ```ts
-interface IApiProblemDetails {
+interface Failure {
   title: string;
   detail: string;
+}
+
+interface ServerFailure extends Failure {
   status: number;
-  errors?: Record<string, string[]>;
+  instance?: string | null;
+  traceId?: string | null;
+  timestamp?: string | null;
+  errors?: IValidationError[];
+  retryAfter?: number;
 }
 ```
 
-The existing error handler in `shared/api/client.ts` handles:
+Everything above the infrastructure boundary (use cases, thunks, Redux state, hooks, components) works exclusively with `Failure`. The `IApiProblemDetails` type never leaks out of the infrastructure layer.
 
-- **401/403**: Clears auth state, redirects to login
-- **Validation errors**: Normalizes first error message
-- **Other errors**: Maps exception codes to user-friendly titles
-- **Network errors**: Returns generic "Network Error" message
+See [ui-components.md](./ui-components.md#error-display-pattern) for the standard error display patterns.
