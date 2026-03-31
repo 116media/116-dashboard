@@ -1,7 +1,6 @@
 import { Modal } from "antd";
 import { useNavigate } from "react-router";
 import { signOutAllAction } from "@/modules/auth/presentation/store/signoutall.action";
-import { SettingsNotification } from "@/platform/settings/presentation/utils/notification/settings.notification";
 import { LOGIN_PATH } from "@/shared/infrastructure/constants/paths";
 import { persistor, useAppDispatch, useAppSelector } from "@/shared/presentation/store/store";
 import { showNotification } from "@/shared/presentation/utils/notification/notification.utils";
@@ -43,8 +42,12 @@ export const useSignOutAll = (): IUseSignOutAll => {
                 const result = await dispatch(signOutAllAction());
                 if (signOutAllAction.fulfilled.match(result)) {
                     performLogout();
-                } else {
-                    showNotification(SettingsNotification.signOutError);
+                } else if (signOutAllAction.rejected.match(result) && result.payload) {
+                    showNotification({
+                        type: "error",
+                        title: result.payload.title,
+                        description: result.payload.detail
+                    });
                 }
             }
         });
