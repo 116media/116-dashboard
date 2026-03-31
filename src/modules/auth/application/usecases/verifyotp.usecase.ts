@@ -2,37 +2,29 @@ import type { IAuthRepositoryPort } from "@/modules/auth/application/repositorie
 import type { IVerifyOtpResponse } from "@/modules/auth/domain/entities/IVerifyOtpResponse";
 import { AuthStorageService } from "@/modules/auth/infrastructure/storage/authstorage.service";
 import type { IVerifyOtpCredentials } from "@/modules/auth/presentation/model/IVerifyOtpCredentials";
-import type { IUseCase } from "@/shared/application/usecases/IUseCase";
+import type { IResultUseCase } from "@/shared/application/usecases/IUseCase";
+import type { Result } from "@/shared/domain/results/result";
 
 /**
- * Interface for the verify OTP use case.
- *
  * @interface IVerifyOtpUseCase
- * @extends {IUseCase<IVerifyOtpCredentials, IVerifyOtpResponse>}
+ * @extends {IResultUseCase<IVerifyOtpCredentials, IVerifyOtpResponse>}
  */
-interface IVerifyOtpUseCase extends IUseCase<IVerifyOtpCredentials, IVerifyOtpResponse> {}
+interface IVerifyOtpUseCase extends IResultUseCase<IVerifyOtpCredentials, IVerifyOtpResponse> {}
 
 /**
- * Verify OTP use case implementing business logic for OTP verification.
+ * Use case for verifying an OTP code.
  *
  * @class VerifyOtpUseCase
  * @implements {IVerifyOtpUseCase}
  *
  * @description
- * Orchestrates the verify OTP flow:
- * 1. Sends OTP verification request via repository
- * 2. Returns verification success status
- *
- * @remarks
- * Part of the application layer in Clean Architecture.
- * Contains business rules independent of frameworks and UI.
+ * Verifies the OTP code via the repository and stores it locally
+ * on success for subsequent use in the password reset flow.
  */
 export class VerifyOtpUseCase implements IVerifyOtpUseCase {
     private readonly authRepository: IAuthRepositoryPort;
 
     /**
-     * Creates an instance of VerifyOtpUseCase.
-     *
      * @param {IAuthRepositoryPort} authRepository - Repository for auth operations (injected)
      */
     constructor({ authRepository }: { authRepository: IAuthRepositoryPort }) {
@@ -43,15 +35,15 @@ export class VerifyOtpUseCase implements IVerifyOtpUseCase {
      * Executes the verify OTP use case.
      *
      * @param {IVerifyOtpCredentials} credentials - User email, OTP code, and purpose
-     * @returns {Promise<IVerifyOtpResponse>} Verification success status
-     * @throws {IApiProblemDetails} When the verification fails
+     * @returns {Promise<Result<IVerifyOtpResponse>>} `ok(IVerifyOtpResponse)` on success, `err(Failure)` on failure
      */
-    async execute(credentials: IVerifyOtpCredentials): Promise<IVerifyOtpResponse> {
-        const response = await this.authRepository.verifyOtp(credentials);
+    async execute(credentials: IVerifyOtpCredentials): Promise<Result<IVerifyOtpResponse>> {
+        const result = await this.authRepository.verifyOtp(credentials);
 
-        // Store the otp code data
-        AuthStorageService.setOtpCode(credentials.otp);
+        if (result.ok) {
+            AuthStorageService.setOtpCode(credentials.otp);
+        }
 
-        return response;
+        return result;
     }
 }
