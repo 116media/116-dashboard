@@ -1,5 +1,6 @@
 import type { AxiosError } from "axios";
 import HttpStatus from "http-status";
+import { apiErrors } from "@/shared/infrastructure/constants/api";
 
 export const REFRESH_TOKEN_EXPIRED_EVENT = "refresh-token-expired";
 
@@ -26,7 +27,7 @@ export const refreshTokenExpiryInterceptor = async (error: AxiosError): Promise<
 
     const isRefreshTokenExpiry =
         error.response?.status === HttpStatus.FORBIDDEN &&
-        problemDetails?.title === "RefreshTokenExpiryException";
+        problemDetails?.title === apiErrors.refreshTokenExpiry.code;
 
     if (isRefreshTokenExpiry) {
         window.dispatchEvent(new CustomEvent(REFRESH_TOKEN_EXPIRED_EVENT));
