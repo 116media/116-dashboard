@@ -3,7 +3,7 @@ import { Button, Form, Input } from "antd";
 import type { FC } from "react";
 import type { ILoginCredentials } from "@/modules/auth/presentation/model/ILoginCredentials";
 import { LoginValidator } from "@/modules/auth/presentation/utils/validators/login.validator";
-import type { IApiProblemDetails } from "@/shared/infrastructure/api/type";
+import type { Failure } from "@/shared/domain/failures/failure";
 import { FORGOT_PASSWORD_PATH } from "@/shared/infrastructure/constants/paths";
 import ErrorAlert from "@/shared/presentation/ui/ErrorAlert";
 import { IconLockOutlined, IconMailOutlined } from "@/shared/presentation/ui/Icons";
@@ -16,7 +16,7 @@ const { Password } = Input;
 export interface ILoginFormProps {
     form: FormInstance<ILoginCredentials>;
     loading: boolean;
-    error: IApiProblemDetails | null | undefined;
+    error: Failure | null | undefined;
     onSubmit: (values: ILoginCredentials) => void;
 }
 
@@ -32,7 +32,7 @@ export interface ILoginFormProps {
  * @param {ILoginFormProps} props - Component props
  * @param {FormInstance} props.form - Ant Design form instance
  * @param {boolean} props.loading - Whether login is in progress
- * @param {IApiProblemDetails | null} props.error - Login error if any
+ * @param {Failure | null} props.error - Login error if any
  * @param {Function} props.onSubmit - Form submission handler
  *
  * @returns The login form
