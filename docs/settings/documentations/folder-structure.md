@@ -9,13 +9,17 @@ The settings module follows the same **Clean Architecture** structure as the aut
 ## Complete File Tree
 
 ```
-src/modules/settings/
+src/platform/settings/
 │
 ├── domain/
 │   └── entities/
 │       ├── IProfile.ts                          # Profile entity (mapped from UserResponseDto)
-│       ├── IRoleWithPermissions.ts               # Role with nested permissions entity
-│       └── ISession.ts                          # Session entity (mapped from SessionDto)
+│       ├── IRoleWithPermissions.ts              # Role with nested permissions entity
+│       └── IChangePasswordResponse.ts           # Change password response entity
+│
+# Note: ISession and IRevokeSessionResponse live in src/platform/session/domain/entities/
+# because sessions are shared with the session module (used by both settings and the
+# access-token-expiry interceptor flow).
 │
 ├── application/
 │   ├── repositories/
@@ -184,13 +188,14 @@ All API DTOs are mapped to domain entities in the infrastructure mapper. Present
 
 ### Root Reducer
 
-Add settings reducer in `src/core/presentation/store/root.reducer.ts`:
+Add settings reducer in `src/shared/presentation/store/root.reducer.ts`:
 
 ```ts
-import settingsReducer from "@/modules/settings/presentation/store";
+import settingsReducer from "@/platform/settings/presentation/store";
 
 const rootReducer = combineReducers({
     auth: authReducer,
+    session: sessionReducer,
     settings: settingsReducer,
 });
 ```
