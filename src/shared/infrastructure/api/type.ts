@@ -11,7 +11,7 @@ import type { ProblemDetails } from "./generated/116.api";
  * @property {number} severity - Error severity level
  * @property {string} errorCode - Machine-readable error code
  */
-interface IValidationError {
+export interface IValidationError {
     propertyName: string;
     errorMessage: string;
     attemptedValue: unknown;
@@ -26,12 +26,15 @@ interface IValidationError {
  * @extends {ProblemDetails}
  *
  * @description
- * Extends the standard ProblemDetails from generated API with validation errors.
+ * Extends the standard ProblemDetails from generated API with validation
+ * errors and rate-limit metadata.
  *
  * Used for consistent error handling across the application.
  *
- * @property {IValidationError[]} errors - Array of validation errors if applicable
+ * @property {IValidationError[]} errors - Array of field-level validation errors (400 responses)
+ * @property {number} retryAfter - Seconds until the client may retry (429 responses, from Retry-After header)
  */
 export interface IApiProblemDetails extends ProblemDetails {
     errors?: IValidationError[];
+    retryAfter?: number;
 }
