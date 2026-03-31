@@ -1,6 +1,6 @@
 import type { PayloadAction } from "@reduxjs/toolkit";
 import type { IUnknownObject } from "@/shared/domain/entities/IUnknownObject";
-import type { IApiProblemDetails } from "@/shared/infrastructure/api/type";
+import type { Failure } from "@/shared/domain/failures/failure";
 
 /**
  * Standard state shape for async operations returning a single object.
@@ -12,13 +12,13 @@ import type { IApiProblemDetails } from "@/shared/infrastructure/api/type";
  * @property {T} data - The fetched data object
  * @property {boolean} loading - True when async operation is in progress
  * @property {boolean} fetched - True when operation completed successfully at least once
- * @property {IApiProblemDetails | null} error - Error details if operation failed
+ * @property {Failure | null} error - Typed failure if operation failed
  */
 export interface IBasicInitialState<T = IUnknownObject> {
     data: T;
     loading: boolean;
     fetched: boolean;
-    error?: IApiProblemDetails | null;
+    error?: Failure | null;
 }
 
 /**
@@ -180,10 +180,10 @@ export const BasicActionFulfilled = (
  */
 export const BasicActionRejected = (
     state: IBasicInitialState,
-    action: PayloadAction<IUnknownObject>
+    action: PayloadAction<unknown>
 ): void => {
     resetState(state);
-    state.error = action.payload;
+    state.error = action.payload as Failure;
 };
 
 /**
@@ -267,7 +267,7 @@ export const ActionWrapperRejected = (
 ): void => {
     const store = getChildStore(state, action);
     resetState(store);
-    store.error = action.payload as Error | IUnknownObject;
+    store.error = action.payload as Failure;
 };
 
 /**
