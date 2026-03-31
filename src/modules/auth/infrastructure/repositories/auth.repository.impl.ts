@@ -12,134 +12,100 @@ import type { ILoginCredentials } from "@/modules/auth/presentation/model/ILogin
 import type { IResendOtpCredentials } from "@/modules/auth/presentation/model/IResendOtpCredentials";
 import type { IResetPasswordCredentials } from "@/modules/auth/presentation/model/IResetPasswordCredentials";
 import type { IVerifyOtpCredentials } from "@/modules/auth/presentation/model/IVerifyOtpCredentials";
+import type { Result } from "@/shared/domain/results/result";
+import { err, ok } from "@/shared/domain/results/result";
 import { apiClient } from "@/shared/infrastructure/api/client";
+import { ProblemMapper } from "@/shared/infrastructure/mappers/problem.mapper";
 
 /**
  * Authentication repository implementation using REST API.
  *
- * @class AuthRepositoryImpl
- * @implements {IAuthRepositoryPort}
- *
  * @description
- * Concrete implementation of the auth repository port.
- *
- * Communicates with the backend API and maps DTOs to domain entities.
- *
- * @remarks
- * Part of the infrastructure layer in Clean Architecture.
- * Depends on external APIs and mapping logic.
+ * Communicates with the backend API, maps DTOs to domain entities,
+ * and wraps results in `Result<T>` — errors are converted to typed
+ * Failure values via ProblemMapper.
  */
 export class AuthRepositoryImpl implements IAuthRepositoryPort {
-    /**
-     * Authenticates a user via the admin login endpoint.
-     *
-     * @param {ILoginCredentials} credentials - User email and password
-     * @returns {Promise<IAuthResponse>} Mapped authentication response
-     * @throws {IApiProblemDetails} When API request fails
-     */
-    async login(credentials: ILoginCredentials): Promise<IAuthResponse> {
-        const response = await apiClient.api.adminLogin({
-            email: credentials.email,
-            password: credentials.password
-        });
-
-        return AuthMapper.authResponseFromDto(response.data);
+    async login(credentials: ILoginCredentials): Promise<Result<IAuthResponse>> {
+        try {
+            const response = await apiClient.api.adminLogin({
+                email: credentials.email,
+                password: credentials.password
+            });
+            return ok(AuthMapper.authResponseFromDto(response.data));
+        } catch (error) {
+            return err(ProblemMapper.toFailure(error));
+        }
     }
 
-    /**
-     * Initiates password reset via the admin forgot password endpoint.
-     *
-     * @param {IForgotPasswordCredentials} credentials - User email
-     * @returns {Promise<IForgotPasswordResponse>} Success status of the request
-     * @throws {IApiProblemDetails} When API request fails
-     */
     async forgotPassword(
         credentials: IForgotPasswordCredentials
-    ): Promise<IForgotPasswordResponse> {
-        const response = await apiClient.api.adminForgotPassword({
-            email: credentials.email
-        });
-
-        return AuthMapper.forgotPasswordResponseFromDto(response.data);
+    ): Promise<Result<IForgotPasswordResponse>> {
+        try {
+            const response = await apiClient.api.adminForgotPassword({
+                email: credentials.email
+            });
+            return ok(AuthMapper.forgotPasswordResponseFromDto(response.data));
+        } catch (error) {
+            return err(ProblemMapper.toFailure(error));
+        }
     }
 
-    /**
-     * Verifies OTP code via the admin verify OTP endpoint.
-     *
-     * @param {IVerifyOtpCredentials} credentials - User email, OTP code, and purpose
-     * @returns {Promise<IVerifyOtpResponse>} Success status of the verification
-     * @throws {IApiProblemDetails} When API request fails
-     */
-    async verifyOtp(credentials: IVerifyOtpCredentials): Promise<IVerifyOtpResponse> {
-        const response = await apiClient.api.adminVerifyOtp({
-            email: credentials.email,
-            code: credentials.otp,
-            purpose: credentials.purpose
-        });
-
-        return AuthMapper.verifyOtpResponseFromDto(response.data);
+    async verifyOtp(credentials: IVerifyOtpCredentials): Promise<Result<IVerifyOtpResponse>> {
+        try {
+            const response = await apiClient.api.adminVerifyOtp({
+                email: credentials.email,
+                code: credentials.otp,
+                purpose: credentials.purpose
+            });
+            return ok(AuthMapper.verifyOtpResponseFromDto(response.data));
+        } catch (error) {
+            return err(ProblemMapper.toFailure(error));
+        }
     }
 
-    /**
-     * Resends a new OTP code via the admin resend OTP endpoint.
-     *
-     * @param {IResendOtpCredentials} credentials - User email and purpose
-     * @returns {Promise<IResendOtpResponse>} Success status of the resend request
-     * @throws {IApiProblemDetails} When API request fails
-     */
-    async resendOtp(credentials: IResendOtpCredentials): Promise<IResendOtpResponse> {
-        const response = await apiClient.api.adminResendOtp({
-            email: credentials.email,
-            purpose: credentials.purpose
-        });
-
-        return AuthMapper.resendOtpResponseFromDto(response.data);
+    async resendOtp(credentials: IResendOtpCredentials): Promise<Result<IResendOtpResponse>> {
+        try {
+            const response = await apiClient.api.adminResendOtp({
+                email: credentials.email,
+                purpose: credentials.purpose
+            });
+            return ok(AuthMapper.resendOtpResponseFromDto(response.data));
+        } catch (error) {
+            return err(ProblemMapper.toFailure(error));
+        }
     }
 
-    /**
-     * Resets user password via the admin reset password endpoint.
-     *
-     * @param {IResetPasswordCredentials} credentials - User email, OTP code, and new password
-     * @returns {Promise<IResetPasswordResponse>} Success status of the password reset
-     * @throws {IApiProblemDetails} When API request fails
-     */
-    async resetPassword(credentials: IResetPasswordCredentials): Promise<IResetPasswordResponse> {
-        const response = await apiClient.api.adminResetPassword({
-            email: credentials.email,
-            code: credentials.code,
-            newPassword: credentials.newPassword
-        });
-
-        return AuthMapper.resetPasswordResponseFromDto(response.data);
+    async resetPassword(
+        credentials: IResetPasswordCredentials
+    ): Promise<Result<IResetPasswordResponse>> {
+        try {
+            const response = await apiClient.api.adminResetPassword({
+                email: credentials.email,
+                code: credentials.code,
+                newPassword: credentials.newPassword
+            });
+            return ok(AuthMapper.resetPasswordResponseFromDto(response.data));
+        } catch (error) {
+            return err(ProblemMapper.toFailure(error));
+        }
     }
 
-    /**
-     * Signs out the current session via the admin sign-out endpoint.
-     *
-     * @remarks
-     * Web clients rely on HttpOnly cookies for the refresh token.
-     * Mobile clients send the refresh token in the request body.
-     *
-     * @returns {Promise<ISignOutResponse>} Mapped sign-out response
-     * @throws {IApiProblemDetails} When the API request fails
-     */
-    async signOut(): Promise<ISignOutResponse> {
-        const response = await apiClient.api.adminSignOut({
-            refreshToken: null
-        });
-
-        return AuthMapper.signOutResponseFromDto(response.data);
+    async signOut(): Promise<Result<ISignOutResponse>> {
+        try {
+            const response = await apiClient.api.adminSignOut({ refreshToken: null });
+            return ok(AuthMapper.signOutResponseFromDto(response.data));
+        } catch (error) {
+            return err(ProblemMapper.toFailure(error));
+        }
     }
 
-    /**
-     * Signs out from all devices via the admin sign out all endpoint.
-     *
-     * @returns {Promise<ISignOutAllResponse>} Mapped sign out all response
-     * @throws {IApiProblemDetails} When API request fails
-     */
-    async signOutAll(): Promise<ISignOutAllResponse> {
-        const response = await apiClient.api.adminSignOutFromAllDevices();
-
-        return AuthMapper.signOutAllResponseFromDto(response.data);
+    async signOutAll(): Promise<Result<ISignOutAllResponse>> {
+        try {
+            const response = await apiClient.api.adminSignOutFromAllDevices();
+            return ok(AuthMapper.signOutAllResponseFromDto(response.data));
+        } catch (error) {
+            return err(ProblemMapper.toFailure(error));
+        }
     }
 }
