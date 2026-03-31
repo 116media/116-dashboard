@@ -2,7 +2,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import type { ISignOutAllResponse } from "@/modules/auth/domain/entities/ISignOutAllResponse";
 import { authSlice } from "@/modules/auth/presentation/store";
 import { ActionType } from "@/modules/auth/presentation/store/constants";
-import type { IApiProblemDetails } from "@/shared/infrastructure/api/type";
+import type { Failure } from "@/shared/domain/failures/failure";
 import container from "@/shared/infrastructure/service.locator.ts";
 
 export const resetSignOutAllAction = () =>
@@ -11,11 +11,9 @@ export const resetSignOutAllAction = () =>
 export const signOutAllAction = createAsyncThunk<
     ISignOutAllResponse,
     void,
-    { rejectValue: IApiProblemDetails }
+    { rejectValue: Failure }
 >(ActionType.AuthSignOutAll, async (_, { rejectWithValue }) => {
-    try {
-        return await container.cradle.signOutAllUseCase.execute();
-    } catch (error) {
-        return rejectWithValue(error as IApiProblemDetails);
-    }
+    const result = await container.cradle.signOutAllUseCase.execute();
+    if (!result.ok) return rejectWithValue(result.error);
+    return result.value;
 });
