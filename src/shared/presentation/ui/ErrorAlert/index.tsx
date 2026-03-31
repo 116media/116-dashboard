@@ -1,6 +1,6 @@
 import { Alert } from "antd";
 import type { FC, MouseEventHandler } from "react";
-import type { IApiProblemDetails } from "@/shared/infrastructure/api/type";
+import type { Failure } from "@/shared/domain/failures/failure";
 import { IconCloseCircleOutlined } from "@/shared/presentation/ui/Icons";
 
 import styles from "./index.module.scss";
@@ -12,14 +12,14 @@ import styles from "./index.module.scss";
  * @property {boolean} banner - Whether to display as a banner without borders
  * @property {boolean} showIcon - Whether to show the error icon
  * @property {boolean} closable - Whether the alert can be dismissed
- * @property {IApiProblemDetails | undefined | null} error - The error object to display
+ * @property {Failure | undefined | null} error - The error object to display
  * @property {MouseEventHandler<HTMLButtonElement>} onClose - Callback when the alert is closed
  */
 export interface IErrorAlertProps {
     banner: boolean;
     showIcon: boolean;
     closable: boolean;
-    error: IApiProblemDetails | undefined | null;
+    error: Failure | undefined | null;
     onClose?: MouseEventHandler<HTMLButtonElement>;
 }
 
@@ -30,7 +30,7 @@ export interface IErrorAlertProps {
  *
  * @description
  * Displays error messages from API responses in a user-friendly alert format.
- * Shows the error title and detail from IApiProblemDetails.
+ * Shows the error title and detail from a Failure object.
  * Renders nothing if no error is provided.
  *
  * @returns {JSX.Element | null} The error alert or null if no error
