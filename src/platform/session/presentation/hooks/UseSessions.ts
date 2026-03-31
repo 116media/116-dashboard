@@ -6,14 +6,14 @@ import {
     revokeSessionAction
 } from "@/platform/session/presentation/store/session.action";
 import { SettingsNotification } from "@/platform/settings/presentation/utils/notification/settings.notification";
-import type { IApiProblemDetails } from "@/shared/infrastructure/api/type";
+import type { Failure } from "@/shared/domain/failures/failure";
 import { useAppDispatch, useAppSelector } from "@/shared/presentation/store/store";
 import { showNotification } from "@/shared/presentation/utils/notification/notification.utils";
 
 interface IUseSessions {
     sessions: ISession[];
     loading: boolean;
-    error: IApiProblemDetails | null | undefined;
+    error: Failure | null | undefined;
     revokeLoading: boolean;
     fetchSessions: () => void;
     onRevoke: (sessionId: string) => void;
@@ -58,6 +58,12 @@ export const useSessions = (): IUseSessions => {
                     if (revokeSessionAction.fulfilled.match(result)) {
                         dispatch(getSessionsAction());
                         showNotification(SettingsNotification.sessionRevokeSuccess);
+                    } else if (revokeSessionAction.rejected.match(result) && result.payload) {
+                        showNotification({
+                            type: "error",
+                            title: result.payload.title,
+                            description: result.payload.detail
+                        });
                     }
                 }
             });
