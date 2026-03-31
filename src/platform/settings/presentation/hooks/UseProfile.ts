@@ -1,13 +1,13 @@
 import { useCallback } from "react";
 import type { IUser } from "@/modules/auth/domain/entities/IUser";
 import { getCurrentUserAction } from "@/platform/session/presentation/store/currentuser.action";
-import type { IApiProblemDetails } from "@/shared/infrastructure/api/type";
+import type { Failure } from "@/shared/domain/failures/failure";
 import { useAppDispatch, useAppSelector } from "@/shared/presentation/store/store";
 
 interface IUseProfile {
     profile: IUser;
     loading: boolean;
-    error: IApiProblemDetails | null | undefined;
+    error: Failure | null | undefined;
     fetchProfile: () => void;
 }
 
