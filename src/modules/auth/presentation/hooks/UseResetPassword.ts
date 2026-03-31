@@ -5,7 +5,7 @@ import {
     resetPasswordAction,
     resetResetPasswordAction
 } from "@/modules/auth/presentation/store/resetpassword.action";
-import type { IApiProblemDetails } from "@/shared/infrastructure/api/type";
+import type { Failure } from "@/shared/domain/failures/failure";
 import { useAppDispatch, useAppSelector } from "@/shared/presentation/store/store";
 
 const { useForm } = Form;
@@ -20,7 +20,7 @@ interface IUseResetPassword {
     isSuccess: boolean;
     resetResetPassword: () => void;
     form: FormInstance<IFormValues>;
-    error: IApiProblemDetails | null | undefined;
+    error: Failure | null | undefined;
     onSubmit: (formValues: IFormValues) => Promise<void>;
 }
 
@@ -35,7 +35,7 @@ interface IUseResetPassword {
  *
  * @returns Reset password form utilities and state
  * @returns {FormInstance} form - Ant Design form instance
- * @returns {IApiProblemDetails | null} error - Reset password error if any
+ * @returns {Failure | null} error - Reset password error if any
  * @returns {boolean} loading - Whether reset password request is in progress
  * @returns {boolean} isSuccess - Whether reset password request succeeded
  * @returns {Function} onSubmit - Form submission handler
