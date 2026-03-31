@@ -28,7 +28,12 @@ Complete specification for the **Settings** feature in the dashboard application
 ## Quick Links
 
 - Auth module (pattern reference): `src/modules/auth/`
-- Settings module: `src/modules/settings/`
-- Generated API client: `src/shared/api/generated/116.api.ts`
-- Shared validators: `src/shared/lib/utils/validators/validators.utils.ts`
-- Notification utils: `src/shared/lib/utils/notification/notification.utils.ts`
+- Settings module: `src/platform/settings/`
+- Session module (shared entities): `src/platform/session/`
+- Generated API client: `src/shared/infrastructure/api/generated/116.api.ts`
+- Result / Failure types: `src/shared/domain/types/result.ts`, `src/shared/domain/failures/failure.ts`
+- ProblemMapper: `src/shared/infrastructure/mappers/problem.mapper.ts`
+- Shared validators: `src/shared/presentation/utils/validators/validators.utils.ts`
+- Notification utils: `src/shared/presentation/utils/notification/notification.utils.ts`
+- ErrorAlert component: `src/shared/presentation/ui/ErrorAlert/`
+- DI container (Awilix): `src/shared/infrastructure/service.locator.ts`
