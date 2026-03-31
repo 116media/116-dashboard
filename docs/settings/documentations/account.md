@@ -115,12 +115,22 @@ This mirrors the existing logout logic in `SettingsDropdownMenu` component.
 
 ## Notifications
 
-No success notifications needed — the user is redirected to login immediately. Error notifications are shown if the API call fails:
+No success notifications needed — the user is redirected to login immediately.
+
+Error notifications are built at call time from the backend's `Failure` (never hardcoded). Inside `UseSignOut` / `UseSignOutAll`:
 
 ```ts
-signOutError: {
-    type: "error",
-    message: "Erreur de déconnexion",
-    description: "Une erreur est survenue lors de la déconnexion. Veuillez réessayer."
+const result = await dispatch(signOutAction());
+
+if (signOutAction.rejected.match(result) && result.payload) {
+    showNotification({
+        type: "error",
+        title: result.payload.title,       // backend Failure.title
+        description: result.payload.detail // backend Failure.detail
+    });
 }
 ```
+
+For `useSignOut`, the logout happens regardless of the API outcome (graceful logout). For `useSignOutAll`, the logout only happens on success — a failed call keeps the user signed in on this device and shows the backend's error message.
+
+See [ui-components.md — Error Display Pattern](./ui-components.md#error-display-pattern) for the general rule.
