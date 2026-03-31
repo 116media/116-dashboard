@@ -7,6 +7,7 @@ import SettingsPageHeader from "@/platform/settings/presentation/components/ui/S
 import { useProfile } from "@/platform/settings/presentation/hooks/UseProfile";
 import { useUpdateAccount } from "@/platform/settings/presentation/hooks/UseUpdateAccount";
 import { useUpdateAvatar } from "@/platform/settings/presentation/hooks/UseUpdateAvatar";
+import ErrorAlert from "@/shared/presentation/ui/ErrorAlert";
 import {
     IconCameraOutlined,
     IconEnvironmentOutlined,
@@ -31,7 +32,7 @@ const { Text } = Typography;
  * Fetches profile data on mount.
  */
 const ProfileContainer: FC = () => {
-    const { profile, loading, fetchProfile } = useProfile();
+    const { profile, loading, error: profileError, fetchProfile } = useProfile();
     const updateAccount = useUpdateAccount();
     const { loading: avatarLoading, onUpload } = useUpdateAvatar();
     const fileInputRef = useRef<HTMLInputElement>(null);
@@ -68,6 +69,7 @@ const ProfileContainer: FC = () => {
                 icon={<IconUserOutlined />}
                 description="Gérez vos informations personnelles et votre photo de profil."
             />
+            <ErrorAlert banner showIcon closable error={profileError} onClose={fetchProfile} />
             <SettingsCard title="Photo de profil">
                 <div className={styles.profileContainer__avatarSection}>
                     <button
