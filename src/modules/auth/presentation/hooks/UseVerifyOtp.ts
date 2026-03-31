@@ -6,7 +6,7 @@ import {
     resetVerifyOtpAction,
     verifyOtpAction
 } from "@/modules/auth/presentation/store/verifyotp.action";
-import type { IApiProblemDetails } from "@/shared/infrastructure/api/type";
+import type { Failure } from "@/shared/domain/failures/failure";
 import { useAppDispatch, useAppSelector } from "@/shared/presentation/store/store";
 
 const { useForm } = Form;
@@ -16,7 +16,7 @@ interface IUseVerifyOtp {
     isSuccess: boolean;
     resetVerifyOtp: () => void;
     form: FormInstance<IVerifyOtpCredentials>;
-    error: IApiProblemDetails | null | undefined;
+    error: Failure | null | undefined;
     onSubmit: (formValues: IVerifyOtpCredentials) => Promise<void>;
 }
 
@@ -31,7 +31,7 @@ interface IUseVerifyOtp {
  *
  * @returns Verify OTP form utilities and state
  * @returns {FormInstance} form - Ant Design form instance
- * @returns {IApiProblemDetails | null} error - Verify OTP error if any
+ * @returns {Failure | null} error - Verify OTP error if any
  * @returns {boolean} loading - Whether verify OTP request is in progress
  * @returns {boolean} isSuccess - Whether verify OTP request succeeded
  * @returns {Function} onSubmit - Form submission handler
