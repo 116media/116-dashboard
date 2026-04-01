@@ -115,5 +115,11 @@ export const RolesNotification = {
         type: "success",
         title: "Permission retirée",
         description: "La permission a été retirée du rôle avec succès."
+    } as INotificationConfig,
+
+    bulkUpdatePermissionsSuccess: {
+        type: "success",
+        title: "Permissions mises à jour",
+        description: "Les permissions du rôle ont été mises à jour avec succès."
     } as INotificationConfig
 } as const;
