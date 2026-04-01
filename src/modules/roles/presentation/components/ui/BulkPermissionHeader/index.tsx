@@ -1,6 +1,7 @@
-import { Flex, Tag, Typography } from "antd";
+import { Flex, Typography } from "antd";
 import type { FC } from "react";
 import { IconSafetyOutlined } from "@/shared/presentation/ui/Icons";
+import StatusTag from "@/shared/presentation/ui/StatusTag";
 import styles from "./index.module.scss";
 
 const { Text, Title } = Typography;
@@ -30,19 +31,11 @@ const BulkPermissionHeader: FC<IBulkPermissionHeaderProps> = ({
             <IconSafetyOutlined />
         </div>
         <div>
-            <Title level={4} className={styles.bulkPermissionHeader__title}>
+            <Title level={5} className={styles.bulkPermissionHeader__title}>
                 Gestion des permissions — {roleName}
             </Title>
             <Flex align="center" gap={8}>
-                {isActive ? (
-                    <Tag color="success" variant="outlined">
-                        Actif
-                    </Tag>
-                ) : (
-                    <Tag color="warning" variant="outlined">
-                        Inactif
-                    </Tag>
-                )}
+                <StatusTag status={isActive ? "active" : "inactive"} />
                 <Text type="secondary">{totalAssigned} assignées</Text>
             </Flex>
         </div>
