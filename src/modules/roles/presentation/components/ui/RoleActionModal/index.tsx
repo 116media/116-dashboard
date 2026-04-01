@@ -8,7 +8,7 @@ import ActionModal from "@/shared/presentation/ui/ActionModal";
  * Action configuration mapping for each role action type.
  */
 const ACTION_CONFIG: Record<
-    Exclude<RoleAction, "edit">,
+    Exclude<RoleAction, "edit" | "assignPermission" | "removePermission">,
     { title: string; description: string; danger: boolean }
 > = {
     activate: {
@@ -84,7 +84,13 @@ const RoleActionModal: FC<IRoleActionModalProps> = ({
     onConfirm,
     onCancel
 }) => {
-    if (!action || action === "edit" || !role) {
+    if (
+        !action ||
+        action === "edit" ||
+        action === "assignPermission" ||
+        action === "removePermission" ||
+        !role
+    ) {
         return null;
     }
 
