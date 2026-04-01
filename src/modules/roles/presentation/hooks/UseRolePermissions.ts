@@ -3,6 +3,7 @@ import type { IPermissionEntity } from "@/modules/permissions/domain/entities/IP
 import { getAllPermissionsAction } from "@/modules/permissions/presentation/store/getall.action";
 import type { IRoleWithPermissions } from "@/modules/roles/domain/entities/IRoleWithPermissions";
 import { assignPermissionAction } from "@/modules/roles/presentation/store/assignpermission.action";
+import { bulkUpdatePermissionsAction } from "@/modules/roles/presentation/store/bulkupdatepermissions.action";
 import { getRoleByIdAction } from "@/modules/roles/presentation/store/getbyid.action";
 import { removePermissionAction } from "@/modules/roles/presentation/store/removepermission.action";
 import { RolesNotification } from "@/modules/roles/presentation/utils/notification/roles.notification";
@@ -24,10 +25,13 @@ interface IUseRolePermissions {
     removeLoading: boolean;
     assignError: Failure | null | undefined;
     removeError: Failure | null | undefined;
+    bulkLoading: boolean;
+    bulkError: Failure | null | undefined;
     fetchRole: (roleId: string) => void;
     fetchAllPermissions: () => void;
     onAssign: (roleId: string, permissionId: string) => Promise<void>;
     onRemove: (roleId: string, permissionId: string) => Promise<void>;
+    onBulkUpdate: (roleId: string, permissionIds: string[]) => Promise<void>;
 }
 
 /**
@@ -49,6 +53,9 @@ export const useRolePermissions = (reload: () => void): IUseRolePermissions => {
     const getAllState = useAppSelector(({ permissions: { getAll } }) => getAll);
     const assignState = useAppSelector(({ roles: { assignPermission } }) => assignPermission);
     const removeState = useAppSelector(({ roles: { removePermission } }) => removePermission);
+    const bulkState = useAppSelector(
+        ({ roles: { bulkUpdatePermissions } }) => bulkUpdatePermissions
+    );
 
     const fetchRole = useCallback(
         (roleId: string) => {
@@ -83,6 +90,21 @@ export const useRolePermissions = (reload: () => void): IUseRolePermissions => {
         }
     };
 
+    const onBulkUpdate = async (roleId: string, permissionIds: string[]) => {
+        const result = await dispatch(bulkUpdatePermissionsAction({ roleId, permissionIds }));
+
+        if (bulkUpdatePermissionsAction.fulfilled.match(result)) {
+            showNotification(RolesNotification.bulkUpdatePermissionsSuccess);
+            reload();
+        } else if (bulkUpdatePermissionsAction.rejected.match(result) && result.payload) {
+            showNotification({
+                type: "error",
+                title: result.payload.title,
+                description: result.payload.detail
+            });
+        }
+    };
+
     const onRemove = async (roleId: string, permissionId: string) => {
         const result = await dispatch(removePermissionAction({ roleId, permissionId }));
 
@@ -107,9 +129,12 @@ export const useRolePermissions = (reload: () => void): IUseRolePermissions => {
         removeLoading: removeState.loading,
         assignError: assignState.error,
         removeError: removeState.error,
+        bulkLoading: bulkState.loading,
+        bulkError: bulkState.error,
         fetchRole,
         fetchAllPermissions,
         onAssign,
-        onRemove
+        onRemove,
+        onBulkUpdate
     };
 };
