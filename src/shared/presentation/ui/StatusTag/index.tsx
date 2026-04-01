@@ -5,15 +5,14 @@ import {
     IconCloseCircleOutlined,
     IconExclamationCircleOutlined
 } from "@/shared/presentation/ui/Icons";
-import { TextTransform } from "@/shared/presentation/utils/text-transform/text-transform.utils";
 import styles from "./index.module.scss";
 
 type EntityStatus = "active" | "inactive" | "deleted";
 
 const STATUS_CONFIG: Record<EntityStatus, { label: string; color: string; icon: FC }> = {
-    active: { label: "Actif", color: "success", icon: IconCheckCircleOutlined },
-    inactive: { label: "Inactif", color: "warning", icon: IconExclamationCircleOutlined },
-    deleted: { label: "Supprimé", color: "error", icon: IconCloseCircleOutlined }
+    active: { label: "actif", color: "success", icon: IconCheckCircleOutlined },
+    inactive: { label: "inactif", color: "warning", icon: IconExclamationCircleOutlined },
+    deleted: { label: "supprimé", color: "error", icon: IconCloseCircleOutlined }
 };
 
 interface IStatusTagProps {
@@ -34,7 +33,7 @@ const StatusTag: FC<IStatusTagProps> = ({ status }) => {
 
     return (
         <Tag color={color} variant="outlined" icon={<Icon />} className={styles.tag}>
-            {TextTransform.noCase(label)}
+            {label}
         </Tag>
     );
 };
