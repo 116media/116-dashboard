@@ -68,7 +68,7 @@ export interface Cradle {
     sessionRepository: SessionRepositoryPort;
     settingsRepository: ISettingsRepositoryPort;
     deviceRepository: IDeviceRepositoryPort;
-    roleRepository: IRolesRepositoryPort;
+    rolesRepository: IRolesRepositoryPort;
 
     // Auth use cases
     loginUseCase: LoginUseCase;
