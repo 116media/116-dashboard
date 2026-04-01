@@ -48,6 +48,7 @@ const CountrySelect: FC<ICountrySelectProps> = ({
 
     return (
         <Select
+            allowClear
             size="large"
             value={value}
             onChange={onChange}
