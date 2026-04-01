@@ -4,8 +4,9 @@ import type { IRoleEntity } from "@/modules/roles/domain/entities/IRole";
 import RoleForm from "@/modules/roles/presentation/components/forms/RoleForm";
 import type { RoleAction } from "@/modules/roles/presentation/components/tables/RolesTable/columns";
 import { rolesTableColumns } from "@/modules/roles/presentation/components/tables/RolesTable/columns";
+import BulkPermissionModal from "@/modules/roles/presentation/components/ui/BulkPermissionModal";
 import RoleActionModal from "@/modules/roles/presentation/components/ui/RoleActionModal";
-import RolePermissionModal from "@/modules/roles/presentation/components/ui/RolePermissionModal";
+import SinglePermissionModal from "@/modules/roles/presentation/components/ui/SinglePermissionModal";
 import { ROLE_STATUS_OPTIONS } from "@/modules/roles/presentation/constants/roles.status";
 import { useCreateRole } from "@/modules/roles/presentation/hooks/UseCreateRole";
 import { useRoleActions } from "@/modules/roles/presentation/hooks/UseRoleActions";
@@ -42,6 +43,7 @@ const RolesListContainer: FC = () => {
     const [actionOpen, setActionOpen] = useState(false);
     const [permissionOpen, setPermissionOpen] = useState(false);
     const [permissionMode, setPermissionMode] = useState<"assign" | "remove">("assign");
+    const [bulkPermissionOpen, setBulkPermissionOpen] = useState(false);
     const [currentAction, setCurrentAction] = useState<RoleAction | null>(null);
 
     // TODO: implement useIsSuperAdmin hook
@@ -50,24 +52,42 @@ const RolesListContainer: FC = () => {
     const handleAction = useCallback(
         (action: RoleAction, role: IRoleEntity) => {
             setSelectedRole(role);
-            if (action === "edit") {
-                setEditOpen(true);
-            } else if (action === "assignPermission") {
-                setPermissionMode("assign");
-                rolePermissions.fetchRole(role.id);
-                rolePermissions.fetchAllPermissions();
-                setPermissionOpen(true);
-            } else if (action === "removePermission") {
-                setPermissionMode("remove");
-                rolePermissions.fetchRole(role.id);
-                setPermissionOpen(true);
-            } else {
-                setCurrentAction(action);
-                setActionOpen(true);
+
+            switch (action) {
+                case "edit":
+                    setEditOpen(true);
+                    break;
+                case "managePermissions":
+                    rolePermissions.fetchRole(role.id);
+                    rolePermissions.fetchAllPermissions();
+                    setBulkPermissionOpen(true);
+                    break;
+                case "assignPermission":
+                    setPermissionMode("assign");
+                    rolePermissions.fetchRole(role.id);
+                    rolePermissions.fetchAllPermissions();
+                    setPermissionOpen(true);
+                    break;
+                case "removePermission":
+                    setPermissionMode("remove");
+                    rolePermissions.fetchRole(role.id);
+                    setPermissionOpen(true);
+                    break;
+                default:
+                    setCurrentAction(action);
+                    setActionOpen(true);
+                    break;
             }
         },
         [rolePermissions]
     );
+
+    const handleBulkSave = async (permissionIds: string[]) => {
+        if (!selectedRole) return;
+
+        await rolePermissions.onBulkUpdate(selectedRole.id, permissionIds);
+        setBulkPermissionOpen(false);
+    };
 
     const handlePermissionConfirm = async (permissionId: string) => {
         if (!selectedRole) return;
@@ -200,7 +220,19 @@ const RolesListContainer: FC = () => {
                 onCancel={() => setActionOpen(false)}
             />
 
-            <RolePermissionModal
+            {bulkPermissionOpen && (
+                <BulkPermissionModal
+                    open={bulkPermissionOpen}
+                    loading={rolePermissions.bulkLoading}
+                    error={rolePermissions.bulkError}
+                    role={rolePermissions.role}
+                    permissions={rolePermissions.allPermissions}
+                    onSave={handleBulkSave}
+                    onCancel={() => setBulkPermissionOpen(false)}
+                />
+            )}
+
+            <SinglePermissionModal
                 open={permissionOpen}
                 mode={permissionMode}
                 role={rolePermissions.role}
