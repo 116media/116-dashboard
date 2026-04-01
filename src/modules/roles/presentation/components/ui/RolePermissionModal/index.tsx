@@ -92,6 +92,7 @@ const RolePermissionModal: FC<IRolePermissionModalProps> = ({
 
     const handleConfirm = () => {
         if (!selectedId) return;
+
         onConfirm(selectedId);
         setSelectedId(null);
     };
