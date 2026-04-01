@@ -1,8 +1,8 @@
 import { Avatar, Button, Flex, Layout, Popover, Tooltip } from "antd";
 import type { FC } from "react";
 import { useLocation, useNavigate } from "react-router";
-import { SettingsDropdownMenu } from "@/shared/presentation/components/SettingsDropdownMenu";
 import { NAVIGATION_ITEMS } from "@/shared/presentation/constants/navigation";
+import { SettingsDropdownMenu } from "@/shared/presentation/layouts/DashboardLayout/SettingsDropdownMenu";
 import { useAppSelector } from "@/shared/presentation/store/store";
 import { IconUserOutlined } from "@/shared/presentation/ui/Icons";
 import { Logo } from "@/shared/presentation/ui/Logo";
