@@ -25,6 +25,7 @@ export {
     CaretRightFilled as IconCaretRightFilled,
     CaretRightOutlined as IconCaretRightOutlined,
     CarOutlined as IconCarOutlined,
+    CheckCircleOutlined as IconCheckCircleOutlined,
     ClockCircleOutlined as IconClockCircleOutlined,
     CloseCircleFilled as IconCloseCircleFilled,
     CloseCircleOutlined as IconCloseCircleOutlined,
