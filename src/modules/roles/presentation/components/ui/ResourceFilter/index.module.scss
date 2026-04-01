@@ -1,0 +1,19 @@
+@use "@/shared/presentation/styles/dimensions.scss" as dimensions;
+@use "@/shared/presentation/styles/colors.scss" as colors;
+
+.resourceFilter {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: calc(dimensions.$padding / 3);
+    padding: dimensions.$padding 0;
+
+    &__label {
+        display: flex;
+        align-items: center;
+        gap: calc(dimensions.$padding / 4);
+        color: colors.$description;
+        font-size: 13px;
+        white-space: nowrap;
+    }
+}
