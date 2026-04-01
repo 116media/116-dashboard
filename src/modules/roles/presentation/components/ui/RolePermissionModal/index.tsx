@@ -70,13 +70,16 @@ const RolePermissionModal: FC<IRolePermissionModalProps> = ({
 
     const options = useMemo(() => {
         if (!role) return [];
-        const source = mode === "assign" ? permissions : (role.permissions ?? []);
+
+        const source =
+            mode === "assign"
+                ? permissions.filter((p) => !assignedIds.has(p.id))
+                : (role.permissions ?? []);
 
         return source.map((p) => ({
             value: p.id,
             description: p.description,
-            label: `${p.resource}:${p.action}`,
-            disabled: mode === "assign" && assignedIds.has(p.id)
+            label: `${p.resource}:${p.action}`
         }));
     }, [mode, permissions, role, assignedIds]);
 
