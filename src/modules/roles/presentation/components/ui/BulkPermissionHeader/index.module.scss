@@ -1,0 +1,21 @@
+@use "@/shared/presentation/styles/colors.scss" as colors;
+@use "@/shared/presentation/styles/dimensions.scss" as dimensions;
+
+.bulkPermissionHeader {
+    &__icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 3rem;
+        height: 3rem;
+        border-radius: dimensions.$border-radius;
+        background: colors.$background;
+        color: colors.$title;
+        flex-shrink: 0;
+        font-size: 15pt;
+    }
+
+    &__title {
+        margin: 0 !important;
+    }
+}
