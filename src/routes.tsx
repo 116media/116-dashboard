@@ -1,8 +1,6 @@
 import { lazy } from "react";
 import type { RouteObject } from "react-router";
 import { Navigate } from "react-router";
-import { GuestRoute } from "@/shared/presentation/components/GuestRoute";
-import { ProtectedRoute } from "@/shared/presentation/components/ProtectedRoute";
 import {
     ADMIN_PATH,
     ADS_BANNER_PATH,
@@ -19,6 +17,7 @@ import {
     USER_PATH,
     VIDEO_PATH
 } from "@/shared/presentation/constants/paths";
+import { RouteGuard } from "@/shared/presentation/guards/RouteGuard";
 import { AuthLayout } from "@/shared/presentation/layouts/AuthLayout";
 import { DashboardLayout } from "@/shared/presentation/layouts/DashboardLayout";
 import { NotFoundPage } from "@/shared/presentation/pages/NotFoundPage";
@@ -43,7 +42,7 @@ const PermissionsPage = lazy(
 
 const guestRoutes: RouteObject[] = [
     {
-        element: <GuestRoute />,
+        element: <RouteGuard type="guest" />,
         children: [
             {
                 element: <AuthLayout />,
@@ -58,7 +57,7 @@ const guestRoutes: RouteObject[] = [
 
 const protectedRoutes: RouteObject[] = [
     {
-        element: <ProtectedRoute />,
+        element: <RouteGuard type="protected" />,
         children: [
             {
                 element: <DashboardLayout />,
