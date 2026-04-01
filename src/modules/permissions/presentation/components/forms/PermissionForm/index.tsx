@@ -80,7 +80,7 @@ const PermissionForm: FC<IPermissionFormProps> = ({ form, error, formContext, in
             >
                 <TextArea
                     showCount
-                    maxLength={300}
+                    maxLength={200}
                     autoSize={{ minRows: 3 }}
                     placeholder="Description de la permission"
                 />
