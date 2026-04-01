@@ -10,9 +10,9 @@ import styles from "./index.module.scss";
 const { Text } = Typography;
 
 /**
- * Props for the RolePermissionModal component.
+ * Props for the SinglePermissionModal component.
  *
- * @interface IRolePermissionModalProps
+ * @interface ISinglePermissionModalProps
  * @property {boolean} open - Whether the modal is visible
  * @property {boolean} loading - Loading state for the confirm button
  * @property {Failure | null | undefined} error - Backend error
@@ -23,7 +23,7 @@ const { Text } = Typography;
  * @property {(permissionId: string) => void} onConfirm - Confirm handler with selected permission ID
  * @property {() => void} onCancel - Cancel/close handler
  */
-interface IRolePermissionModalProps {
+interface ISinglePermissionModalProps {
     open: boolean;
     loading: boolean;
     error: Failure | null | undefined;
@@ -47,10 +47,10 @@ interface IRolePermissionModalProps {
  * ones disabled. In "remove" mode, shows only the permissions
  * currently assigned to the role.
  *
- * @param {IRolePermissionModalProps} props - Component props
+ * @param {ISinglePermissionModalProps} props - Component props
  * @returns {JSX.Element | null} The permission modal
  */
-const RolePermissionModal: FC<IRolePermissionModalProps> = ({
+const SinglePermissionModal: FC<ISinglePermissionModalProps> = ({
     open,
     loading,
     error,
@@ -156,4 +156,4 @@ const RolePermissionModal: FC<IRolePermissionModalProps> = ({
     );
 };
 
-export default RolePermissionModal;
+export default SinglePermissionModal;
