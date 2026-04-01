@@ -1,0 +1,17 @@
+@use "@/shared/presentation/styles/dimensions.scss" as dimensions;
+
+.rolePermission {
+    &__info {
+        padding-top: calc(dimensions.$padding / 2);
+        padding-bottom: dimensions.$padding;
+
+        [class~="ant-alert"]{
+            width: 100%;
+            padding: 0.5rem;  
+        }
+    }
+
+    &__option {
+        padding: calc(dimensions.$padding * 0.25) 0 ;
+    }
+}
