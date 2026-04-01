@@ -12,6 +12,7 @@ const { Text } = Typography;
  */
 export type RoleAction =
     | "edit"
+    | "managePermissions"
     | "assignPermission"
     | "removePermission"
     | "activate"
@@ -98,6 +99,12 @@ export const rolesTableColumns = (
                     label: "Modifier",
                     onClick: () => onAction("edit", record),
                     hidden: !isSuperAdmin
+                },
+                {
+                    key: "managePermissions",
+                    label: "Gérer les permissions",
+                    onClick: () => onAction("managePermissions", record),
+                    hidden: !isSuperAdmin || record.isDeleted
                 },
                 {
                     key: "assignPermission",
