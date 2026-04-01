@@ -12,6 +12,8 @@ const { Text } = Typography;
  */
 export type RoleAction =
     | "edit"
+    | "assignPermission"
+    | "removePermission"
     | "activate"
     | "deactivate"
     | "softDelete"
@@ -96,6 +98,18 @@ export const rolesTableColumns = (
                     label: "Modifier",
                     onClick: () => onAction("edit", record),
                     hidden: !isSuperAdmin
+                },
+                {
+                    key: "assignPermission",
+                    label: "Assigner une permission",
+                    onClick: () => onAction("assignPermission", record),
+                    hidden: !isSuperAdmin || record.isDeleted
+                },
+                {
+                    key: "removePermission",
+                    label: "Retirer une permission",
+                    onClick: () => onAction("removePermission", record),
+                    hidden: !isSuperAdmin || record.isDeleted
                 },
                 {
                     key: "activate",
