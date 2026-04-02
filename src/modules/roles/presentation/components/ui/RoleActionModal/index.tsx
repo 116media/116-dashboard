@@ -1,7 +1,7 @@
 import type { FC } from "react";
 import type { IRoleEntity } from "@/modules/roles/domain/entities/IRole";
 import type { RoleAction } from "@/modules/roles/presentation/components/tables/RolesTable/columns";
-import { ROLE_ACTION_CONFIG } from "@/modules/roles/presentation/constants/roles.actions";
+import { ROLE_ACTION_CONFIG } from "@/modules/roles/presentation/constants/roles.config";
 import type { Failure } from "@/shared/domain/failures/failure";
 import ActionModal from "@/shared/presentation/ui/ActionModal";
 
