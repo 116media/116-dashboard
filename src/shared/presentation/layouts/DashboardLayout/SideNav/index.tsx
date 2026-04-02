@@ -1,8 +1,8 @@
-import { Avatar, Button, Flex, Layout, Popover, Tooltip } from "antd";
+import { Avatar, Button, Flex, Layout, Menu, Popover, Tooltip } from "antd";
 import { type FC, useMemo } from "react";
 import { useLocation, useNavigate } from "react-router";
 import { useAuthorization } from "@/modules/auth/presentation/hooks/UseAuthorization";
-import { NAVIGATION_ITEMS } from "@/shared/presentation/constants/navigation";
+import { type INavigationItem, NAVIGATION_ITEMS } from "@/shared/presentation/constants/navigation";
 import { SettingsDropdownMenu } from "@/shared/presentation/layouts/DashboardLayout/SettingsDropdownMenu";
 import { useAppSelector } from "@/shared/presentation/store/store";
 import { IconUserOutlined } from "@/shared/presentation/ui/Icons";
@@ -20,9 +20,11 @@ const { Sider } = Layout;
  * @description
  * Renders a vertical strip with:
  * - App logo at the top
- * - Navigation icons with tooltips showing the French route label on hover
+ * - Navigation icons with tooltips or Popovers
+ * - Items with `children` open a Popover with sub-items on click
+ * - Items without `children` navigate directly with a tooltip
  * - Active route highlighting
- * - User avatar at the bottom opening a popover with profile info, menu, and logout
+ * - User avatar at the bottom
  *
  * @returns The side navigation
  */
@@ -37,6 +39,11 @@ export const SideNav: FC = () => {
         [hasPermission]
     );
 
+    const getIsActive = (item: INavigationItem) =>
+        item.children
+            ? item.children.some((child) => location.pathname.startsWith(child.path))
+            : location.pathname.startsWith(item.path);
+
     return (
         <Sider width={56} className={styles.sideNav}>
             <Flex vertical align="center" justify="space-between" className={styles.sideNav__inner}>
@@ -44,8 +51,47 @@ export const SideNav: FC = () => {
                     <Logo className={styles.sideNav__logo} canRedirect />
 
                     <Flex vertical align="center" gap={4} className={styles.sideNav__nav}>
-                        {visibleItems.map(({ path, label, icon: Icon }) => {
-                            const isActive = location.pathname.startsWith(path);
+                        {visibleItems.map((item) => {
+                            const { path, label, icon: Icon, children } = item;
+                            const isActive = getIsActive(item);
+                            const btnClass = `${styles.sideNav__item} ${isActive ? styles.sideNav__item__active : ""}`;
+
+                            if (children) {
+                                const visibleChildren = children.filter(
+                                    (child) => !child.permission || hasPermission(child.permission)
+                                );
+
+                                if (visibleChildren.length === 0) return null;
+
+                                return (
+                                    <Popover
+                                        key={path}
+                                        trigger="click"
+                                        placement="right"
+                                        content={
+                                            <Menu
+                                                mode="vertical"
+                                                selectedKeys={[location.pathname]}
+                                                items={visibleChildren.map((child) => ({
+                                                    key: child.path,
+                                                    label: child.label,
+                                                    icon: <child.icon />,
+                                                    onClick: () => navigate(child.path)
+                                                }))}
+                                            />
+                                        }
+                                    >
+                                        <Tooltip key={path} title={label} placement="right">
+                                            <Button
+                                                size="large"
+                                                icon={<Icon />}
+                                                type={isActive ? "primary" : "text"}
+                                                className={btnClass}
+                                            />
+                                        </Tooltip>
+                                    </Popover>
+                                );
+                            }
 
                             return (
                                 <Tooltip key={path} title={label} placement="right">
@@ -54,7 +100,7 @@ export const SideNav: FC = () => {
                                         icon={<Icon />}
                                         onClick={() => navigate(path)}
                                         type={isActive ? "primary" : "text"}
-                                        className={`${styles.sideNav__item} ${isActive ? styles.sideNav__item__active : ""}`}
+                                        className={btnClass}
                                     />
                                 </Tooltip>
                             );
