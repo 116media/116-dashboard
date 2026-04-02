@@ -1,7 +1,7 @@
 import type { FC } from "react";
 import type { IPermissionEntity } from "@/modules/permissions/domain/entities/IPermission";
 import type { PermissionAction } from "@/modules/permissions/presentation/components/tables/PermissionsTable/columns";
-import { PERMISSION_ACTION_CONFIG } from "@/modules/permissions/presentation/constants/permissions.actions";
+import { PERMISSION_ACTION_CONFIG } from "@/modules/permissions/presentation/constants/permissions.config";
 import type { Failure } from "@/shared/domain/failures/failure";
 import ActionModal from "@/shared/presentation/ui/ActionModal";
 
