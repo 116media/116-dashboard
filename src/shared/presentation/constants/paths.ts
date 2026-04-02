@@ -40,6 +40,12 @@ export const SETTING_ACCOUNT_PATH = "/settings/account";
 export const CONTENT_PATH = "/contents";
 export const VIDEO_PATH = "/videos";
 export const ARTICLE_PATH = "/articles";
+
+export const REFERENCES_PATH = "/references";
+export const CONTENT_TYPES_PATH = "/references/content-types";
+export const PRICING_TIERS_PATH = "/references/pricing-tiers";
+export const PROMOTION_LEVELS_PATH = "/references/promotion-levels";
+export const TAGS_PATH = "/references/tags";
 export const ADS_BANNER_PATH = "/ads/banners";
 export const ADS_POPUP_PATH = "/ads/popups";
 export const ADMIN_PATH = "/admins";
