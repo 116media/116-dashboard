@@ -67,9 +67,13 @@ For now, since all admin endpoints require `RequireAdminOrSuperAdmin` at minimum
 ### Full Route Map
 
 - [ ] `/overview` — no permission required (accessible to all authenticated admins)
-- [ ] `/contents` — `contents:read`
-- [ ] `/videos` — `videos:read`
+- [ ] `/references/*` — `content-types:read`, `pricing-tiers:read`, `promotion-levels:read`, `tags:read`
+- [ ] `/catalog/*` — `categories:read`, `customers:read`, `packages:read`
 - [ ] `/articles` — `articles:read`
+- [ ] `/videos` — `videos:read`
+- [ ] `/shorts` — `shorts:read`
+- [ ] `/lyrics` — `lyrics:read`
+- [ ] `/orders` — `orders:read`
 - [ ] `/ads/banners`, `/ads/popups` — `ads:read`
 - [ ] `/admins` — `admins:read`
 - [ ] `/users` — `users:read`

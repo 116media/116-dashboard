@@ -31,10 +31,20 @@ This way, when the backend adds `resource:action` permissions for admin operatio
 
 | Dashboard Page | Route Path | Required Role | Future Permission |
 | --- | --- | --- | --- |
-| Overview | `/overview` | Admin or SuperAdmin | — (always accessible to authenticated admins) |
-| Contents | `/contents` | Admin or SuperAdmin | `contents:read` |
-| Videos | `/videos` | Admin or SuperAdmin | `videos:read` |
-| Articles | `/articles` | Admin or SuperAdmin | `articles:read` |
+| Overview | `/overview` | Admin or SuperAdmin | — (always accessible) |
+| Références — Types de contenu | `/references/content-types` | Admin or SuperAdmin | `content-types:read` |
+| Références — Niveaux tarifaires | `/references/pricing-tiers` | Admin or SuperAdmin | `pricing-tiers:read` |
+| Références — Promotions | `/references/promotion-levels` | Admin or SuperAdmin | `promotion-levels:read` |
+| Références — Tags | `/references/tags` | Admin or SuperAdmin | `tags:read` |
+| Catalogue — Catégories | `/catalog/categories` | Admin or SuperAdmin | `categories:read` |
+| Catalogue — Clients | `/catalog/customers` | Admin or SuperAdmin | `customers:read` |
+| Catalogue — Packages | `/catalog/packages` | Admin or SuperAdmin | `packages:read` |
+| Édition — Articles | `/articles` | Admin or SuperAdmin | `articles:read` |
+| Édition — Vidéos | `/videos` | Admin or SuperAdmin | `videos:read` |
+| Édition — Shorts | `/shorts` | Admin or SuperAdmin | `shorts:read` |
+| Édition — Paroles | `/lyrics` | Admin or SuperAdmin | `lyrics:read` |
+| Ventes — Commandes | `/orders` | Admin or SuperAdmin | `orders:read` |
+| Ventes — Paiements | `/payments` | Admin or SuperAdmin | `payments:read` |
 | Ads Banners | `/ads/banners` | Admin or SuperAdmin | `ads:read` |
 | Ads Popups | `/ads/popups` | Admin or SuperAdmin | `ads:read` |
 | Administrators | `/admins` | Admin or SuperAdmin | `admins:read` |
@@ -90,19 +100,29 @@ This way, when the backend adds `resource:action` permissions for admin operatio
 
 The sidebar navigation should only show items the user has access to:
 
-| Nav Item | Required Role | Future Permission |
-| --- | --- | --- |
-| Accueil | Admin or SuperAdmin | — |
-| Contenus | Admin or SuperAdmin | `contents:read` |
-| Vidéos | Admin or SuperAdmin | `videos:read` |
-| Articles | Admin or SuperAdmin | `articles:read` |
-| Bannières | Admin or SuperAdmin | `ads:read` |
-| Popups | Admin or SuperAdmin | `ads:read` |
-| Administrateurs | Admin or SuperAdmin | `admins:read` |
-| Utilisateurs | Admin or SuperAdmin | `users:read` |
-| Rôles | Admin or SuperAdmin | `roles:read` |
-| Permissions | Admin or SuperAdmin | `permissions:read` |
-| Paramètres | Admin or SuperAdmin | — |
+| Nav Group | Sub-items | Required Role | Future Permission |
+| --- | --- | --- | --- |
+| Accueil | — | Admin or SuperAdmin | — |
+| Références | Types de contenu | Admin or SuperAdmin | `content-types:read` |
+| Références | Niveaux tarifaires | Admin or SuperAdmin | `pricing-tiers:read` |
+| Références | Promotions | Admin or SuperAdmin | `promotion-levels:read` |
+| Références | Tags | Admin or SuperAdmin | `tags:read` |
+| Catalogue | Catégories | Admin or SuperAdmin | `categories:read` |
+| Catalogue | Clients | Admin or SuperAdmin | `customers:read` |
+| Catalogue | Packages | Admin or SuperAdmin | `packages:read` |
+| Édition | Articles | Admin or SuperAdmin | `articles:read` |
+| Édition | Vidéos | Admin or SuperAdmin | `videos:read` |
+| Édition | Shorts | Admin or SuperAdmin | `shorts:read` |
+| Édition | Paroles | Admin or SuperAdmin | `lyrics:read` |
+| Ventes | Commandes | Admin or SuperAdmin | `orders:read` |
+| Ventes | Paiements | Admin or SuperAdmin | `payments:read` |
+| Publicité | Bannières | Admin or SuperAdmin | `ads:read` |
+| Publicité | Popups | Admin or SuperAdmin | `ads:read` |
+| Gestion | Administrateurs | Admin or SuperAdmin | `admins:read` |
+| Gestion | Utilisateurs | Admin or SuperAdmin | `users:read` |
+| Gestion | Rôles | Admin or SuperAdmin | `roles:read` |
+| Gestion | Permissions | Admin or SuperAdmin | `permissions:read` |
+| Paramètres | — | Admin or SuperAdmin | — |
 
 > **Note:** Currently all dashboard users are Admin or SuperAdmin, so all nav items are visible. Navigation filtering will become relevant when the backend adds fine-grained `resource:action` permissions for admin operations, or when custom roles (e.g., "Editor", "Moderator") are created with limited permissions.
 
@@ -123,17 +143,27 @@ This means:
 
 When the backend adds `resource:action` permissions for admin users, the following permissions should be created:
 
-| Resource | Actions |
-| --- | --- |
-| `articles` | `read`, `create`, `update`, `delete`, `publish`, `archive` |
-| `videos` | `read`, `create`, `update`, `delete`, `publish`, `archive` |
-| `shorts` | `read`, `create`, `update`, `delete`, `activate`, `deactivate` |
-| `roles` | `read`, `create`, `update`, `delete`, `activate`, `deactivate` |
-| `permissions` | `read`, `create`, `update`, `delete`, `activate`, `deactivate` |
-| `users` | `read`, `update`, `assign_role`, `remove_role` |
-| `admins` | `read`, `create`, `update`, `delete` |
-| `sessions` | `read`, `revoke`, `force_logout` |
-| `ads_banners` | `read`, `create`, `update`, `delete` |
-| `ads_stories` | `read`, `create`, `update`, `delete` |
+| Resource | Nav Group (UI) | Actions |
+| --- | --- | --- |
+| `content-types` | Références | `read`, `create`, `update`, `activate`, `deactivate` |
+| `pricing-tiers` | Références | `read`, `create`, `update`, `activate`, `deactivate` |
+| `promotion-levels` | Références | `read`, `create`, `update`, `activate`, `deactivate` |
+| `tags` | Références | `read`, `create` |
+| `categories` | Catalogue | `read`, `create`, `update`, `activate`, `deactivate` |
+| `customers` | Catalogue | `read`, `create`, `update` |
+| `packages` | Catalogue | `read`, `create`, `activate`, `deactivate` |
+| `articles` | Édition | `read`, `create`, `update`, `delete`, `publish`, `archive` |
+| `videos` | Édition | `read`, `create`, `update`, `delete`, `publish`, `archive` |
+| `shorts` | Édition | `read`, `create`, `update`, `delete`, `activate`, `deactivate` |
+| `lyrics` | Édition | `read`, `create`, `update` |
+| `orders` | Ventes | `read`, `create`, `update`, `submit`, `cancel` |
+| `payments` | Ventes | `read`, `verify`, `reject` |
+| `roles` | — | `read`, `create`, `update`, `delete`, `activate`, `deactivate` |
+| `permissions` | — | `read`, `create`, `update`, `delete`, `activate`, `deactivate` |
+| `users` | — | `read`, `update`, `assign_role`, `remove_role` |
+| `admins` | — | `read`, `create`, `update`, `delete` |
+| `sessions` | — | `read`, `revoke`, `force_logout` |
+| `ads_banners` | — | `read`, `create`, `update`, `delete` |
+| `ads_stories` | — | `read`, `create`, `update`, `delete` |
 
 The frontend `useAuthorization` hook and `<PermissionRoute>` component are designed to support this transition — no code changes will be needed, only updating route configs and UI checks from role-based to permission-based.
