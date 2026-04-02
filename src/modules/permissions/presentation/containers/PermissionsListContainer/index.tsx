@@ -1,5 +1,6 @@
 import { Table } from "antd";
 import { type FC, useCallback, useState } from "react";
+import { useAuthorization } from "@/modules/auth/presentation/hooks/UseAuthorization";
 import type { IPermissionEntity } from "@/modules/permissions/domain/entities/IPermission";
 import PermissionForm from "@/modules/permissions/presentation/components/forms/PermissionForm";
 import type { PermissionAction } from "@/modules/permissions/presentation/components/tables/PermissionsTable/columns";
@@ -37,8 +38,7 @@ const PermissionsListContainer: FC = () => {
     const [actionOpen, setActionOpen] = useState(false);
     const [currentAction, setCurrentAction] = useState<PermissionAction | null>(null);
 
-    // TODO: implement useIsSuperAdmin hook
-    const isSuperAdmin = true;
+    const { isSuperAdmin } = useAuthorization();
 
     const handleAction = useCallback((action: PermissionAction, permission: IPermissionEntity) => {
         setSelectedPermission(permission);
