@@ -1,6 +1,7 @@
 import { Avatar, Button, Flex, Layout, Popover, Tooltip } from "antd";
-import type { FC } from "react";
+import { type FC, useMemo } from "react";
 import { useLocation, useNavigate } from "react-router";
+import { useAuthorization } from "@/modules/auth/presentation/hooks/UseAuthorization";
 import { NAVIGATION_ITEMS } from "@/shared/presentation/constants/navigation";
 import { SettingsDropdownMenu } from "@/shared/presentation/layouts/DashboardLayout/SettingsDropdownMenu";
 import { useAppSelector } from "@/shared/presentation/store/store";
@@ -28,7 +29,13 @@ const { Sider } = Layout;
 export const SideNav: FC = () => {
     const navigate = useNavigate();
     const location = useLocation();
+    const { hasPermission } = useAuthorization();
     const user = useAppSelector(({ session: { currentUser } }) => currentUser.data);
+
+    const visibleItems = useMemo(
+        () => NAVIGATION_ITEMS.filter((item) => !item.permission || hasPermission(item.permission)),
+        [hasPermission]
+    );
 
     return (
         <Sider width={56} className={styles.sideNav}>
@@ -37,7 +44,7 @@ export const SideNav: FC = () => {
                     <Logo className={styles.sideNav__logo} canRedirect />
 
                     <Flex vertical align="center" gap={4} className={styles.sideNav__nav}>
-                        {NAVIGATION_ITEMS.map(({ path, label, icon: Icon }) => {
+                        {visibleItems.map(({ path, label, icon: Icon }) => {
                             const isActive = location.pathname.startsWith(path);
 
                             return (
