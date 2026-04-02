@@ -1,5 +1,6 @@
 import { Table } from "antd";
 import { type FC, useCallback, useState } from "react";
+import { useAuthorization } from "@/modules/auth/presentation/hooks/UseAuthorization";
 import type { IRoleEntity } from "@/modules/roles/domain/entities/IRole";
 import RoleForm from "@/modules/roles/presentation/components/forms/RoleForm";
 import type { RoleAction } from "@/modules/roles/presentation/components/tables/RolesTable/columns";
@@ -46,8 +47,7 @@ const RolesListContainer: FC = () => {
     const [bulkPermissionOpen, setBulkPermissionOpen] = useState(false);
     const [currentAction, setCurrentAction] = useState<RoleAction | null>(null);
 
-    // TODO: implement useIsSuperAdmin hook
-    const isSuperAdmin = true;
+    const { isSuperAdmin } = useAuthorization();
 
     const handleAction = useCallback(
         (action: RoleAction, role: IRoleEntity) => {
