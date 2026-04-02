@@ -1,5 +1,6 @@
 import { combineReducers } from "@reduxjs/toolkit";
 import authReducer from "@/modules/auth/presentation/store";
+import lookupReducer from "@/modules/lookup/presentation/store";
 import permissionsReducer from "@/modules/permissions/presentation/store";
 import rolesReducer from "@/modules/roles/presentation/store";
 import sessionReducer from "@/platform/session/presentation/store";
@@ -18,7 +19,8 @@ export const rootReducer = combineReducers({
     session: sessionReducer,
     settings: settingsReducer,
     roles: rolesReducer,
-    permissions: permissionsReducer
+    permissions: permissionsReducer,
+    lookup: lookupReducer
 });
 
 /**
