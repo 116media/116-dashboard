@@ -1,8 +1,9 @@
-import { Avatar, Button, Flex, Layout, Menu, Popover, Tooltip } from "antd";
+import { Avatar, Button, Flex, Layout, Popover, Tooltip } from "antd";
 import { type FC, useMemo } from "react";
 import { useLocation, useNavigate } from "react-router";
 import { useAuthorization } from "@/modules/auth/presentation/hooks/UseAuthorization";
 import { type INavigationItem, NAVIGATION_ITEMS } from "@/shared/presentation/constants/navigation";
+import NavPopoverMenu from "@/shared/presentation/layouts/DashboardLayout/NavPopoverMenu";
 import { SettingsDropdownMenu } from "@/shared/presentation/layouts/DashboardLayout/SettingsDropdownMenu";
 import { useAppSelector } from "@/shared/presentation/store/store";
 import { IconUserOutlined } from "@/shared/presentation/ui/Icons";
@@ -20,8 +21,8 @@ const { Sider } = Layout;
  * @description
  * Renders a vertical strip with:
  * - App logo at the top
- * - Navigation icons with tooltips or Popovers
- * - Items with `children` open a Popover with sub-items on click
+ * - Navigation icons with tooltips or NavPopoverMenu
+ * - Items with `children` delegate to `NavPopoverMenu`
  * - Items without `children` navigate directly with a tooltip
  * - Active route highlighting
  * - User avatar at the bottom
@@ -64,32 +65,14 @@ export const SideNav: FC = () => {
                                 if (visibleChildren.length === 0) return null;
 
                                 return (
-                                    <Popover
+                                    <NavPopoverMenu
                                         key={path}
-                                        trigger="click"
-                                        placement="right"
-                                        content={
-                                            <Menu
-                                                mode="vertical"
-                                                selectedKeys={[location.pathname]}
-                                                items={visibleChildren.map((child) => ({
-                                                    key: child.path,
-                                                    label: child.label,
-                                                    icon: <child.icon />,
-                                                    onClick: () => navigate(child.path)
-                                                }))}
-                                            />
-                                        }
-                                    >
-                                        <Tooltip key={path} title={label} placement="right">
-                                            <Button
-                                                size="large"
-                                                icon={<Icon />}
-                                                type={isActive ? "primary" : "text"}
-                                                className={btnClass}
-                                            />
-                                        </Tooltip>
-                                    </Popover>
+                                        icon={Icon}
+                                        label={label}
+                                        isActive={isActive}
+                                        className={btnClass}
+                                        items={visibleChildren}
+                                    />
                                 );
                             }
 
