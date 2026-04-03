@@ -7,6 +7,7 @@ import { TagsNotification } from "@/modules/lookup/presentation/utils/notificati
 import type { Failure } from "@/shared/domain/failures/failure";
 import { useAppDispatch, useAppSelector } from "@/shared/presentation/store/store";
 import { showNotification } from "@/shared/presentation/utils/notification/notification.utils";
+import { generateSlug } from "@/shared/presentation/utils/slug/slug.utils";
 
 const { useForm } = Form;
 
@@ -18,10 +19,10 @@ const { useForm } = Form;
 interface IUseCreateTag {
     form: FormInstance<ICreateTagCredentials>;
     loading: boolean;
-    error: Failure | null | undefined;
     success: string | null;
-    onSubmit: (values: ICreateTagCredentials) => Promise<void>;
     resetCreate: () => void;
+    error: Failure | null | undefined;
+    onSubmit: (values: ICreateTagCredentials) => Promise<void>;
 }
 
 /**
@@ -42,7 +43,8 @@ export const useCreateTag = (): IUseCreateTag => {
     const { loading, error } = useAppSelector(({ lookup: { createTag } }) => createTag);
 
     const onSubmit = async (values: ICreateTagCredentials): Promise<void> => {
-        const result = await dispatch(createTagAction(values));
+        const slug = generateSlug(values.name, { unique: true });
+        const result = await dispatch(createTagAction({ ...values, slug }));
 
         if (createTagAction.fulfilled.match(result)) {
             setSuccess(TagsNotification.createSuccess.description);
