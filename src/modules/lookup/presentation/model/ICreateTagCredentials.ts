@@ -3,9 +3,11 @@
  *
  * @interface ICreateTagCredentials
  * @property {string} name - Tag display name (required, max 50 chars)
- * @property {string} slug - URL-friendly identifier (lowercase, hyphens)
+ *
+ * @remarks
+ * The slug is auto-generated from the name in the hook via
+ * `generateSlug` — it is not part of the form fields.
  */
 export interface ICreateTagCredentials {
     name: string;
-    slug: string;
 }
