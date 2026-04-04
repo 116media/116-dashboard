@@ -34,6 +34,7 @@ export const pricingTiersTableColumns = (
         title: "Nom",
         dataIndex: "name",
         key: "name",
+        width: 200,
         sorter: (a, b) => a.name.localeCompare(b.name),
         render: (name: string) => <Text strong>{name}</Text>
     },
@@ -41,6 +42,7 @@ export const pricingTiersTableColumns = (
         title: "Description",
         dataIndex: "description",
         key: "description",
+        width: 250,
         ellipsis: { showTitle: true },
         render: (description: string | null) => <Text type="secondary">{description ?? "—"}</Text>
     },
