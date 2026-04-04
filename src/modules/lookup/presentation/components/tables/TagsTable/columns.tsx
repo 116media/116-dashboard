@@ -19,6 +19,7 @@ export const tagsTableColumns = (): ColumnsType<ITagEntity> => [
         title: "Nom",
         dataIndex: "name",
         key: "name",
+        width: 200,
         sorter: (a, b) => a.name.localeCompare(b.name),
         render: (name: string) => <Text strong>{name}</Text>
     },
@@ -26,6 +27,7 @@ export const tagsTableColumns = (): ColumnsType<ITagEntity> => [
         title: "Slug",
         dataIndex: "slug",
         key: "slug",
+        width: 200,
         sorter: (a, b) => a.slug.localeCompare(b.slug),
         render: (slug: string) => <Text type="secondary">{slug}</Text>
     }
