@@ -65,6 +65,7 @@ export const permissionsTableColumns = (
         title: "Description",
         dataIndex: "description",
         key: "description",
+        width: 250,
         ellipsis: { showTitle: true },
         sorter: (a, b) => a.description.localeCompare(b.description),
         render: (description: string) => <Text type="secondary">{description}</Text>
