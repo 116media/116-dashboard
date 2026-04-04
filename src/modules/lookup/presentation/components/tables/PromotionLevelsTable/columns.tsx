@@ -33,6 +33,7 @@ export const promotionLevelsTableColumns = (
         title: "Nom",
         dataIndex: "name",
         key: "name",
+        width: 200,
         sorter: (a, b) => a.name.localeCompare(b.name),
         render: (name: string) => <Text strong>{name}</Text>
     },
