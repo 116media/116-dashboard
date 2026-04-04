@@ -43,6 +43,7 @@ export const rolesTableColumns = (
         title: "Nom",
         dataIndex: "name",
         key: "name",
+        width: 200,
         sorter: (a, b) => a.name.localeCompare(b.name),
         render: (name: string) => <Text strong>{name}</Text>
     },
@@ -64,6 +65,7 @@ export const rolesTableColumns = (
         title: "Description",
         dataIndex: "description",
         key: "description",
+        width: 250,
         ellipsis: { showTitle: true },
         sorter: (a, b) => a.description.localeCompare(b.description),
         render: (description: string) => <Text type="secondary">{description}</Text>
