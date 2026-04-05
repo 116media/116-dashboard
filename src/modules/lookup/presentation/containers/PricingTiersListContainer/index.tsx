@@ -15,6 +15,7 @@ import CreateEditModal from "@/shared/presentation/ui/CreateEditModal";
 import ErrorAlert from "@/shared/presentation/ui/ErrorAlert";
 import { IconDollarOutlined } from "@/shared/presentation/ui/Icons";
 import PageHeader from "@/shared/presentation/ui/PageHeader";
+import ResizableTitle from "@/shared/presentation/ui/ResizableTable/ResizableTitle";
 import TableToolbar from "@/shared/presentation/ui/TableToolbar";
 
 /**
@@ -70,6 +71,25 @@ const PricingTiersListContainer: FC = () => {
         }
     };
 
+    const [columnWidths, setColumnWidths] = useState<Record<number, number>>({});
+
+    const handleResize =
+        (index: number) =>
+        (_: React.SyntheticEvent, { size }: { size: { width: number } }) => {
+            setColumnWidths((prev) => ({ ...prev, [index]: size.width }));
+        };
+
+    const baseColumns = pricingTiersTableColumns(handleAction, isSuperAdmin);
+
+    const tableColumns = baseColumns.map((col, index) => ({
+        ...col,
+        width: columnWidths[index] ?? col.width,
+        onHeaderCell: () => ({
+            width: columnWidths[index] ?? col.width,
+            onResize: handleResize(index)
+        })
+    }));
+
     return (
         <>
             <ErrorAlert banner showIcon closable error={list.error} onClose={list.reload} />
@@ -94,13 +114,15 @@ const PricingTiersListContainer: FC = () => {
             <Table
                 rowKey="id"
                 dataSource={list.items}
-                columns={pricingTiersTableColumns(handleAction, isSuperAdmin)}
+                columns={tableColumns}
                 loading={list.loading}
-                pagination={false}
+                components={{ header: { cell: ResizableTitle } }}
+                pagination={{ showSizeChanger: true, defaultPageSize: 10 }}
             />
 
             {createOpen && (
                 <CreateEditModal
+                    width={420}
                     open={createOpen}
                     formContext="CREATE"
                     loading={createPricingTier.loading}
@@ -127,6 +149,7 @@ const PricingTiersListContainer: FC = () => {
 
             {editOpen && (
                 <CreateEditModal
+                    width={420}
                     open={editOpen}
                     formContext="EDIT"
                     loading={updatePricingTier.loading}
