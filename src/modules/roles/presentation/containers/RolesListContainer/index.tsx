@@ -157,7 +157,8 @@ const RolesListContainer: FC = () => {
                 columns={tableColumns}
                 loading={rolesList.loading}
                 components={{ header: { cell: ResizableTitle } }}
-                rowSelection={{ type: "checkbox", columnWidth: 48 }}
+                rowSelection={{ type: "checkbox", columnWidth: 36 }}
+                scroll={{ x: "max-content" }}
                 pagination={{
                     showSizeChanger: true,
                     current: (rolesList.roles?.pageIndex ?? 0) + 1,
