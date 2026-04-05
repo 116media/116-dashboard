@@ -204,3 +204,82 @@ input {
 [class~="ant-input-data-count"]{
     font-size: 9.5pt;
 }
+
+[class~="ant-table-wrapper"] {
+    table {
+        border-collapse: separate !important;
+        border-spacing: 0 8px !important;
+    }
+
+    [class~="ant-table-thead"] {
+        > tr > th {
+            background: colors.$background !important;
+            border-bottom: none !important;
+            padding: calc(dimensions.$padding / 2) !important;
+
+            &:first-child {
+                border-radius: dimensions.$border-radius 0 0 dimensions.$border-radius !important;
+            }
+
+            &:last-child {
+                border-radius: 0 dimensions.$border-radius dimensions.$border-radius 0 !important;
+            }
+        }
+    }
+
+    [class~="ant-table-tbody"] {
+        cursor: pointer;
+        > tr > td {
+            border-bottom: 1px solid colors.$border-table !important;
+            border-top: 1px solid colors.$border-table !important;
+            background: colors.$white;
+            padding: calc(dimensions.$padding / 2) !important;
+
+            &:first-child {
+                border-left: 1px solid colors.$border-table !important;
+                border-radius: dimensions.$border-radius 0 0 dimensions.$border-radius !important;
+            }
+
+            &:last-child {
+                border-right: 1px solid colors.$border-table !important;
+                border-radius: 0 dimensions.$border-radius dimensions.$border-radius 0 !important;
+            }
+
+            &:only-child {
+                border: 1px solid colors.$border-table !important;
+                border-radius: dimensions.$border-radius !important;
+            }
+        }
+
+        > tr:hover > td {
+            background: rgba(
+                $color: colors.$background, 
+                $alpha: 0.2,
+            ) !important;
+        }
+    }
+}
+
+[class~="ant-spin"] {
+    [class~="ant-spin-dot"] {
+        display: none !important;
+    }
+
+    &::after {
+        content: "";
+        display: block;
+        width: 36px;
+        height: 36px;
+        margin: 0 auto;
+        border-radius: 50%;
+        border: 3px solid colors.$border-light;
+        border-top-color: colors.$brand-primary;
+        animation: spinProgress 0.8s linear infinite;
+    }
+}
+
+@keyframes spinProgress {
+    to {
+        transform: rotate(360deg);
+    }
+}
