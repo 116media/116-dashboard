@@ -208,7 +208,11 @@ input {
 [class~="ant-table-wrapper"] {
     table {
         border-collapse: separate !important;
-        border-spacing: 0 8px !important;
+        border-spacing: 0 calc(dimensions.$padding / 4) !important;
+    }
+
+    [class~="ant-table-measure-row"] {
+        display: none !important;
     }
 
     [class~="ant-table-thead"] {
@@ -253,10 +257,14 @@ input {
 
         > tr:hover > td {
             background: rgba(
-                $color: colors.$background, 
+                $color: colors.$background,
                 $alpha: 0.4,
             ) !important;
         }
+    }
+
+    [class~="ant-table-selection-column"] {
+        border-spacing: initial !important;
     }
 }
 
