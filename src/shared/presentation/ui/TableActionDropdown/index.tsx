@@ -63,7 +63,7 @@ const TableActionDropdown: FC<ITableActionDropdownProps> = ({ items }) => {
 
     return (
         <Flex justify="center" align="center">
-            <Dropdown arrow trigger={["click"]} placement="bottomRight" menu={{ items: menuItems }}>
+            <Dropdown arrow trigger={["click"]} placement="bottom" menu={{ items: menuItems }}>
                 <Button
                     type="text"
                     icon={<IconSettingOutlined />}
