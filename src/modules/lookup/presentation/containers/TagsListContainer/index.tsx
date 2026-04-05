@@ -5,11 +5,12 @@ import TagForm from "@/modules/lookup/presentation/components/forms/TagForm";
 import { tagsTableColumns } from "@/modules/lookup/presentation/components/tables/TagsTable/columns";
 import { useCreateTag } from "@/modules/lookup/presentation/hooks/UseCreateTag";
 import { useTagsList } from "@/modules/lookup/presentation/hooks/UseTagsList";
+import { useResizableColumns } from "@/shared/presentation/hooks/UseResizableColumns";
 import CreateEditModal from "@/shared/presentation/ui/CreateEditModal";
 import ErrorAlert from "@/shared/presentation/ui/ErrorAlert";
 import { IconTagOutlined } from "@/shared/presentation/ui/Icons";
 import PageHeader from "@/shared/presentation/ui/PageHeader";
-import ResizableTitle from "@/shared/presentation/ui/ResizableTable/ResizableTitle";
+import ResizableTitle from "@/shared/presentation/ui/ResizableTable";
 
 /**
  * Container for the tags list tab.
@@ -29,24 +30,7 @@ const TagsListContainer: FC = () => {
 
     const { isSuperAdmin } = useAuthorization();
 
-    const [columnWidths, setColumnWidths] = useState<Record<number, number>>({});
-
-    const handleResize =
-        (index: number) =>
-        (_: React.SyntheticEvent, { size }: { size: { width: number } }) => {
-            setColumnWidths((prev) => ({ ...prev, [index]: size.width }));
-        };
-
-    const baseColumns = tagsTableColumns();
-
-    const tableColumns = baseColumns.map((col, index) => ({
-        ...col,
-        width: columnWidths[index] ?? col.width,
-        onHeaderCell: () => ({
-            width: columnWidths[index] ?? col.width,
-            onResize: handleResize(index)
-        })
-    }));
+    const { columns: tableColumns } = useResizableColumns(tagsTableColumns());
 
     return (
         <>
