@@ -11,11 +11,12 @@ import { useCreatePermission } from "@/modules/permissions/presentation/hooks/Us
 import { usePermissionActions } from "@/modules/permissions/presentation/hooks/UsePermissionActions";
 import { usePermissionsList } from "@/modules/permissions/presentation/hooks/UsePermissionsList";
 import { useUpdatePermission } from "@/modules/permissions/presentation/hooks/UseUpdatePermission";
+import { useResizableColumns } from "@/shared/presentation/hooks/UseResizableColumns";
 import CreateEditModal from "@/shared/presentation/ui/CreateEditModal";
 import ErrorAlert from "@/shared/presentation/ui/ErrorAlert";
 import { IconUnlockOutlined } from "@/shared/presentation/ui/Icons";
 import PageHeader from "@/shared/presentation/ui/PageHeader";
-import ResizableTitle from "@/shared/presentation/ui/ResizableTable/ResizableTitle";
+import ResizableTitle from "@/shared/presentation/ui/ResizableTable";
 import TableToolbar from "@/shared/presentation/ui/TableToolbar";
 
 /**
@@ -68,24 +69,9 @@ const PermissionsListContainer: FC = () => {
         }
     };
 
-    const [columnWidths, setColumnWidths] = useState<Record<number, number>>({});
-
-    const handleResize =
-        (index: number) =>
-        (_: React.SyntheticEvent, { size }: { size: { width: number } }) => {
-            setColumnWidths((prev) => ({ ...prev, [index]: size.width }));
-        };
-
-    const baseColumns = permissionsTableColumns(handleAction, isSuperAdmin);
-
-    const tableColumns = baseColumns.map((col, index) => ({
-        ...col,
-        width: columnWidths[index] ?? col.width,
-        onHeaderCell: () => ({
-            width: columnWidths[index] ?? col.width,
-            onResize: handleResize(index)
-        })
-    }));
+    const { columns: tableColumns } = useResizableColumns(
+        permissionsTableColumns(handleAction, isSuperAdmin)
+    );
 
     return (
         <div>
