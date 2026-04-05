@@ -106,6 +106,8 @@ const PromotionLevelsListContainer: FC = () => {
                 columns={tableColumns}
                 loading={list.loading}
                 components={{ header: { cell: ResizableTitle } }}
+                rowSelection={{ type: "checkbox", columnWidth: 36 }}
+                scroll={{ x: "max-content" }}
                 pagination={{ showSizeChanger: true, defaultPageSize: 10 }}
             />
 
