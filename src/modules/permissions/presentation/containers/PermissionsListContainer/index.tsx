@@ -107,7 +107,8 @@ const PermissionsListContainer: FC = () => {
                 columns={tableColumns}
                 loading={permissionsList.loading}
                 components={{ header: { cell: ResizableTitle } }}
-                rowSelection={{ type: "checkbox", columnWidth: 48 }}
+                rowSelection={{ type: "checkbox", columnWidth: 36 }}
+                scroll={{ x: "max-content" }}
                 pagination={{
                     showSizeChanger: true,
                     current: (permissionsList.permissions?.pageIndex ?? 0) + 1,
