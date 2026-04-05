@@ -11,11 +11,12 @@ import { useCreatePricingTier } from "@/modules/lookup/presentation/hooks/UseCre
 import { usePricingTierActions } from "@/modules/lookup/presentation/hooks/UsePricingTierActions";
 import { usePricingTiersList } from "@/modules/lookup/presentation/hooks/UsePricingTiersList";
 import { useUpdatePricingTier } from "@/modules/lookup/presentation/hooks/UseUpdatePricingTier";
+import { useResizableColumns } from "@/shared/presentation/hooks/UseResizableColumns";
 import CreateEditModal from "@/shared/presentation/ui/CreateEditModal";
 import ErrorAlert from "@/shared/presentation/ui/ErrorAlert";
 import { IconDollarOutlined } from "@/shared/presentation/ui/Icons";
 import PageHeader from "@/shared/presentation/ui/PageHeader";
-import ResizableTitle from "@/shared/presentation/ui/ResizableTable/ResizableTitle";
+import ResizableTitle from "@/shared/presentation/ui/ResizableTable";
 import TableToolbar from "@/shared/presentation/ui/TableToolbar";
 
 /**
@@ -71,24 +72,9 @@ const PricingTiersListContainer: FC = () => {
         }
     };
 
-    const [columnWidths, setColumnWidths] = useState<Record<number, number>>({});
-
-    const handleResize =
-        (index: number) =>
-        (_: React.SyntheticEvent, { size }: { size: { width: number } }) => {
-            setColumnWidths((prev) => ({ ...prev, [index]: size.width }));
-        };
-
-    const baseColumns = pricingTiersTableColumns(handleAction, isSuperAdmin);
-
-    const tableColumns = baseColumns.map((col, index) => ({
-        ...col,
-        width: columnWidths[index] ?? col.width,
-        onHeaderCell: () => ({
-            width: columnWidths[index] ?? col.width,
-            onResize: handleResize(index)
-        })
-    }));
+    const { columns: tableColumns } = useResizableColumns(
+        pricingTiersTableColumns(handleAction, isSuperAdmin)
+    );
 
     return (
         <>
