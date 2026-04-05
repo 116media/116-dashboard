@@ -21,8 +21,8 @@ const { Item } = Form;
  */
 interface IPromotionLevelFormProps {
     form: FormInstance;
-    error: Failure | null | undefined;
     formContext: FormContext;
+    error: Failure | null | undefined;
     initialValues?: IPromotionLevelEntity | null;
 }
 
