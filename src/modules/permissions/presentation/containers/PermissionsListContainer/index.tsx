@@ -15,6 +15,7 @@ import CreateEditModal from "@/shared/presentation/ui/CreateEditModal";
 import ErrorAlert from "@/shared/presentation/ui/ErrorAlert";
 import { IconUnlockOutlined } from "@/shared/presentation/ui/Icons";
 import PageHeader from "@/shared/presentation/ui/PageHeader";
+import ResizableTitle from "@/shared/presentation/ui/ResizableTable/ResizableTitle";
 import TableToolbar from "@/shared/presentation/ui/TableToolbar";
 
 /**
@@ -67,6 +68,25 @@ const PermissionsListContainer: FC = () => {
         }
     };
 
+    const [columnWidths, setColumnWidths] = useState<Record<number, number>>({});
+
+    const handleResize =
+        (index: number) =>
+        (_: React.SyntheticEvent, { size }: { size: { width: number } }) => {
+            setColumnWidths((prev) => ({ ...prev, [index]: size.width }));
+        };
+
+    const baseColumns = permissionsTableColumns(handleAction, isSuperAdmin);
+
+    const tableColumns = baseColumns.map((col, index) => ({
+        ...col,
+        width: columnWidths[index] ?? col.width,
+        onHeaderCell: () => ({
+            width: columnWidths[index] ?? col.width,
+            onResize: handleResize(index)
+        })
+    }));
+
     return (
         <div>
             <ErrorAlert
@@ -98,8 +118,9 @@ const PermissionsListContainer: FC = () => {
             <Table
                 rowKey="id"
                 dataSource={permissionsList.permissions?.items ?? []}
-                columns={permissionsTableColumns(handleAction, isSuperAdmin)}
+                columns={tableColumns}
                 loading={permissionsList.loading}
+                components={{ header: { cell: ResizableTitle } }}
                 rowSelection={{ type: "checkbox", columnWidth: 48 }}
                 pagination={{
                     showSizeChanger: true,
