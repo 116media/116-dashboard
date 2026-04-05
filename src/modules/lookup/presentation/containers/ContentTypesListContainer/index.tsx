@@ -102,6 +102,8 @@ const ContentTypesListContainer: FC = () => {
                 loading={list.loading}
                 dataSource={list.items}
                 columns={tableColumns}
+                rowSelection={{ type: "checkbox", columnWidth: 36 }}
+                scroll={{ x: "max-content" }}
                 components={{ header: { cell: ResizableTitle } }}
                 pagination={{ showSizeChanger: true, defaultPageSize: 10 }}
             />
