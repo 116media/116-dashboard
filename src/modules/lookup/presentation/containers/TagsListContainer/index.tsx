@@ -50,6 +50,8 @@ const TagsListContainer: FC = () => {
                 dataSource={list.items}
                 columns={tableColumns}
                 components={{ header: { cell: ResizableTitle } }}
+                rowSelection={{ type: "checkbox", columnWidth: 36 }}
+                scroll={{ x: "max-content" }}
                 pagination={{ showSizeChanger: true, defaultPageSize: 10 }}
             />
 
