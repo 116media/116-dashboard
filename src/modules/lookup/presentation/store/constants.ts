@@ -18,7 +18,9 @@ export const ActionType = {
     ActivatePromotionLevel: "lookup/activatePromotionLevel",
     DeactivatePromotionLevel: "lookup/deactivatePromotionLevel",
     GetTags: "lookup/getTags",
-    CreateTag: "lookup/createTag"
+    CreateTag: "lookup/createTag",
+    UpdateTag: "lookup/updateTag",
+    DeleteTag: "lookup/deleteTag"
 } as const;
 
 /**
