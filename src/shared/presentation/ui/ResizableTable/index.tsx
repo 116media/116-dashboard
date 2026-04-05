@@ -1,8 +1,8 @@
 import type { FC } from "react";
-import { Resizable } from "react-resizable";
 import type { ResizeCallbackData } from "react-resizable";
+import { Resizable } from "react-resizable";
 
-import "./index.scss";
+import styles from "./index.module.scss";
 
 /**
  * Props for the ResizableTitle component.
@@ -32,18 +32,24 @@ interface IResizableTitleProps extends React.HTMLAttributes<HTMLTableCellElement
  */
 const ResizableTitle: FC<IResizableTitleProps> = ({ width, onResize, ...rest }) => {
     if (!width) return <th {...rest} />;
-    
+
     return (
         <Resizable
-        height={0}
+            axis="x"
+            height={0}
             width={width}
             onResize={onResize}
+            minConstraints={[80, 0]}
+            maxConstraints={[800, 0]}
             draggableOpts={{ enableUserSelectHack: false }}
             handle={
-                <span
-                    className="resizable-handle"
+                <button
+                    type="button"
+                    aria-label="Resize column"
                     onClick={(e) => e.stopPropagation()}
+                    onKeyDown={(e) => e.stopPropagation()}
                     onMouseDown={(e) => e.stopPropagation()}
+                    className={styles.resizableTable__handle}
                 />
             }
         >
