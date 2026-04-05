@@ -48,20 +48,6 @@ export const rolesTableColumns = (
         render: (name: string) => <Text strong>{name}</Text>
     },
     {
-        title: "Statut",
-        dataIndex: "isActive",
-        key: "status",
-        width: 100,
-        sorter: (a, b) => {
-            const order = (r: IRoleEntity) => (r.isDeleted ? 2 : r.isActive ? 0 : 1);
-            return order(a) - order(b);
-        },
-        render: (_: boolean, record: IRoleEntity) => {
-            if (record.isDeleted) return <StatusTag status="deleted" />;
-            return <StatusTag status={record.isActive ? "active" : "inactive"} />;
-        }
-    },
-    {
         title: "Description",
         dataIndex: "description",
         key: "description",
@@ -79,15 +65,33 @@ export const rolesTableColumns = (
             new Date(a.updatedAt ?? 0).getTime() - new Date(b.updatedAt ?? 0).getTime(),
         render: (date: string | null) =>
             date ? (
-                <Text type="secondary">{dayjs(date).format("DD MMM YYYY, HH:mm")}</Text>
+                <Text type="secondary">{dayjs(date).format("DD/MM/YYYY hh:mm")}</Text>
             ) : (
                 <Text type="secondary">—</Text>
             )
     },
     {
+        title: "Statut",
+        dataIndex: "isActive",
+        key: "status",
+        width: 100,
+        fixed: "end",
+        align: "center",
+        sorter: (a, b) => {
+            const order = (r: IRoleEntity) => (r.isDeleted ? 2 : r.isActive ? 0 : 1);
+            return order(a) - order(b);
+        },
+        render: (_: boolean, record: IRoleEntity) => {
+            if (record.isDeleted) return <StatusTag status="deleted" />;
+            return <StatusTag status={record.isActive ? "active" : "inactive"} />;
+        }
+    },
+    {
         width: 65,
+        fixed: "end",
         key: "actions",
-        align: "center" as const,
+        align: "center",
+        title: "Action",
         render: (_: unknown, record: IRoleEntity) => {
             const items: ITableActionItem[] = ROLE_DROPDOWN_ITEMS.map((item) => ({
                 key: item.key,
