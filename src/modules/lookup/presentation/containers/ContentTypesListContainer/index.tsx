@@ -15,6 +15,7 @@ import CreateEditModal from "@/shared/presentation/ui/CreateEditModal";
 import ErrorAlert from "@/shared/presentation/ui/ErrorAlert";
 import { IconAppstoreOutlined } from "@/shared/presentation/ui/Icons";
 import PageHeader from "@/shared/presentation/ui/PageHeader";
+import ResizableTitle from "@/shared/presentation/ui/ResizableTable/ResizableTitle";
 import TableToolbar from "@/shared/presentation/ui/TableToolbar";
 
 /**
@@ -70,6 +71,25 @@ const ContentTypesListContainer: FC = () => {
         }
     };
 
+    const [columnWidths, setColumnWidths] = useState<Record<number, number>>({});
+
+    const handleResize =
+        (index: number) =>
+        (_: React.SyntheticEvent, { size }: { size: { width: number } }) => {
+            setColumnWidths((prev) => ({ ...prev, [index]: size.width }));
+        };
+
+    const baseColumns = contentTypesTableColumns(handleAction, isSuperAdmin, isAdminOrSuperAdmin);
+
+    const tableColumns = baseColumns.map((col, index) => ({
+        ...col,
+        width: columnWidths[index] ?? col.width,
+        onHeaderCell: () => ({
+            width: columnWidths[index] ?? col.width,
+            onResize: handleResize(index)
+        })
+    }));
+
     return (
         <>
             <ErrorAlert banner showIcon closable error={list.error} onClose={list.reload} />
@@ -93,14 +113,16 @@ const ContentTypesListContainer: FC = () => {
 
             <Table
                 rowKey="id"
-                dataSource={list.items}
-                columns={contentTypesTableColumns(handleAction, isSuperAdmin, isAdminOrSuperAdmin)}
                 loading={list.loading}
-                pagination={false}
+                dataSource={list.items}
+                columns={tableColumns}
+                components={{ header: { cell: ResizableTitle } }}
+                pagination={{ showSizeChanger: true, defaultPageSize: 10 }}
             />
 
             {createOpen && (
                 <CreateEditModal
+                    width={420}
                     open={createOpen}
                     formContext="CREATE"
                     loading={createContentType.loading}
@@ -127,6 +149,7 @@ const ContentTypesListContainer: FC = () => {
 
             {editOpen && (
                 <CreateEditModal
+                    width={420}
                     open={editOpen}
                     formContext="EDIT"
                     loading={updateContentType.loading}
@@ -147,9 +170,9 @@ const ContentTypesListContainer: FC = () => {
                     }}
                 >
                     <ContentTypeForm
+                        formContext="EDIT"
                         form={updateContentType.form}
                         error={updateContentType.error}
-                        formContext="EDIT"
                         initialValues={selectedEntity}
                     />
                 </CreateEditModal>
@@ -157,10 +180,10 @@ const ContentTypesListContainer: FC = () => {
 
             <ContentTypeActionModal
                 open={actionOpen}
-                contentType={selectedEntity}
+                error={actions.error}
                 action={currentAction}
                 loading={actions.loading}
-                error={actions.error}
+                contentType={selectedEntity}
                 onConfirm={handleActionConfirm}
                 onCancel={() => setActionOpen(false)}
             />
