@@ -2,4 +2,8 @@
 
 .formSuccessResult {
     padding: dimensions.$padding 0;
+
+    [class~="ant-result"]{
+        padding: dimensions.$padding;
+    }
 }
