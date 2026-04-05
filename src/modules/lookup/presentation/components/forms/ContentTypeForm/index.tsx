@@ -21,8 +21,8 @@ const { Item } = Form;
  */
 interface IContentTypeFormProps {
     form: FormInstance;
-    error: Failure | null | undefined;
     formContext: FormContext;
+    error: Failure | null | undefined;
     initialValues?: IContentTypeEntity | null;
 }
 
