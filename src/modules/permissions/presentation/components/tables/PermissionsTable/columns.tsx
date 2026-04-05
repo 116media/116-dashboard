@@ -71,9 +71,25 @@ export const permissionsTableColumns = (
         render: (description: string) => <Text type="secondary">{description}</Text>
     },
     {
+        title: "Modifié le",
+        dataIndex: "updatedAt",
+        key: "updatedAt",
+        width: 160,
+        sorter: (a, b) =>
+            new Date(a.updatedAt ?? 0).getTime() - new Date(b.updatedAt ?? 0).getTime(),
+        render: (date: string | null) =>
+            date ? (
+                <Text type="secondary">{dayjs(date).format("DD/MM/YYYY hh:mm")}</Text>
+            ) : (
+                <Text type="secondary">—</Text>
+            )
+    },
+    {
         title: "Statut",
         key: "status",
         width: 100,
+        fixed: "end",
+        align: "center",
         sorter: (a, b) => {
             const order = (r: IPermissionEntity) => (r.isDeleted ? 2 : r.isActive ? 0 : 1);
             return order(a) - order(b);
@@ -84,23 +100,11 @@ export const permissionsTableColumns = (
         }
     },
     {
-        title: "Modifié le",
-        dataIndex: "updatedAt",
-        key: "updatedAt",
-        width: 160,
-        sorter: (a, b) =>
-            new Date(a.updatedAt ?? 0).getTime() - new Date(b.updatedAt ?? 0).getTime(),
-        render: (date: string | null) =>
-            date ? (
-                <Text type="secondary">{dayjs(date).format("DD MMM YYYY, HH:mm")}</Text>
-            ) : (
-                <Text type="secondary">—</Text>
-            )
-    },
-    {
         width: 65,
+        fixed: "end",
         key: "actions",
-        align: "center" as const,
+        align: "center",
+        title: "Actions",
         render: (_: unknown, record: IPermissionEntity) => {
             const items: ITableActionItem[] = PERMISSION_DROPDOWN_ITEMS.map((item) => ({
                 key: item.key,
