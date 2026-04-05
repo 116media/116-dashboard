@@ -7,7 +7,8 @@ import type { Result } from "@/shared/domain/results/result";
  * @interface IGetAllContentTypesUseCase
  * @extends {IResultUseCase<void, IContentTypeEntity[]>}
  */
-interface IGetAllContentTypesUseCase extends IResultUseCase<void, IContentTypeEntity[]> {}
+interface IGetAllContentTypesUseCase
+    extends IResultUseCase<string | undefined, IContentTypeEntity[]> {}
 
 /**
  * Use case for fetching all content types.
@@ -30,7 +31,7 @@ export class GetAllContentTypesUseCase implements IGetAllContentTypesUseCase {
      *
      * @returns {Promise<Result<IContentTypeEntity[]>>} `ok(IContentTypeEntity[])` on success, `err(Failure)` on failure
      */
-    async execute(): Promise<Result<IContentTypeEntity[]>> {
-        return this.lookupRepository.getAllContentTypes();
+    async execute(search?: string): Promise<Result<IContentTypeEntity[]>> {
+        return this.lookupRepository.getAllContentTypes(search);
     }
 }
