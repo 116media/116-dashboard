@@ -100,7 +100,7 @@ export const permissionsTableColumns = (
         }
     },
     {
-        width: 65,
+        width: 50,
         fixed: "end",
         key: "actions",
         align: "center",
