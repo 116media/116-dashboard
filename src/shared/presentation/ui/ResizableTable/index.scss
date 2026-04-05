@@ -1,0 +1,35 @@
+@use "@/shared/presentation/styles/colors.scss" as colors;
+
+.react-resizable {
+    position: relative;
+}
+
+.resizable-handle {
+    position: absolute;
+    right: -5px;
+    bottom: 0;
+    z-index: 1;
+    width: 10px;
+    height: 100%;
+    cursor: col-resize;
+
+    &::after {
+        content: "";
+        position: absolute;
+        top: 50%;
+        right: 5px;
+        width: 1px;
+        height: 60%;
+        transform: translateY(-50%);
+        background: colors.$border-light;
+        transition: background 0.2s ease;
+    }
+
+    &:hover::after {
+        background: colors.$brand-primary;
+    }
+}
+
+.react-resizable-handle {
+    display: none;
+}
