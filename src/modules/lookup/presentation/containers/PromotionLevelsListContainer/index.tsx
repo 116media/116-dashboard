@@ -15,6 +15,7 @@ import CreateEditModal from "@/shared/presentation/ui/CreateEditModal";
 import ErrorAlert from "@/shared/presentation/ui/ErrorAlert";
 import { IconStarOutlined } from "@/shared/presentation/ui/Icons";
 import PageHeader from "@/shared/presentation/ui/PageHeader";
+import ResizableTitle from "@/shared/presentation/ui/ResizableTable/ResizableTitle";
 import TableToolbar from "@/shared/presentation/ui/TableToolbar";
 
 /**
@@ -73,6 +74,25 @@ const PromotionLevelsListContainer: FC = () => {
         }
     };
 
+    const [columnWidths, setColumnWidths] = useState<Record<number, number>>({});
+
+    const handleResize =
+        (index: number) =>
+        (_: React.SyntheticEvent, { size }: { size: { width: number } }) => {
+            setColumnWidths((prev) => ({ ...prev, [index]: size.width }));
+        };
+
+    const baseColumns = promotionLevelsTableColumns(handleAction, isSuperAdmin);
+
+    const tableColumns = baseColumns.map((col, index) => ({
+        ...col,
+        width: columnWidths[index] ?? col.width,
+        onHeaderCell: () => ({
+            width: columnWidths[index] ?? col.width,
+            onResize: handleResize(index)
+        })
+    }));
+
     return (
         <>
             <ErrorAlert banner showIcon closable error={list.error} onClose={list.reload} />
@@ -97,13 +117,15 @@ const PromotionLevelsListContainer: FC = () => {
             <Table
                 rowKey="id"
                 dataSource={list.items}
-                columns={promotionLevelsTableColumns(handleAction, isSuperAdmin)}
+                columns={tableColumns}
                 loading={list.loading}
-                pagination={false}
+                components={{ header: { cell: ResizableTitle } }}
+                pagination={{ showSizeChanger: true, defaultPageSize: 10 }}
             />
 
             {createOpen && (
                 <CreateEditModal
+                    width={420}
                     open={createOpen}
                     formContext="CREATE"
                     loading={createPromotionLevel.loading}
@@ -130,6 +152,7 @@ const PromotionLevelsListContainer: FC = () => {
 
             {editOpen && (
                 <CreateEditModal
+                    width={420}
                     open={editOpen}
                     formContext="EDIT"
                     loading={updatePromotionLevel.loading}
@@ -150,9 +173,9 @@ const PromotionLevelsListContainer: FC = () => {
                     }}
                 >
                     <PromotionLevelForm
+                        formContext="EDIT"
                         form={updatePromotionLevel.form}
                         error={updatePromotionLevel.error}
-                        formContext="EDIT"
                         initialValues={selectedEntity}
                     />
                 </CreateEditModal>
@@ -160,10 +183,10 @@ const PromotionLevelsListContainer: FC = () => {
 
             <PromotionLevelActionModal
                 open={actionOpen}
-                promotionLevel={selectedEntity}
+                error={actions.error}
                 action={currentAction}
                 loading={actions.loading}
-                error={actions.error}
+                promotionLevel={selectedEntity}
                 onConfirm={handleActionConfirm}
                 onCancel={() => setActionOpen(false)}
             />
