@@ -36,7 +36,8 @@ interface IUseUpdateContentType {
  * @returns Form instance, loading/error state, success message, and submit handler
  */
 export const useUpdateContentType = (
-    contentType: IContentTypeEntity | null
+    contentType: IContentTypeEntity | null,
+    onSuccess?: () => void
 ): IUseUpdateContentType => {
     const dispatch = useAppDispatch();
     const [form] = useForm<IUpdateContentTypeCredentials>();
@@ -64,6 +65,7 @@ export const useUpdateContentType = (
         if (updateContentTypeAction.fulfilled.match(result)) {
             setSuccess(ContentTypesNotification.updateSuccess.description);
             showNotification(ContentTypesNotification.updateSuccess);
+            onSuccess?.();
         }
     };
 
