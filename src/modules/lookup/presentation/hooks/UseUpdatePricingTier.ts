@@ -36,7 +36,8 @@ interface IUseUpdatePricingTier {
  * @returns Form instance, loading/error state, success message, and submit handler
  */
 export const useUpdatePricingTier = (
-    pricingTier: IPricingTierEntity | null
+    pricingTier: IPricingTierEntity | null,
+    onSuccess?: () => void
 ): IUseUpdatePricingTier => {
     const dispatch = useAppDispatch();
     const [form] = useForm<IUpdatePricingTierCredentials>();
@@ -65,6 +66,7 @@ export const useUpdatePricingTier = (
         if (updatePricingTierAction.fulfilled.match(result)) {
             setSuccess(PricingTiersNotification.updateSuccess.description);
             showNotification(PricingTiersNotification.updateSuccess);
+            onSuccess?.();
         }
     };
 
