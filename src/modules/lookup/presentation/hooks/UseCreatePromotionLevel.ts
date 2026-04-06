@@ -34,7 +34,7 @@ interface IUseCreatePromotionLevel {
  *
  * @returns Form instance, loading/error state, success message, and submit handler
  */
-export const useCreatePromotionLevel = (): IUseCreatePromotionLevel => {
+export const useCreatePromotionLevel = (onSuccess?: () => void): IUseCreatePromotionLevel => {
     const dispatch = useAppDispatch();
     const [form] = useForm<ICreatePromotionLevelCredentials>();
     const [success, setSuccess] = useState<string | null>(null);
@@ -50,6 +50,7 @@ export const useCreatePromotionLevel = (): IUseCreatePromotionLevel => {
             setSuccess(PromotionLevelsNotification.createSuccess.description);
             showNotification(PromotionLevelsNotification.createSuccess);
             form.resetFields();
+            onSuccess?.();
         }
     };
 
