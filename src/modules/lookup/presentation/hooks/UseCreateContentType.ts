@@ -34,7 +34,7 @@ interface IUseCreateContentType {
  *
  * @returns Form instance, loading/error state, success message, and submit handler
  */
-export const useCreateContentType = (): IUseCreateContentType => {
+export const useCreateContentType = (onSuccess?: () => void): IUseCreateContentType => {
     const dispatch = useAppDispatch();
     const [form] = useForm<ICreateContentTypeCredentials>();
     const [success, setSuccess] = useState<string | null>(null);
@@ -50,6 +50,7 @@ export const useCreateContentType = (): IUseCreateContentType => {
             setSuccess(ContentTypesNotification.createSuccess.description);
             showNotification(ContentTypesNotification.createSuccess);
             form.resetFields();
+            onSuccess?.();
         }
     };
 
