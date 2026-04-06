@@ -3,6 +3,8 @@ import type { IAuthResponse } from "@/modules/auth/domain/entities/IAuthResponse
 import type { IForgotPasswordResponse } from "@/modules/auth/domain/entities/IForgotPasswordResponse";
 import type { IResendOtpResponse } from "@/modules/auth/domain/entities/IResendOtpResponse";
 import type { IResetPasswordResponse } from "@/modules/auth/domain/entities/IResetPasswordResponse";
+import type { ISignOutAllResponse } from "@/modules/auth/domain/entities/ISignOutAllResponse";
+import type { ISignOutResponse } from "@/modules/auth/domain/entities/ISignOutResponse";
 import type { IVerifyOtpResponse } from "@/modules/auth/domain/entities/IVerifyOtpResponse";
 import { AuthMapper } from "@/modules/auth/infrastructure/mappers/auth.mapper";
 import type { IForgotPasswordCredentials } from "@/modules/auth/presentation/model/IForgotPasswordCredentials";
@@ -10,7 +12,7 @@ import type { ILoginCredentials } from "@/modules/auth/presentation/model/ILogin
 import type { IResendOtpCredentials } from "@/modules/auth/presentation/model/IResendOtpCredentials";
 import type { IResetPasswordCredentials } from "@/modules/auth/presentation/model/IResetPasswordCredentials";
 import type { IVerifyOtpCredentials } from "@/modules/auth/presentation/model/IVerifyOtpCredentials";
-import { apiClient } from "@/shared/api/client";
+import { apiClient } from "@/shared/infrastructure/api/client";
 
 /**
  * Authentication repository implementation using REST API.
@@ -109,5 +111,35 @@ export class AuthRepositoryImpl implements IAuthRepositoryPort {
         });
 
         return AuthMapper.resetPasswordResponseFromDto(response.data);
+    }
+
+    /**
+     * Signs out the current session via the admin sign-out endpoint.
+     *
+     * @remarks
+     * Web clients rely on HttpOnly cookies for the refresh token.
+     * Mobile clients send the refresh token in the request body.
+     *
+     * @returns {Promise<ISignOutResponse>} Mapped sign-out response
+     * @throws {IApiProblemDetails} When the API request fails
+     */
+    async signOut(): Promise<ISignOutResponse> {
+        const response = await apiClient.api.adminSignOut({
+            refreshToken: null
+        });
+
+        return AuthMapper.signOutResponseFromDto(response.data);
+    }
+
+    /**
+     * Signs out from all devices via the admin sign out all endpoint.
+     *
+     * @returns {Promise<ISignOutAllResponse>} Mapped sign out all response
+     * @throws {IApiProblemDetails} When API request fails
+     */
+    async signOutAll(): Promise<ISignOutAllResponse> {
+        const response = await apiClient.api.adminSignOutFromAllDevices();
+
+        return AuthMapper.signOutAllResponseFromDto(response.data);
     }
 }

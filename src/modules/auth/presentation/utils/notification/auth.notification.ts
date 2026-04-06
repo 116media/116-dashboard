@@ -1,4 +1,4 @@
-import type { INotificationConfig } from "@/shared/lib/utils/notification/notification.utils";
+import type { INotificationConfig } from "@/shared/presentation/utils/notification/notification.utils";
 
 /**
  * Authentication notification configurations.

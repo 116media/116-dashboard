@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import { useAppDispatch } from "@/core/presentation/store/store";
 import type { EOtpPurpose } from "@/modules/auth/domain/enums/EOtpPurpose";
 import { resendOtpAction } from "@/modules/auth/presentation/store/resendotp.action";
 import { AuthNotification } from "@/modules/auth/presentation/utils/notification/auth.notification";
-import { showNotification } from "@/shared/lib/utils/notification/notification.utils";
+import { useAppDispatch } from "@/shared/presentation/store/store";
+import { showNotification } from "@/shared/presentation/utils/notification/notification.utils";
 
 interface IUseResendOtp {
     countdown: number;

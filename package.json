@@ -12,7 +12,7 @@
         "lint:code": "biome lint --no-errors-on-unmatched",
         "lint:code:fix": "biome check --write",
         "lint:types": "tsc --noEmit",
-        "api:generate": "yarn dlx swagger-typescript-api generate -p https://one16-backend.onrender.com/swagger/v1/swagger.json -o ./src/shared/api/generated/ -n 116.api.ts --axios --responses && node scripts/format-api-docs.js"
+        "api:generate": "yarn dlx swagger-typescript-api generate -p http://localhost:5025/swagger/v1/swagger.json -o ./src/shared/api/generated/ -n 116.api.ts --axios --responses && node scripts/format-api-docs.js"
     },
     "dependencies": {
         "@lottiefiles/dotlottie-react": "^0.18.7",

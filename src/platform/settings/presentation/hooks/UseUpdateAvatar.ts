@@ -1,0 +1,27 @@
+import { authSlice } from "@/modules/auth/presentation/store";
+import { updateAvatarAction } from "@/platform/settings/presentation/store/profile.action";
+import { SettingsNotification } from "@/platform/settings/presentation/utils/notification/settings.notification";
+import type { IApiProblemDetails } from "@/shared/infrastructure/api/type";
+import { useAppDispatch, useAppSelector } from "@/shared/presentation/store/store";
+import { showNotification } from "@/shared/presentation/utils/notification/notification.utils";
+
+interface IUseUpdateAvatar {
+    loading: boolean;
+    error: IApiProblemDetails | null | undefined;
+    onUpload: (file: File) => void;
+}
+
+export const useUpdateAvatar = (): IUseUpdateAvatar => {
+    const dispatch = useAppDispatch();
+    const { loading, error } = useAppSelector(({ settings: { updateAvatar } }) => updateAvatar);
+
+    const onUpload = async (file: File) => {
+        const result = await dispatch(updateAvatarAction(file));
+        if (updateAvatarAction.fulfilled.match(result)) {
+            showNotification(SettingsNotification.avatarUpdateSuccess);
+            dispatch(authSlice.actions.updateUser(result.payload));
+        }
+    };
+
+    return { loading, error, onUpload };
+};

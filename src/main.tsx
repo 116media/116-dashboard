@@ -1,15 +1,15 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import { InitializeDeviceUseCase } from "@/core/session/application/usecases/initialize.device.usecase";
-import { DeviceStorageDataSource } from "@/core/session/infrastructure/data-sources/device.storage.datasource";
-import { DeviceRepositoryImpl } from "@/core/session/infrastructure/repositories/device.repository.impl";
+import { InitializeDeviceUseCase } from "@/platform/session/application/usecases/initialize.device.usecase";
+import { DeviceStorageDataSource } from "@/platform/session/infrastructure/data-sources/device.storage.datasource";
+import { DeviceRepositoryImpl } from "@/platform/session/infrastructure/repositories/device.repository.impl";
 import App from "./App.tsx";
 import reportWebVitals from "./reportWebVitals";
 
-import "@/shared/styles/nprogress.scss";
-import "@/shared/styles/fonts.scss";
-import "@/shared/styles/theme.scss";
-import "@/shared/styles/main.scss";
+import "@/shared/presentation/styles/nprogress.scss";
+import "@/shared/presentation/styles/fonts.scss";
+import "@/shared/presentation/styles/theme.scss";
+import "@/shared/presentation/styles/main.scss";
 
 // Initialize device ID before app renders
 const deviceDataSource = new DeviceStorageDataSource();

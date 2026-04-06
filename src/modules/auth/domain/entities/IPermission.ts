@@ -18,4 +18,5 @@ export interface IPermission {
     resource: string;
     action: string;
     description: string;
+    isActive: boolean;
 }

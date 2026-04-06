@@ -1,7 +1,7 @@
 import { Typography } from "antd";
 import type { FC } from "react";
 import { Helmet, HelmetProvider } from "react-helmet-async";
-import { APP_NAME } from "@/shared/lib/constants/common";
+import { APP_NAME } from "@/shared/infrastructure/constants/common";
 
 const { Title } = Typography;
 

@@ -1,8 +1,8 @@
-import type { IUseCase } from "@/core/application/IUseCase";
 import type { IAuthRepositoryPort } from "@/modules/auth/application/repositories/auth.repository.port";
 import type { IVerifyOtpResponse } from "@/modules/auth/domain/entities/IVerifyOtpResponse";
 import { AuthStorageService } from "@/modules/auth/infrastructure/storage/authstorage.service";
 import type { IVerifyOtpCredentials } from "@/modules/auth/presentation/model/IVerifyOtpCredentials";
+import type { IUseCase } from "@/shared/application/usecases/IUseCase";
 
 /**
  * Interface for the verify OTP use case.

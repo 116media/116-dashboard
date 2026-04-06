@@ -5,9 +5,9 @@ import { BackToLoginButton } from "@/modules/auth/presentation/components/ui/Bac
 import FormHeader from "@/modules/auth/presentation/components/ui/FormHeader";
 import type { IForgotPasswordCredentials } from "@/modules/auth/presentation/model/IForgotPasswordCredentials";
 import { ForgotPasswordValidator } from "@/modules/auth/presentation/utils/validators/forgotpassword.validator";
-import type { IApiProblemDetails } from "@/shared/api/type";
-import ErrorAlert from "@/shared/ui/ErrorAlert";
-import { IconMailOutlined } from "@/shared/ui/Icons";
+import type { IApiProblemDetails } from "@/shared/infrastructure/api/type";
+import ErrorAlert from "@/shared/presentation/ui/ErrorAlert";
+import { IconMailOutlined } from "@/shared/presentation/ui/Icons";
 
 import styles from "./index.module.scss";
 

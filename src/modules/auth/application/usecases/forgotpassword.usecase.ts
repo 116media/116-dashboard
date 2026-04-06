@@ -1,7 +1,7 @@
-import type { IUseCase } from "@/core/application/IUseCase";
 import type { IAuthRepositoryPort } from "@/modules/auth/application/repositories/auth.repository.port";
 import type { IForgotPasswordResponse } from "@/modules/auth/domain/entities/IForgotPasswordResponse";
 import type { IForgotPasswordCredentials } from "@/modules/auth/presentation/model/IForgotPasswordCredentials";
+import type { IUseCase } from "@/shared/application/usecases/IUseCase";
 
 /**
  * Interface for the forgot password use case.

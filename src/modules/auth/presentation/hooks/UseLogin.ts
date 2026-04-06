@@ -1,10 +1,10 @@
 import { Form, type FormInstance } from "antd";
 import { useNavigate } from "react-router";
-import { useAppDispatch, useAppSelector } from "@/core/presentation/store/store";
 import type { ILoginCredentials } from "@/modules/auth/presentation/model/ILoginCredentials";
 import { loginAction, resetLoginAction } from "@/modules/auth/presentation/store/login.action";
-import type { IApiProblemDetails } from "@/shared/api/type";
-import { OVERVIEW_PATH } from "@/shared/lib/constants/paths";
+import type { IApiProblemDetails } from "@/shared/infrastructure/api/type";
+import { OVERVIEW_PATH } from "@/shared/infrastructure/constants/paths";
+import { useAppDispatch, useAppSelector } from "@/shared/presentation/store/store";
 
 const { useForm } = Form;
 

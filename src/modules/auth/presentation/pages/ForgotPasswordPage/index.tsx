@@ -1,10 +1,10 @@
 import { Card } from "antd";
 import type { FC, ReactNode } from "react";
-import { useAppSelector } from "@/core/presentation/store/store";
 import { ForgotPasswordContainer } from "@/modules/auth/presentation/containers/ForgotPasswordContainer";
 import { ResetPasswordContainer } from "@/modules/auth/presentation/containers/ResetPasswordContainer";
 import { VerifyOtpContainer } from "@/modules/auth/presentation/containers/VerifyOtpContainer";
-import { Logo } from "@/shared/ui/Logo";
+import { useAppSelector } from "@/shared/presentation/store/store";
+import { Logo } from "@/shared/presentation/ui/Logo";
 
 import styles from "./index.module.scss";
 

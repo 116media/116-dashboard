@@ -19,11 +19,8 @@ import type { IRole } from "./IRole";
  * @property {string} authProvider - Authentication provider (e.g., "Local", "Google", "Facebook")
  * @property {boolean} isVerified - Whether user has verified their email/account
  * @property {boolean} isActive - Whether user account is active
- * @property {boolean} isLoggedIn - Current login status
- * @property {string | null} lastLoginAt - ISO timestamp of last login
  * @property {IFile | null} avatar - User avatar/profile picture
  * @property {string | null} countryName - User's country name
- * @property {string | null} countryFlagUrl - URL to country flag image
  * @property {string | null} countryIsoCode - ISO country code (e.g., "FR", "US")
  * @property {string | null} countryDialCode - Phone country dial code (e.g., "+33", "+1")
  * @property {string | null} partialPhoneNumber - Phone number without country code
@@ -40,11 +37,8 @@ export interface IUser {
     authProvider: string;
     isVerified: boolean;
     isActive: boolean;
-    isLoggedIn: boolean;
-    lastLoginAt?: string | null;
     avatar?: IFile | null;
     countryName?: string | null;
-    countryFlagUrl?: string | null;
     countryIsoCode?: string | null;
     countryDialCode?: string | null;
     partialPhoneNumber?: string | null;

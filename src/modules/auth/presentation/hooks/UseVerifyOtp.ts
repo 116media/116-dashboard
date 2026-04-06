@@ -1,13 +1,13 @@
 import type { FormInstance } from "antd";
 import { Form } from "antd";
-import { useAppDispatch, useAppSelector } from "@/core/presentation/store/store";
 import type { EOtpPurpose } from "@/modules/auth/domain/enums/EOtpPurpose";
 import type { IVerifyOtpCredentials } from "@/modules/auth/presentation/model/IVerifyOtpCredentials";
 import {
     resetVerifyOtpAction,
     verifyOtpAction
 } from "@/modules/auth/presentation/store/verifyotp.action";
-import type { IApiProblemDetails } from "@/shared/api/type";
+import type { IApiProblemDetails } from "@/shared/infrastructure/api/type";
+import { useAppDispatch, useAppSelector } from "@/shared/presentation/store/store";
 
 const { useForm } = Form;
 

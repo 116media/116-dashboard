@@ -6,14 +6,12 @@ import type { IUser } from "./IUser";
  * @interface IAuthResponse
  *
  * @description
- * Domain entity representing the complete authentication state.
+ * Domain entity representing the authenticated user's state.
+ * The access token is delivered via HttpOnly cookies and is not
+ * accessible to JavaScript.
  *
- * Contains both the JWT token for API authentication and the authenticated user's data.
- *
- * @property {string} token - JWT access token for authenticating API requests
  * @property {IUser} user - Authenticated user's profile and authorization data
  */
 export interface IAuthResponse {
-    token: string;
     user: IUser;
 }

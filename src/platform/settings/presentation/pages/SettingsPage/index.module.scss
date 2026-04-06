@@ -1,0 +1,12 @@
+.page {
+    display: flex;
+    min-height: calc(100vh - 120px);
+    background: #fff;
+    border-radius: 8px;
+}
+
+.content {
+    flex: 1;
+    padding: 24px;
+    overflow-y: auto;
+}

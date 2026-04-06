@@ -1,0 +1,45 @@
+@use "@/shared/presentation/styles/colors.scss" as colors;
+@use "@/shared/presentation/styles/dimensions.scss" as dimensions;
+
+.activityPanel {
+    background: colors.$white;
+    border-right: 1px solid colors.$background;
+    transition: all 0.3s cubic-bezier(0.2, 0, 0, 1);
+    overflow: hidden;
+    height: 100vh;
+    position: sticky;
+    top: 0;
+
+    &__inner {
+        height: 100%;
+        width: 100%;
+        min-width: 280px;
+        padding: dimensions.$padding 16px;
+        overflow-y: auto;
+    }
+
+    &__welcome {
+        padding: 8px 0;
+
+        &__avatar {
+            margin-bottom: 1rem;
+        }
+    }
+
+    &__username {
+        margin: 0 !important;
+    }
+
+    &__section {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    &__chartPlaceholder {
+        height: 120px;
+        margin-top: 8px;
+        border-radius: dimensions.$border-radius;
+        background: colors.$neutral;
+    }
+}

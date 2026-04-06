@@ -1,10 +1,10 @@
 import { Button } from "antd";
 import type { FC } from "react";
 import { useNavigate } from "react-router";
-import { useAppDispatch } from "@/core/presentation/store/store";
 import { authSlice } from "@/modules/auth/presentation/store";
-import { LOGIN_PATH } from "@/shared/lib/constants/paths";
-import { IconArrowLeftOutlined } from "@/shared/ui/Icons";
+import { LOGIN_PATH } from "@/shared/infrastructure/constants/paths";
+import { useAppDispatch } from "@/shared/presentation/store/store";
+import { IconArrowLeftOutlined } from "@/shared/presentation/ui/Icons";
 
 /**
  * Back to login button component.

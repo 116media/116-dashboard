@@ -1,5 +1,5 @@
 import type { Rule } from "antd/es/form";
-import { ValidatorUtils } from "@/shared/lib/utils/validators/validators.utils";
+import { ValidatorUtils } from "@/shared/presentation/utils/validators/validators.utils";
 
 /**
  * Validation rules for login form fields.
