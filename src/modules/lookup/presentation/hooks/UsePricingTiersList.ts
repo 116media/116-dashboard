@@ -3,6 +3,7 @@ import type { IPricingTierEntity } from "@/modules/lookup/domain/entities/IPrici
 import type { PricingTierStatusFilter } from "@/modules/lookup/presentation/constants/lookup.pricing-tiers.status";
 import { getPricingTiersAction } from "@/modules/lookup/presentation/store/getpricingtiers.action";
 import type { Failure } from "@/shared/domain/failures/failure";
+import { useDebounce } from "@/shared/presentation/hooks/UseDebounce";
 import { useAppDispatch, useAppSelector } from "@/shared/presentation/store/store";
 
 /**
@@ -15,6 +16,9 @@ interface IUsePricingTiersList {
     error: Failure | null | undefined;
     items: IPricingTierEntity[];
     statusFilter: PricingTierStatusFilter;
+    searchValue: string;
+    onSearchChange: (value: string) => void;
+    onSearch: (value: string) => void;
     onStatusFilterChange: (value: PricingTierStatusFilter) => void;
     reload: () => void;
 }
@@ -24,8 +28,8 @@ interface IUsePricingTiersList {
  *
  * @description
  * Fetches all pricing tiers on mount and applies client-side
- * status filtering. No pagination is needed since lookup lists
- * are small. Exposes a status filter and reload callback.
+ * status filtering. Supports server-side search with debounce.
+ * Exposes a status filter, search controls, and reload callback.
  *
  * @returns Pricing tiers list data, loading/error state, filter controls, and reload function
  */
@@ -38,11 +42,13 @@ export const usePricingTiersList = (): IUsePricingTiersList => {
         error
     } = useAppSelector(({ lookup: { getPricingTiers } }) => getPricingTiers);
 
+    const [searchValue, setSearchValue] = useState("");
+    const debouncedSearch = useDebounce(searchValue);
     const [statusFilter, setStatusFilter] = useState<PricingTierStatusFilter>("all");
 
     const fetchPricingTiers = useCallback(() => {
-        dispatch(getPricingTiersAction());
-    }, [dispatch]);
+        dispatch(getPricingTiersAction(debouncedSearch || undefined));
+    }, [dispatch, debouncedSearch]);
 
     useEffect(() => {
         fetchPricingTiers();
@@ -59,11 +65,22 @@ export const usePricingTiersList = (): IUsePricingTiersList => {
         setStatusFilter(value);
     };
 
+    const onSearch = (value: string) => {
+        setSearchValue(value);
+    };
+
+    const onSearchChange = (value: string) => {
+        setSearchValue(value);
+    };
+
     return {
         loading,
         error,
         items,
         statusFilter,
+        searchValue,
+        onSearchChange,
+        onSearch,
         onStatusFilterChange,
         reload: fetchPricingTiers
     };
