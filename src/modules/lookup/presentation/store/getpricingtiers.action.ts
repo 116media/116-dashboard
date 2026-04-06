@@ -14,10 +14,10 @@ import { ActionType } from "./constants";
  */
 export const getPricingTiersAction = createAsyncThunk<
     IPricingTierEntity[],
-    void,
+    string | undefined,
     { rejectValue: Failure }
->(ActionType.GetPricingTiers, async (_, { rejectWithValue }) => {
-    const result = await container.cradle.getAllPricingTiersUseCase.execute();
+>(ActionType.GetPricingTiers, async (search, { rejectWithValue }) => {
+    const result = await container.cradle.getAllPricingTiersUseCase.execute(search);
 
     if (!result.ok) return rejectWithValue(result.error);
     return result.value;
