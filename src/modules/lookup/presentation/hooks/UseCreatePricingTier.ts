@@ -34,7 +34,7 @@ interface IUseCreatePricingTier {
  *
  * @returns Form instance, loading/error state, success message, and submit handler
  */
-export const useCreatePricingTier = (): IUseCreatePricingTier => {
+export const useCreatePricingTier = (onSuccess?: () => void): IUseCreatePricingTier => {
     const dispatch = useAppDispatch();
     const [form] = useForm<ICreatePricingTierCredentials>();
     const [success, setSuccess] = useState<string | null>(null);
@@ -50,6 +50,7 @@ export const useCreatePricingTier = (): IUseCreatePricingTier => {
             setSuccess(PricingTiersNotification.createSuccess.description);
             showNotification(PricingTiersNotification.createSuccess);
             form.resetFields();
+            onSuccess?.();
         }
     };
 
