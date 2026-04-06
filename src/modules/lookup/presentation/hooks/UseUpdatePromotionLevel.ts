@@ -36,7 +36,8 @@ interface IUseUpdatePromotionLevel {
  * @returns Form instance, loading/error state, success message, and submit handler
  */
 export const useUpdatePromotionLevel = (
-    promotionLevel: IPromotionLevelEntity | null
+    promotionLevel: IPromotionLevelEntity | null,
+    onSuccess?: () => void
 ): IUseUpdatePromotionLevel => {
     const dispatch = useAppDispatch();
     const [form] = useForm<IUpdatePromotionLevelCredentials>();
@@ -66,6 +67,7 @@ export const useUpdatePromotionLevel = (
         if (updatePromotionLevelAction.fulfilled.match(result)) {
             setSuccess(PromotionLevelsNotification.updateSuccess.description);
             showNotification(PromotionLevelsNotification.updateSuccess);
+            onSuccess?.();
         }
     };
 
