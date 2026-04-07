@@ -31,9 +31,9 @@ import TableToolbar from "@/shared/presentation/ui/TableToolbar";
  */
 const ContentTypesListContainer: FC = () => {
     const list = useContentTypesList();
-    const createContentType = useCreateContentType();
+    const createContentType = useCreateContentType(list.reload);
     const [selectedEntity, setSelectedEntity] = useState<IContentTypeEntity | null>(null);
-    const updateContentType = useUpdateContentType(selectedEntity);
+    const updateContentType = useUpdateContentType(selectedEntity, list.reload);
     const actions = useContentTypeActions(list.reload);
 
     const [createOpen, setCreateOpen] = useState(false);
@@ -92,9 +92,10 @@ const ContentTypesListContainer: FC = () => {
                 statusFilter={list.statusFilter}
                 onStatusFilterChange={list.onStatusFilterChange}
                 statusOptions={CONTENT_TYPE_STATUS_OPTIONS}
-                searchValue=""
-                onSearchChange={() => {}}
-                onSearch={() => {}}
+                searchValue={list.searchValue}
+                onSearchChange={list.onSearchChange}
+                onSearch={list.onSearch}
+                searchLoading={list.loading}
             />
 
             <Table
@@ -131,6 +132,7 @@ const ContentTypesListContainer: FC = () => {
                         form={createContentType.form}
                         error={createContentType.error}
                         formContext="CREATE"
+                        onSubmit={createContentType.onSubmit}
                     />
                 </CreateEditModal>
             )}
@@ -162,6 +164,7 @@ const ContentTypesListContainer: FC = () => {
                         form={updateContentType.form}
                         error={updateContentType.error}
                         initialValues={selectedEntity}
+                        onSubmit={updateContentType.onSubmit}
                     />
                 </CreateEditModal>
             )}
