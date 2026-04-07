@@ -46,8 +46,25 @@ export const CONTENT_TYPES_PATH = "/references/content-types";
 export const PRICING_TIERS_PATH = "/references/pricing-tiers";
 export const PROMOTION_LEVELS_PATH = "/references/promotion-levels";
 export const TAGS_PATH = "/references/tags";
+// Catalogue (Catalog)
+export const CATALOG_PATH = "/catalog";
+export const CATEGORIES_PATH = "/catalog/categories";
+export const CUSTOMERS_PATH = "/catalog/customers";
+export const PACKAGES_PATH = "/catalog/packages";
+
+// Édition (Editorial)
+export const SHORTS_PATH = "/shorts";
+export const LYRICS_PATH = "/lyrics";
+
+// Ventes (Commerce)
+export const ORDERS_PATH = "/orders";
+export const PAYMENTS_PATH = "/payments";
+
+// Publicité (Ads)
+export const ADS_PATH = "/ads";
 export const ADS_BANNER_PATH = "/ads/banners";
 export const ADS_POPUP_PATH = "/ads/popups";
+
 export const ADMIN_PATH = "/admins";
 export const USER_PATH = "/users";
 export const ROLES_PATH = "/roles";
