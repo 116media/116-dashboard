@@ -6,9 +6,9 @@ Complete specification for the **Content** domain in the dashboard application. 
 
 | Sub-module | UI Label | Description | Module Path | Status |
 | --- | --- | --- | --- | --- |
-| [Lookup](./lookup/README.md) | **Références** | Reference data: content types, pricing tiers, promotion levels, tags | `src/modules/lookup/` | Planned |
+| [Lookup](./lookup/README.md) | **Références** | Reference data: content types, pricing tiers, promotion levels, tags | `src/modules/lookup/` | **Implemented** |
 | [Catalog](./catalog/README.md) | **Catalogue** | Product catalog: categories, packages, customers | `src/modules/catalog/` | Planned |
-| [Editorial](./editorial/README.md) | **Édition** | Content lifecycle: articles, videos, shorts, lyrics | `src/modules/articles/`, `src/modules/videos/`, `src/modules/shorts/`, `src/modules/lyrics/` | Planned |
+| [Editorial](./editorial/README.md) | **Édition** | Content lifecycle: articles, videos, shorts, lyrics | `src/modules/editorial/` | Planned |
 | [Commerce](./commerce/README.md) | **Ventes** | Revenue lifecycle: orders, payments | `src/modules/commerce/` | Planned |
 
 > **Interactions** (likes, bookmarks, comments, shares, playlists, ratings) are visitor-only features for the public app. They are excluded from the dashboard — only the admin "delete comment" endpoint is relevant and will be handled within the Editorial sub-module.
