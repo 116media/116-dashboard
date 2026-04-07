@@ -35,7 +35,7 @@ interface IUseUpdateRole {
  * @param role - The role to edit (used for pre-population and ID)
  * @returns Form instance, loading/error state, success message, and submit handler
  */
-export const useUpdateRole = (role: IRoleEntity | null): IUseUpdateRole => {
+export const useUpdateRole = (role: IRoleEntity | null, onSuccess?: () => void): IUseUpdateRole => {
     const dispatch = useAppDispatch();
     const [form] = useForm<IUpdateRoleCredentials>();
     const [success, setSuccess] = useState<string | null>(null);
@@ -59,6 +59,7 @@ export const useUpdateRole = (role: IRoleEntity | null): IUseUpdateRole => {
         if (updateRoleAction.fulfilled.match(result)) {
             setSuccess(RolesNotification.updateSuccess.description);
             showNotification(RolesNotification.updateSuccess);
+            onSuccess?.();
         }
     };
 
