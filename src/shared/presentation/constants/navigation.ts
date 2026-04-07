@@ -2,15 +2,26 @@ import type { FC } from "react";
 import {
     IconAppstoreOutlined,
     IconCommentOutlined,
+    IconCreditCardOutlined,
     IconDollarOutlined,
+    IconEditFilled,
     IconFireFilled,
+    IconFolderOutlined,
     IconGroupOutlined,
     IconHomeFilled,
+    IconInboxOutlined,
+    IconNotificationOutlined,
+    IconOrderedListOutlined,
+    IconPlaySquareOutlined,
     IconReadOutlined,
     IconSafetyOutlined,
     IconSettingOutlined,
+    IconShopOutlined,
+    IconShoppingCartOutlined,
+    IconSoundOutlined,
     IconStarOutlined,
     IconTagOutlined,
+    IconTeamOutlined,
     IconUnlockOutlined,
     IconUserAddOutlined,
     IconUserOutlined,
@@ -19,16 +30,25 @@ import {
 import {
     ADMIN_PATH,
     ADS_BANNER_PATH,
+    ADS_PATH,
     ADS_POPUP_PATH,
     ARTICLE_PATH,
+    CATALOG_PATH,
+    CATEGORIES_PATH,
     CONTENT_TYPES_PATH,
+    CUSTOMERS_PATH,
+    LYRICS_PATH,
+    ORDERS_PATH,
     OVERVIEW_PATH,
+    PACKAGES_PATH,
+    PAYMENTS_PATH,
     PERMISSIONS_PATH,
     PRICING_TIERS_PATH,
     PROMOTION_LEVELS_PATH,
     REFERENCES_PATH,
     ROLES_PATH,
     SETTING_PATH,
+    SHORTS_PATH,
     TAGS_PATH,
     USER_PATH,
     VIDEO_PATH
@@ -75,10 +95,14 @@ export interface INavigationItem {
  * Ordered list of navigation entries rendered in the SideNav.
  * Items with `children` render a Popover with sub-items on click.
  * Items without `children` render a direct navigation button with tooltip.
+ *
+ * Groups: Références, Catalogue, Édition, Ventes, Publicité
+ * Standalone: Accueil, Admins, Utilisateurs, Rôles, Permissions, Paramètres
  */
 export const NAVIGATION_ITEMS: INavigationItem[] = [
     { path: OVERVIEW_PATH, label: "Accueil", icon: IconHomeFilled },
 
+    // Références (Lookup)
     {
         path: REFERENCES_PATH,
         label: "Références",
@@ -111,30 +135,109 @@ export const NAVIGATION_ITEMS: INavigationItem[] = [
         ]
     },
 
+    // Catalogue (Catalog)
     {
-        label: "Vidéos",
-        path: VIDEO_PATH,
-        icon: IconVideoCameraFilled,
-        permission: { resource: "videos", action: "read" }
+        path: CATALOG_PATH,
+        label: "Catalogue",
+        icon: IconShopOutlined,
+        children: [
+            {
+                path: CATEGORIES_PATH,
+                label: "Catégories",
+                icon: IconFolderOutlined,
+                permission: { resource: "categories", action: "read" }
+            },
+            {
+                path: CUSTOMERS_PATH,
+                label: "Clients",
+                icon: IconTeamOutlined,
+                permission: { resource: "customers", action: "read" }
+            },
+            {
+                path: PACKAGES_PATH,
+                label: "Packages",
+                icon: IconInboxOutlined,
+                permission: { resource: "packages", action: "read" }
+            }
+        ]
     },
+
+    // Édition (Editorial)
     {
-        label: "Articles",
         path: ARTICLE_PATH,
-        icon: IconReadOutlined,
-        permission: { resource: "articles", action: "read" }
+        label: "Édition",
+        icon: IconEditFilled,
+        children: [
+            {
+                path: ARTICLE_PATH,
+                label: "Articles",
+                icon: IconReadOutlined,
+                permission: { resource: "articles", action: "read" }
+            },
+            {
+                path: VIDEO_PATH,
+                label: "Vidéos",
+                icon: IconVideoCameraFilled,
+                permission: { resource: "videos", action: "read" }
+            },
+            {
+                path: SHORTS_PATH,
+                label: "Shorts",
+                icon: IconPlaySquareOutlined,
+                permission: { resource: "shorts", action: "read" }
+            },
+            {
+                path: LYRICS_PATH,
+                label: "Paroles",
+                icon: IconSoundOutlined,
+                permission: { resource: "lyrics", action: "read" }
+            }
+        ]
     },
+
+    // Ventes (Commerce)
     {
-        label: "Bannières",
-        path: ADS_BANNER_PATH,
-        icon: IconFireFilled,
-        permission: { resource: "ads", action: "read" }
+        path: ORDERS_PATH,
+        label: "Ventes",
+        icon: IconShoppingCartOutlined,
+        children: [
+            {
+                path: ORDERS_PATH,
+                label: "Commandes",
+                icon: IconOrderedListOutlined,
+                permission: { resource: "orders", action: "read" }
+            },
+            {
+                path: PAYMENTS_PATH,
+                label: "Paiements",
+                icon: IconCreditCardOutlined,
+                permission: { resource: "payments", action: "read" }
+            }
+        ]
     },
+
+    // Publicité (Ads)
     {
-        label: "Popups",
-        path: ADS_POPUP_PATH,
-        icon: IconCommentOutlined,
-        permission: { resource: "ads", action: "read" }
+        path: ADS_PATH,
+        label: "Publicité",
+        icon: IconNotificationOutlined,
+        children: [
+            {
+                path: ADS_BANNER_PATH,
+                label: "Bannières",
+                icon: IconFireFilled,
+                permission: { resource: "ads", action: "read" }
+            },
+            {
+                path: ADS_POPUP_PATH,
+                label: "Popups",
+                icon: IconCommentOutlined,
+                permission: { resource: "ads", action: "read" }
+            }
+        ]
     },
+
+    // Standalone items
     {
         path: ADMIN_PATH,
         label: "Administrateurs",
