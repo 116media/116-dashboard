@@ -31,9 +31,9 @@ import TableToolbar from "@/shared/presentation/ui/TableToolbar";
  */
 const PricingTiersListContainer: FC = () => {
     const list = usePricingTiersList();
-    const createPricingTier = useCreatePricingTier();
+    const createPricingTier = useCreatePricingTier(list.reload);
     const [selectedEntity, setSelectedEntity] = useState<IPricingTierEntity | null>(null);
-    const updatePricingTier = useUpdatePricingTier(selectedEntity);
+    const updatePricingTier = useUpdatePricingTier(selectedEntity, list.reload);
     const actions = usePricingTierActions(list.reload);
 
     const [createOpen, setCreateOpen] = useState(false);
@@ -92,9 +92,10 @@ const PricingTiersListContainer: FC = () => {
                 statusFilter={list.statusFilter}
                 onStatusFilterChange={list.onStatusFilterChange}
                 statusOptions={PRICING_TIER_STATUS_OPTIONS}
-                searchValue=""
-                onSearchChange={() => {}}
-                onSearch={() => {}}
+                searchValue={list.searchValue}
+                onSearchChange={list.onSearchChange}
+                onSearch={list.onSearch}
+                searchLoading={list.loading}
             />
 
             <Table
@@ -131,6 +132,7 @@ const PricingTiersListContainer: FC = () => {
                         form={createPricingTier.form}
                         error={createPricingTier.error}
                         formContext="CREATE"
+                        onSubmit={createPricingTier.onSubmit}
                     />
                 </CreateEditModal>
             )}
@@ -162,6 +164,7 @@ const PricingTiersListContainer: FC = () => {
                         error={updatePricingTier.error}
                         formContext="EDIT"
                         initialValues={selectedEntity}
+                        onSubmit={updatePricingTier.onSubmit}
                     />
                 </CreateEditModal>
             )}
