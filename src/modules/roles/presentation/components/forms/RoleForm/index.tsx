@@ -3,6 +3,7 @@ import { Form, Input } from "antd";
 import type { FC } from "react";
 import { useEffect } from "react";
 import type { IRoleEntity } from "@/modules/roles/domain/entities/IRole";
+import type { ICreateRoleCredentials } from "@/modules/roles/presentation/model/ICreateRoleCredentials";
 import { RolesValidator } from "@/modules/roles/presentation/utils/validators/roles.validator";
 import type { Failure } from "@/shared/domain/failures/failure";
 import type { FormContext } from "@/shared/domain/types/pagination";
@@ -25,6 +26,7 @@ interface IRoleFormProps {
     error: Failure | null | undefined;
     formContext: FormContext;
     initialValues?: IRoleEntity | null;
+    onSubmit: (values: ICreateRoleCredentials) => void;
 }
 
 /**
@@ -40,7 +42,7 @@ interface IRoleFormProps {
  * @param {IRoleFormProps} props - Component props
  * @returns {JSX.Element} The role form
  */
-const RoleForm: FC<IRoleFormProps> = ({ form, error, formContext, initialValues }) => {
+const RoleForm: FC<IRoleFormProps> = ({ form, error, formContext, initialValues, onSubmit }) => {
     useEffect(() => {
         if (formContext === "EDIT" && initialValues) {
             form.setFieldsValue({
@@ -55,6 +57,7 @@ const RoleForm: FC<IRoleFormProps> = ({ form, error, formContext, initialValues 
             form={form}
             size="large"
             layout="vertical"
+            onFinish={onSubmit}
             name="role_form"
             validateTrigger={["onSubmit", "onBlur"]}
         >
