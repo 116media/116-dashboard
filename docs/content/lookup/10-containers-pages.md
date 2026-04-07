@@ -113,6 +113,8 @@ Each page has a matching `index.module.scss` with the `.page` class.
 
 ## TODO
 
-- [ ] Create 4 container components with JSDoc
-- [ ] Create 4 page components with JSDoc
-- [ ] Create 4 page SCSS files
+- [x] Create 4 container components with JSDoc
+- [x] Create 4 page components with JSDoc
+- [x] Create 4 page SCSS files
+- [x] Add edit modal, delete modal, and search to TagsListContainer (added post-spec)
+- [x] Use `TableToolbar` with `canFilter={false}` for tags (added post-spec)
