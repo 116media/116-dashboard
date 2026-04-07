@@ -31,9 +31,9 @@ import TableToolbar from "@/shared/presentation/ui/TableToolbar";
  */
 const PromotionLevelsListContainer: FC = () => {
     const list = usePromotionLevelsList();
-    const createPromotionLevel = useCreatePromotionLevel();
+    const createPromotionLevel = useCreatePromotionLevel(list.reload);
     const [selectedEntity, setSelectedEntity] = useState<IPromotionLevelEntity | null>(null);
-    const updatePromotionLevel = useUpdatePromotionLevel(selectedEntity);
+    const updatePromotionLevel = useUpdatePromotionLevel(selectedEntity, list.reload);
     const actions = usePromotionLevelActions(list.reload);
 
     const [createOpen, setCreateOpen] = useState(false);
@@ -95,9 +95,10 @@ const PromotionLevelsListContainer: FC = () => {
                 statusFilter={list.statusFilter}
                 onStatusFilterChange={list.onStatusFilterChange}
                 statusOptions={PROMOTION_LEVEL_STATUS_OPTIONS}
-                searchValue=""
-                onSearchChange={() => {}}
-                onSearch={() => {}}
+                searchValue={list.searchValue}
+                onSearchChange={list.onSearchChange}
+                onSearch={list.onSearch}
+                searchLoading={list.loading}
             />
 
             <Table
@@ -134,6 +135,7 @@ const PromotionLevelsListContainer: FC = () => {
                         form={createPromotionLevel.form}
                         error={createPromotionLevel.error}
                         formContext="CREATE"
+                        onSubmit={createPromotionLevel.onSubmit}
                     />
                 </CreateEditModal>
             )}
@@ -165,6 +167,7 @@ const PromotionLevelsListContainer: FC = () => {
                         form={updatePromotionLevel.form}
                         error={updatePromotionLevel.error}
                         initialValues={selectedEntity}
+                        onSubmit={updatePromotionLevel.onSubmit}
                     />
                 </CreateEditModal>
             )}
