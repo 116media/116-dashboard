@@ -109,7 +109,7 @@ Call `registerLookupDependencies(container)` in `service.locator.ts` and extend 
 
 ## TODO
 
-- [ ] Create `lookup.mapper.ts` with JSDoc
-- [ ] Create `lookup.repository.impl.ts` with JSDoc
-- [ ] Create `lookup.dependencies.ts` with JSDoc
-- [ ] Verify all generated API method names against `116.api.ts`
+- [x] Create `lookup.mapper.ts` with JSDoc
+- [x] Create `lookup.repository.impl.ts` with JSDoc
+- [x] Create `lookup.dependencies.ts` with JSDoc
+- [x] Verify all generated API method names against `116.api.ts`
