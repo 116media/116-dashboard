@@ -126,18 +126,20 @@ One `createAsyncThunk` per endpoint:
 
 ## Integration
 
-- [ ] Add `lookup: lookupReducer` to `root.reducer.ts`
-- [ ] Extend `Cradle` interface in `service.locator.ts`
-- [ ] Call `registerLookupDependencies(container)` in `service.locator.ts`
+- [x] Add `lookup: lookupReducer` to `root.reducer.ts`
+- [x] Extend `Cradle` interface in `service.locator.ts`
+- [x] Call `registerLookupDependencies(container)` in `service.locator.ts`
 
 ---
 
 ## TODO
 
-- [ ] Create `constants.ts`
-- [ ] Create `type.ts`
-- [ ] Create `state.ts`
-- [ ] Create all 17 action files
-- [ ] Create `index.ts` (slice)
-- [ ] Wire into `root.reducer.ts`
-- [ ] Wire into `service.locator.ts`
+- [x] Create `constants.ts`
+- [x] Create `type.ts`
+- [x] Create `state.ts`
+- [x] Create all 17 action files
+- [x] Create `index.ts` (slice)
+- [x] Wire into `root.reducer.ts`
+- [x] Wire into `service.locator.ts`
+- [x] Create `updatetag.action.ts` and `deletetag.action.ts` (added post-spec)
+- [x] Add `updateTag` and `deleteTag` to state type and initial state
