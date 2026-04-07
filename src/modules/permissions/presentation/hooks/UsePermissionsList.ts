@@ -3,6 +3,7 @@ import type { IPermissionPaginatedResult } from "@/modules/permissions/domain/en
 import type { PermissionStatusFilter } from "@/modules/permissions/presentation/constants/permissions.status";
 import { getAllPermissionsAction } from "@/modules/permissions/presentation/store/getall.action";
 import type { Failure } from "@/shared/domain/failures/failure";
+import { useDebounce } from "@/shared/presentation/hooks/UseDebounce";
 import { useAppDispatch, useAppSelector } from "@/shared/presentation/store/store";
 
 /**
@@ -44,6 +45,7 @@ export const usePermissionsList = (): IUsePermissionsList => {
     } = useAppSelector(({ permissions: { getAll } }) => getAll);
 
     const [searchValue, setSearchValue] = useState("");
+    const debouncedSearch = useDebounce(searchValue);
     const [statusFilter, setStatusFilter] = useState<PermissionStatusFilter>("all");
     const [pageIndex, setPageIndex] = useState(0);
     const [pageSize, setPageSize] = useState(10);
@@ -57,12 +59,12 @@ export const usePermissionsList = (): IUsePermissionsList => {
             getAllPermissionsAction({
                 pageIndex,
                 pageSize,
-                search: searchValue || undefined,
+                search: debouncedSearch || undefined,
                 isActive,
                 isDeleted
             })
         );
-    }, [dispatch, pageIndex, pageSize, searchValue, statusFilter]);
+    }, [dispatch, pageIndex, pageSize, debouncedSearch, statusFilter]);
 
     useEffect(() => {
         fetchPermissions();
