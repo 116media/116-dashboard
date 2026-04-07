@@ -34,7 +34,7 @@ interface IUseCreateRole {
  *
  * @returns Form instance, loading/error state, success message, and submit handler
  */
-export const useCreateRole = (): IUseCreateRole => {
+export const useCreateRole = (onSuccess?: () => void): IUseCreateRole => {
     const dispatch = useAppDispatch();
     const [form] = useForm<ICreateRoleCredentials>();
     const [success, setSuccess] = useState<string | null>(null);
@@ -48,6 +48,7 @@ export const useCreateRole = (): IUseCreateRole => {
             setSuccess(RolesNotification.createSuccess.description);
             showNotification(RolesNotification.createSuccess);
             form.resetFields();
+            onSuccess?.();
         }
     };
 
