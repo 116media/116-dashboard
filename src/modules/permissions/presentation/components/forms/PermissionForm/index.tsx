@@ -3,6 +3,7 @@ import { Form, Input } from "antd";
 import type { FC } from "react";
 import { useEffect } from "react";
 import type { IPermissionEntity } from "@/modules/permissions/domain/entities/IPermission";
+import type { ICreatePermissionCredentials } from "@/modules/permissions/presentation/model/ICreatePermissionCredentials";
 import { PermissionsValidator } from "@/modules/permissions/presentation/utils/validators/permissions.validator";
 import type { Failure } from "@/shared/domain/failures/failure";
 import type { FormContext } from "@/shared/domain/types/pagination";
@@ -25,6 +26,7 @@ interface IPermissionFormProps {
     error: Failure | null | undefined;
     formContext: FormContext;
     initialValues?: IPermissionEntity | null;
+    onSubmit: (values: ICreatePermissionCredentials) => void;
 }
 
 /**
@@ -40,7 +42,13 @@ interface IPermissionFormProps {
  * @param {IPermissionFormProps} props - Component props
  * @returns {JSX.Element} The permission form
  */
-const PermissionForm: FC<IPermissionFormProps> = ({ form, error, formContext, initialValues }) => {
+const PermissionForm: FC<IPermissionFormProps> = ({
+    form,
+    error,
+    formContext,
+    initialValues,
+    onSubmit
+}) => {
     useEffect(() => {
         if (formContext === "EDIT" && initialValues) {
             form.setFieldsValue({
@@ -56,6 +64,7 @@ const PermissionForm: FC<IPermissionFormProps> = ({ form, error, formContext, in
             form={form}
             size="large"
             layout="vertical"
+            onFinish={onSubmit}
             name="permission_form"
             validateTrigger={["onSubmit", "onBlur"]}
         >
