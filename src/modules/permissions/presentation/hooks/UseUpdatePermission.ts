@@ -35,7 +35,10 @@ interface IUseUpdatePermission {
  * @param permission - The permission to edit
  * @returns Form instance, loading/error state, success message, and submit handler
  */
-export const useUpdatePermission = (permission: IPermissionEntity | null): IUseUpdatePermission => {
+export const useUpdatePermission = (
+    permission: IPermissionEntity | null,
+    onSuccess?: () => void
+): IUseUpdatePermission => {
     const dispatch = useAppDispatch();
     const [form] = useForm<IUpdatePermissionCredentials>();
     const [success, setSuccess] = useState<string | null>(null);
@@ -60,6 +63,7 @@ export const useUpdatePermission = (permission: IPermissionEntity | null): IUseU
         if (updatePermissionAction.fulfilled.match(result)) {
             setSuccess(PermissionsNotification.updateSuccess.description);
             showNotification(PermissionsNotification.updateSuccess);
+            onSuccess?.();
         }
     };
 
