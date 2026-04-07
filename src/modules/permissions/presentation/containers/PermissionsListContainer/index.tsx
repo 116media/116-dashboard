@@ -30,9 +30,9 @@ import TableToolbar from "@/shared/presentation/ui/TableToolbar";
  */
 const PermissionsListContainer: FC = () => {
     const permissionsList = usePermissionsList();
-    const createPermission = useCreatePermission();
+    const createPermission = useCreatePermission(permissionsList.reload);
     const [selectedPermission, setSelectedPermission] = useState<IPermissionEntity | null>(null);
-    const updatePermission = useUpdatePermission(selectedPermission);
+    const updatePermission = useUpdatePermission(selectedPermission, permissionsList.reload);
     const permissionActions = usePermissionActions(permissionsList.reload);
 
     const [createOpen, setCreateOpen] = useState(false);
@@ -140,6 +140,7 @@ const PermissionsListContainer: FC = () => {
                         form={createPermission.form}
                         error={createPermission.error}
                         formContext="CREATE"
+                        onSubmit={createPermission.onSubmit}
                     />
                 </CreateEditModal>
             )}
@@ -170,6 +171,7 @@ const PermissionsListContainer: FC = () => {
                         form={updatePermission.form}
                         error={updatePermission.error}
                         initialValues={selectedPermission}
+                        onSubmit={updatePermission.onSubmit}
                     />
                 </CreateEditModal>
             )}
