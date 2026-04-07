@@ -3,6 +3,7 @@ import type { IRolePaginatedResult } from "@/modules/roles/domain/entities/IRole
 import type { RoleStatusFilter } from "@/modules/roles/presentation/constants/roles.status";
 import { getAllRolesAction } from "@/modules/roles/presentation/store/getall.action";
 import type { Failure } from "@/shared/domain/failures/failure";
+import { useDebounce } from "@/shared/presentation/hooks/UseDebounce";
 import { useAppDispatch, useAppSelector } from "@/shared/presentation/store/store";
 
 /**
@@ -40,6 +41,7 @@ export const useRolesList = (): IUseRolesList => {
     const { data: roles, loading, error } = useAppSelector(({ roles: { getAll } }) => getAll);
 
     const [searchValue, setSearchValue] = useState("");
+    const debouncedSearch = useDebounce(searchValue);
     const [statusFilter, setStatusFilter] = useState<RoleStatusFilter>("all");
     const [pageIndex, setPageIndex] = useState(0);
     const [pageSize, setPageSize] = useState(10);
@@ -53,12 +55,12 @@ export const useRolesList = (): IUseRolesList => {
             getAllRolesAction({
                 pageIndex,
                 pageSize,
-                search: searchValue || undefined,
+                search: debouncedSearch || undefined,
                 isActive,
                 isDeleted
             })
         );
-    }, [dispatch, pageIndex, pageSize, searchValue, statusFilter]);
+    }, [dispatch, pageIndex, pageSize, debouncedSearch, statusFilter]);
 
     useEffect(() => {
         fetchRoles();
