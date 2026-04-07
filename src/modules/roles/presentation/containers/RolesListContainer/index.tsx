@@ -35,9 +35,9 @@ import TableToolbar from "@/shared/presentation/ui/TableToolbar";
  */
 const RolesListContainer: FC = () => {
     const rolesList = useRolesList();
-    const createRole = useCreateRole();
+    const createRole = useCreateRole(rolesList.reload);
     const [selectedRole, setSelectedRole] = useState<IRoleEntity | null>(null);
-    const updateRole = useUpdateRole(selectedRole);
+    const updateRole = useUpdateRole(selectedRole, rolesList.reload);
     const roleActions = useRoleActions(rolesList.reload);
     const rolePermissions = useRolePermissions(rolesList.reload);
 
@@ -187,6 +187,7 @@ const RolesListContainer: FC = () => {
                         form={createRole.form}
                         error={createRole.error}
                         formContext="CREATE"
+                        onSubmit={createRole.onSubmit}
                     />
                 </CreateEditModal>
             )}
@@ -214,6 +215,7 @@ const RolesListContainer: FC = () => {
                         error={updateRole.error}
                         formContext="EDIT"
                         initialValues={selectedRole}
+                        onSubmit={updateRole.onSubmit}
                     />
                 </CreateEditModal>
             )}
