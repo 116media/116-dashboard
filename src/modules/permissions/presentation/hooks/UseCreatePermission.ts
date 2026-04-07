@@ -34,7 +34,7 @@ interface IUseCreatePermission {
  *
  * @returns Form instance, loading/error state, success message, and submit handler
  */
-export const useCreatePermission = (): IUseCreatePermission => {
+export const useCreatePermission = (onSuccess?: () => void): IUseCreatePermission => {
     const dispatch = useAppDispatch();
     const [form] = useForm<ICreatePermissionCredentials>();
     const [success, setSuccess] = useState<string | null>(null);
@@ -48,6 +48,7 @@ export const useCreatePermission = (): IUseCreatePermission => {
             setSuccess(PermissionsNotification.createSuccess.description);
             showNotification(PermissionsNotification.createSuccess);
             form.resetFields();
+            onSuccess?.();
         }
     };
 
