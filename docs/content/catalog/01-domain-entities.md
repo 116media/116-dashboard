@@ -31,7 +31,7 @@ interface ICategoryEntity {
     contentTypeName: string;
     name: string;
     slug: string;
-    description?: string | null;
+    description: string;
     isFree: boolean;
     isActive: boolean;
     pricing: ICategoryPricingEntity[];
