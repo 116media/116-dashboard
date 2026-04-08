@@ -1,0 +1,15 @@
+@use "@/shared/presentation/styles/dimensions.scss" as dimensions;
+@use "@/shared/presentation/styles/colors.scss" as colors;
+
+.page {
+    display: flex;
+    min-height: calc(100vh - 120px);
+
+    &__content {
+        flex: 1;
+        overflow-y: auto;
+        background: colors.$white;
+        padding: dimensions.$padding;
+        border-radius: dimensions.$border-radius;
+    }
+}
