@@ -10,8 +10,8 @@ Form credential interfaces, validation rules, and success notification configs.
 
 | File | Fields |
 | --- | --- |
-| `ICreateCategoryCredentials.ts` | `contentTypeId: string; name: string; description?: string; isFree: boolean` |
-| `IUpdateCategoryCredentials.ts` | `contentTypeId: string; name: string; description?: string; isFree: boolean` |
+| `ICreateCategoryCredentials.ts` | `contentTypeId: string; name: string; description: string; isFree: boolean` |
+| `IUpdateCategoryCredentials.ts` | `name: string; description: string` |
 | `IAddCategoryPricingCredentials.ts` | `pricingTierId: string; priceUsd: number` |
 | `IUpdateCategoryPricingCredentials.ts` | `priceUsd: number` |
 | `ICreateCustomerCredentials.ts` | `fullName: string; email: string; phone?: string; company?: string; notes?: string` |
@@ -33,7 +33,7 @@ Form credential interfaces, validation rules, and success notification configs.
 export const CategoriesValidator = {
     contentTypeId: (label: string) => [required(label)],
     name: (label: string) => [required(label), max(label, 100)],
-    description: (label: string) => [max(label, 500)],
+    description: (label: string) => [required(label), max(label, 500)],
     isFree: (label: string) => [required(label)],
     pricingTierId: (label: string) => [required(label)],
     priceUsd: (label: string) => [required(label), min(label, 0)],
