@@ -8,6 +8,28 @@ import type { SignOutUseCase } from "@/modules/auth/application/usecases/signout
 import type { SignOutAllUseCase } from "@/modules/auth/application/usecases/signoutall.usecase";
 import type { VerifyOtpUseCase } from "@/modules/auth/application/usecases/verifyotp.usecase";
 import { registerAuthDependencies } from "@/modules/auth/infrastructure/dependencies/auth.dependencies";
+import type { ICatalogRepositoryPort } from "@/modules/catalog/application/repositories/catalog.repository.port";
+import type { ActivateCategoryUseCase } from "@/modules/catalog/application/usecases/activatecategory.usecase";
+import type { ActivatePackageUseCase } from "@/modules/catalog/application/usecases/activatepackage.usecase";
+import type { AddCategoryPricingUseCase } from "@/modules/catalog/application/usecases/addcategorypricing.usecase";
+import type { AddPackageSlotUseCase } from "@/modules/catalog/application/usecases/addpackageslot.usecase";
+import type { CreateCategoryUseCase } from "@/modules/catalog/application/usecases/createcategory.usecase";
+import type { CreateCustomerUseCase } from "@/modules/catalog/application/usecases/createcustomer.usecase";
+import type { CreatePackageUseCase } from "@/modules/catalog/application/usecases/createpackage.usecase";
+import type { DeactivateCategoryUseCase } from "@/modules/catalog/application/usecases/deactivatecategory.usecase";
+import type { DeactivatePackageUseCase } from "@/modules/catalog/application/usecases/deactivatepackage.usecase";
+import type { GetAllCategoriesUseCase } from "@/modules/catalog/application/usecases/getallcategories.usecase";
+import type { GetAllCustomersUseCase } from "@/modules/catalog/application/usecases/getallcustomers.usecase";
+import type { GetAllPackagesUseCase } from "@/modules/catalog/application/usecases/getallpackages.usecase";
+import type { GetCategoryByIdUseCase } from "@/modules/catalog/application/usecases/getcategorybyid.usecase";
+import type { GetCustomerByIdUseCase } from "@/modules/catalog/application/usecases/getcustomerbyid.usecase";
+import type { GetPackageByIdUseCase } from "@/modules/catalog/application/usecases/getpackagebyid.usecase";
+import type { RemoveCategoryPricingUseCase } from "@/modules/catalog/application/usecases/removecategorypricing.usecase";
+import type { RemovePackageSlotUseCase } from "@/modules/catalog/application/usecases/removepackageslot.usecase";
+import type { UpdateCategoryUseCase } from "@/modules/catalog/application/usecases/updatecategory.usecase";
+import type { UpdateCategoryPricingUseCase } from "@/modules/catalog/application/usecases/updatecategorypricing.usecase";
+import type { UpdateCustomerUseCase } from "@/modules/catalog/application/usecases/updatecustomer.usecase";
+import { registerCatalogDependencies } from "@/modules/catalog/infrastructure/dependencies/catalog.dependencies";
 import type { ILookupRepositoryPort } from "@/modules/lookup/application/repositories/lookup.repository.port";
 import type { ActivateContentTypeUseCase } from "@/modules/lookup/application/usecases/activatecontenttype.usecase";
 import type { ActivatePricingTierUseCase } from "@/modules/lookup/application/usecases/activatepricingtier.usecase";
@@ -164,6 +186,35 @@ export interface Cradle {
     createTagUseCase: CreateTagUseCase;
     updateTagUseCase: UpdateTagUseCase;
     deleteTagUseCase: DeleteTagUseCase;
+
+    // Catalog repository
+    catalogRepository: ICatalogRepositoryPort;
+
+    // Catalog use cases — Categories
+    getAllCategoriesUseCase: GetAllCategoriesUseCase;
+    getCategoryByIdUseCase: GetCategoryByIdUseCase;
+    createCategoryUseCase: CreateCategoryUseCase;
+    updateCategoryUseCase: UpdateCategoryUseCase;
+    activateCategoryUseCase: ActivateCategoryUseCase;
+    deactivateCategoryUseCase: DeactivateCategoryUseCase;
+    addCategoryPricingUseCase: AddCategoryPricingUseCase;
+    updateCategoryPricingUseCase: UpdateCategoryPricingUseCase;
+    removeCategoryPricingUseCase: RemoveCategoryPricingUseCase;
+
+    // Catalog use cases — Customers
+    getAllCustomersUseCase: GetAllCustomersUseCase;
+    getCustomerByIdUseCase: GetCustomerByIdUseCase;
+    createCustomerUseCase: CreateCustomerUseCase;
+    updateCustomerUseCase: UpdateCustomerUseCase;
+
+    // Catalog use cases — Packages
+    getAllPackagesUseCase: GetAllPackagesUseCase;
+    getPackageByIdUseCase: GetPackageByIdUseCase;
+    createPackageUseCase: CreatePackageUseCase;
+    activatePackageUseCase: ActivatePackageUseCase;
+    deactivatePackageUseCase: DeactivatePackageUseCase;
+    addPackageSlotUseCase: AddPackageSlotUseCase;
+    removePackageSlotUseCase: RemovePackageSlotUseCase;
 }
 
 /**
@@ -185,5 +236,6 @@ registerSettingsDependencies(container);
 registerRolesDependencies(container);
 registerPermissionsDependencies(container);
 registerLookupDependencies(container);
+registerCatalogDependencies(container);
 
 export default container;
