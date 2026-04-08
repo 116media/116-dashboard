@@ -264,7 +264,7 @@ export interface AdminCreateArticleResponse {
 export interface AdminCreateCategoryRequest {
   name: string;
   slug: string;
-  description?: string | null;
+  description: string;
   isFree: boolean;
 }
 
@@ -514,6 +514,10 @@ export interface AdminGetAllSessionsResponse {
 
 export interface AdminGetAllShortsResponse {
   shortVideos: ShortVideoDtoPaginatedResult;
+}
+
+export interface AdminGetAllTagsResponse {
+  tags: TagDto[];
 }
 
 export interface AdminGetAllVideosResponse {
@@ -804,7 +808,7 @@ export interface AdminUpdateCategoryPricingResponse {
 export interface AdminUpdateCategoryRequest {
   name: string;
   slug: string;
-  description?: string | null;
+  description: string;
 }
 
 export interface AdminUpdateCategoryResponse {
@@ -1123,6 +1127,7 @@ export interface CategoryDto {
   contentTypeName: string;
   name: string;
   slug: string;
+  description: string;
   isFree: boolean;
   isActive: boolean;
   pricing: CategoryPricingDto[];
@@ -3351,10 +3356,16 @@ export class Api<
      * @response `403` `ProblemDetails` Forbidden
      * @response `429` `ProblemDetails` Too Many Requests
      */
-    adminGetAllContentTypes: (params: RequestParams = {}) =>
+    adminGetAllContentTypes: (
+      query?: {
+        search?: string;
+      },
+      params: RequestParams = {},
+    ) =>
       this.request<AdminGetAllContentTypesResponse, ProblemDetails>({
         path: `/api/v1/admin/content-types`,
         method: "GET",
+        query: query,
         secure: true,
         format: "json",
         ...params,
@@ -6487,10 +6498,16 @@ export class Api<
      * @response `403` `ProblemDetails` Forbidden
      * @response `429` `ProblemDetails` Too Many Requests
      */
-    adminGetAllPricingTiers: (params: RequestParams = {}) =>
+    adminGetAllPricingTiers: (
+      query?: {
+        search?: string;
+      },
+      params: RequestParams = {},
+    ) =>
       this.request<AdminGetAllPricingTiersResponse, ProblemDetails>({
         path: `/api/v1/admin/pricing-tiers`,
         method: "GET",
+        query: query,
         secure: true,
         format: "json",
         ...params,
@@ -6691,10 +6708,16 @@ export class Api<
      * @response `403` `ProblemDetails` Forbidden
      * @response `429` `ProblemDetails` Too Many Requests
      */
-    adminGetAllPromotionLevels: (params: RequestParams = {}) =>
+    adminGetAllPromotionLevels: (
+      query?: {
+        search?: string;
+      },
+      params: RequestParams = {},
+    ) =>
       this.request<AdminGetAllPromotionLevelsResponse, ProblemDetails>({
         path: `/api/v1/admin/promotion-levels`,
         method: "GET",
+        query: query,
         secure: true,
         format: "json",
         ...params,
@@ -8342,6 +8365,92 @@ export class Api<
       }),
 
     /**
+     * @description Returns the complete list of tags available in the system,
+     * with optional search filtering by name or slug.
+     * 
+     * **Authentication Requirements:**
+     * 
+     * - User must be authenticated with a valid access token
+     * - User must have Admin or SuperAdmin role
+     * 
+     * **Response Codes:**
+     * 
+     * - Returns 200 OK with the list of tags on success
+     * - Returns 401 Unauthorized if access token is invalid or expired
+     * - Returns 403 Forbidden if user lacks Admin role
+     *
+     * @tags admin::tags
+     * @name AdminGetAllTags
+     * @summary List all tags
+     * @request GET:/api/v1/admin/tags
+     * @secure
+     * @response `200` `AdminGetAllTagsResponse` OK
+     * @response `401` `ProblemDetails` Unauthorized
+     * @response `403` `ProblemDetails` Forbidden
+     * @response `429` `ProblemDetails` Too Many Requests
+     */
+    adminGetAllTags: (
+      query?: {
+        search?: string;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<AdminGetAllTagsResponse, ProblemDetails>({
+        path: `/api/v1/admin/tags`,
+        method: "GET",
+        query: query,
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * @description Creates a new content discovery tag (e.g. "Fally Ipupa", "Kinshasa", "Afrobeats").
+     * \n
+     * This endpoint creates a tag by:\n
+     * - Validating the name and slug format\n
+     * - Checking that no tag with the same slug already exists\n
+     * - Creating the tag and returning its details\n
+     * \n
+     * **Authentication Requirements:**\n
+     * - User must be authenticated with a valid access token\n
+     * - User must have Admin or SuperAdmin role\n
+     * \n
+     * **Request Body:**\n
+     * - name: The display name for the tag (max 50 characters)\n
+     * - slug: URL-safe identifier — lowercase letters, numbers, and hyphens only (max 60 characters)\n
+     * \n
+     * **Response Codes:**\n
+     * - Returns 201 Created with tag details on success\n
+     * - Returns 400 Bad Request if validation fails\n
+     * - Returns 401 Unauthorized if access token is invalid or expired\n
+     * - Returns 403 Forbidden if user lacks Admin role\n
+     * - Returns 409 Conflict if tag slug already exists\n
+     *
+     * @tags admin::tags
+     * @name AdminCreateTag
+     * @summary Create a new content tag
+     * @request POST:/api/v1/admin/tags
+     * @secure
+     * @response `201` `AdminCreateTagResponse` Created
+     * @response `400` `ProblemDetails` Bad Request
+     * @response `401` `ProblemDetails` Unauthorized
+     * @response `403` `ProblemDetails` Forbidden
+     * @response `409` `ProblemDetails` Conflict
+     * @response `429` `ProblemDetails` Too Many Requests
+     */
+    adminCreateTag: (data: AdminCreateTagRequest, params: RequestParams = {}) =>
+      this.request<AdminCreateTagResponse, ProblemDetails>({
+        path: `/api/v1/admin/tags`,
+        method: "POST",
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
      * @description Updates an existing content tag's name and slug.
      * 
      * This endpoint updates a tag by:
@@ -8437,52 +8546,6 @@ export class Api<
         path: `/api/v1/admin/tags/${id}`,
         method: "DELETE",
         secure: true,
-        format: "json",
-        ...params,
-      }),
-
-    /**
-     * @description Creates a new content discovery tag (e.g. "Fally Ipupa", "Kinshasa", "Afrobeats").
-     * \n
-     * This endpoint creates a tag by:\n
-     * - Validating the name and slug format\n
-     * - Checking that no tag with the same slug already exists\n
-     * - Creating the tag and returning its details\n
-     * \n
-     * **Authentication Requirements:**\n
-     * - User must be authenticated with a valid access token\n
-     * - User must have Admin or SuperAdmin role\n
-     * \n
-     * **Request Body:**\n
-     * - name: The display name for the tag (max 50 characters)\n
-     * - slug: URL-safe identifier — lowercase letters, numbers, and hyphens only (max 60 characters)\n
-     * \n
-     * **Response Codes:**\n
-     * - Returns 201 Created with tag details on success\n
-     * - Returns 400 Bad Request if validation fails\n
-     * - Returns 401 Unauthorized if access token is invalid or expired\n
-     * - Returns 403 Forbidden if user lacks Admin role\n
-     * - Returns 409 Conflict if tag slug already exists\n
-     *
-     * @tags admin::tags
-     * @name AdminCreateTag
-     * @summary Create a new content tag
-     * @request POST:/api/v1/admin/tags
-     * @secure
-     * @response `201` `AdminCreateTagResponse` Created
-     * @response `400` `ProblemDetails` Bad Request
-     * @response `401` `ProblemDetails` Unauthorized
-     * @response `403` `ProblemDetails` Forbidden
-     * @response `409` `ProblemDetails` Conflict
-     * @response `429` `ProblemDetails` Too Many Requests
-     */
-    adminCreateTag: (data: AdminCreateTagRequest, params: RequestParams = {}) =>
-      this.request<AdminCreateTagResponse, ProblemDetails>({
-        path: `/api/v1/admin/tags`,
-        method: "POST",
-        body: data,
-        secure: true,
-        type: ContentType.Json,
         format: "json",
         ...params,
       }),
