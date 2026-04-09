@@ -1,41 +1,33 @@
 import type { FormInstance } from "antd";
-import { Checkbox, Form, Input, InputNumber } from "antd";
-import type { FC } from "react";
+import { Checkbox, Form, InputNumber, Select } from "antd";
+import { type FC, useMemo } from "react";
+import type { ICategoryEntity } from "@/modules/catalog/domain/entities/ICategoryEntity";
 import type { IAddPackageSlotCredentials } from "@/modules/catalog/presentation/model/IAddPackageSlotCredentials";
+import { PackagesValidator } from "@/modules/catalog/presentation/utils/validators/catalog.packages.validator";
 import type { Failure } from "@/shared/domain/failures/failure";
+import { useAppSelector } from "@/shared/presentation/store/store";
 import ErrorAlert from "@/shared/presentation/ui/ErrorAlert";
 
 const { Item } = Form;
 
-/**
- * Props for the PackageSlotForm component.
- *
- * @interface IPackageSlotFormProps
- * @property {FormInstance} form - Ant Design form instance
- * @property {Failure | null | undefined} error - API error to display
- * @property {(values: IAddPackageSlotCredentials) => void} onSubmit - Form submission handler
- */
 interface IPackageSlotFormProps {
     form: FormInstance;
     error: Failure | null | undefined;
     onSubmit: (values: IAddPackageSlotCredentials) => void;
 }
 
-/**
- * Form for adding a slot to a package.
- *
- * @component
- *
- * @description
- * Renders categoryId, isRequired, and quantity fields. This is
- * always a create-only form. The categoryId field is a simple
- * Input for now, to be replaced with a Select component later.
- * Displays API errors via `ErrorAlert`.
- *
- * @param {IPackageSlotFormProps} props - Component props
- * @returns {JSX.Element} The package slot form
- */
 const PackageSlotForm: FC<IPackageSlotFormProps> = ({ form, error, onSubmit }) => {
+    const { data: categories } = useAppSelector(
+        ({ catalog: { getAllCategories } }) => getAllCategories
+    );
+
+    const categoryOptions = useMemo(() => {
+        const items = (categories as { items: ICategoryEntity[] } | null)?.items ?? [];
+        return items
+            .filter((c) => c.isActive)
+            .map((c) => ({ label: `${c.name} (${c.contentTypeName})`, value: c.id }));
+    }, [categories]);
+
     return (
         <Form
             form={form}
@@ -50,9 +42,13 @@ const PackageSlotForm: FC<IPackageSlotFormProps> = ({ form, error, onSubmit }) =
             <Item
                 name="categoryId"
                 label="Catégorie"
-                rules={[{ required: true, message: "Catégorie est requis" }]}
+                rules={PackagesValidator.categoryId("Catégorie")}
             >
-                <Input placeholder="ID de la catégorie" />
+                <Select
+                    showSearch
+                    options={categoryOptions}
+                    placeholder="Sélectionner une catégorie"
+                />
             </Item>
 
             <Item name="isRequired" valuePropName="checked">
@@ -62,7 +58,7 @@ const PackageSlotForm: FC<IPackageSlotFormProps> = ({ form, error, onSubmit }) =
             <Item
                 name="quantity"
                 label="Quantité"
-                rules={[{ required: true, message: "Quantité est requis" }]}
+                rules={PackagesValidator.quantity("Quantité")}
             >
                 <InputNumber min={1} placeholder="Quantité" style={{ width: "100%" }} />
             </Item>
