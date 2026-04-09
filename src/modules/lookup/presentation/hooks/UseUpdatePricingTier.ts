@@ -51,7 +51,7 @@ export const useUpdatePricingTier = (
         if (pricingTier) {
             form.setFieldsValue({
                 name: pricingTier.name,
-                description: pricingTier.description ?? undefined
+                description: pricingTier.description
             });
         }
     }, [pricingTier, form]);
