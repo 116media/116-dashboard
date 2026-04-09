@@ -34,8 +34,11 @@ export const PricingTiersValidator = {
      * @returns {Rule[]} Array of validation rules
      *
      * @remarks
-     * - Optional field
+     * - Required field
      * - Must not exceed 300 characters
      */
-    description: (label: string): Rule[] => [ValidatorUtils.max(label, 300)]
+    description: (label: string): Rule[] => [
+        ValidatorUtils.required(label),
+        ValidatorUtils.max(label, 300)
+    ]
 } as const;
