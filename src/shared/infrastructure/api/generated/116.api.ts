@@ -319,7 +319,7 @@ export interface AdminCreateOrderResponse {
 
 export interface AdminCreatePackageRequest {
   name: string;
-  description?: string | null;
+  description: string;
   /** @format double */
   flatPriceUsd: number;
 }
@@ -340,7 +340,7 @@ export interface AdminCreatePermissionResponse {
 
 export interface AdminCreatePricingTierRequest {
   name: string;
-  description?: string | null;
+  description: string;
 }
 
 export interface AdminCreatePricingTierResponse {
@@ -390,7 +390,7 @@ export interface AdminCreateVideoRequest {
   customerId?: string | null;
   /** @format uuid */
   orderItemId?: string | null;
-  description?: string | null;
+  description: string;
   /** @format date-time */
   shootingScheduledAt?: string | null;
 }
@@ -877,7 +877,7 @@ export interface AdminUpdatePermissionResponse {
 
 export interface AdminUpdatePricingTierRequest {
   name: string;
-  description?: string | null;
+  description: string;
 }
 
 export interface AdminUpdatePricingTierResponse {
@@ -919,7 +919,7 @@ export interface AdminUpdateVideoRequest {
   categoryId: string;
   title: string;
   slug: string;
-  description?: string | null;
+  description: string;
   /** @format uuid */
   customerId?: string | null;
   /** @format uuid */
@@ -1356,7 +1356,7 @@ export interface PackageDto {
   /** @format uuid */
   id: string;
   name: string;
-  description?: string | null;
+  description: string;
   /** @format double */
   flatPriceUsd: number;
   isActive: boolean;
@@ -1471,7 +1471,7 @@ export interface PricingTierDto {
   /** @format uuid */
   id: string;
   name: string;
-  description?: string | null;
+  description: string;
   isActive: boolean;
 }
 
@@ -1981,7 +1981,7 @@ export interface VideoDetailDto {
   categoryName: string;
   title: string;
   slug: string;
-  description?: string | null;
+  description: string;
   thumbnailUrl?: string | null;
   thumbnailStorageKey?: string | null;
   authorId: string;
