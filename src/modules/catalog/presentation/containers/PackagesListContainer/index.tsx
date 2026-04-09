@@ -6,6 +6,7 @@ import PackageForm from "@/modules/catalog/presentation/components/forms/Package
 import type { PackageAction } from "@/modules/catalog/presentation/components/tables/PackagesTable/columns";
 import { packagesTableColumns } from "@/modules/catalog/presentation/components/tables/PackagesTable/columns";
 import PackageActionModal from "@/modules/catalog/presentation/components/ui/PackageActionModal";
+import PackageSlotsPanel from "@/modules/catalog/presentation/components/ui/PackageSlotsPanel";
 import { PACKAGE_STATUS_OPTIONS } from "@/modules/catalog/presentation/constants/catalog.packages.status";
 import { useCreatePackage } from "@/modules/catalog/presentation/hooks/UseCreatePackage";
 import { usePackageActions } from "@/modules/catalog/presentation/hooks/UsePackageActions";
@@ -26,14 +27,19 @@ const PackagesListContainer: FC = () => {
     const [selectedEntity, setSelectedEntity] = useState<IPackageEntity | null>(null);
     const [createOpen, setCreateOpen] = useState(false);
     const [actionOpen, setActionOpen] = useState(false);
+    const [slotsOpen, setSlotsOpen] = useState(false);
     const [currentAction, setCurrentAction] = useState<PackageAction | null>(null);
 
     const { isSuperAdmin, isAdminOrSuperAdmin } = useAuthorization();
 
     const handleAction = useCallback((action: PackageAction, entity: IPackageEntity) => {
         setSelectedEntity(entity);
-        setCurrentAction(action);
-        setActionOpen(true);
+
+        if (action === "manageSlots") setSlotsOpen(true);
+        else {
+            setCurrentAction(action);
+            setActionOpen(true);
+        }
     }, []);
 
     const handleActionConfirm = async () => {
@@ -79,12 +85,12 @@ const PackagesListContainer: FC = () => {
 
             <Table
                 rowKey="id"
+                scroll={{ x: 200 }}
                 loading={list.loading}
-                dataSource={list.packages?.items ?? []}
                 columns={tableColumns}
+                dataSource={list.packages?.items ?? []}
                 components={{ header: { cell: ResizableTitle } }}
                 rowSelection={{ type: "checkbox", columnWidth: 36 }}
-                scroll={{ x: "max-content" }}
                 pagination={{
                     showSizeChanger: true,
                     current: (list.packages?.pageIndex ?? 0) + 1,
@@ -129,6 +135,13 @@ const PackagesListContainer: FC = () => {
                 error={actions.error}
                 onConfirm={handleActionConfirm}
                 onCancel={() => setActionOpen(false)}
+            />
+
+            <PackageSlotsPanel
+                open={slotsOpen}
+                pkg={selectedEntity}
+                onClose={() => setSlotsOpen(false)}
+                onSuccess={list.reload}
             />
         </>
     );
