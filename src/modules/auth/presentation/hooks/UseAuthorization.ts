@@ -63,12 +63,12 @@ export const useAuthorization = (): IUseAuthorization => {
     const user = useAppSelector(({ session: { currentUser } }) => currentUser.data);
 
     const isSuperAdmin = useMemo(
-        () => user?.roles.some((r) => r.name === ECoreUserRole.SuperAdmin) ?? false,
+        () => user?.roles?.some((r) => r.name === ECoreUserRole.SuperAdmin) ?? false,
         [user?.roles]
     );
 
     const isAdmin = useMemo(
-        () => user?.roles.some((r) => r.name === ECoreUserRole.Admin) ?? false,
+        () => user?.roles?.some((r) => r.name === ECoreUserRole.Admin) ?? false,
         [user?.roles]
     );
 
@@ -79,9 +79,9 @@ export const useAuthorization = (): IUseAuthorization => {
         if (isSuperAdmin) return () => true;
 
         return ({ resource, action }: PermissionCheck) =>
-            user.permissions.some(
+            user.permissions?.some(
                 (p) => p.resource === resource && p.action === action && p.isActive
-            );
+            ) ?? false;
     }, [user, isSuperAdmin]);
 
     const hasEvery = useMemo(() => {
