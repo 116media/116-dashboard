@@ -100,12 +100,12 @@ const PricingTiersListContainer: FC = () => {
 
             <Table
                 rowKey="id"
+                scroll={{ x: 200 }}
                 dataSource={list.items}
                 columns={tableColumns}
                 loading={list.loading}
                 components={{ header: { cell: ResizableTitle } }}
                 rowSelection={{ type: "checkbox", columnWidth: 36 }}
-                scroll={{ x: "max-content" }}
                 pagination={{ showSizeChanger: true, defaultPageSize: 10 }}
             />
 
