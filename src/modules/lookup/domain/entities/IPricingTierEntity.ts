@@ -9,7 +9,7 @@
  *
  * @property {string} id - Unique identifier (UUID)
  * @property {string} name - Pricing tier name
- * @property {string | null} description - Optional description of the pricing tier
+ * @property {string} description - Description of the pricing tier
  * @property {boolean} isActive - Whether the pricing tier is currently active
  * @property {string | null} createdAt - ISO 8601 creation timestamp
  * @property {string | null} updatedAt - ISO 8601 last update timestamp
@@ -19,7 +19,7 @@
 export interface IPricingTierEntity {
     id: string;
     name: string;
-    description?: string | null;
+    description: string;
     isActive: boolean;
     createdAt?: string | null;
     updatedAt?: string | null;
