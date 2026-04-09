@@ -7,7 +7,7 @@ import type { IPackageSlotEntity } from "@/modules/catalog/domain/entities/IPack
  *
  * @property {string} id - Unique identifier (UUID)
  * @property {string} name - Package display name
- * @property {string | null} description - Optional description
+ * @property {string} description - Package description
  * @property {number} flatPriceUsd - Flat price in USD
  * @property {boolean} isActive - Whether the package is currently active
  * @property {IPackageSlotEntity[]} slots - Content slots in this package
@@ -19,7 +19,7 @@ import type { IPackageSlotEntity } from "@/modules/catalog/domain/entities/IPack
 export interface IPackageEntity {
     id: string;
     name: string;
-    description?: string | null;
+    description: string;
     flatPriceUsd: number;
     isActive: boolean;
     slots: IPackageSlotEntity[];
