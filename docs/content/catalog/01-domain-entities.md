@@ -86,7 +86,7 @@ Maps from backend `PackageSlotDto`. Nested inside `IPackageEntity.slots[]`.
 interface IPackageEntity {
     id: string;
     name: string;
-    description?: string | null;
+    description: string;
     flatPriceUsd: number;
     isActive: boolean;
     slots: IPackageSlotEntity[];
