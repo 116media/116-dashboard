@@ -13,7 +13,7 @@ import { ActionType } from "./constants";
  */
 export const createPackageAction = createAsyncThunk<
     IPackageEntity,
-    { name: string; description?: string; flatPriceUsd: number },
+    { name: string; description: string; flatPriceUsd: number },
     { rejectValue: Failure }
 >(ActionType.CreatePackage, async (data, { rejectWithValue }) => {
     const result = await container.cradle.createPackageUseCase.execute(data);
