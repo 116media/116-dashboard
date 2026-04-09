@@ -54,6 +54,32 @@ export const PackagesValidator = {
      */
     flatPriceUsd: (label: string): Rule[] => [
         ValidatorUtils.required(label),
-        { type: "number", min: 0, message: `${label} doit être supérieur ou égal à 0` }
+        ValidatorUtils.numericMin(label, 0)
+    ],
+
+    /**
+     * Validates slot category selection field.
+     *
+     * @param {string} label - Display name for error messages
+     * @returns {Rule[]} Array of validation rules
+     *
+     * @remarks
+     * - Required field
+     */
+    categoryId: (label: string): Rule[] => [ValidatorUtils.required(label)],
+
+    /**
+     * Validates slot quantity field.
+     *
+     * @param {string} label - Display name for error messages
+     * @returns {Rule[]} Array of validation rules
+     *
+     * @remarks
+     * - Required field
+     * - Must be at least 1
+     */
+    quantity: (label: string): Rule[] => [
+        ValidatorUtils.required(label),
+        ValidatorUtils.numericMin(label, 1)
     ]
 } as const;
