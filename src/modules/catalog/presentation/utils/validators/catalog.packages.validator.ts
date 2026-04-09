@@ -34,9 +34,13 @@ export const PackagesValidator = {
      * @returns {Rule[]} Array of validation rules
      *
      * @remarks
+     * - Required field
      * - Must not exceed 500 characters
      */
-    description: (label: string): Rule[] => [ValidatorUtils.max(label, 500)],
+    description: (label: string): Rule[] => [
+        ValidatorUtils.required(label),
+        ValidatorUtils.max(label, 500)
+    ],
 
     /**
      * Validates package flat price field.
