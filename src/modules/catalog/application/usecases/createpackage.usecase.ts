@@ -5,7 +5,7 @@ import type { Result } from "@/shared/domain/results/result";
 
 interface ICreatePackageUseCase
     extends IResultUseCase<
-        { name: string; description?: string; flatPriceUsd: number },
+        { name: string; description: string; flatPriceUsd: number },
         IPackageEntity
     > {}
 
@@ -16,7 +16,7 @@ export class CreatePackageUseCase implements ICreatePackageUseCase {
     }
     async execute(data: {
         name: string;
-        description?: string;
+        description: string;
         flatPriceUsd: number;
     }): Promise<Result<IPackageEntity>> {
         return this.catalogRepository.createPackage(data);
