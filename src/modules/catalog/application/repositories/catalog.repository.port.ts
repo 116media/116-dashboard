@@ -86,7 +86,7 @@ export interface ICatalogRepositoryPort {
 
     createPackage(data: {
         name: string;
-        description?: string;
+        description: string;
         flatPriceUsd: number;
     }): Promise<Result<IPackageEntity>>;
 
