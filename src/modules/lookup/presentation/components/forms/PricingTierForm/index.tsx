@@ -53,7 +53,7 @@ const PricingTierForm: FC<IPricingTierFormProps> = ({
         if (formContext === "EDIT" && initialValues) {
             form.setFieldsValue({
                 name: initialValues.name,
-                description: initialValues.description ?? undefined
+                description: initialValues.description
             });
         }
     }, [formContext, initialValues, form]);
