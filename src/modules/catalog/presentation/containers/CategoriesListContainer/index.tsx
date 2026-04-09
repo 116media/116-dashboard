@@ -6,6 +6,7 @@ import CategoryForm from "@/modules/catalog/presentation/components/forms/Catego
 import type { CategoryAction } from "@/modules/catalog/presentation/components/tables/CategoriesTable/columns";
 import { categoriesTableColumns } from "@/modules/catalog/presentation/components/tables/CategoriesTable/columns";
 import CategoryActionModal from "@/modules/catalog/presentation/components/ui/CategoryActionModal";
+import CategoryPricingPanel from "@/modules/catalog/presentation/components/ui/CategoryPricingPanel";
 import { CATEGORY_STATUS_OPTIONS } from "@/modules/catalog/presentation/constants/catalog.categories.status";
 import { useCategoriesList } from "@/modules/catalog/presentation/hooks/UseCategoriesList";
 import { useCategoryActions } from "@/modules/catalog/presentation/hooks/UseCategoryActions";
@@ -38,6 +39,7 @@ const CategoriesListContainer: FC = () => {
     const [createOpen, setCreateOpen] = useState(false);
     const [editOpen, setEditOpen] = useState(false);
     const [actionOpen, setActionOpen] = useState(false);
+    const [pricingOpen, setPricingOpen] = useState(false);
     const [currentAction, setCurrentAction] = useState<CategoryAction | null>(null);
 
     const { isSuperAdmin, isAdminOrSuperAdmin } = useAuthorization();
@@ -48,6 +50,9 @@ const CategoriesListContainer: FC = () => {
         switch (action) {
             case "edit":
                 setEditOpen(true);
+                break;
+            case "managePricing":
+                setPricingOpen(true);
                 break;
             default:
                 setCurrentAction(action);
@@ -99,12 +104,12 @@ const CategoriesListContainer: FC = () => {
 
             <Table
                 rowKey="id"
+                scroll={{ x: "200" }}
                 loading={list.loading}
-                dataSource={list.categories?.items ?? []}
                 columns={tableColumns}
+                dataSource={list.categories?.items ?? []}
                 components={{ header: { cell: ResizableTitle } }}
                 rowSelection={{ type: "checkbox", columnWidth: 36 }}
-                scroll={{ x: "max-content" }}
                 pagination={{
                     showSizeChanger: true,
                     current: (list.categories?.pageIndex ?? 0) + 1,
@@ -182,6 +187,13 @@ const CategoriesListContainer: FC = () => {
                 error={actions.error}
                 onConfirm={handleActionConfirm}
                 onCancel={() => setActionOpen(false)}
+            />
+
+            <CategoryPricingPanel
+                open={pricingOpen}
+                category={selectedEntity}
+                onClose={() => setPricingOpen(false)}
+                onSuccess={list.reload}
             />
         </>
     );
