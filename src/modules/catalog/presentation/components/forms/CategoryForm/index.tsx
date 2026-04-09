@@ -91,14 +91,13 @@ const CategoryForm: FC<ICategoryFormProps> = ({
             <Item
                 name="contentTypeId"
                 label="Type de contenu"
-                rules={[{ required: true, message: "Type de contenu est requis" }]}
+                rules={CategoriesValidator.contentTypeId("Type de contenu")}
             >
                 <Select
                     showSearch
-                    optionFilterProp="label"
                     options={contentTypeOptions}
-                    placeholder="Sélectionner un type de contenu"
                     disabled={formContext === "EDIT"}
+                    placeholder="Sélectionner un type de contenu"
                 />
             </Item>
 
