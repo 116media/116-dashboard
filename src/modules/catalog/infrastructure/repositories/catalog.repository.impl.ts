@@ -226,7 +226,7 @@ export class CatalogRepositoryImpl implements ICatalogRepositoryPort {
 
     async createPackage(data: {
         name: string;
-        description?: string;
+        description: string;
         flatPriceUsd: number;
     }): Promise<Result<IPackageEntity>> {
         try {
