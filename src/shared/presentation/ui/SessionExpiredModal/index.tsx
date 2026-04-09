@@ -3,6 +3,7 @@ import { type FC, useCallback, useEffect, useState } from "react";
 import { REFRESH_TOKEN_EXPIRED_EVENT } from "@/shared/infrastructure/interceptors/refresh-token-expiry.interceptor";
 import { LOGIN_PATH } from "@/shared/presentation/constants/paths";
 import { persistor } from "@/shared/presentation/store/store";
+import styles from "./index.module.scss";
 
 /**
  * Modal displayed when the user's refresh token has expired.
@@ -35,23 +36,24 @@ const SessionExpiredModal: FC = () => {
         };
     }, [handleSessionExpired]);
 
-    const handleOk = () => {
+    const handleOk = async () => {
         setIsOpen(false);
-        persistor.purge();
-        window.location.href = LOGIN_PATH;
+        await persistor.purge();
+        window.location.replace(LOGIN_PATH);
     };
 
     return (
         <Modal
-            open={isOpen}
             centered
-            closable={false}
-            mask={{ closable: false }}
-            keyboard={false}
-            title="Session expirée"
             okText="OK"
-            cancelButtonProps={{ style: { display: "none" } }}
+            open={isOpen}
             onOk={handleOk}
+            closable={false}
+            keyboard={false}
+            mask={{ closable: false }}
+            title="Session expirée"
+            cancelButtonProps={{ style: { display: "none" } }}
+            className={styles.sessionExpiredModal}
         >
             Votre session a expiré. Veuillez vous reconnecter pour continuer.
         </Modal>
