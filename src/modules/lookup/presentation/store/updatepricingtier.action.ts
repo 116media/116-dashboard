@@ -14,7 +14,7 @@ import { ActionType } from "./constants";
  */
 export const updatePricingTierAction = createAsyncThunk<
     IPricingTierEntity,
-    { id: string; data: { name: string; description?: string } },
+    { id: string; data: { name: string; description: string } },
     { rejectValue: Failure }
 >(ActionType.UpdatePricingTier, async (params, { rejectWithValue }) => {
     const result = await container.cradle.updatePricingTierUseCase.execute(params);
