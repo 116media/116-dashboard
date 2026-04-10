@@ -11,7 +11,9 @@ import { PACKAGE_STATUS_OPTIONS } from "@/modules/catalog/presentation/constants
 import { useCreatePackage } from "@/modules/catalog/presentation/hooks/UseCreatePackage";
 import { usePackageActions } from "@/modules/catalog/presentation/hooks/UsePackageActions";
 import { usePackagesList } from "@/modules/catalog/presentation/hooks/UsePackagesList";
+import { getPackageByIdAction } from "@/modules/catalog/presentation/store/getpackagebyid.action";
 import { useResizableColumns } from "@/shared/presentation/hooks/UseResizableColumns";
+import { useAppDispatch, useAppSelector } from "@/shared/presentation/store/store";
 import CreateEditModal from "@/shared/presentation/ui/CreateEditModal";
 import ErrorAlert from "@/shared/presentation/ui/ErrorAlert";
 import { IconInboxOutlined } from "@/shared/presentation/ui/Icons";
@@ -19,8 +21,23 @@ import PageHeader from "@/shared/presentation/ui/PageHeader";
 import ResizableTitle from "@/shared/presentation/ui/ResizableTable";
 import TableToolbar from "@/shared/presentation/ui/TableToolbar";
 
+/**
+ * Container for the packages list tab.
+ *
+ * @component
+ *
+ * @description
+ * Orchestrates the packages table, create modal, action
+ * confirmation modal, and slots management drawer. Packages
+ * have no edit — only create, activate/deactivate, and
+ * slot management. Uses server-side pagination and status filtering.
+ */
 const PackagesListContainer: FC = () => {
+    const dispatch = useAppDispatch();
     const list = usePackagesList();
+    const { loading: packageLoading } = useAppSelector(
+        ({ catalog: { getPackageById } }) => getPackageById
+    );
     const createPackage = useCreatePackage(list.reload);
     const actions = usePackageActions(list.reload);
 
@@ -31,6 +48,15 @@ const PackagesListContainer: FC = () => {
     const [currentAction, setCurrentAction] = useState<PackageAction | null>(null);
 
     const { isSuperAdmin, isAdminOrSuperAdmin } = useAuthorization();
+
+    const refreshSelectedPackage = useCallback(async () => {
+        if (!selectedEntity) return;
+        const result = await dispatch(getPackageByIdAction(selectedEntity.id));
+        if (getPackageByIdAction.fulfilled.match(result)) {
+            setSelectedEntity(result.payload);
+        }
+        list.reload();
+    }, [dispatch, selectedEntity, list.reload]);
 
     const handleAction = useCallback((action: PackageAction, entity: IPackageEntity) => {
         setSelectedEntity(entity);
@@ -129,7 +155,7 @@ const PackagesListContainer: FC = () => {
 
             <PackageActionModal
                 open={actionOpen}
-                pkg={selectedEntity}
+                bundle={selectedEntity}
                 action={currentAction}
                 loading={actions.loading}
                 error={actions.error}
@@ -139,9 +165,10 @@ const PackagesListContainer: FC = () => {
 
             <PackageSlotsPanel
                 open={slotsOpen}
-                pkg={selectedEntity}
+                loading={packageLoading}
+                bundle={selectedEntity}
                 onClose={() => setSlotsOpen(false)}
-                onSuccess={list.reload}
+                onSuccess={refreshSelectedPackage}
             />
         </>
     );
