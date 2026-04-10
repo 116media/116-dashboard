@@ -66,7 +66,6 @@ const PackageSlotsList: FC<IPackageSlotsListProps> = ({ slots, removeLoading, on
                             <Button
                                 ghost
                                 danger
-                                size="small"
                                 loading={removeLoading}
                                 icon={<IconDeleteFilled />}
                             />
