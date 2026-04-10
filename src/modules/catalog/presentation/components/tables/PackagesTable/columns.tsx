@@ -27,7 +27,7 @@ export type { PackageAction };
  * @returns Column configuration for the Ant Design Table
  */
 export const packagesTableColumns = (
-    onAction: (action: PackageAction, pkg: IPackageEntity) => void,
+    onAction: (action: PackageAction, bundle: IPackageEntity) => void,
     isSuperAdmin: boolean,
     isAdminOrSuperAdmin: boolean
 ): ColumnsType<IPackageEntity> => [
