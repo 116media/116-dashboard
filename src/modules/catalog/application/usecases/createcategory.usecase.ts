@@ -3,6 +3,9 @@ import type { ICategoryEntity } from "@/modules/catalog/domain/entities/ICategor
 import type { IResultUseCase } from "@/shared/application/usecases/IUseCase";
 import type { Result } from "@/shared/domain/results/result";
 
+/**
+ * @interface ICreateCategoryUseCase
+ */
 interface ICreateCategoryUseCase
     extends IResultUseCase<
         {
@@ -15,11 +18,23 @@ interface ICreateCategoryUseCase
         ICategoryEntity
     > {}
 
+/**
+ * Use case for creating a new category.
+ *
+ * @class CreateCategoryUseCase
+ * @implements {ICreateCategoryUseCase}
+ */
 export class CreateCategoryUseCase implements ICreateCategoryUseCase {
     private readonly catalogRepository: ICatalogRepositoryPort;
+    /**
+     * @param {ICatalogRepositoryPort} catalogRepository - Repository for catalog operations (injected)
+     */
     constructor({ catalogRepository }: { catalogRepository: ICatalogRepositoryPort }) {
         this.catalogRepository = catalogRepository;
     }
+    /**
+     * Executes the creating a new category use case.
+     */
     async execute(params: {
         contentTypeId: string;
         name: string;
