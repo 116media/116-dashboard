@@ -16,6 +16,17 @@ import PageHeader from "@/shared/presentation/ui/PageHeader";
 import ResizableTitle from "@/shared/presentation/ui/ResizableTable";
 import TableToolbar from "@/shared/presentation/ui/TableToolbar";
 
+/**
+ * Container for the customers list tab.
+ *
+ * @component
+ *
+ * @description
+ * Orchestrates the customers table and create/edit modals.
+ * Uses server-side pagination with debounced search.
+ * No status filter or action modal — customers have no
+ * active/inactive state.
+ */
 const CustomersListContainer: FC = () => {
     const list = useCustomersList();
     const createCustomer = useCreateCustomer(list.reload);
