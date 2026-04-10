@@ -80,12 +80,7 @@ const CategoryPricingForm: FC<ICategoryPricingFormProps> = ({ form, error, onSub
                 label="Prix (USD)"
                 rules={CategoriesValidator.priceUsd("Prix (USD)")}
             >
-                <InputNumber
-                    min={0}
-                    step={0.5}
-                    placeholder="Prix en USD"
-                    style={{ width: "100%" }}
-                />
+                <InputNumber min={0} step={0.5} placeholder="Prix en USD" />
             </Item>
         </Form>
     );
