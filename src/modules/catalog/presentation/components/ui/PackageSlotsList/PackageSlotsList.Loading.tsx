@@ -12,7 +12,12 @@ import styles from "./index.module.scss";
  * (category name + quantity + tag on the left, delete button on the right).
  */
 const PackageSlotsListLoading: FC = () => (
-    <Space direction="vertical" style={{ width: "100%" }} size="small" className={styles.packageSlotsList}>
+    <Space
+        size="small"
+        orientation="vertical"
+        style={{ width: "100%" }}
+        className={styles.packageSlotsList}
+    >
         {Array.from({ length: 3 }, (_, i) => i).map((key) => (
             <Card key={key} size="small" hoverable>
                 <Flex justify="space-between" align="center">
