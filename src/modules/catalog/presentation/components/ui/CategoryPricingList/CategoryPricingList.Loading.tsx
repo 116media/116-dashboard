@@ -12,7 +12,12 @@ import styles from "./index.module.scss";
  * cards (tier name + price on the left, action buttons on the right).
  */
 const CategoryPricingListLoading: FC = () => (
-    <Space direction="vertical" style={{ width: "100%" }} size="small" className={styles.categoryPricingList}>
+    <Space
+        size="small"
+        orientation="vertical"
+        style={{ width: "100%" }}
+        className={styles.categoryPricingList}
+    >
         {Array.from({ length: 3 }, (_, i) => i).map((key) => (
             <Card key={key} size="small" hoverable>
                 <Flex justify="space-between" align="center">
