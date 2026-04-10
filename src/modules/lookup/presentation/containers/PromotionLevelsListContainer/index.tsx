@@ -1,5 +1,5 @@
 import { Table } from "antd";
-import { type FC, useCallback, useState } from "react";
+import type { FC } from "react";
 import { useAuthorization } from "@/modules/auth/presentation/hooks/UseAuthorization";
 import type { IPromotionLevelEntity } from "@/modules/lookup/domain/entities/IPromotionLevelEntity";
 import PromotionLevelForm from "@/modules/lookup/presentation/components/forms/PromotionLevelForm";
@@ -8,6 +8,7 @@ import { promotionLevelsTableColumns } from "@/modules/lookup/presentation/compo
 import PromotionLevelActionModal from "@/modules/lookup/presentation/components/ui/PromotionLevelActionModal";
 import { PROMOTION_LEVEL_STATUS_OPTIONS } from "@/modules/lookup/presentation/constants/lookup.promotion-levels.status";
 import { useCreatePromotionLevel } from "@/modules/lookup/presentation/hooks/UseCreatePromotionLevel";
+import { useLookupModals } from "@/modules/lookup/presentation/hooks/UseLookupModals";
 import { usePromotionLevelActions } from "@/modules/lookup/presentation/hooks/UsePromotionLevelActions";
 import { usePromotionLevelsList } from "@/modules/lookup/presentation/hooks/UsePromotionLevelsList";
 import { useUpdatePromotionLevel } from "@/modules/lookup/presentation/hooks/UseUpdatePromotionLevel";
@@ -31,52 +32,14 @@ import TableToolbar from "@/shared/presentation/ui/TableToolbar";
  */
 const PromotionLevelsListContainer: FC = () => {
     const list = usePromotionLevelsList();
+    const modals = useLookupModals<IPromotionLevelEntity, PromotionLevelAction>();
     const createPromotionLevel = useCreatePromotionLevel(list.reload);
-    const [selectedEntity, setSelectedEntity] = useState<IPromotionLevelEntity | null>(null);
-    const updatePromotionLevel = useUpdatePromotionLevel(selectedEntity, list.reload);
+    const updatePromotionLevel = useUpdatePromotionLevel(modals.selectedEntity, list.reload);
     const actions = usePromotionLevelActions(list.reload);
-
-    const [createOpen, setCreateOpen] = useState(false);
-    const [editOpen, setEditOpen] = useState(false);
-    const [actionOpen, setActionOpen] = useState(false);
-    const [currentAction, setCurrentAction] = useState<PromotionLevelAction | null>(null);
-
     const { isSuperAdmin } = useAuthorization();
 
-    const handleAction = useCallback(
-        (action: PromotionLevelAction, entity: IPromotionLevelEntity) => {
-            setSelectedEntity(entity);
-
-            switch (action) {
-                case "edit":
-                    setEditOpen(true);
-                    break;
-                default:
-                    setCurrentAction(action);
-                    setActionOpen(true);
-                    break;
-            }
-        },
-        []
-    );
-
-    const handleActionConfirm = async () => {
-        if (!selectedEntity || !currentAction) return;
-
-        const actionMap = {
-            activate: actions.onActivate,
-            deactivate: actions.onDeactivate
-        } as const;
-
-        const handler = actionMap[currentAction as keyof typeof actionMap];
-        if (handler) {
-            await handler(selectedEntity.id);
-            setActionOpen(false);
-        }
-    };
-
     const { columns: tableColumns } = useResizableColumns(
-        promotionLevelsTableColumns(handleAction, isSuperAdmin)
+        promotionLevelsTableColumns(modals.handleAction, isSuperAdmin)
     );
 
     return (
@@ -87,7 +50,7 @@ const PromotionLevelsListContainer: FC = () => {
                 title="Niveaux de promotion"
                 subtitle="Gérer les niveaux de promotion disponibles."
                 icon={<IconStarOutlined />}
-                onCreate={isSuperAdmin ? () => setCreateOpen(true) : undefined}
+                onCreate={isSuperAdmin ? () => modals.setCreateOpen(true) : undefined}
                 createLabel="Créer une promotion"
             />
 
@@ -112,21 +75,21 @@ const PromotionLevelsListContainer: FC = () => {
                 pagination={{ showSizeChanger: true, defaultPageSize: 10 }}
             />
 
-            {createOpen && (
+            {modals.createOpen && (
                 <CreateEditModal
                     width={420}
-                    open={createOpen}
+                    open={modals.createOpen}
                     formContext="CREATE"
                     loading={createPromotionLevel.loading}
                     success={createPromotionLevel.success}
-                    onClose={() => setCreateOpen(false)}
+                    onClose={() => modals.setCreateOpen(false)}
                     onSubmit={() => createPromotionLevel.form.submit()}
                     title={{
                         create: "Créer un niveau de promotion",
                         edit: "Modifier le niveau de promotion"
                     }}
                     onSuccessClose={() => {
-                        setCreateOpen(false);
+                        modals.setCreateOpen(false);
                         createPromotionLevel.resetCreate();
                         list.reload();
                     }}
@@ -140,15 +103,15 @@ const PromotionLevelsListContainer: FC = () => {
                 </CreateEditModal>
             )}
 
-            {editOpen && (
+            {modals.editOpen && (
                 <CreateEditModal
                     width={420}
-                    open={editOpen}
+                    open={modals.editOpen}
                     formContext="EDIT"
                     loading={updatePromotionLevel.loading}
                     success={updatePromotionLevel.success}
                     onClose={() => {
-                        setEditOpen(false);
+                        modals.setEditOpen(false);
                         updatePromotionLevel.resetUpdate();
                     }}
                     onSubmit={() => updatePromotionLevel.form.submit()}
@@ -157,7 +120,7 @@ const PromotionLevelsListContainer: FC = () => {
                         edit: "Modifier le niveau de promotion"
                     }}
                     onSuccessClose={() => {
-                        setEditOpen(false);
+                        modals.setEditOpen(false);
                         updatePromotionLevel.resetUpdate();
                         list.reload();
                     }}
@@ -166,20 +129,25 @@ const PromotionLevelsListContainer: FC = () => {
                         formContext="EDIT"
                         form={updatePromotionLevel.form}
                         error={updatePromotionLevel.error}
-                        initialValues={selectedEntity}
+                        initialValues={modals.selectedEntity}
                         onSubmit={updatePromotionLevel.onSubmit}
                     />
                 </CreateEditModal>
             )}
 
             <PromotionLevelActionModal
-                open={actionOpen}
+                open={modals.actionOpen}
                 error={actions.error}
-                action={currentAction}
+                action={modals.currentAction}
                 loading={actions.loading}
-                promotionLevel={selectedEntity}
-                onConfirm={handleActionConfirm}
-                onCancel={() => setActionOpen(false)}
+                promotionLevel={modals.selectedEntity}
+                onConfirm={() =>
+                    modals.handleActionConfirm({
+                        activate: actions.onActivate,
+                        deactivate: actions.onDeactivate
+                    })
+                }
+                onCancel={() => modals.setActionOpen(false)}
             />
         </>
     );
