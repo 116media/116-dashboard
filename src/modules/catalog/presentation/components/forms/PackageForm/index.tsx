@@ -71,12 +71,7 @@ const PackageForm: FC<IPackageFormProps> = ({ form, error, onSubmit }) => {
                 label="Prix forfaitaire (USD)"
                 rules={PackagesValidator.flatPriceUsd("Prix forfaitaire")}
             >
-                <InputNumber
-                    min={0}
-                    step={0.5}
-                    placeholder="Prix forfaitaire en USD"
-                    style={{ width: "100%" }}
-                />
+                <InputNumber min={0} step={0.5} placeholder="Prix forfaitaire en USD" />
             </Item>
         </Form>
     );
