@@ -41,7 +41,13 @@ interface IPackageSlotsPanelProps {
  * @param {IPackageSlotsPanelProps} props - Component props
  * @returns {JSX.Element} The slots management drawer
  */
-const PackageSlotsPanel: FC<IPackageSlotsPanelProps> = ({ open, loading, bundle, onClose, onSuccess }) => {
+const PackageSlotsPanel: FC<IPackageSlotsPanelProps> = ({
+    open,
+    loading,
+    bundle,
+    onClose,
+    onSuccess
+}) => {
     const addSlot = useAddPackageSlot(bundle?.id ?? null, onSuccess);
     const manageSlots = useManagePackageSlots(bundle?.id ?? null, onSuccess);
 
