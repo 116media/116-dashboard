@@ -1,53 +1,65 @@
-import { Button, Drawer, Flex, InputNumber, List, Popconfirm, Typography } from "antd";
-import { type FC, useState } from "react";
+import { Button, Card, Drawer, Flex, Typography } from "antd";
+import type { FC } from "react";
 import type { ICategoryEntity } from "@/modules/catalog/domain/entities/ICategoryEntity";
-import type { ICategoryPricingEntity } from "@/modules/catalog/domain/entities/ICategoryPricingEntity";
 import CategoryPricingForm from "@/modules/catalog/presentation/components/forms/CategoryPricingForm";
+import CategoryPricingList from "@/modules/catalog/presentation/components/ui/CategoryPricingList";
+import CategoryPricingListLoading from "@/modules/catalog/presentation/components/ui/CategoryPricingList/CategoryPricingList.Loading";
 import { useAddCategoryPricing } from "@/modules/catalog/presentation/hooks/UseAddCategoryPricing";
 import { useManageCategoryPricing } from "@/modules/catalog/presentation/hooks/UseManageCategoryPricing";
 import ErrorAlert from "@/shared/presentation/ui/ErrorAlert";
-import { IconDeleteFilled, IconEditOutlined } from "@/shared/presentation/ui/Icons";
 
-const { Text, Title } = Typography;
+const { Title } = Typography;
 
+/**
+ * Props for the CategoryPricingPanel component.
+ *
+ * @interface ICategoryPricingPanelProps
+ * @property {boolean} open - Whether the drawer is visible
+ * @property {ICategoryEntity | null} category - The category to manage pricing for
+ * @property {() => void} onClose - Closes the drawer
+ * @property {boolean} loading - Whether the category data is being refreshed
+ * @property {() => void} onSuccess - Callback after a successful add/update/remove
+ */
 interface ICategoryPricingPanelProps {
     open: boolean;
+    loading: boolean;
     onClose: () => void;
     onSuccess: () => void;
     category: ICategoryEntity | null;
 }
 
+/**
+ * Drawer panel for managing category pricing tiers.
+ *
+ * @component
+ *
+ * @description
+ * Displays existing pricing tiers via `CategoryPricingList` with
+ * inline edit and delete.
+ *
+ * @param {ICategoryPricingPanelProps} props - Component props
+ * @returns {JSX.Element} The pricing management drawer
+ */
 const CategoryPricingPanel: FC<ICategoryPricingPanelProps> = ({
     open,
+    loading,
     category,
     onClose,
     onSuccess
 }) => {
     const addPricing = useAddCategoryPricing(category?.id ?? null, onSuccess);
     const managePricing = useManageCategoryPricing(category?.id ?? null, onSuccess);
-    const [editingId, setEditingId] = useState<string | null>(null);
-    const [editValue, setEditValue] = useState<number>(0);
 
-    const handleStartEdit = (pricing: ICategoryPricingEntity) => {
-        setEditingId(pricing.tierId);
-        setEditValue(pricing.priceUsd);
-    };
-
-    const handleSaveEdit = async (pricingId: string) => {
-        await managePricing.onUpdatePricing(pricingId, { priceUsd: editValue });
-        setEditingId(null);
-    };
-
-    const handleCancelEdit = () => {
-        setEditingId(null);
+    const handleUpdate = async (pricingId: string, priceUsd: number) => {
+        await managePricing.onUpdatePricing(pricingId, { priceUsd });
     };
 
     return (
         <Drawer
+            size={520}
             open={open}
-            width={480}
+            destroyOnHidden
             onClose={onClose}
-            destroyOnClose
             title={`Tarifs — ${category?.name ?? ""}`}
         >
             <ErrorAlert error={addPricing.error} showIcon closable banner={false} />
@@ -56,97 +68,40 @@ const CategoryPricingPanel: FC<ICategoryPricingPanelProps> = ({
 
             <Title level={5}>Tarifs existants</Title>
 
-            <List
-                size="small"
-                dataSource={category?.pricing ?? []}
-                locale={{ emptyText: "Aucun tarif configuré" }}
-                renderItem={(pricing: ICategoryPricingEntity) => (
-                    <List.Item
-                        actions={
-                            editingId === pricing.tierId
-                                ? [
-                                      <Button
-                                          key="save"
-                                          type="link"
-                                          size="small"
-                                          loading={managePricing.updateLoading}
-                                          onClick={() => handleSaveEdit(pricing.tierId)}
-                                      >
-                                          Enregistrer
-                                      </Button>,
-                                      <Button
-                                          key="cancel"
-                                          type="link"
-                                          size="small"
-                                          onClick={handleCancelEdit}
-                                      >
-                                          Annuler
-                                      </Button>
-                                  ]
-                                : [
-                                      <Button
-                                          key="edit"
-                                          type="text"
-                                          size="small"
-                                          icon={<IconEditOutlined />}
-                                          onClick={() => handleStartEdit(pricing)}
-                                      />,
-                                      <Popconfirm
-                                          key="delete"
-                                          title="Supprimer ce tarif ?"
-                                          onConfirm={() =>
-                                              managePricing.onRemovePricing(pricing.tierId)
-                                          }
-                                          okText="Oui"
-                                          cancelText="Non"
-                                      >
-                                          <Button
-                                              type="text"
-                                              size="small"
-                                              danger
-                                              loading={managePricing.removeLoading}
-                                              icon={<IconDeleteFilled />}
-                                          />
-                                      </Popconfirm>
-                                  ]
-                        }
-                    >
-                        <Flex gap={8} align="center" flex={1}>
-                            <Text strong>{pricing.tierName}</Text>
-                            {editingId === pricing.tierId ? (
-                                <InputNumber
-                                    min={0}
-                                    step={0.5}
-                                    size="small"
-                                    value={editValue}
-                                    onChange={(v) => setEditValue(v ?? 0)}
-                                    style={{ width: 100 }}
-                                />
-                            ) : (
-                                <Text type="secondary">{pricing.priceUsd.toFixed(2)} $</Text>
-                            )}
-                        </Flex>
-                    </List.Item>
+            <Flex orientation="vertical">
+                {loading ? (
+                    <CategoryPricingListLoading />
+                ) : (
+                    <CategoryPricingList
+                        pricing={category?.pricing ?? []}
+                        updateLoading={managePricing.updateLoading}
+                        removeLoading={managePricing.removeLoading}
+                        onUpdate={handleUpdate}
+                        onRemove={managePricing.onRemovePricing}
+                    />
                 )}
-            />
 
-            <Title level={5} style={{ marginTop: 24 }}>
-                Ajouter un tarif
-            </Title>
+                <Title level={5} style={{ marginTop: 24 }}>
+                    Ajouter un tarif
+                </Title>
+                <Card>
+                    <CategoryPricingForm
+                        form={addPricing.form}
+                        error={addPricing.error}
+                        onSubmit={addPricing.onSubmit}
+                    />
 
-            <CategoryPricingForm
-                form={addPricing.form}
-                error={addPricing.error}
-                onSubmit={addPricing.onSubmit}
-            />
-
-            <Button
-                type="primary"
-                loading={addPricing.loading}
-                onClick={() => addPricing.form.submit()}
-            >
-                Ajouter
-            </Button>
+                    <Flex justify="end">
+                        <Button
+                            type="primary"
+                            loading={addPricing.loading}
+                            onClick={() => addPricing.form.submit()}
+                        >
+                            Ajouter
+                        </Button>
+                    </Flex>
+                </Card>
+            </Flex>
         </Drawer>
     );
 };
