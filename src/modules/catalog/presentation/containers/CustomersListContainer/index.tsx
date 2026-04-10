@@ -1,11 +1,10 @@
 import { Table } from "antd";
-import { type FC, useCallback, useState } from "react";
+import type { FC } from "react";
 import { useAuthorization } from "@/modules/auth/presentation/hooks/UseAuthorization";
-import type { ICustomerEntity } from "@/modules/catalog/domain/entities/ICustomerEntity";
 import CustomerForm from "@/modules/catalog/presentation/components/forms/CustomerForm";
-import type { CustomerAction } from "@/modules/catalog/presentation/components/tables/CustomersTable/columns";
 import { customersTableColumns } from "@/modules/catalog/presentation/components/tables/CustomersTable/columns";
 import { useCreateCustomer } from "@/modules/catalog/presentation/hooks/UseCreateCustomer";
+import { useCustomerModals } from "@/modules/catalog/presentation/hooks/UseCustomerModals";
 import { useCustomersList } from "@/modules/catalog/presentation/hooks/UseCustomersList";
 import { useUpdateCustomer } from "@/modules/catalog/presentation/hooks/UseUpdateCustomer";
 import { useResizableColumns } from "@/shared/presentation/hooks/UseResizableColumns";
@@ -29,22 +28,13 @@ import TableToolbar from "@/shared/presentation/ui/TableToolbar";
  */
 const CustomersListContainer: FC = () => {
     const list = useCustomersList();
+    const modals = useCustomerModals();
     const createCustomer = useCreateCustomer(list.reload);
-    const [selectedEntity, setSelectedEntity] = useState<ICustomerEntity | null>(null);
-    const updateCustomer = useUpdateCustomer(selectedEntity, list.reload);
-
-    const [createOpen, setCreateOpen] = useState(false);
-    const [editOpen, setEditOpen] = useState(false);
-
+    const updateCustomer = useUpdateCustomer(modals.selectedEntity, list.reload);
     const { isAdminOrSuperAdmin } = useAuthorization();
 
-    const handleAction = useCallback((_action: CustomerAction, entity: ICustomerEntity) => {
-        setSelectedEntity(entity);
-        setEditOpen(true);
-    }, []);
-
     const { columns: tableColumns } = useResizableColumns(
-        customersTableColumns(handleAction, isAdminOrSuperAdmin)
+        customersTableColumns(modals.handleAction, isAdminOrSuperAdmin)
     );
 
     return (
@@ -55,7 +45,7 @@ const CustomersListContainer: FC = () => {
                 title="Clients"
                 subtitle="Gérer les clients B2B."
                 icon={<IconTeamOutlined />}
-                onCreate={isAdminOrSuperAdmin ? () => setCreateOpen(true) : undefined}
+                onCreate={isAdminOrSuperAdmin ? () => modals.setCreateOpen(true) : undefined}
                 createLabel="Créer un client"
             />
 
@@ -69,12 +59,12 @@ const CustomersListContainer: FC = () => {
 
             <Table
                 rowKey="id"
-                loading={list.loading}
-                dataSource={list.customers?.items ?? []}
                 columns={tableColumns}
+                loading={list.loading}
+                scroll={{ x: "max-content" }}
+                dataSource={list.customers?.items ?? []}
                 components={{ header: { cell: ResizableTitle } }}
                 rowSelection={{ type: "checkbox", columnWidth: 36 }}
-                scroll={{ x: "max-content" }}
                 pagination={{
                     showSizeChanger: true,
                     current: (list.customers?.pageIndex ?? 0) + 1,
@@ -84,21 +74,21 @@ const CustomersListContainer: FC = () => {
                 }}
             />
 
-            {createOpen && (
+            {modals.createOpen && (
                 <CreateEditModal
                     width={520}
-                    open={createOpen}
+                    open={modals.createOpen}
                     formContext="CREATE"
                     loading={createCustomer.loading}
                     success={createCustomer.success}
-                    onClose={() => setCreateOpen(false)}
+                    onClose={() => modals.setCreateOpen(false)}
                     onSubmit={() => createCustomer.form.submit()}
                     title={{
                         create: "Créer un client",
                         edit: "Modifier le client"
                     }}
                     onSuccessClose={() => {
-                        setCreateOpen(false);
+                        modals.setCreateOpen(false);
                         createCustomer.resetCreate();
                         list.reload();
                     }}
@@ -112,15 +102,15 @@ const CustomersListContainer: FC = () => {
                 </CreateEditModal>
             )}
 
-            {editOpen && (
+            {modals.editOpen && (
                 <CreateEditModal
                     width={520}
-                    open={editOpen}
+                    open={modals.editOpen}
                     formContext="EDIT"
                     loading={updateCustomer.loading}
                     success={updateCustomer.success}
                     onClose={() => {
-                        setEditOpen(false);
+                        modals.setEditOpen(false);
                         updateCustomer.resetUpdate();
                     }}
                     onSubmit={() => updateCustomer.form.submit()}
@@ -129,7 +119,7 @@ const CustomersListContainer: FC = () => {
                         edit: "Modifier le client"
                     }}
                     onSuccessClose={() => {
-                        setEditOpen(false);
+                        modals.setEditOpen(false);
                         updateCustomer.resetUpdate();
                         list.reload();
                     }}
@@ -138,7 +128,7 @@ const CustomersListContainer: FC = () => {
                         formContext="EDIT"
                         form={updateCustomer.form}
                         error={updateCustomer.error}
-                        initialValues={selectedEntity}
+                        initialValues={modals.selectedEntity}
                         onSubmit={updateCustomer.onSubmit}
                     />
                 </CreateEditModal>
