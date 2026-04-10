@@ -12,10 +12,11 @@ import { useCategoriesList } from "@/modules/catalog/presentation/hooks/UseCateg
 import { useCategoryActions } from "@/modules/catalog/presentation/hooks/UseCategoryActions";
 import { useCreateCategory } from "@/modules/catalog/presentation/hooks/UseCreateCategory";
 import { useUpdateCategory } from "@/modules/catalog/presentation/hooks/UseUpdateCategory";
+import { getCategoryByIdAction } from "@/modules/catalog/presentation/store/getcategorybyid.action";
 import { getContentTypesAction } from "@/modules/lookup/presentation/store/getcontenttypes.action";
 import { getPricingTiersAction } from "@/modules/lookup/presentation/store/getpricingtiers.action";
 import { useResizableColumns } from "@/shared/presentation/hooks/UseResizableColumns";
-import { useAppDispatch } from "@/shared/presentation/store/store";
+import { useAppDispatch, useAppSelector } from "@/shared/presentation/store/store";
 import CreateEditModal from "@/shared/presentation/ui/CreateEditModal";
 import ErrorAlert from "@/shared/presentation/ui/ErrorAlert";
 import { IconFolderOutlined } from "@/shared/presentation/ui/Icons";
@@ -23,9 +24,23 @@ import PageHeader from "@/shared/presentation/ui/PageHeader";
 import ResizableTitle from "@/shared/presentation/ui/ResizableTable";
 import TableToolbar from "@/shared/presentation/ui/TableToolbar";
 
+/**
+ * Container for the categories list tab.
+ *
+ * @component
+ *
+ * @description
+ * Orchestrates the categories table, create/edit modals, action
+ * confirmation modal, and pricing management drawer. Fetches
+ * lookup data (content types, pricing tiers) on mount for form
+ * Select dropdowns. Uses server-side pagination and status filtering.
+ */
 const CategoriesListContainer: FC = () => {
     const dispatch = useAppDispatch();
     const list = useCategoriesList();
+    const { loading: categoryLoading } = useAppSelector(
+        ({ catalog: { getCategoryById } }) => getCategoryById
+    );
 
     useEffect(() => {
         dispatch(getContentTypesAction());
@@ -35,6 +50,15 @@ const CategoriesListContainer: FC = () => {
     const [selectedEntity, setSelectedEntity] = useState<ICategoryEntity | null>(null);
     const updateCategory = useUpdateCategory(selectedEntity, list.reload);
     const actions = useCategoryActions(list.reload);
+
+    const refreshSelectedCategory = useCallback(async () => {
+        if (!selectedEntity) return;
+        const result = await dispatch(getCategoryByIdAction(selectedEntity.id));
+        if (getCategoryByIdAction.fulfilled.match(result)) {
+            setSelectedEntity(result.payload);
+        }
+        list.reload();
+    }, [dispatch, selectedEntity, list.reload]);
 
     const [createOpen, setCreateOpen] = useState(false);
     const [editOpen, setEditOpen] = useState(false);
@@ -191,9 +215,10 @@ const CategoriesListContainer: FC = () => {
 
             <CategoryPricingPanel
                 open={pricingOpen}
+                loading={categoryLoading}
                 category={selectedEntity}
                 onClose={() => setPricingOpen(false)}
-                onSuccess={list.reload}
+                onSuccess={refreshSelectedCategory}
             />
         </>
     );
