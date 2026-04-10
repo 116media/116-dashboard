@@ -1,19 +1,16 @@
 import { Table } from "antd";
-import { type FC, useCallback, useState } from "react";
+import type { FC } from "react";
 import { useAuthorization } from "@/modules/auth/presentation/hooks/UseAuthorization";
-import type { IPackageEntity } from "@/modules/catalog/domain/entities/IPackageEntity";
 import PackageForm from "@/modules/catalog/presentation/components/forms/PackageForm";
-import type { PackageAction } from "@/modules/catalog/presentation/components/tables/PackagesTable/columns";
 import { packagesTableColumns } from "@/modules/catalog/presentation/components/tables/PackagesTable/columns";
 import PackageActionModal from "@/modules/catalog/presentation/components/ui/PackageActionModal";
 import PackageSlotsPanel from "@/modules/catalog/presentation/components/ui/PackageSlotsPanel";
 import { PACKAGE_STATUS_OPTIONS } from "@/modules/catalog/presentation/constants/catalog.packages.status";
 import { useCreatePackage } from "@/modules/catalog/presentation/hooks/UseCreatePackage";
 import { usePackageActions } from "@/modules/catalog/presentation/hooks/UsePackageActions";
+import { usePackageModals } from "@/modules/catalog/presentation/hooks/UsePackageModals";
 import { usePackagesList } from "@/modules/catalog/presentation/hooks/UsePackagesList";
-import { getPackageByIdAction } from "@/modules/catalog/presentation/store/getpackagebyid.action";
 import { useResizableColumns } from "@/shared/presentation/hooks/UseResizableColumns";
-import { useAppDispatch, useAppSelector } from "@/shared/presentation/store/store";
 import CreateEditModal from "@/shared/presentation/ui/CreateEditModal";
 import ErrorAlert from "@/shared/presentation/ui/ErrorAlert";
 import { IconInboxOutlined } from "@/shared/presentation/ui/Icons";
@@ -33,58 +30,14 @@ import TableToolbar from "@/shared/presentation/ui/TableToolbar";
  * slot management. Uses server-side pagination and status filtering.
  */
 const PackagesListContainer: FC = () => {
-    const dispatch = useAppDispatch();
     const list = usePackagesList();
-    const { loading: packageLoading } = useAppSelector(
-        ({ catalog: { getPackageById } }) => getPackageById
-    );
+    const modals = usePackageModals(list.reload);
     const createPackage = useCreatePackage(list.reload);
     const actions = usePackageActions(list.reload);
-
-    const [selectedEntity, setSelectedEntity] = useState<IPackageEntity | null>(null);
-    const [createOpen, setCreateOpen] = useState(false);
-    const [actionOpen, setActionOpen] = useState(false);
-    const [slotsOpen, setSlotsOpen] = useState(false);
-    const [currentAction, setCurrentAction] = useState<PackageAction | null>(null);
-
     const { isSuperAdmin, isAdminOrSuperAdmin } = useAuthorization();
 
-    const refreshSelectedPackage = useCallback(async () => {
-        if (!selectedEntity) return;
-        const result = await dispatch(getPackageByIdAction(selectedEntity.id));
-        if (getPackageByIdAction.fulfilled.match(result)) {
-            setSelectedEntity(result.payload);
-        }
-        list.reload();
-    }, [dispatch, selectedEntity, list.reload]);
-
-    const handleAction = useCallback((action: PackageAction, entity: IPackageEntity) => {
-        setSelectedEntity(entity);
-
-        if (action === "manageSlots") setSlotsOpen(true);
-        else {
-            setCurrentAction(action);
-            setActionOpen(true);
-        }
-    }, []);
-
-    const handleActionConfirm = async () => {
-        if (!selectedEntity || !currentAction) return;
-
-        const actionMap = {
-            activate: actions.onActivate,
-            deactivate: actions.onDeactivate
-        } as const;
-
-        const handler = actionMap[currentAction as keyof typeof actionMap];
-        if (handler) {
-            await handler(selectedEntity.id);
-            setActionOpen(false);
-        }
-    };
-
     const { columns: tableColumns } = useResizableColumns(
-        packagesTableColumns(handleAction, isSuperAdmin, isAdminOrSuperAdmin)
+        packagesTableColumns(modals.handleAction, isSuperAdmin, isAdminOrSuperAdmin)
     );
 
     return (
@@ -95,7 +48,7 @@ const PackagesListContainer: FC = () => {
                 title="Packages"
                 subtitle="Gérer les offres groupées."
                 icon={<IconInboxOutlined />}
-                onCreate={isSuperAdmin ? () => setCreateOpen(true) : undefined}
+                onCreate={isSuperAdmin ? () => modals.setCreateOpen(true) : undefined}
                 createLabel="Créer un package"
             />
 
@@ -126,21 +79,21 @@ const PackagesListContainer: FC = () => {
                 }}
             />
 
-            {createOpen && (
+            {modals.createOpen && (
                 <CreateEditModal
                     width={480}
-                    open={createOpen}
+                    open={modals.createOpen}
                     formContext="CREATE"
                     loading={createPackage.loading}
                     success={createPackage.success}
-                    onClose={() => setCreateOpen(false)}
+                    onClose={() => modals.setCreateOpen(false)}
                     onSubmit={() => createPackage.form.submit()}
                     title={{
                         create: "Créer un package",
                         edit: "Modifier le package"
                     }}
                     onSuccessClose={() => {
-                        setCreateOpen(false);
+                        modals.setCreateOpen(false);
                         createPackage.resetCreate();
                         list.reload();
                     }}
@@ -154,21 +107,26 @@ const PackagesListContainer: FC = () => {
             )}
 
             <PackageActionModal
-                open={actionOpen}
-                bundle={selectedEntity}
-                action={currentAction}
+                open={modals.actionOpen}
+                bundle={modals.selectedEntity}
+                action={modals.currentAction}
                 loading={actions.loading}
                 error={actions.error}
-                onConfirm={handleActionConfirm}
-                onCancel={() => setActionOpen(false)}
+                onConfirm={() =>
+                    modals.handleActionConfirm({
+                        activate: actions.onActivate,
+                        deactivate: actions.onDeactivate
+                    })
+                }
+                onCancel={() => modals.setActionOpen(false)}
             />
 
             <PackageSlotsPanel
-                open={slotsOpen}
-                loading={packageLoading}
-                bundle={selectedEntity}
-                onClose={() => setSlotsOpen(false)}
-                onSuccess={refreshSelectedPackage}
+                open={modals.slotsOpen}
+                loading={modals.refreshLoading}
+                bundle={modals.selectedEntity}
+                onClose={() => modals.setSlotsOpen(false)}
+                onSuccess={modals.refreshSelectedEntity}
             />
         </>
     );
