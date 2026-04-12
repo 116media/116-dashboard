@@ -5,6 +5,7 @@ import type { Result } from "@/shared/domain/results/result";
 
 /**
  * @interface IDeactivateCategoryUseCase
+ * @extends {IResultUseCase<string, ICategoryEntity>}
  */
 interface IDeactivateCategoryUseCase extends IResultUseCase<string, ICategoryEntity> {}
 
@@ -13,6 +14,10 @@ interface IDeactivateCategoryUseCase extends IResultUseCase<string, ICategoryEnt
  *
  * @class DeactivateCategoryUseCase
  * @implements {IDeactivateCategoryUseCase}
+ *
+ * @description
+ * Deactivates an active category, hiding it from public visibility
+ * via the catalog repository.
  */
 export class DeactivateCategoryUseCase implements IDeactivateCategoryUseCase {
     private readonly catalogRepository: ICatalogRepositoryPort;
@@ -23,7 +28,10 @@ export class DeactivateCategoryUseCase implements IDeactivateCategoryUseCase {
         this.catalogRepository = catalogRepository;
     }
     /**
-     * Executes the deactivating a category use case.
+     * Executes the deactivate category use case.
+     *
+     * @param {string} id - The unique identifier of the category to deactivate
+     * @returns {Promise<Result<ICategoryEntity>>} `ok(ICategoryEntity)` on success, `err(Failure)` on failure
      */
     async execute(id: string): Promise<Result<ICategoryEntity>> {
         return this.catalogRepository.deactivateCategory(id);
