@@ -50,4 +50,4 @@ One shared port instead of 3 separate ports because:
 
 ## TODO
 
-- [ ] Create `catalog.repository.port.ts` with JSDoc on the interface and every method
+- [x] Create `catalog.repository.port.ts` with JSDoc on the interface and every method
