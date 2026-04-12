@@ -5,6 +5,7 @@ import type { Result } from "@/shared/domain/results/result";
 
 /**
  * @interface IUpdateCategoryPricingUseCase
+ * @extends {IResultUseCase<{ categoryId: string; pricingId: string; data: { priceUsd: number } }, ICategoryPricingEntity>}
  */
 interface IUpdateCategoryPricingUseCase
     extends IResultUseCase<
@@ -17,6 +18,10 @@ interface IUpdateCategoryPricingUseCase
  *
  * @class UpdateCategoryPricingUseCase
  * @implements {IUpdateCategoryPricingUseCase}
+ *
+ * @description
+ * Updates the USD price of an existing pricing tier on a category
+ * via the catalog repository.
  */
 export class UpdateCategoryPricingUseCase implements IUpdateCategoryPricingUseCase {
     private readonly catalogRepository: ICatalogRepositoryPort;
@@ -27,7 +32,10 @@ export class UpdateCategoryPricingUseCase implements IUpdateCategoryPricingUseCa
         this.catalogRepository = catalogRepository;
     }
     /**
-     * Executes the updating a category pricing tier use case.
+     * Executes the update category pricing use case.
+     *
+     * @param {object} params - The category ID, pricing ID, and updated price data
+     * @returns {Promise<Result<ICategoryPricingEntity>>} `ok(ICategoryPricingEntity)` on success, `err(Failure)` on failure
      */
     async execute(params: {
         categoryId: string;
