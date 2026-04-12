@@ -6,6 +6,7 @@ import type { IPaginatedResult } from "@/shared/domain/types/pagination";
 
 /**
  * @interface IGetAllCustomersUseCase
+ * @extends {IResultUseCase<{ pageIndex: number; pageSize: number; search?: string }, IPaginatedResult<ICustomerEntity>>}
  */
 interface IGetAllCustomersUseCase
     extends IResultUseCase<
@@ -18,6 +19,10 @@ interface IGetAllCustomersUseCase
  *
  * @class GetAllCustomersUseCase
  * @implements {IGetAllCustomersUseCase}
+ *
+ * @description
+ * Retrieves a paginated list of customers with optional search filtering
+ * via the catalog repository.
  */
 export class GetAllCustomersUseCase implements IGetAllCustomersUseCase {
     private readonly catalogRepository: ICatalogRepositoryPort;
@@ -28,7 +33,10 @@ export class GetAllCustomersUseCase implements IGetAllCustomersUseCase {
         this.catalogRepository = catalogRepository;
     }
     /**
-     * Executes the fetching all customers use case.
+     * Executes the get all customers use case.
+     *
+     * @param {object} params - Pagination and search parameters
+     * @returns {Promise<Result<IPaginatedResult<ICustomerEntity>>>} `ok(IPaginatedResult<ICustomerEntity>)` on success, `err(Failure)` on failure
      */
     async execute(params: {
         pageIndex: number;
