@@ -4,7 +4,7 @@
 
 B2B revenue lifecycle: **orders** and **payments**.
 
-> **Status:** Planned — depends on Catalogue module (customers, categories, packages) being implemented first.
+> **Status:** Planned — Catalogue dependency is now complete (categories, customers, packages). Ready for implementation.
 
 ## Overview
 
