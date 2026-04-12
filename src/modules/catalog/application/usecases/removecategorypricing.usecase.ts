@@ -4,6 +4,7 @@ import type { Result } from "@/shared/domain/results/result";
 
 /**
  * @interface IRemoveCategoryPricingUseCase
+ * @extends {IResultUseCase<{ categoryId: string; pricingId: string }, { isSuccess: boolean }>}
  */
 interface IRemoveCategoryPricingUseCase
     extends IResultUseCase<{ categoryId: string; pricingId: string }, { isSuccess: boolean }> {}
@@ -13,6 +14,10 @@ interface IRemoveCategoryPricingUseCase
  *
  * @class RemoveCategoryPricingUseCase
  * @implements {IRemoveCategoryPricingUseCase}
+ *
+ * @description
+ * Removes an existing pricing tier from a category
+ * via the catalog repository.
  */
 export class RemoveCategoryPricingUseCase implements IRemoveCategoryPricingUseCase {
     private readonly catalogRepository: ICatalogRepositoryPort;
@@ -23,7 +28,10 @@ export class RemoveCategoryPricingUseCase implements IRemoveCategoryPricingUseCa
         this.catalogRepository = catalogRepository;
     }
     /**
-     * Executes the removing a pricing tier from a category use case.
+     * Executes the remove category pricing use case.
+     *
+     * @param {object} params - The category ID and pricing ID to remove
+     * @returns {Promise<Result<{ isSuccess: boolean }>>} `ok({ isSuccess: boolean })` on success, `err(Failure)` on failure
      */
     async execute(params: {
         categoryId: string;
