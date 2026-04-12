@@ -124,6 +124,6 @@ Custom hooks following the paginated-list / actions / create / update pattern pe
 
 ## TODO
 
-- [ ] Create 6 category hooks with JSDoc
-- [ ] Create 3 customer hooks with JSDoc
-- [ ] Create 5 package hooks with JSDoc
+- [x] Create 6 category hooks with JSDoc
+- [x] Create 3 customer hooks with JSDoc
+- [x] Create 5 package hooks with JSDoc
