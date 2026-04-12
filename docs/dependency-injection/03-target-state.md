@@ -50,16 +50,13 @@ import { GetRolesUseCase } from "@/platform/settings/application/usecases/get-ro
 const container = createContainer({ injectionMode: "PROXY" });
 
 container.register({
-  // ── Data Sources ────────────────────────────────────────────────────────────
   deviceStorageDataSource: asClass(DeviceStorageDataSource).singleton(),
 
-  // ── Repositories (singletons — one instance per app lifetime) ───────────────
   authRepository:     asClass(AuthRepositoryImpl).singleton(),
   sessionRepository:  asClass(SessionRepositoryImpl).singleton(),
   settingsRepository: asClass(SettingsRepositoryImpl).singleton(),
   deviceRepository:   asClass(DeviceRepositoryImpl).singleton(),
 
-  // ── Auth Use Cases ──────────────────────────────────────────────────────────
   loginUseCase:          asClass(LoginUseCase).transient(),
   forgotPasswordUseCase: asClass(ForgotPasswordUseCase).transient(),
   verifyOtpUseCase:      asClass(VerifyOtpUseCase).transient(),
@@ -68,12 +65,10 @@ container.register({
   signOutUseCase:        asClass(SignOutUseCase).transient(),
   signOutAllUseCase:     asClass(SignOutAllUseCase).transient(),
 
-  // ── Session Use Cases ───────────────────────────────────────────────────────
   refreshTokenUseCase:   asClass(RefreshTokenUseCase).transient(),
   getSessionsUseCase:    asClass(GetSessionsUseCase).transient(),
   revokeSessionUseCase:  asClass(RevokeSessionUseCase).transient(),
 
-  // ── Settings Use Cases ──────────────────────────────────────────────────────
   getProfileUseCase:     asClass(GetProfileUseCase).transient(),
   updateAccountUseCase:  asClass(UpdateAccountUseCase).transient(),
   updateAvatarUseCase:   asClass(UpdateAvatarUseCase).transient(),
