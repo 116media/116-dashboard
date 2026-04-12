@@ -150,7 +150,7 @@ export interface AdminAddItemTierResponse {
 }
 
 export interface AdminAddOrderItemRequest {
-  contentKind: "Article" | "Video" | "Short";
+  contentKind: EnumCoreContentType;
   categoryId: string;
   /** @format uuid */
   promotionLevelId?: string | null;
@@ -1028,14 +1028,7 @@ export interface ArticleDetailDto {
   body: string;
   coverImageUrl?: string | null;
   authorId: string;
-  status:
-    | "Draft"
-    | "PendingPayment"
-    | "PendingReview"
-    | "Approved"
-    | "Published"
-    | "Rejected"
-    | "Archived";
+  status: EnumContentStatus;
   rejectionReason?: string | null;
   isFeatured: boolean;
   /** @format date-time */
@@ -1055,7 +1048,7 @@ export interface ArticleImageDto {
   id: string;
   url: string;
   storageKey: string;
-  imageType: "Cover" | "Body";
+  imageType: EnumArticleImageType;
 }
 
 export interface ArticleSummaryDto {
@@ -1075,14 +1068,7 @@ export interface ArticleSummaryDto {
   headline: string;
   coverImageUrl?: string | null;
   authorId: string;
-  status:
-    | "Draft"
-    | "PendingPayment"
-    | "PendingReview"
-    | "Approved"
-    | "Published"
-    | "Rejected"
-    | "Archived";
+  status: EnumContentStatus;
   isFeatured: boolean;
   /** @format date-time */
   publishedAt?: string | null;
@@ -1172,7 +1158,7 @@ export interface ContentOrderDetailDto {
   /** @format uuid */
   id: string;
   customerName: string;
-  status: "Draft" | "PendingPayment" | "Paid" | "Cancelled";
+  status: EnumOrderStatus;
   /** @format double */
   totalAmountUsd: number;
   items: OrderItemDto[];
@@ -1189,7 +1175,7 @@ export interface ContentOrderSummaryDto {
   /** @format uuid */
   id: string;
   customerName: string;
-  status: "Draft" | "PendingPayment" | "Paid" | "Cancelled";
+  status: EnumOrderStatus;
   /** @format double */
   totalAmountUsd: number;
   /** @format int32 */
@@ -1336,7 +1322,7 @@ export interface LyricsDtoPaginatedResult {
 export interface OrderItemDto {
   /** @format uuid */
   id: string;
-  contentKind: "Article" | "Video" | "Short";
+  contentKind: EnumCoreContentType;
   categoryName: string;
   promotionLevelName?: string | null;
   /** @format double */
@@ -1391,7 +1377,7 @@ export interface PaymentDto {
   amountUsd: number;
   paymentMethod?: EnumPaymentMethod | null;
   paymentProof?: FileDto | null;
-  status: "Pending" | "Verified" | "Rejected";
+  status: EnumPaymentStatus;
   /** @format uuid */
   verifiedBy?: string | null;
   /** @format date-time */
@@ -1855,36 +1841,10 @@ export interface SessionDto {
   id: string;
   ipAddress?: string | null;
   userAgent?: string | null;
-  browser:
-    | "Chrome"
-    | "InternetExplorer"
-    | "Safari"
-    | "Firefox"
-    | "Edge"
-    | "Opera"
-    | "GoogleSearchApp"
-    | "Samsung"
-    | "Unknown";
-  device:
-    | "Desktop"
-    | "Tablet"
-    | "Mobile"
-    | "Watch"
-    | "Tv"
-    | "Console"
-    | "Car"
-    | "IoT"
-    | "Unknown";
-  platform:
-    | "Windows"
-    | "Mac"
-    | "Ios"
-    | "IpadOs"
-    | "Linux"
-    | "Android"
-    | "ChromeOs"
-    | "Unknown";
-  client: "MobileApp" | "WebApp" | "Dashboard" | "Unknown";
+  browser: EnumBrowser;
+  device: EnumDevice;
+  platform: EnumPlatform;
+  client: EnumClient;
   /** @format date-time */
   expiresAt: string;
   isActive: boolean;
@@ -1956,7 +1916,7 @@ export interface UserResponseDto {
   userName: string;
   roles: RoleDto[];
   permissions: PermissionDto[];
-  authProvider: "Local" | "Google" | "Facebook";
+  authProvider: EnumAuthProvider;
   isVerified: boolean;
   isActive: boolean;
   avatar?: FileDto | null;
@@ -1985,14 +1945,7 @@ export interface VideoDetailDto {
   thumbnailUrl?: string | null;
   thumbnailStorageKey?: string | null;
   authorId: string;
-  status:
-    | "Draft"
-    | "PendingPayment"
-    | "PendingReview"
-    | "Approved"
-    | "Published"
-    | "Rejected"
-    | "Archived";
+  status: EnumContentStatus;
   rejectionReason?: string | null;
   youtubeVideoId?: string | null;
   isFeatured: boolean;
@@ -2037,14 +1990,7 @@ export interface VideoSummaryDto {
   slug: string;
   thumbnailUrl?: string | null;
   authorId: string;
-  status:
-    | "Draft"
-    | "PendingPayment"
-    | "PendingReview"
-    | "Approved"
-    | "Published"
-    | "Rejected"
-    | "Archived";
+  status: EnumContentStatus;
   youtubeVideoId?: string | null;
   isFeatured: boolean;
   hasLyrics: boolean;
