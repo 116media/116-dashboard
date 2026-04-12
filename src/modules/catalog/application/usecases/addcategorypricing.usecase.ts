@@ -5,6 +5,7 @@ import type { Result } from "@/shared/domain/results/result";
 
 /**
  * @interface IAddCategoryPricingUseCase
+ * @extends {IResultUseCase<{ categoryId: string; data: { pricingTierId: string; priceUsd: number } }, ICategoryPricingEntity>}
  */
 interface IAddCategoryPricingUseCase
     extends IResultUseCase<
@@ -17,6 +18,10 @@ interface IAddCategoryPricingUseCase
  *
  * @class AddCategoryPricingUseCase
  * @implements {IAddCategoryPricingUseCase}
+ *
+ * @description
+ * Adds a new pricing tier with a USD price to the specified category
+ * via the catalog repository.
  */
 export class AddCategoryPricingUseCase implements IAddCategoryPricingUseCase {
     private readonly catalogRepository: ICatalogRepositoryPort;
@@ -27,7 +32,10 @@ export class AddCategoryPricingUseCase implements IAddCategoryPricingUseCase {
         this.catalogRepository = catalogRepository;
     }
     /**
-     * Executes the adding a pricing tier to a category use case.
+     * Executes the add category pricing use case.
+     *
+     * @param {object} params - The category ID and pricing data
+     * @returns {Promise<Result<ICategoryPricingEntity>>} `ok(ICategoryPricingEntity)` on success, `err(Failure)` on failure
      */
     async execute(params: {
         categoryId: string;
