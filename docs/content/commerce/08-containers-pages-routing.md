@@ -26,7 +26,7 @@ French labels:
 - Subtitle: "Gérer les commandes"
 - Create button: "Créer une commande"
 - Create modal title: "Créer une commande"
-- Status filter options: "Tous" | "Brouillon" | "En attente de paiement" | "Payé" | "Annulé"
+- Status filter options: "Tous" | "Brouillon" | "paiement en cours" | "Payé" | "Annulé"
 
 ### `OrderDetailContainer/index.tsx`
 
