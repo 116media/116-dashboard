@@ -4,7 +4,7 @@
 
 Product catalog management: **categories**, **packages**, and **customers**.
 
-> **Status:** Planned — depends on Références module being implemented first.
+> **Status:** Implemented — all 20 use cases, 105+ files, full CRUD with pricing and slot management panels.
 
 ## Overview
 
