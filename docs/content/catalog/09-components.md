@@ -146,7 +146,7 @@ Rendered inside a `Drawer` or `Modal` opened via the `manageSlots` dropdown acti
 
 ## TODO
 
-- [ ] Create 5 form components with JSDoc
-- [ ] Create 3 table column files with JSDoc
-- [ ] Create 2 action modal components with JSDoc
-- [ ] Create 2 management panel components with JSDoc
+- [x] Create 5 form components with JSDoc
+- [x] Create 3 table column files with JSDoc
+- [x] Create 2 action modal components with JSDoc
+- [x] Create 2 management panel components with JSDoc
