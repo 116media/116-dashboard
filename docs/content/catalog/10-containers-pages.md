@@ -116,6 +116,6 @@ Each page has a matching `index.module.scss` with the `.page` class.
 
 ## TODO
 
-- [ ] Create 3 container components with JSDoc
-- [ ] Create 3 page components with JSDoc
-- [ ] Create 3 page SCSS files
+- [x] Create 3 container components with JSDoc
+- [x] Create 3 page components with JSDoc
+- [x] Create 3 page SCSS files
