@@ -1,9 +1,5 @@
 import type { IRevokeSessionResponse } from "@/platform/session/domain/entities/IRevokeSessionResponse";
 import type { ISession } from "@/platform/session/domain/entities/ISession";
-import type { ESessionBrowser } from "@/platform/session/domain/enums/ESessionBrowser";
-import type { ESessionClient } from "@/platform/session/domain/enums/ESessionClient";
-import type { ESessionDevice } from "@/platform/session/domain/enums/ESessionDevice";
-import type { ESessionPlatform } from "@/platform/session/domain/enums/ESessionPlatform";
 import type {
     AdminRevokeSessionResponse,
     SessionDto
@@ -34,10 +30,10 @@ export const SessionMapper = {
             id: dto.id,
             ipAddress: dto.ipAddress,
             userAgent: dto.userAgent,
-            browser: dto.browser as ESessionBrowser,
-            device: dto.device as ESessionDevice,
-            platform: dto.platform as ESessionPlatform,
-            client: dto.client as ESessionClient,
+            browser: dto.browser,
+            device: dto.device,
+            platform: dto.platform,
+            client: dto.client,
             expiresAt: dto.expiresAt,
             isActive: dto.isActive,
             isCurrent: dto.isCurrent,
