@@ -119,7 +119,7 @@ Call `registerCatalogDependencies(container)` in `service.locator.ts` and extend
 
 ## TODO
 
-- [ ] Create `catalog.mapper.ts` with JSDoc
-- [ ] Create `catalog.repository.impl.ts` with JSDoc
-- [ ] Create `catalog.dependencies.ts` with JSDoc
-- [ ] Verify all generated API method names against `116.api.ts`
+- [x] Create `catalog.mapper.ts` with JSDoc
+- [x] Create `catalog.repository.impl.ts` with JSDoc
+- [x] Create `catalog.dependencies.ts` with JSDoc
+- [x] Verify all generated API method names against `116.api.ts`
