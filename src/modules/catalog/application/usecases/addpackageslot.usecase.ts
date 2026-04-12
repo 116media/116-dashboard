@@ -5,6 +5,7 @@ import type { Result } from "@/shared/domain/results/result";
 
 /**
  * @interface IAddPackageSlotUseCase
+ * @extends {IResultUseCase<{ packageId: string; data: { categoryId: string; isRequired: boolean; quantity: number } }, IPackageSlotEntity>}
  */
 interface IAddPackageSlotUseCase
     extends IResultUseCase<
@@ -17,6 +18,10 @@ interface IAddPackageSlotUseCase
  *
  * @class AddPackageSlotUseCase
  * @implements {IAddPackageSlotUseCase}
+ *
+ * @description
+ * Adds a new slot to a package, linking a category with required/optional
+ * status and quantity via the catalog repository.
  */
 export class AddPackageSlotUseCase implements IAddPackageSlotUseCase {
     private readonly catalogRepository: ICatalogRepositoryPort;
@@ -27,7 +32,10 @@ export class AddPackageSlotUseCase implements IAddPackageSlotUseCase {
         this.catalogRepository = catalogRepository;
     }
     /**
-     * Executes the adding a slot to a package use case.
+     * Executes the add package slot use case.
+     *
+     * @param {object} params - The package ID and slot data
+     * @returns {Promise<Result<IPackageSlotEntity>>} `ok(IPackageSlotEntity)` on success, `err(Failure)` on failure
      */
     async execute(params: {
         packageId: string;
