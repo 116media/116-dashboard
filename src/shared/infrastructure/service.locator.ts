@@ -30,6 +30,21 @@ import type { UpdateCategoryUseCase } from "@/modules/catalog/application/usecas
 import type { UpdateCategoryPricingUseCase } from "@/modules/catalog/application/usecases/updatecategorypricing.usecase";
 import type { UpdateCustomerUseCase } from "@/modules/catalog/application/usecases/updatecustomer.usecase";
 import { registerCatalogDependencies } from "@/modules/catalog/infrastructure/dependencies/catalog.dependencies";
+import type { ICommerceRepositoryPort } from "@/modules/commerce/application/repositories/commerce.repository.port";
+import type { AddItemToOrderUseCase } from "@/modules/commerce/application/usecases/additemtoorder.usecase";
+import type { AddTierToItemUseCase } from "@/modules/commerce/application/usecases/addtiertoitem.usecase";
+import type { AttachPaymentProofUseCase } from "@/modules/commerce/application/usecases/attachpaymentproof.usecase";
+import type { CancelOrderUseCase } from "@/modules/commerce/application/usecases/cancelorder.usecase";
+import type { CreateOrderUseCase } from "@/modules/commerce/application/usecases/createorder.usecase";
+import type { GetCustomerOrdersUseCase } from "@/modules/commerce/application/usecases/getcustomerorders.usecase";
+import type { GetOrderByIdUseCase } from "@/modules/commerce/application/usecases/getorderbyid.usecase";
+import type { GetOrderPaymentUseCase } from "@/modules/commerce/application/usecases/getorderpayment.usecase";
+import type { ListOrdersUseCase } from "@/modules/commerce/application/usecases/listorders.usecase";
+import type { ListPendingPaymentOrdersUseCase } from "@/modules/commerce/application/usecases/listpendingpaymentorders.usecase";
+import type { RejectPaymentUseCase } from "@/modules/commerce/application/usecases/rejectpayment.usecase";
+import type { SubmitOrderUseCase } from "@/modules/commerce/application/usecases/submitorder.usecase";
+import type { VerifyPaymentUseCase } from "@/modules/commerce/application/usecases/verifypayment.usecase";
+import { registerCommerceDependencies } from "@/modules/commerce/infrastructure/dependencies/commerce.dependencies";
 import type { ILookupRepositoryPort } from "@/modules/lookup/application/repositories/lookup.repository.port";
 import type { ActivateContentTypeUseCase } from "@/modules/lookup/application/usecases/activatecontenttype.usecase";
 import type { ActivatePricingTierUseCase } from "@/modules/lookup/application/usecases/activatepricingtier.usecase";
@@ -215,6 +230,28 @@ export interface Cradle {
     deactivatePackageUseCase: DeactivatePackageUseCase;
     addPackageSlotUseCase: AddPackageSlotUseCase;
     removePackageSlotUseCase: RemovePackageSlotUseCase;
+
+    // Commerce repository
+    commerceRepository: ICommerceRepositoryPort;
+
+    // Commerce use cases — Order mutations
+    createOrderUseCase: CreateOrderUseCase;
+    addItemToOrderUseCase: AddItemToOrderUseCase;
+    addTierToItemUseCase: AddTierToItemUseCase;
+    submitOrderUseCase: SubmitOrderUseCase;
+    cancelOrderUseCase: CancelOrderUseCase;
+
+    // Commerce use cases — Payment mutations
+    attachPaymentProofUseCase: AttachPaymentProofUseCase;
+    verifyPaymentUseCase: VerifyPaymentUseCase;
+    rejectPaymentUseCase: RejectPaymentUseCase;
+
+    // Commerce use cases — Queries
+    listOrdersUseCase: ListOrdersUseCase;
+    getOrderByIdUseCase: GetOrderByIdUseCase;
+    getOrderPaymentUseCase: GetOrderPaymentUseCase;
+    listPendingPaymentOrdersUseCase: ListPendingPaymentOrdersUseCase;
+    getCustomerOrdersUseCase: GetCustomerOrdersUseCase;
 }
 
 /**
@@ -237,5 +274,6 @@ registerRolesDependencies(container);
 registerPermissionsDependencies(container);
 registerLookupDependencies(container);
 registerCatalogDependencies(container);
+registerCommerceDependencies(container);
 
 export default container;
