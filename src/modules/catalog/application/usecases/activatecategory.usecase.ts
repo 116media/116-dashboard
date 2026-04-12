@@ -5,6 +5,7 @@ import type { Result } from "@/shared/domain/results/result";
 
 /**
  * @interface IActivateCategoryUseCase
+ * @extends {IResultUseCase<string, ICategoryEntity>}
  */
 interface IActivateCategoryUseCase extends IResultUseCase<string, ICategoryEntity> {}
 
@@ -13,6 +14,10 @@ interface IActivateCategoryUseCase extends IResultUseCase<string, ICategoryEntit
  *
  * @class ActivateCategoryUseCase
  * @implements {IActivateCategoryUseCase}
+ *
+ * @description
+ * Activates a previously deactivated category, making it visible
+ * and available via the catalog repository.
  */
 export class ActivateCategoryUseCase implements IActivateCategoryUseCase {
     private readonly catalogRepository: ICatalogRepositoryPort;
@@ -23,7 +28,10 @@ export class ActivateCategoryUseCase implements IActivateCategoryUseCase {
         this.catalogRepository = catalogRepository;
     }
     /**
-     * Executes the activating a category use case.
+     * Executes the activate category use case.
+     *
+     * @param {string} id - The unique identifier of the category to activate
+     * @returns {Promise<Result<ICategoryEntity>>} `ok(ICategoryEntity)` on success, `err(Failure)` on failure
      */
     async execute(id: string): Promise<Result<ICategoryEntity>> {
         return this.catalogRepository.activateCategory(id);
