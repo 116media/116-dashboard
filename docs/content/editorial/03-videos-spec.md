@@ -354,7 +354,7 @@ Same status options as articles:
 | --- | --- |
 | `all` | "Tous" |
 | `Draft` | "Brouillon" |
-| `PendingPayment` | "En attente de paiement" |
+| `PendingPayment` | "paiement en cours" |
 | `PendingReview` | "En attente de revue" |
 | `Approved` | "Approuvé" |
 | `Published` | "Publié" |
