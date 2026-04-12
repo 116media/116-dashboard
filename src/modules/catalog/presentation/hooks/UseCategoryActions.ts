@@ -38,8 +38,8 @@ export const useCategoryActions = (reload: () => void): IUseCategoryActions => {
         ({ catalog: { deactivateCategory } }) => deactivateCategory
     );
 
-    const loading = activateState.loading || deactivateState.loading;
     const error = activateState.error || deactivateState.error;
+    const loading = activateState.loading || deactivateState.loading;
 
     const dispatchAction = async <T>(
         thunk: AsyncThunk<T, string, { rejectValue: Failure }>,
