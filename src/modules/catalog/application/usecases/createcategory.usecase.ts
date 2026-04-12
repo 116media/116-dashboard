@@ -5,6 +5,7 @@ import type { Result } from "@/shared/domain/results/result";
 
 /**
  * @interface ICreateCategoryUseCase
+ * @extends {IResultUseCase<{ contentTypeId: string; name: string; slug: string; description: string; isFree: boolean }, ICategoryEntity>}
  */
 interface ICreateCategoryUseCase
     extends IResultUseCase<
@@ -23,6 +24,10 @@ interface ICreateCategoryUseCase
  *
  * @class CreateCategoryUseCase
  * @implements {ICreateCategoryUseCase}
+ *
+ * @description
+ * Creates a new content category under the specified content type
+ * via the catalog repository.
  */
 export class CreateCategoryUseCase implements ICreateCategoryUseCase {
     private readonly catalogRepository: ICatalogRepositoryPort;
@@ -33,7 +38,10 @@ export class CreateCategoryUseCase implements ICreateCategoryUseCase {
         this.catalogRepository = catalogRepository;
     }
     /**
-     * Executes the creating a new category use case.
+     * Executes the create category use case.
+     *
+     * @param {object} params - Category creation parameters
+     * @returns {Promise<Result<ICategoryEntity>>} `ok(ICategoryEntity)` on success, `err(Failure)` on failure
      */
     async execute(params: {
         contentTypeId: string;
