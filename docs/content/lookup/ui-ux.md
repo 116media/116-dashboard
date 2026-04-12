@@ -427,7 +427,7 @@ const containerMap: Record<CatalogTab, FC> = {
 ### New Modules
 
 - [x] Create `src/modules/lookup/` (Références) — full CRUD with search
-- [ ] Create `src/modules/catalog/` (Catalogue)
+- [x] Create `src/modules/catalog/` (Catalogue)
 - [ ] Create `src/modules/editorial/` (Édition — articles, videos, shorts, lyrics)
 - [ ] Create `src/modules/commerce/` (Ventes)
 - [ ] Create `src/modules/admins/` (split from users)
