@@ -1,0 +1,23 @@
+@use "@/shared/presentation/styles/dimensions.scss" as dimensions;
+@use "@/shared/presentation/styles/colors.scss" as colors;
+
+.sidebar {
+    width: 240px;
+    min-width: 240px;
+    margin-right: 1rem;
+    background: colors.$white;
+    padding: calc(dimensions.$padding / 2);
+    border-radius: dimensions.$border-radius;
+
+    [class~="ant-menu"] {
+        gap: 5px;
+        display: flex;
+        flex-direction: column;
+        border: none !important;
+
+        [class~="ant-menu-item"] {
+            margin-top: 0;
+            margin-bottom: 0;
+        }
+    }
+}
