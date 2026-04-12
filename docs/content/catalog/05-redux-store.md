@@ -131,18 +131,18 @@ One `createAsyncThunk` per endpoint:
 
 ## Integration
 
-- [ ] Add `catalog: catalogReducer` to `root.reducer.ts`
-- [ ] Extend `Cradle` interface in `service.locator.ts`
-- [ ] Call `registerCatalogDependencies(container)` in `service.locator.ts`
+- [x] Add `catalog: catalogReducer` to `root.reducer.ts`
+- [x] Extend `Cradle` interface in `service.locator.ts`
+- [x] Call `registerCatalogDependencies(container)` in `service.locator.ts`
 
 ---
 
 ## TODO
 
-- [ ] Create `constants.ts`
-- [ ] Create `type.ts`
-- [ ] Create `state.ts`
-- [ ] Create all 21 action files (note: `getpackagebyid` and `removecategorypricing` bring the count to 21, not 20)
-- [ ] Create `index.ts` (slice)
-- [ ] Wire into `root.reducer.ts`
-- [ ] Wire into `service.locator.ts`
+- [x] Create `constants.ts`
+- [x] Create `type.ts`
+- [x] Create `state.ts`
+- [x] Create all 21 action files (note: `getpackagebyid` and `removecategorypricing` bring the count to 21, not 20)
+- [x] Create `index.ts` (slice)
+- [x] Wire into `root.reducer.ts`
+- [x] Wire into `service.locator.ts`
