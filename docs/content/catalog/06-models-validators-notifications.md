@@ -106,6 +106,6 @@ Each file exports a config object with the relevant success keys.
 
 ## TODO
 
-- [ ] Create all 8 model files with JSDoc
-- [ ] Create all 3 validator files with JSDoc
-- [ ] Create all 3 notification files with JSDoc
+- [x] Create all 8 model files with JSDoc
+- [x] Create all 3 validator files with JSDoc
+- [x] Create all 3 notification files with JSDoc
