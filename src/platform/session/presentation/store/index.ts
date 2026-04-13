@@ -8,6 +8,7 @@ import {
     createInitialState
 } from "@/shared/presentation/store/action.wrapper";
 import { SliceName } from "./constants";
+import { getCurrentUserAction } from "./currentuser.action";
 import { getSessionsAction, revokeSessionAction } from "./session.action";
 import { sessionInitialState } from "./state";
 import type { SessionStateKey } from "./type";
@@ -17,6 +18,7 @@ export const sessionSlice = createSlice({
     initialState: sessionInitialState,
     reducers: {
         clear: ActionWrapperReset,
+        currentUser: ActionWrapperFulfilled,
         purge: (state, action: PayloadAction<SessionStateKey[]>) => {
             action.payload.forEach((key) => {
                 if (state[key]) {
@@ -27,6 +29,10 @@ export const sessionSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
+            // get current user
+            .addCase(getCurrentUserAction.pending, ActionWrapperPending)
+            .addCase(getCurrentUserAction.fulfilled, ActionWrapperFulfilled)
+            .addCase(getCurrentUserAction.rejected, ActionWrapperRejected)
             // get sessions
             .addCase(getSessionsAction.pending, ActionWrapperPending)
             .addCase(getSessionsAction.fulfilled, ActionWrapperFulfilled)

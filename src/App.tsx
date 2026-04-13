@@ -10,6 +10,7 @@ import { Theme } from "@/shared/infrastructure/constants/theme";
 import { persistor, store } from "@/shared/presentation/store/store";
 import { NavigationProgress } from "@/shared/presentation/ui/NavigationProgress";
 import { PageLoader } from "@/shared/presentation/ui/PageLoader";
+import SessionExpiredModal from "@/shared/presentation/ui/SessionExpiredModal";
 import { routes } from "./routes";
 
 const AppRoutes: FC = () => useRoutes(routes);
@@ -26,6 +27,7 @@ const App: FC = () => {
                 <ConfigProvider theme={Theme}>
                     <BrowserRouter>
                         <NavigationProgress />
+                        <SessionExpiredModal />
                         <AppRoutes />
                     </BrowserRouter>
                 </ConfigProvider>

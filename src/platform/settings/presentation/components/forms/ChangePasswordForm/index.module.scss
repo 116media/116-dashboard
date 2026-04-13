@@ -1,5 +1,24 @@
-.footer {
-    display: flex;
-    justify-content: flex-end;
-    margin-top: 8px;
+@use "@/shared/presentation/styles/dimensions.scss" as dimensions;
+@use "@/shared/presentation/styles/mixins.scss" as mixins;
+
+.changePasswordForm {
+    width: 100%;
+
+    @include mixins.mediaLG {
+        width: 60%;
+    }
+
+    @include mixins.mediaXL {
+        width: 60%;
+    }
+
+    @include mixins.mediaXXL {
+        width: 40%;
+    }
+
+    &__footer {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: calc(dimensions.$padding / 2);
+    }
 }

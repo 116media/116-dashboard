@@ -5,7 +5,11 @@ import type { IUseCase } from "@/shared/application/usecases/IUseCase";
 interface IGetSessionsUseCase extends IUseCase<void, ISession[]> {}
 
 export class GetSessionsUseCase implements IGetSessionsUseCase {
-    constructor(private readonly sessionRepository: SessionRepositoryPort) {}
+    private readonly sessionRepository: SessionRepositoryPort;
+
+    constructor({ sessionRepository }: { sessionRepository: SessionRepositoryPort }) {
+        this.sessionRepository = sessionRepository;
+    }
 
     async execute(): Promise<ISession[]> {
         return this.sessionRepository.getSessions();

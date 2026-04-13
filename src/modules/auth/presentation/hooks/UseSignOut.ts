@@ -11,6 +11,16 @@ interface IUseSignOut {
     onSignOut: () => void;
 }
 
+/**
+ * Custom hook for signing out from the current device.
+ *
+ * @description
+ * Shows a confirmation modal before dispatching the sign-out action.
+ * Purges persisted Redux state and redirects to login regardless
+ * of whether the API call succeeds (graceful logout).
+ *
+ * @returns Loading state and sign-out handler
+ */
 export const useSignOut = (): IUseSignOut => {
     const navigate = useNavigate();
     const dispatch = useAppDispatch();

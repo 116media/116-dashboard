@@ -1,15 +1,11 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { ResetPasswordUseCase } from "@/modules/auth/application/usecases/resetpassword.usecase";
 import type { IResetPasswordResponse } from "@/modules/auth/domain/entities/IResetPasswordResponse";
-import { AuthRepositoryImpl } from "@/modules/auth/infrastructure/repositories/auth.repository.impl";
 import { AuthStorageService } from "@/modules/auth/infrastructure/storage/authstorage.service";
 import type { IResetPasswordCredentials } from "@/modules/auth/presentation/model/IResetPasswordCredentials";
 import { authSlice } from "@/modules/auth/presentation/store";
 import { ActionType } from "@/modules/auth/presentation/store/constants";
 import type { IApiProblemDetails } from "@/shared/infrastructure/api/type";
-
-const authRepository = new AuthRepositoryImpl();
-const resetPasswordUseCase = new ResetPasswordUseCase(authRepository);
+import container from "@/shared/infrastructure/service.locator.ts";
 
 /**
  * Action to reset reset password state.
@@ -40,7 +36,7 @@ export const resetPasswordAction = createAsyncThunk<
     async (credentials: IResetPasswordCredentials, { rejectWithValue }) => {
         try {
             const otpCode = AuthStorageService.getOtpCode();
-            const response = await resetPasswordUseCase.execute({
+            const response = await container.cradle.resetPasswordUseCase.execute({
                 ...credentials,
                 code: otpCode as string
             });

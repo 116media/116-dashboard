@@ -5,7 +5,11 @@ import type { IUseCase } from "@/shared/application/usecases/IUseCase";
 interface ISignOutAllUseCase extends IUseCase<void, ISignOutAllResponse> {}
 
 export class SignOutAllUseCase implements ISignOutAllUseCase {
-    constructor(private readonly authRepository: IAuthRepositoryPort) {}
+    private readonly authRepository: IAuthRepositoryPort;
+
+    constructor({ authRepository }: { authRepository: IAuthRepositoryPort }) {
+        this.authRepository = authRepository;
+    }
 
     async execute(): Promise<ISignOutAllResponse> {
         return this.authRepository.signOutAll();

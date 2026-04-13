@@ -18,12 +18,18 @@ import type { IDeviceRepositoryPort } from "@/platform/session/application/repos
  * no external dependencies required).
  */
 export class DeviceRepositoryImpl implements IDeviceRepositoryPort {
+    private readonly deviceStorageDataSource: IDeviceStorageDataSource;
+
     /**
      * Creates an instance of DeviceRepositoryImpl.
      *
      * @param {IDeviceStorageDataSource} deviceStorageDataSource - Data source for device ID persistence (injected)
      */
-    constructor(private readonly deviceStorageDataSource: IDeviceStorageDataSource) {}
+    constructor({
+        deviceStorageDataSource
+    }: { deviceStorageDataSource: IDeviceStorageDataSource }) {
+        this.deviceStorageDataSource = deviceStorageDataSource;
+    }
 
     initializeDevice(): string {
         const existingDeviceId = this.deviceStorageDataSource.getDeviceId();

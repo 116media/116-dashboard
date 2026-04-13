@@ -44,7 +44,7 @@ export class SessionRepositoryImpl implements SessionRepositoryPort {
     }
 
     async getSessions(): Promise<ISession[]> {
-        const response = await apiClient.api.adminGetOwnSessions({ isActive: true });
+        const response = await apiClient.api.adminGetOwnSessions();
         return response.data.sessions.map(SessionMapper.sessionFromDto);
     }
 

@@ -3,7 +3,7 @@ import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const apiFilePath = join(__dirname, '../src/shared/api/generated/116.api.ts');
+const apiFilePath = join(__dirname, '../src/shared/infrastructure/api/generated/116.api.ts');
 
 const swagger = await fetch('http://localhost:5025/swagger/v1/swagger.json').then(r => r.json());
 

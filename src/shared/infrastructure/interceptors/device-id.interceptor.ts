@@ -1,8 +1,6 @@
 import type { InternalAxiosRequestConfig } from "axios";
 import { X_DEVICE_ID_HEADER } from "@/platform/session/infrastructure/constants/storage.constants";
-import { DeviceStorageDataSource } from "@/platform/session/infrastructure/data-sources/device.storage.datasource";
-
-const deviceStorageDataSource = new DeviceStorageDataSource();
+import container from "@/shared/infrastructure/service.locator.ts";
 
 /**
  * Axios request interceptor that attaches the X-Device-Id header.
@@ -21,7 +19,7 @@ const deviceStorageDataSource = new DeviceStorageDataSource();
 export const deviceIdInterceptor = (
     config: InternalAxiosRequestConfig
 ): InternalAxiosRequestConfig => {
-    const deviceId = deviceStorageDataSource.getDeviceId();
+    const deviceId = container.cradle.deviceStorageDataSource.getDeviceId();
     if (deviceId) {
         config.headers[X_DEVICE_ID_HEADER] = deviceId;
     }

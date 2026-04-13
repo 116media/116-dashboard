@@ -1,7 +1,5 @@
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { createSlice } from "@reduxjs/toolkit";
-import type { IAuthResponse } from "@/modules/auth/domain/entities/IAuthResponse";
-import type { IUser } from "@/modules/auth/domain/entities/IUser";
 import {
     ActionWrapperFulfilled,
     ActionWrapperPending,
@@ -39,24 +37,10 @@ export const authSlice = createSlice({
     initialState: authInitialState,
     reducers: {
         clear: ActionWrapperReset,
-        /**
-         * Purges specific auth substates.
-         *
-         * @param {PayloadAction<AuthStateKey[]>} action - Action with array of substate keys to purge
-         *
-         * @description
-         * Resets specified substates to their initial values.
-         * Allows selective clearing of auth states on demand.
-         */
         purge: (state, action: PayloadAction<AuthStateKey[]>) => {
             action.payload.forEach((key) => {
                 if (state[key]) state[key] = createInitialState();
             });
-        },
-        updateUser: (state, action: PayloadAction<IUser>) => {
-            if (state.login.data) {
-                (state.login.data as IAuthResponse).user = action.payload;
-            }
         }
     },
     extraReducers: (builder) => {

@@ -1,4 +1,6 @@
 import type { Rule } from "antd/es/form";
+import { PhoneNumberUtil } from "google-libphonenumber";
+import { COUNTRY_LIST } from "@/shared/infrastructure/constants/countries";
 
 /**
  * Min/max length configuration for validation.
@@ -83,5 +85,50 @@ export const ValidatorUtils = {
     numericOnly: (name: string): Rule => ({
         pattern: /^[0-9]+$/,
         message: `${name} doit contenir uniquement des chiffres`
+    }),
+
+    // TODO: integrate phone number existence check via Twilio Lookup or NumVerify API on the backend
+
+    /**
+     * Creates a phone number validation rule using google-libphonenumber.
+     *
+     * @param {string} name - Field display name for error message
+     * @param {string | undefined} phoneDialCode - International dial code (e.g. "+33")
+     * @returns {Rule} Ant Design validation rule
+     *
+     * @remarks
+     * Validates the phone number format and checks region validity
+     * using the dial code to resolve the country ISO code.
+     */
+    phone: (name: string, phoneDialCode: string | undefined): Rule => ({
+        validator(_rule: unknown, value: string) {
+            if ([null, undefined, ""].includes(value)) {
+                return Promise.resolve();
+            }
+
+            const regexPhone = /^[1-9][0-9]{1,12}$/;
+            if (!regexPhone.test(value)) {
+                return Promise.reject(`${phoneDialCode}${value} a un format invalide`);
+            }
+
+            const regexDialCode = /^\+\d{1,4}$/;
+            if (!phoneDialCode || !regexDialCode.test(phoneDialCode)) {
+                return Promise.reject("Indicatif téléphonique est invalide");
+            }
+
+            const fullPhoneNumber = `${phoneDialCode}${value}`;
+            const country = COUNTRY_LIST.find((c) => c.dialCode === phoneDialCode);
+            const isoCode = country?.isoCode;
+
+            try {
+                const phoneUtil = PhoneNumberUtil.getInstance();
+                const parsed = phoneUtil.parse(fullPhoneNumber, isoCode);
+                return phoneUtil.isValidNumberForRegion(parsed, isoCode)
+                    ? Promise.resolve()
+                    : Promise.reject(`${name} est invalide pour la région choisie`);
+            } catch {
+                return Promise.reject(`${name} a un format invalide`);
+            }
+        }
     })
 } as const;

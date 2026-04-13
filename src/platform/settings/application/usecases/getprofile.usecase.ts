@@ -5,7 +5,11 @@ import type { IUseCase } from "@/shared/application/usecases/IUseCase";
 interface IGetProfileUseCase extends IUseCase<void, IUser> {}
 
 export class GetProfileUseCase implements IGetProfileUseCase {
-    constructor(private readonly settingsRepository: ISettingsRepositoryPort) {}
+    private readonly settingsRepository: ISettingsRepositoryPort;
+
+    constructor({ settingsRepository }: { settingsRepository: ISettingsRepositoryPort }) {
+        this.settingsRepository = settingsRepository;
+    }
 
     async execute(): Promise<IUser> {
         return this.settingsRepository.getProfile();

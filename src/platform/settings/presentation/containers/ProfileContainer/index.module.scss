@@ -1,42 +1,82 @@
-.loader {
-    display: flex;
-    justify-content: center;
-    padding: 48px;
-}
+@use "@/shared/presentation/styles/colors" as colors;
+@use "@/shared/presentation/styles/dimensions" as dimensions;
 
-.avatarSection {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-}
+.profileContainer {
+    &__avatarSection {
+        display: flex;
+        align-items: center;
+        gap: calc(dimensions.$padding / 1.5);
+    }
 
-.avatarWrapper {
-    flex-shrink: 0;
-}
+    &__avatarWrapper {
+        flex-shrink: 0;
+        cursor: pointer;
+        position: relative;
+        border: none;
+        background: none;
 
-.avatarInfo {
-    display: flex;
-    flex-direction: column;
-    flex: 1;
-}
+            [class~="ant-skeleton-avatar"]{
+                border-radius: dimensions.$border-radius !important;
+            }
+    }
 
-.userName {
-    font-weight: 600;
-    font-size: 16px;
-}
+    &__cameraIcon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 1.5rem;
+        height: 1.5rem;
+        border-radius: dimensions.$border-radius;
+        background: colors.$primary;
+        color: colors.$white;
+        font-size: 0.75rem;
+    }
 
-.role {
-    color: rgba(0, 0, 0, 0.45);
-    font-size: 13px;
-}
+    &__avatarInfo {
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+    }
 
-.location {
-    color: rgba(0, 0, 0, 0.45);
-    font-size: 13px;
-}
+    &__location {
+        margin-top: calc(dimensions.$padding / 4);
+    }
 
-.fieldsGrid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
+    &__fieldsGrid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: calc(dimensions.$padding / 1.5);
+    }
+
+    &__loading {
+        [class~="ant-skeleton-title"] {
+            margin: 0 !important;
+            margin-bottom: 1rem !important;
+        }
+
+        &__avatarSection {
+            display: flex;
+            align-items: center;
+            gap: calc(dimensions.$padding / 1.5);
+        }
+        
+        &__avatarInfo {
+            flex: 1;
+        }
+        
+        &__fieldsGrid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: calc(dimensions.$padding / 1.5);
+
+            [class~="ant-skeleton-paragraph"]{
+                margin-top: calc(dimensions.$padding / 4) !important;
+                margin-bottom: 0 !important;
+            }
+        }
+        
+        &__spacer {
+            margin-bottom: calc(dimensions.$padding / 1.5);
+        }
+    }
 }

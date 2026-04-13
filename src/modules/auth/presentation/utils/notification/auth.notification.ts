@@ -15,7 +15,7 @@ export const AuthNotification = {
      */
     otpSentSuccess: {
         type: "success",
-        message: "Code envoyé",
+        title: "Code envoyé",
         description: "Un nouveau code de vérification a été envoyé à votre adresse e-mail."
     } as INotificationConfig,
 
@@ -28,7 +28,7 @@ export const AuthNotification = {
      */
     passwordResetSuccess: {
         type: "success",
-        message: "Mot de passe réinitialisé",
+        title: "Mot de passe réinitialisé",
         description:
             "Votre mot de passe a été réinitialisé avec succès. Veuillez vous connecter maintenant."
     } as INotificationConfig

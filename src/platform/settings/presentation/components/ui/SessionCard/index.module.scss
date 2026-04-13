@@ -1,35 +1,35 @@
-.card {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    padding: 12px 16px;
-    border: 1px solid #f0f0f0;
-    border-radius: 8px;
-    margin-bottom: 8px;
-}
+@use "@/shared/presentation/styles/colors.scss" as colors;
+@use "@/shared/presentation/styles/dimensions.scss" as dimensions;
 
-.info {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-}
-
-.summary {
+.session {
     display: flex;
     align-items: center;
-    gap: 8px;
-}
+    gap: calc(dimensions.$padding / 2);
+    padding: calc(dimensions.$padding * 0.67) calc(dimensions.$padding * 0.83);
+    border: 1px solid colors.$border-light;
+    border-radius: dimensions.$border-radius;
 
-.summaryText {
-    font-size: 14px;
-}
+    &__icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 2.5rem;
+        height: 2.5rem;
+        border-radius: dimensions.$border-radius;
+        background: colors.$background;
+        color: colors.$title;
+        font-size: 1.125rem;
+        flex-shrink: 0;
+    }
 
-.meta {
-    display: flex;
-    gap: 4px;
-    margin-top: 4px;
-}
+    &__info {
+        flex: 1;
+        min-width: 0;
+    }
 
-.date {
-    font-size: 12px;
+    &__meta {
+        display: flex;
+        align-items: center;
+        gap: calc(dimensions.$padding / 4);
+    }
 }

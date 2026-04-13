@@ -28,12 +28,16 @@ interface IVerifyOtpUseCase extends IUseCase<IVerifyOtpCredentials, IVerifyOtpRe
  * Contains business rules independent of frameworks and UI.
  */
 export class VerifyOtpUseCase implements IVerifyOtpUseCase {
+    private readonly authRepository: IAuthRepositoryPort;
+
     /**
      * Creates an instance of VerifyOtpUseCase.
      *
      * @param {IAuthRepositoryPort} authRepository - Repository for auth operations (injected)
      */
-    constructor(private readonly authRepository: IAuthRepositoryPort) {}
+    constructor({ authRepository }: { authRepository: IAuthRepositoryPort }) {
+        this.authRepository = authRepository;
+    }
 
     /**
      * Executes the verify OTP use case.

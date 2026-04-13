@@ -5,8 +5,9 @@ import type { IApiProblemDetails } from "@/shared/infrastructure/api/type";
 import { apiErrors } from "@/shared/infrastructure/constants/api";
 import { API_URL, CLIENT_APP } from "@/shared/infrastructure/constants/common";
 import { LOGIN_PATH } from "@/shared/infrastructure/constants/paths";
+import { accessTokenExpiryInterceptor } from "@/shared/infrastructure/interceptors/access-token-expiry.interceptor";
 import { deviceIdInterceptor } from "@/shared/infrastructure/interceptors/device-id.interceptor";
-import { refreshTokenInterceptor } from "@/shared/infrastructure/interceptors/refresh-token.interceptor";
+import { refreshTokenExpiryInterceptor } from "@/shared/infrastructure/interceptors/refresh-token-expiry.interceptor";
 import { persistor } from "@/shared/presentation/store/store";
 
 /**
@@ -89,8 +90,12 @@ const errorHandler = async (error: AxiosError<IApiProblemDetails>): Promise<neve
 
 // Request interceptors
 apiClient.instance.interceptors.request.use(deviceIdInterceptor);
+
+// Runs first: silently refreshes expired access tokens and retries the original request
 apiClient.instance.interceptors.response.use(
     responseHandler,
-    refreshTokenInterceptor(apiClient.instance)
+    accessTokenExpiryInterceptor(apiClient.instance)
 );
+// Runs second: detects expired refresh tokens and signals the UI via a DOM event
+apiClient.instance.interceptors.response.use(responseHandler, refreshTokenExpiryInterceptor);
 apiClient.instance.interceptors.response.use(responseHandler, errorHandler);

@@ -58,7 +58,7 @@ const protectedRoutes: RouteObject[] = [
                 element: <DashboardLayout />,
                 children: [
                     { path: OVERVIEW_PATH, element: <OverviewPage /> },
-                    { path: SETTING_PATH, element: <SettingsPage /> },
+                    { path: `${SETTING_PATH}/:tab?`, element: <SettingsPage /> },
                     { path: CONTENT_PATH, element: <ContentsPage /> },
                     { path: VIDEO_PATH, element: <VideosPage /> },
                     { path: ARTICLE_PATH, element: <ArticlesPage /> },

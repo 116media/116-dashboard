@@ -8,19 +8,6 @@
         padding-top: 0.8rem;
     }
 
-    &__role {
-        cursor: pointer;
-        margin-top: 4px;
-        padding: 0.5rem;
-        text-align: center;
-        
-        span {
-            font-weight: 500;
-            text-transform: lowercase;
-            line-height: 0.5 !important;
-        }
-    }
-
     &__menuItem {
         display: flex;
         align-items: center;

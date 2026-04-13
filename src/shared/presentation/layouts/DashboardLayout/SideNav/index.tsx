@@ -28,7 +28,7 @@ const { Sider } = Layout;
 export const SideNav: FC = () => {
     const navigate = useNavigate();
     const location = useLocation();
-    const user = useAppSelector(({ auth: { login } }) => login.data?.user);
+    const user = useAppSelector(({ session: { currentUser } }) => currentUser.data);
 
     return (
         <Sider width={56} className={styles.sideNav}>
@@ -47,7 +47,7 @@ export const SideNav: FC = () => {
                                         icon={<Icon />}
                                         onClick={() => navigate(path)}
                                         type={isActive ? "primary" : "text"}
-                                        className={`${styles.sideNav__item} ${isActive ? styles["sideNav__item--active"] : ""}`}
+                                        className={`${styles.sideNav__item} ${isActive ? styles.sideNav__item__active : ""}`}
                                     />
                                 </Tooltip>
                             );

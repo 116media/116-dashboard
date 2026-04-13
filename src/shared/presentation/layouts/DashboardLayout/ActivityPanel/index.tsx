@@ -47,7 +47,7 @@ interface IActivityPanelProps {
  * @returns The activity panel
  */
 export const ActivityPanel: FC<IActivityPanelProps> = ({ collapsed }) => {
-    const { userName, avatar } = useAppSelector(({ auth: { login } }) => login.data?.user);
+    const { userName, avatar } = useAppSelector(({ session: { currentUser } }) => currentUser.data);
 
     return (
         <Sider

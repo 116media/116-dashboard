@@ -1,15 +1,14 @@
 import type { FormInstance } from "antd";
-import { Button, Form, Input, Modal, Select } from "antd";
+import { Button, Form, Input, Modal } from "antd";
 import { type FC, useEffect, useState } from "react";
 import type { IProfile } from "@/platform/settings/domain/entities/IProfile";
 import type { IUpdateAccountCredentials } from "@/platform/settings/presentation/model/IUpdateAccountCredentials";
 import { SettingsValidator } from "@/platform/settings/presentation/utils/validators/settings.validator";
 import type { IApiProblemDetails } from "@/shared/infrastructure/api/type";
 import { COUNTRY_LIST, type ICountryObject } from "@/shared/infrastructure/constants/countries";
+import CountrySelect from "@/shared/presentation/ui/CountrySelect";
 import ErrorAlert from "@/shared/presentation/ui/ErrorAlert";
 import styles from "./index.module.scss";
-
-const { Option } = Select;
 
 interface IAccountInfoModalProps {
     isOpen: boolean;
@@ -53,12 +52,26 @@ const AccountInfoModal: FC<IAccountInfoModalProps> = ({
 
     return (
         <Modal
-            title="Modifier les informations du compte"
-            open={isOpen}
-            onCancel={onClose}
-            footer={null}
-            destroyOnClose
             width={520}
+            open={isOpen}
+            destroyOnHidden
+            onCancel={onClose}
+            className={styles.modal}
+            title="Modifier les informations du compte"
+            footer={[
+                <Button danger key="cancel" onClick={onClose}>
+                    Annuler
+                </Button>,
+                <Button
+                    key="submit"
+                    htmlType="submit"
+                    type="primary"
+                    loading={loading}
+                    onClick={() => form.submit()}
+                >
+                    Mettre à jour
+                </Button>
+            ]}
         >
             <Form form={form} layout="vertical" size="large" onFinish={onSubmit}>
                 <Form.Item name="email" label="Adresse e-mail">
@@ -78,39 +91,18 @@ const AccountInfoModal: FC<IAccountInfoModalProps> = ({
                     label="Indicatif téléphonique"
                     rules={SettingsValidator.countryName("Pays")}
                 >
-                    <Select showSearch optionLabelProp="label" placeholder="Sélectionner un pays">
-                        {COUNTRY_LIST.map((c) => (
-                            <Option value={c.name} key={c.name} label={c.name}>
-                                <div className="d-flex justify-content-between">
-                                    <span>
-                                        <img width={15} height={15} src={c.flag} alt={c.isoCode} />
-                                    </span>
-                                    <span className="mx-2 fw-medium">
-                                        {c.name.length > 35 ? `${c.name.slice(0, 32)}...` : c.name}
-                                    </span>
-                                    <span className="text-secondary">{c.dialCode}</span>
-                                </div>
-                            </Option>
-                        ))}
-                    </Select>
+                    <CountrySelect />
                 </Form.Item>
 
                 <Form.Item
                     name="phonePartial"
                     label="Téléphone"
-                    rules={SettingsValidator.phonePartial("Téléphone")}
+                    rules={SettingsValidator.phonePartial("Téléphone", country?.dialCode)}
                 >
-                    <Input prefix={country?.dialCode} placeholder="ex: 788123456" />
+                    <Input prefix={country?.dialCode} placeholder="Numéro de téléphone" />
                 </Form.Item>
 
                 <ErrorAlert error={error} showIcon closable banner={false} />
-
-                <div className={styles.footer}>
-                    <Button onClick={onClose}>Annuler</Button>
-                    <Button type="primary" htmlType="submit" loading={loading}>
-                        Mettre à jour
-                    </Button>
-                </div>
             </Form>
         </Modal>
     );

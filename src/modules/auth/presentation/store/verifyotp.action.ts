@@ -1,14 +1,10 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { VerifyOtpUseCase } from "@/modules/auth/application/usecases/verifyotp.usecase";
 import type { IVerifyOtpResponse } from "@/modules/auth/domain/entities/IVerifyOtpResponse";
-import { AuthRepositoryImpl } from "@/modules/auth/infrastructure/repositories/auth.repository.impl";
 import type { IVerifyOtpCredentials } from "@/modules/auth/presentation/model/IVerifyOtpCredentials";
 import { authSlice } from "@/modules/auth/presentation/store";
 import { ActionType } from "@/modules/auth/presentation/store/constants";
 import type { IApiProblemDetails } from "@/shared/infrastructure/api/type";
-
-const authRepository = new AuthRepositoryImpl();
-const verifyOtpUseCase = new VerifyOtpUseCase(authRepository);
+import container from "@/shared/infrastructure/service.locator.ts";
 
 /**
  * Action to reset verify OTP state.
@@ -36,7 +32,7 @@ export const verifyOtpAction = createAsyncThunk<
     { rejectValue: IApiProblemDetails }
 >(ActionType.AuthVerifyOtp, async (credentials: IVerifyOtpCredentials, { rejectWithValue }) => {
     try {
-        const response = await verifyOtpUseCase.execute(credentials);
+        const response = await container.cradle.verifyOtpUseCase.execute(credentials);
         return response;
     } catch (error) {
         return rejectWithValue(error as IApiProblemDetails);

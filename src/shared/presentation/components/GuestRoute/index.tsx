@@ -18,7 +18,7 @@ import { useAppSelector } from "@/shared/presentation/store/store";
  * @returns Child routes or a redirect to overview
  */
 export const GuestRoute: FC = () => {
-    const user = useAppSelector(({ auth: { login } }) => login.data?.user);
+    const user = useAppSelector(({ session: { currentUser } }) => currentUser.data);
 
     if (user) {
         return <Navigate to={OVERVIEW_PATH} replace />;

@@ -1,14 +1,10 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { LoginUseCase } from "@/modules/auth/application/usecases/login.usecase";
 import type { IAuthResponse } from "@/modules/auth/domain/entities/IAuthResponse";
-import { AuthRepositoryImpl } from "@/modules/auth/infrastructure/repositories/auth.repository.impl";
 import type { ILoginCredentials } from "@/modules/auth/presentation/model/ILoginCredentials";
 import { authSlice } from "@/modules/auth/presentation/store";
 import { ActionType } from "@/modules/auth/presentation/store/constants";
 import type { IApiProblemDetails } from "@/shared/infrastructure/api/type";
-
-const authRepository = new AuthRepositoryImpl();
-const loginUseCase = new LoginUseCase(authRepository);
+import container from "@/shared/infrastructure/service.locator.ts";
 
 /**
  * Action to reset login state.
@@ -35,7 +31,7 @@ export const loginAction = createAsyncThunk<
     { rejectValue: IApiProblemDetails }
 >(ActionType.AuthLogin, async (credentials: ILoginCredentials, { rejectWithValue }) => {
     try {
-        const response = await loginUseCase.execute(credentials);
+        const response = await container.cradle.loginUseCase.execute(credentials);
         return response;
     } catch (error) {
         return rejectWithValue(error as IApiProblemDetails);

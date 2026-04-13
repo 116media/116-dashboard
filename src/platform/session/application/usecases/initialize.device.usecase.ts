@@ -28,12 +28,16 @@ interface IInitializeDeviceUseCase extends IUseCase<void, string> {}
  * Part of the application layer in Clean Architecture.
  */
 export class InitializeDeviceUseCase implements IInitializeDeviceUseCase {
+    private readonly deviceRepository: IDeviceRepositoryPort;
+
     /**
      * Creates an instance of InitializeDeviceUseCase.
      *
      * @param {IDeviceRepositoryPort} deviceRepository - Repository for device operations (injected)
      */
-    constructor(private readonly deviceRepository: IDeviceRepositoryPort) {}
+    constructor({ deviceRepository }: { deviceRepository: IDeviceRepositoryPort }) {
+        this.deviceRepository = deviceRepository;
+    }
 
     /**
      * Executes the device initialization.

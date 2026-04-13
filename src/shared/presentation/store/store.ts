@@ -50,7 +50,7 @@ const persistConfig = {
     key: "root",
     version: 1,
     storage,
-    whitelist: ["auth"],
+    whitelist: ["auth", "session"],
     transforms: [encryptor]
 };
 
@@ -116,7 +116,7 @@ export const useAppDispatch = (): AppDispatch => useDispatch<AppDispatch>();
  *
  * @example
  * ```typescript
- * const user = useAppSelector((state) => state.auth.login.data?.user);
+ * const user = useAppSelector((state) => state.session.currentUser.data);
  * ```
  */
 export const useAppSelector: TypedUseSelectorHook<IRootState> = useSelector;

@@ -1,8 +1,12 @@
-import { Avatar, Badge, Button, Divider, Flex, Tag, Typography } from "antd";
+import { Avatar, Button, Divider, Flex, Typography } from "antd";
 import type { FC } from "react";
 import { useNavigate } from "react-router";
 import { useSignOut } from "@/modules/auth/presentation/hooks/UseSignOut";
-import { SETTING_PATH } from "@/shared/infrastructure/constants/paths";
+import {
+    SETTING_NOTIFICATION_PATH,
+    SETTING_PROFILE_PATH,
+    SETTING_SECURITY_PATH
+} from "@/shared/infrastructure/constants/paths";
 import { useAppSelector } from "@/shared/presentation/store/store";
 import {
     IconBellOutlined,
@@ -10,6 +14,7 @@ import {
     IconLogoutOutlined,
     IconUserOutlined
 } from "@/shared/presentation/ui/Icons";
+import RoleBadge from "@/shared/presentation/ui/RoleBadge";
 
 import styles from "./index.module.scss";
 
@@ -19,9 +24,19 @@ const { Text } = Typography;
  * User menu items displayed in the settings dropdown.
  */
 const USER_MENU_ITEMS = [
-    { key: "profile", label: "Mon profil", icon: IconUserOutlined, path: SETTING_PATH },
-    { key: "notifications", label: "Notifications", icon: IconBellOutlined, path: null },
-    { key: "password", label: "Changer mot de passe", icon: IconLockOutlined, path: null }
+    { key: "profile", label: "Mon profil", icon: IconUserOutlined, path: SETTING_PROFILE_PATH },
+    {
+        key: "notifications",
+        label: "Notifications",
+        icon: IconBellOutlined,
+        path: SETTING_NOTIFICATION_PATH
+    },
+    {
+        key: "password",
+        label: "Changer mot de passe",
+        icon: IconLockOutlined,
+        path: SETTING_SECURITY_PATH
+    }
 ];
 
 /**
@@ -36,11 +51,11 @@ const USER_MENU_ITEMS = [
  */
 export const SettingsDropdownMenu: FC = () => {
     const navigate = useNavigate();
-    const user = useAppSelector(({ auth: { login } }) => login.data?.user);
+    const user = useAppSelector(({ session: { currentUser } }) => currentUser.data);
     const { loading, onSignOut } = useSignOut();
 
-    const handleMenuClick = (path: string | null) => {
-        if (path) navigate(path);
+    const handleMenuClick = (path: string) => {
+        navigate(path);
     };
 
     return (
@@ -56,24 +71,9 @@ export const SettingsDropdownMenu: FC = () => {
                 </Text>
                 <Text type="secondary">{user?.email}</Text>
 
-                <div className={styles.settingsDropdownMenu__role}>
-                    <Tag
-                        variant="outlined"
-                        className={styles.settingsDropdownMenu__role}
-                        onClick={() => navigate(SETTING_PATH)}
-                    >
-                        {user?.roles?.[0]?.name}
-                    </Tag>
-
-                    {user?.roles?.length >= 1 && (
-                        <Badge
-                            size="small"
-                            color="volcano"
-                            offset={[-6, -20]}
-                            count={user.roles.length}
-                        />
-                    )}
-                </div>
+                {user?.roles && (
+                    <RoleBadge roles={user.roles} onClick={() => navigate(SETTING_PROFILE_PATH)} />
+                )}
             </Flex>
 
             <Divider size="small" />

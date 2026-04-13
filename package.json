@@ -11,15 +11,17 @@
         "preview": "vite preview",
         "lint:code": "biome lint --no-errors-on-unmatched",
         "lint:code:fix": "biome check --write",
-        "lint:types": "tsc --noEmit",
-        "api:generate": "yarn dlx swagger-typescript-api generate -p http://localhost:5025/swagger/v1/swagger.json -o ./src/shared/api/generated/ -n 116.api.ts --axios --responses && node scripts/format-api-docs.js"
+        "lint:types": "tsc --noEmit -p tsconfig.app.json",
+        "api:generate": "yarn dlx swagger-typescript-api generate -p http://localhost:5025/swagger/v1/swagger.json -o ./src/shared/infrastructure/api/generated/ -n 116.api.ts --axios --responses && node scripts/format-api-docs.js"
     },
     "dependencies": {
         "@lottiefiles/dotlottie-react": "^0.18.7",
         "@reduxjs/toolkit": "^2.9.0",
         "antd": "^6.3.4",
         "antd-style": "^4.1.0",
+        "awilix": "^13.0.3",
         "axios": "^1.12.2",
+        "google-libphonenumber": "^3.2.44",
         "http-status": "^2.1.0",
         "nprogress": "^0.2.0",
         "react": "^19.2.0",
@@ -35,6 +37,7 @@
     },
     "devDependencies": {
         "@biomejs/biome": "^2.2.5",
+        "@types/google-libphonenumber": "^7.4.30",
         "@types/node": "^25.5.0",
         "@types/nprogress": "^0.2.3",
         "@types/react": "^19.2.0",
@@ -44,7 +47,8 @@
         "globals": "^17.4.0",
         "lint-staged": "^16.2.3",
         "typescript": "^6.0.2",
-        "vite": "^8.0.2"
+        "vite": "^8.0.2",
+        "vite-plugin-checker": "^0.12.0"
     },
     "packageManager": "yarn@4.9.4"
 }
