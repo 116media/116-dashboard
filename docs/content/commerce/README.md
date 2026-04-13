@@ -17,13 +17,17 @@ The Ventes module manages the order-to-payment lifecycle for B2B content commiss
 5. Verify or reject payment
 6. On verification: stamps (SocialBoost, IsFeatured) applied to linked content
 
-## Backend Endpoints (13)
+## Backend Endpoints (17)
 
 | Method | Route | Auth | Description |
 | --- | --- | --- | --- |
 | POST | `/api/v1/admin/orders` | AdminOrSuperAdmin | Create order |
+| PATCH | `/api/v1/admin/orders/{id}` | AdminOrSuperAdmin | Edit order (Draft only) |
 | POST | `/api/v1/admin/orders/{id}/items` | AdminOrSuperAdmin | Add item to order |
+| PATCH | `/api/v1/admin/orders/{id}/items/{itemId}` | AdminOrSuperAdmin | Edit item (Draft only) |
+| DELETE | `/api/v1/admin/orders/{id}/items/{itemId}` | AdminOrSuperAdmin | Remove item (Draft only) |
 | POST | `/api/v1/admin/orders/{id}/items/{itemId}/tiers` | AdminOrSuperAdmin | Add tier to item |
+| DELETE | `/api/v1/admin/orders/{id}/items/{itemId}/tiers/{tierId}` | AdminOrSuperAdmin | Remove tier (Draft only) |
 | PATCH | `/api/v1/admin/orders/{id}/submit` | AdminOrSuperAdmin | Submit order |
 | PATCH | `/api/v1/admin/orders/{id}/cancel` | AdminOrSuperAdmin | Cancel order |
 | POST | `/api/v1/admin/orders/{id}/payment/proof` | AdminOrSuperAdmin | Attach payment proof |
