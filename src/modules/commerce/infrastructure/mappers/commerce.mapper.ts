@@ -3,13 +3,37 @@ import type { IOrderDetailEntity } from "@/modules/commerce/domain/entities/IOrd
 import type { IOrderItemEntity } from "@/modules/commerce/domain/entities/IOrderItemEntity";
 import type { IOrderSummaryEntity } from "@/modules/commerce/domain/entities/IOrderSummaryEntity";
 import type { IPaymentEntity } from "@/modules/commerce/domain/entities/IPaymentEntity";
+import type { IPaymentSummaryEntity } from "@/modules/commerce/domain/entities/IPaymentSummaryEntity";
 import type {
     ContentOrderDetailDto,
     ContentOrderSummaryDto,
+    EnumOrderStatus,
+    EnumPaymentMethod,
+    EnumPaymentStatus,
     ItemTierDto,
     OrderItemDto,
     PaymentDto
 } from "@/shared/infrastructure/api/generated/116.api";
+
+/**
+ * Temporary DTO type for payment summaries until the API client is regenerated.
+ * Matches the backend's `PaymentSummaryDto` record shape.
+ */
+export interface PaymentSummaryDto {
+    id: string;
+    orderId: string;
+    customerName: string;
+    amountUsd: number;
+    paymentMethod?: EnumPaymentMethod | null;
+    status: EnumPaymentStatus;
+    orderStatus: EnumOrderStatus;
+    verifiedBy?: string | null;
+    verifiedAt?: string | null;
+    createdAt?: string | null;
+    createdBy?: string | null;
+    updatedAt?: string | null;
+    updatedBy?: string | null;
+}
 
 /**
  * Mapper for converting API DTOs to domain entities in the commerce module.
@@ -31,8 +55,9 @@ export const CommerceMapper = {
      * @param {ItemTierDto} dto - Pricing tier snapshot data from API
      * @returns {IItemTierEntity} Mapped item tier entity
      */
-    itemTierFromDto(dto: ItemTierDto): IItemTierEntity {
+    itemTierFromDto(dto: ItemTierDto & { id?: string }): IItemTierEntity {
         return {
+            id: dto.id ?? "",
             tierName: dto.tierName,
             priceSnapshotUsd: dto.priceSnapshotUsd
         };
@@ -116,6 +141,30 @@ export const CommerceMapper = {
             totalAmountUsd: dto.totalAmountUsd,
             items: dto.items.map(CommerceMapper.orderItemFromDto),
             payment: dto.payment ? CommerceMapper.paymentFromDto(dto.payment) : null,
+            createdAt: dto.createdAt,
+            createdBy: dto.createdBy,
+            updatedAt: dto.updatedAt,
+            updatedBy: dto.updatedBy
+        };
+    },
+
+    /**
+     * Maps PaymentSummaryDto to IPaymentSummaryEntity domain entity.
+     *
+     * @param {PaymentSummaryDto} dto - Payment summary data from API
+     * @returns {IPaymentSummaryEntity} Mapped payment summary entity with order and customer info
+     */
+    paymentSummaryFromDto(dto: PaymentSummaryDto): IPaymentSummaryEntity {
+        return {
+            id: dto.id,
+            orderId: dto.orderId,
+            customerName: dto.customerName,
+            amountUsd: dto.amountUsd,
+            paymentMethod: dto.paymentMethod,
+            status: dto.status,
+            orderStatus: dto.orderStatus,
+            verifiedBy: dto.verifiedBy,
+            verifiedAt: dto.verifiedAt,
             createdAt: dto.createdAt,
             createdBy: dto.createdBy,
             updatedAt: dto.updatedAt,
