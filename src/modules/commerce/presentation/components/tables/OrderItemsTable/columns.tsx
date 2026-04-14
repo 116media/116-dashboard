@@ -1,6 +1,10 @@
-import { Tag, Typography } from "antd";
+import { Space, Tag, Typography } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import type { IOrderItemEntity } from "@/modules/commerce/domain/entities/IOrderItemEntity";
+import { Colors } from "@/shared/presentation/constants/theme";
+import { IconCheckCircleFilled, IconCloseCircleFilled } from "@/shared/presentation/ui/Icons";
+import type { ITableActionItem } from "@/shared/presentation/ui/TableActionDropdown";
+import TableActionDropdown from "@/shared/presentation/ui/TableActionDropdown";
 
 const { Text } = Typography;
 
@@ -9,12 +13,22 @@ const { Text } = Typography;
  *
  * @description
  * Builds columns for content type, category name, promotion level,
- * social boost flag, bonus flag, and attached pricing tiers.
- * Used in the order detail view to display line items.
+ * social boost flag, bonus flag, attached pricing tiers, and an
+ * actions column for managing items and tiers (only on draft orders).
  *
+ * @param onAddTier - Callback to add a pricing tier to an item
+ * @param onRemoveItem - Callback to remove an item from the order
+ * @param onRemoveTier - Callback to remove a tier from an item
+ * @param isDraft - Whether the order is in Draft status (enables actions)
  * @returns Column configuration for the Ant Design Table
  */
-export const orderItemsTableColumns = (): ColumnsType<IOrderItemEntity> => [
+export const orderItemsTableColumns = (
+    onAddTier?: (itemId: string, categoryName: string) => void,
+    onRemoveItem?: (itemId: string) => void,
+    onRemoveTier?: (itemId: string, tierId: string) => void,
+    onEditItem?: (item: IOrderItemEntity) => void,
+    isDraft?: boolean
+): ColumnsType<IOrderItemEntity> => [
     {
         title: "Type",
         dataIndex: "contentKind",
@@ -53,9 +67,12 @@ export const orderItemsTableColumns = (): ColumnsType<IOrderItemEntity> => [
         key: "socialBoost",
         width: 80,
         align: "center",
-        render: (boost: boolean) => (
-            <Tag color={boost ? "blue" : "default"}>{boost ? "Oui" : "Non"}</Tag>
-        )
+        render: (boost: boolean) =>
+            boost ? (
+                <IconCheckCircleFilled style={{ color: Colors.Success, fontSize: 18 }} />
+            ) : (
+                <IconCloseCircleFilled style={{ color: Colors.Error, fontSize: 18 }} />
+            )
     },
     {
         title: "Bonus",
@@ -63,24 +80,77 @@ export const orderItemsTableColumns = (): ColumnsType<IOrderItemEntity> => [
         key: "isBonus",
         width: 80,
         align: "center",
-        render: (bonus: boolean) => (
-            <Tag color={bonus ? "green" : "default"}>{bonus ? "Oui" : "Non"}</Tag>
-        )
+        render: (bonus: boolean) =>
+            bonus ? (
+                <IconCheckCircleFilled style={{ color: Colors.Success, fontSize: 18 }} />
+            ) : (
+                <IconCloseCircleFilled style={{ color: Colors.Error, fontSize: 18 }} />
+            )
     },
     {
         title: "Tranches",
         dataIndex: "tiers",
         key: "tiers",
-        width: 200,
+        width: 250,
         render: (_: unknown, record: IOrderItemEntity) =>
-            record.tiers.length > 0 ? (
-                record.tiers.map((tier) => (
-                    <Tag key={tier.tierName}>
-                        {tier.tierName}: ${tier.priceSnapshotUsd.toFixed(2)}
-                    </Tag>
-                ))
+            (record.tiers ?? []).length > 0 ? (
+                <Space size={[0, 4]} wrap>
+                    {record.tiers.map((tier) => (
+                        <Tag
+                            key={tier.id}
+                            closable={isDraft && !!onRemoveTier}
+                            onClose={(e) => {
+                                e.preventDefault();
+                                onRemoveTier?.(record.id, tier.id);
+                            }}
+                        >
+                            {tier.tierName}: ${tier.priceSnapshotUsd.toFixed(2)}
+                        </Tag>
+                    ))}
+                </Space>
             ) : (
                 <Text type="secondary">Aucune</Text>
             )
-    }
+    },
+    ...(isDraft && (onAddTier || onRemoveItem)
+        ? [
+              {
+                  title: "Actions",
+                  key: "actions",
+                  width: 80,
+                  fixed: "end" as const,
+                  align: "center" as const,
+                  render: (_: unknown, record: IOrderItemEntity) => {
+                      const items: ITableActionItem[] = [];
+
+                      if (onEditItem) {
+                          items.push({
+                              key: "editItem",
+                              label: "Modifier le produit",
+                              onClick: () => onEditItem(record)
+                          });
+                      }
+
+                      if (onAddTier) {
+                          items.push({
+                              key: "addTier",
+                              label: "Ajouter une tranche",
+                              onClick: () => onAddTier(record.id, record.categoryName)
+                          });
+                      }
+
+                      if (onRemoveItem) {
+                          items.push({
+                              key: "removeItem",
+                              label: "Supprimer le produit",
+                              danger: true,
+                              onClick: () => onRemoveItem(record.id)
+                          });
+                      }
+
+                      return <TableActionDropdown items={items} />;
+                  }
+              }
+          ]
+        : [])
 ];
