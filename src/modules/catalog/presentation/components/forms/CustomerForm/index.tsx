@@ -38,8 +38,7 @@ interface ICustomerFormProps {
  * @description
  * Renders fullName, email, phone, company, and notes fields with
  * client-side validation matching the backend constraints.
- * Pre-populates from `initialValues` when in EDIT mode. The email
- * field is disabled in EDIT mode since it cannot be updated.
+ * Pre-populates from `initialValues` when in EDIT mode.
  * Displays API errors via `ErrorAlert`.
  *
  * @param {ICustomerFormProps} props - Component props
@@ -84,15 +83,11 @@ const CustomerForm: FC<ICustomerFormProps> = ({
             </Item>
 
             <Item name="email" label="Email" rules={CustomersValidator.email("Email")}>
-                <Input
-                    maxLength={200}
-                    placeholder="Adresse e-mail"
-                    disabled={formContext === "EDIT"}
-                />
+                <Input maxLength={200} placeholder="Adresse e-mail" />
             </Item>
 
             <Item name="phone" label="Téléphone" rules={CustomersValidator.phone("Téléphone")}>
-                <Input maxLength={20} placeholder="Numéro de téléphone" />
+                <Input maxLength={30} placeholder="Numéro de téléphone" />
             </Item>
 
             <Item
