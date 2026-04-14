@@ -98,7 +98,7 @@ const PaymentSection: FC<IPaymentSectionProps> = ({
 
                 <Descriptions column={2} size="small" bordered>
                     <Descriptions.Item label="Montant">
-                        ${payment.amountUsd.toFixed(2)}
+                        ${(payment.amountUsd ?? 0).toFixed(2)}
                     </Descriptions.Item>
                     <Descriptions.Item label="Mode de paiement">
                         {payment.paymentMethod ?? "—"}
