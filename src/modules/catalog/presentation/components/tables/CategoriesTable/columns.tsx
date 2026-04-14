@@ -1,10 +1,12 @@
-import { Tag, Typography } from "antd";
+import { Typography } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import type { ICategoryEntity } from "@/modules/catalog/domain/entities/ICategoryEntity";
 import {
     CATEGORY_DROPDOWN_ITEMS,
     type CategoryAction
 } from "@/modules/catalog/presentation/constants/catalog.categories.dropdown";
+import { Colors } from "@/shared/presentation/constants/theme";
+import { IconCheckCircleFilled, IconCloseCircleFilled } from "@/shared/presentation/ui/Icons";
 import StatusTag from "@/shared/presentation/ui/StatusTag";
 import type { ITableActionItem } from "@/shared/presentation/ui/TableActionDropdown";
 import TableActionDropdown from "@/shared/presentation/ui/TableActionDropdown";
@@ -61,9 +63,12 @@ export const categoriesTableColumns = (
         key: "isFree",
         width: 100,
         align: "center",
-        render: (isFree: boolean) => (
-            <Tag color={isFree ? "success" : "default"}>{isFree ? "Oui" : "Non"}</Tag>
-        )
+        render: (isFree: boolean) =>
+            isFree ? (
+                <IconCheckCircleFilled style={{ color: Colors.Success, fontSize: 18 }} />
+            ) : (
+                <IconCloseCircleFilled style={{ color: Colors.Error, fontSize: 18 }} />
+            )
     },
     {
         title: "Statut",
