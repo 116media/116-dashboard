@@ -22,5 +22,10 @@ export const commerceInitialState: ICommerceState = {
     getOrderById: createInitialState(),
     getOrderPayment: createInitialState(),
     listPendingPaymentOrders: createInitialState(),
-    getCustomerOrders: createInitialState()
+    getCustomerOrders: createInitialState(),
+    listPayments: createInitialState(),
+    editOrder: createInitialState(),
+    removeItem: createInitialState(),
+    removeItemTier: createInitialState(),
+    editItem: createInitialState()
 };
