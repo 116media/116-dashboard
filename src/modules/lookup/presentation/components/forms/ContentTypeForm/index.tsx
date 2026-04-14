@@ -68,7 +68,7 @@ const ContentTypeForm: FC<IContentTypeFormProps> = ({
             <ErrorAlert error={error} showIcon closable banner={false} />
 
             <Item name="name" label="Nom" rules={ContentTypesValidator.name("Nom")}>
-                <Input maxLength={50} placeholder="Nom du type de contenu" />
+                <Input maxLength={30} placeholder="Nom du type de contenu" />
             </Item>
         </Form>
     );
