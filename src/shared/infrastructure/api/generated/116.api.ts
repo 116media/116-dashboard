@@ -451,6 +451,29 @@ export interface AdminDeleteVideoResponse {
   isSuccess: boolean;
 }
 
+export interface AdminEditOrderItemRequest {
+  contentKind?: EnumCoreContentType | null;
+  categoryId?: string | null;
+  /** @format uuid */
+  promotionLevelId?: string | null;
+  socialBoost?: boolean | null;
+  isBonus?: boolean | null;
+}
+
+export interface AdminEditOrderItemResponse {
+  item: OrderItemDto;
+}
+
+export interface AdminEditOrderRequest {
+  customerId?: string | null;
+  /** @format uuid */
+  packageId?: string | null;
+}
+
+export interface AdminEditOrderResponse {
+  order: ContentOrderSummaryDto;
+}
+
 export interface AdminForceLogoutUserResponse {
   isSuccess: boolean;
 }
@@ -490,6 +513,10 @@ export interface AdminGetAllOrdersResponse {
 
 export interface AdminGetAllPackagesResponse {
   packages: PackageDtoPaginatedResult;
+}
+
+export interface AdminGetAllPaymentsResponse {
+  payments: PaymentSummaryDtoPaginatedResult;
 }
 
 export interface AdminGetAllPermissionsResponse {
@@ -662,6 +689,14 @@ export interface AdminRemoveCategoryPricingResponse {
   isSuccess: boolean;
 }
 
+export interface AdminRemoveItemTierResponse {
+  isSuccess: boolean;
+}
+
+export interface AdminRemoveOrderItemResponse {
+  isSuccess: boolean;
+}
+
 export interface AdminRemovePackageSlotResponse {
   package: PackageDto;
   isSuccess: boolean;
@@ -825,6 +860,7 @@ export interface AdminUpdateContentTypeResponse {
 
 export interface AdminUpdateCustomerRequest {
   fullName: string;
+  email: string;
   phone?: string | null;
   company?: string | null;
   notes?: string | null;
@@ -1282,6 +1318,8 @@ export interface HttpValidationProblemDetails {
 }
 
 export interface ItemTierDto {
+  /** @format uuid */
+  id: string;
   tierName: string;
   /** @format double */
   priceSnapshotUsd: number;
@@ -1383,6 +1421,39 @@ export interface PaymentDto {
   /** @format date-time */
   verifiedAt?: string | null;
   receiptUrl?: string | null;
+}
+
+export interface PaymentSummaryDto {
+  /** @format date-time */
+  createdAt?: string | null;
+  createdBy?: string | null;
+  /** @format date-time */
+  updatedAt?: string | null;
+  updatedBy?: string | null;
+  /** @format uuid */
+  id: string;
+  /** @format uuid */
+  orderId: string;
+  customerName: string;
+  /** @format double */
+  amountUsd: number;
+  paymentMethod?: EnumPaymentMethod | null;
+  status: EnumPaymentStatus;
+  orderStatus: EnumOrderStatus;
+  /** @format uuid */
+  verifiedBy?: string | null;
+  /** @format date-time */
+  verifiedAt?: string | null;
+}
+
+export interface PaymentSummaryDtoPaginatedResult {
+  /** @format int32 */
+  pageIndex: number;
+  /** @format int32 */
+  pageSize: number;
+  /** @format int64 */
+  count: number;
+  items: PaymentSummaryDto[];
 }
 
 export interface PermissionDto {
@@ -3580,10 +3651,8 @@ export class Api<
       }),
 
     /**
-     * @description Updates the contact information of an existing B2B customer.
-     * 
-     * Email is intentionally excluded from this operation — it serves as the unique
-     * identifier for a customer and cannot be changed after creation.
+     * @description Updates the contact information of an existing B2B customer,
+     * including name, email, phone, company, and notes.
      * 
      * **Authentication Requirements:**
      * 
@@ -3681,8 +3750,6 @@ export class Api<
      * 
      * A customer account must exist before an order can be opened for them. Customers are entirely
      * separate from platform visitor accounts (B2C users who read articles and watch videos).
-     * 
-     * **Note:** The email address is used as the unique identifier and cannot be changed after creation.
      * 
      * **Authentication Requirements:**
      * 
@@ -5134,6 +5201,50 @@ export class Api<
       }),
 
     /**
+     * @description Edits a Draft content order's customer or package assignment.
+     * Only orders in Draft status can be modified.
+     * 
+     * **Authentication Requirements:**
+     * 
+     * - User must be authenticated with a valid access token
+     * - User must have Admin or SuperAdmin role
+     * 
+     * **Response Codes:**
+     * 
+     * - Returns 200 OK with the updated order summary on success
+     * - Returns 400 Bad Request if the order is not in Draft status or validation fails
+     * - Returns 401 Unauthorized if access token is invalid or expired
+     * - Returns 403 Forbidden if user lacks Admin role
+     * - Returns 404 Not Found if the order or customer does not exist
+     *
+     * @tags admin::orders
+     * @name AdminEditOrder
+     * @summary Edit a draft order
+     * @request PATCH:/api/v1/admin/orders/{id}
+     * @secure
+     * @response `200` `AdminEditOrderResponse` OK
+     * @response `400` `ProblemDetails` Bad Request
+     * @response `401` `ProblemDetails` Unauthorized
+     * @response `403` `ProblemDetails` Forbidden
+     * @response `404` `ProblemDetails` Not Found
+     * @response `429` `ProblemDetails` Too Many Requests
+     */
+    adminEditOrder: (
+      id: string,
+      data: AdminEditOrderRequest,
+      params: RequestParams = {},
+    ) =>
+      this.request<AdminEditOrderResponse, ProblemDetails>({
+        path: `/api/v1/admin/orders/${id}`,
+        method: "PATCH",
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
      * @description Returns a paginated list of orders. Supports optional filtering by status and customer.
      * Results are ordered by most recently created first.
      * 
@@ -5173,6 +5284,7 @@ export class Api<
         status?: EnumOrderStatus;
         /** @format uuid */
         customerId?: string;
+        search?: string;
       },
       params: RequestParams = {},
     ) =>
@@ -5314,6 +5426,139 @@ export class Api<
       this.request<AdminSubmitOrderResponse, ProblemDetails>({
         path: `/api/v1/admin/orders/${id}/submit`,
         method: "PATCH",
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * @description Removes a commissioned content item from a Draft order and recalculates the order total.
+     * Only orders in Draft status can have items removed.
+     * 
+     * **Authentication Requirements:**
+     * 
+     * - User must be authenticated with a valid access token
+     * - User must have Admin or SuperAdmin role
+     * 
+     * **Response Codes:**
+     * 
+     * - Returns 200 OK on success
+     * - Returns 400 Bad Request if the order is not in Draft status or validation fails
+     * - Returns 401 Unauthorized if access token is invalid or expired
+     * - Returns 403 Forbidden if user lacks Admin role
+     * - Returns 404 Not Found if the order or item does not exist
+     *
+     * @tags admin::orders
+     * @name AdminRemoveOrderItem
+     * @summary Remove an item from a draft order
+     * @request DELETE:/api/v1/admin/orders/{id}/items/{itemId}
+     * @secure
+     * @response `200` `AdminRemoveOrderItemResponse` OK
+     * @response `400` `ProblemDetails` Bad Request
+     * @response `401` `ProblemDetails` Unauthorized
+     * @response `403` `ProblemDetails` Forbidden
+     * @response `404` `ProblemDetails` Not Found
+     * @response `429` `ProblemDetails` Too Many Requests
+     */
+    adminRemoveOrderItem: (
+      id: string,
+      itemId: string,
+      params: RequestParams = {},
+    ) =>
+      this.request<AdminRemoveOrderItemResponse, ProblemDetails>({
+        path: `/api/v1/admin/orders/${id}/items/${itemId}`,
+        method: "DELETE",
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * @description Edits an existing content item in a Draft order. Supports changing the content kind,
+     * category, promotion level, social boost, and bonus status.
+     * 
+     * When the promotion level changes, the price is re-snapshotted from the current level price.
+     * The order total is recalculated after the update.
+     * 
+     * **Authentication Requirements:**
+     * 
+     * - User must be authenticated with a valid access token
+     * - User must have Admin or SuperAdmin role
+     * 
+     * **Response Codes:**
+     * 
+     * - Returns 200 OK with the updated order item on success
+     * - Returns 400 Bad Request if the order is not in Draft status or validation fails
+     * - Returns 401 Unauthorized if access token is invalid or expired
+     * - Returns 403 Forbidden if user lacks Admin role
+     * - Returns 404 Not Found if the order, item, category, or promotion level does not exist
+     *
+     * @tags admin::orders
+     * @name AdminEditOrderItem
+     * @summary Edit a content item in a draft order
+     * @request PATCH:/api/v1/admin/orders/{id}/items/{itemId}
+     * @secure
+     * @response `200` `AdminEditOrderItemResponse` OK
+     * @response `400` `ProblemDetails` Bad Request
+     * @response `401` `ProblemDetails` Unauthorized
+     * @response `403` `ProblemDetails` Forbidden
+     * @response `404` `ProblemDetails` Not Found
+     * @response `429` `ProblemDetails` Too Many Requests
+     */
+    adminEditOrderItem: (
+      id: string,
+      itemId: string,
+      data: AdminEditOrderItemRequest,
+      params: RequestParams = {},
+    ) =>
+      this.request<AdminEditOrderItemResponse, ProblemDetails>({
+        path: `/api/v1/admin/orders/${id}/items/${itemId}`,
+        method: "PATCH",
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * @description Removes a pricing tier snapshot from an order item in a Draft order and recalculates
+     * the order total. Only orders in Draft status can have tiers removed.
+     * 
+     * **Authentication Requirements:**
+     * 
+     * - User must be authenticated with a valid access token
+     * - User must have Admin or SuperAdmin role
+     * 
+     * **Response Codes:**
+     * 
+     * - Returns 200 OK on success
+     * - Returns 400 Bad Request if the order is not in Draft status or validation fails
+     * - Returns 401 Unauthorized if access token is invalid or expired
+     * - Returns 403 Forbidden if user lacks Admin role
+     * - Returns 404 Not Found if the order, item, or tier does not exist
+     *
+     * @tags admin::orders
+     * @name AdminRemoveItemTier
+     * @summary Remove a pricing tier from an order item
+     * @request DELETE:/api/v1/admin/orders/{id}/items/{itemId}/tiers/{tierId}
+     * @secure
+     * @response `200` `AdminRemoveItemTierResponse` OK
+     * @response `400` `ProblemDetails` Bad Request
+     * @response `401` `ProblemDetails` Unauthorized
+     * @response `403` `ProblemDetails` Forbidden
+     * @response `404` `ProblemDetails` Not Found
+     * @response `429` `ProblemDetails` Too Many Requests
+     */
+    adminRemoveItemTier: (
+      id: string,
+      itemId: string,
+      tierId: string,
+      params: RequestParams = {},
+    ) =>
+      this.request<AdminRemoveItemTierResponse, ProblemDetails>({
+        path: `/api/v1/admin/orders/${id}/items/${itemId}/tiers/${tierId}`,
+        method: "DELETE",
         secure: true,
         format: "json",
         ...params,
@@ -5841,6 +6086,59 @@ export class Api<
       this.request<AdminActivatePackageResponse, ProblemDetails>({
         path: `/api/v1/admin/packages/${id}/activate`,
         method: "PATCH",
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * @description Returns a paginated list of payment records with linked order and customer data.
+     * Supports optional filtering by payment status, payment method, and customer search.
+     * Results are ordered by most recently created first.
+     * 
+     * **Authentication Requirements:**
+     * 
+     * - User must be authenticated with a valid access token
+     * - User must have Admin or SuperAdmin role
+     * 
+     * **Response Codes:**
+     * 
+     * - Returns 200 OK with a paginated list of payment summaries
+     * - Returns 401 Unauthorized if access token is invalid or expired
+     * - Returns 403 Forbidden if user lacks Admin role
+     *
+     * @tags admin::payments
+     * @name AdminGetAllPayments
+     * @summary List all payments
+     * @request GET:/api/v1/admin/payments
+     * @secure
+     * @response `200` `AdminGetAllPaymentsResponse` OK
+     * @response `401` `ProblemDetails` Unauthorized
+     * @response `403` `ProblemDetails` Forbidden
+     * @response `429` `ProblemDetails` Too Many Requests
+     */
+    adminGetAllPayments: (
+      query?: {
+        /**
+         * @format int32
+         * @default 0
+         */
+        pageIndex?: number;
+        /**
+         * @format int32
+         * @default 10
+         */
+        pageSize?: number;
+        status?: EnumPaymentStatus;
+        method?: EnumPaymentMethod;
+        search?: string;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<AdminGetAllPaymentsResponse, ProblemDetails>({
+        path: `/api/v1/admin/payments`,
+        method: "GET",
+        query: query,
         secure: true,
         format: "json",
         ...params,
