@@ -14,7 +14,12 @@ export const ActionType = {
     GetOrderById: "Commerce/getOrderById",
     GetOrderPayment: "Commerce/getOrderPayment",
     ListPendingPaymentOrders: "Commerce/listPendingPaymentOrders",
-    GetCustomerOrders: "Commerce/getCustomerOrders"
+    GetCustomerOrders: "Commerce/getCustomerOrders",
+    ListPayments: "Commerce/listPayments",
+    EditOrder: "Commerce/editOrder",
+    RemoveItem: "Commerce/removeItem",
+    RemoveItemTier: "Commerce/removeItemTier",
+    EditItem: "Commerce/editItem"
 } as const;
 
 /**
