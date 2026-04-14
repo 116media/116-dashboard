@@ -1,6 +1,7 @@
 import { Button, Descriptions, Space, Table, Typography } from "antd";
 import type { FC } from "react";
 import type { IOrderDetailEntity } from "@/modules/commerce/domain/entities/IOrderDetailEntity";
+import type { IOrderItemEntity } from "@/modules/commerce/domain/entities/IOrderItemEntity";
 import type { IPaymentEntity } from "@/modules/commerce/domain/entities/IPaymentEntity";
 import { orderItemsTableColumns } from "@/modules/commerce/presentation/components/tables/OrderItemsTable/columns";
 import OrderStatusTag from "@/modules/commerce/presentation/components/ui/OrderStatusTag";
@@ -31,6 +32,11 @@ interface IOrderDetailViewProps {
     onSubmitOrder: () => void;
     onCancelOrder: () => void;
     onAddItem: () => void;
+    onAddTier: (itemId: string, categoryName: string) => void;
+    onRemoveItem: (itemId: string) => void;
+    onRemoveTier: (itemId: string, tierId: string) => void;
+    onEditItem: (item: IOrderItemEntity) => void;
+    onEditOrder: () => void;
     onAttachProof: () => void;
     onVerifyPayment: () => void;
     onRejectPayment: () => void;
@@ -58,6 +64,11 @@ const OrderDetailView: FC<IOrderDetailViewProps> = ({
     onSubmitOrder,
     onCancelOrder,
     onAddItem,
+    onAddTier,
+    onRemoveItem,
+    onRemoveTier,
+    onEditItem,
+    onEditOrder,
     onAttachProof,
     onVerifyPayment,
     onRejectPayment,
@@ -82,14 +93,17 @@ const OrderDetailView: FC<IOrderDetailViewProps> = ({
                         </Title>
                         <Space>
                             <OrderStatusTag status={order.status} />
-                            <Text type="secondary">Total: ${order.totalAmountUsd.toFixed(2)}</Text>
+                            <Text type="secondary">
+                                Total: ${(order.totalAmountUsd ?? 0).toFixed(2)}
+                            </Text>
                         </Space>
                     </Space>
 
                     <Space>
                         {isDraft && (
                             <>
-                                <Button onClick={onAddItem}>Ajouter un article</Button>
+                                <Button onClick={onEditOrder}>Modifier</Button>
+                                <Button onClick={onAddItem}>Ajouter un produit</Button>
                                 <Button
                                     type="primary"
                                     loading={actionsLoading}
@@ -120,13 +134,19 @@ const OrderDetailView: FC<IOrderDetailViewProps> = ({
                 </Descriptions>
 
                 <div>
-                    <Title level={5}>Articles ({order.items.length})</Title>
+                    <Title level={5}>Produits ({(order.items ?? []).length})</Title>
                     <Table
                         rowKey="id"
                         size="small"
                         pagination={false}
-                        columns={orderItemsTableColumns()}
-                        dataSource={order.items}
+                        columns={orderItemsTableColumns(
+                            onAddTier,
+                            onRemoveItem,
+                            onRemoveTier,
+                            onEditItem,
+                            isDraft
+                        )}
+                        dataSource={order.items ?? []}
                     />
                 </div>
 
