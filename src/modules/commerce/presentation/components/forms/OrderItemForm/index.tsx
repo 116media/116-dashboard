@@ -5,12 +5,14 @@ import { useMemo } from "react";
 import type { ICategoryEntity } from "@/modules/catalog/domain/entities/ICategoryEntity";
 import type { IAddOrderItemCredentials } from "@/modules/commerce/presentation/model/IAddOrderItemCredentials";
 import { OrderItemsValidator } from "@/modules/commerce/presentation/utils/validators/commerce.orderitems.validator";
+import type { IContentTypeEntity } from "@/modules/lookup/domain/entities/IContentTypeEntity";
 import type { IPromotionLevelEntity } from "@/modules/lookup/domain/entities/IPromotionLevelEntity";
 import type { Failure } from "@/shared/domain/failures/failure";
+import { EnumCoreContentType } from "@/shared/infrastructure/api/generated/116.api";
 import { useAppSelector } from "@/shared/presentation/store/store";
 import ErrorAlert from "@/shared/presentation/ui/ErrorAlert";
 
-const { Item } = Form;
+const { Item, useWatch } = Form;
 
 /**
  * Props for the OrderItemForm component.
@@ -27,10 +29,9 @@ interface IOrderItemFormProps {
 }
 
 const CONTENT_KIND_OPTIONS = [
-    { value: "Article", label: "Article" },
-    { value: "Video", label: "Vidéo" },
-    { value: "Short", label: "Short" },
-    { value: "PhotoShoot", label: "Shooting Photo" }
+    { value: EnumCoreContentType.Article, label: "Article" },
+    { value: EnumCoreContentType.Video, label: "Vidéo" },
+    { value: EnumCoreContentType.Short, label: "Short" }
 ];
 
 /**
@@ -40,8 +41,9 @@ const CONTENT_KIND_OPTIONS = [
  *
  * @description
  * Renders content kind, category, promotion level selects and
- * social boost / bonus checkboxes. Category and promotion level
- * options are loaded from the catalog and lookup stores.
+ * social boost / bonus checkboxes. Categories are filtered by
+ * the selected content kind. When content kind changes, category
+ * and promotion level selections are reset.
  *
  * @param {IOrderItemFormProps} props - Component props
  * @returns {JSX.Element} The rendered order item form
@@ -50,25 +52,47 @@ const OrderItemForm: FC<IOrderItemFormProps> = ({ form, error, onSubmit }) => {
     const { data: categories } = useAppSelector(
         ({ catalog: { getAllCategories } }) => getAllCategories
     );
+    const { data: contentTypes } = useAppSelector(
+        ({ lookup: { getContentTypes } }) => getContentTypes
+    );
     const { data: promotionLevels } = useAppSelector(
         ({ lookup: { getPromotionLevels } }) => getPromotionLevels
     );
+
+    const selectedContentKind: EnumCoreContentType | undefined = useWatch("contentKind", form);
+
+    const matchedContentTypeId = useMemo(() => {
+        if (!selectedContentKind) return null;
+        const types = (contentTypes as IContentTypeEntity[]) ?? [];
+        const match = types.find(
+            (ct) => ct.name.toLowerCase() === selectedContentKind.toLowerCase()
+        );
+        return match?.id ?? null;
+    }, [contentTypes, selectedContentKind]);
 
     const categoryOptions = useMemo(
         () =>
             ((categories as { items: ICategoryEntity[] })?.items ?? [])
                 .filter((c) => c.isActive)
+                .filter((c) => !matchedContentTypeId || c.contentTypeId === matchedContentTypeId)
                 .map((c) => ({ label: c.name, value: c.id })),
-        [categories]
+        [categories, matchedContentTypeId]
     );
 
     const promotionLevelOptions = useMemo(
         () =>
             ((promotionLevels as IPromotionLevelEntity[]) ?? [])
                 .filter((pl) => pl.isActive)
-                .map((pl) => ({ label: pl.name, value: pl.id })),
+                .map((pl) => ({
+                    label: `${pl.name} — ${pl.durationDays}j — $${pl.priceUsd.toFixed(2)}`,
+                    value: pl.id
+                })),
         [promotionLevels]
     );
+
+    const handleContentKindChange = () => {
+        form.setFieldsValue({ categoryId: undefined, promotionLevelId: undefined });
+    };
 
     return (
         <Form
@@ -87,7 +111,11 @@ const OrderItemForm: FC<IOrderItemFormProps> = ({ form, error, onSubmit }) => {
                 label="Type de contenu"
                 rules={OrderItemsValidator.contentKind("Type de contenu")}
             >
-                <Select options={CONTENT_KIND_OPTIONS} placeholder="Sélectionner un type" />
+                <Select
+                    options={CONTENT_KIND_OPTIONS}
+                    placeholder="Sélectionner un type"
+                    onChange={handleContentKindChange}
+                />
             </Item>
 
             <Item
@@ -100,6 +128,12 @@ const OrderItemForm: FC<IOrderItemFormProps> = ({ form, error, onSubmit }) => {
                     optionFilterProp="label"
                     options={categoryOptions}
                     placeholder="Sélectionner une catégorie"
+                    disabled={!selectedContentKind}
+                    notFoundContent={
+                        selectedContentKind
+                            ? "Aucune catégorie pour ce type"
+                            : "Sélectionnez d'abord un type"
+                    }
                 />
             </Item>
 
