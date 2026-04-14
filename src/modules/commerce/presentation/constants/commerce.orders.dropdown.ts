@@ -37,7 +37,7 @@ export const ORDER_DROPDOWN_ITEMS: IOrderDropdownItem[] = [
     },
     {
         key: "addItem",
-        label: "Ajouter un article",
+        label: "Ajouter un produit",
         hidden: (record) => record.status !== "Draft"
     },
     {
