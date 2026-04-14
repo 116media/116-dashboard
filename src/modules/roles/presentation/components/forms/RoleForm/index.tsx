@@ -74,7 +74,7 @@ const RoleForm: FC<IRoleFormProps> = ({ form, error, formContext, initialValues,
             >
                 <TextArea
                     showCount
-                    maxLength={200}
+                    maxLength={300}
                     placeholder="Description du rôle"
                     autoSize={{ minRows: 3 }}
                 />
