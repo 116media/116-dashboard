@@ -70,7 +70,7 @@ const PromotionLevelForm: FC<IPromotionLevelFormProps> = ({
             <ErrorAlert error={error} showIcon closable banner={false} />
 
             <Item name="name" label="Nom" rules={PromotionLevelsValidator.name("Nom")}>
-                <Input maxLength={50} placeholder="Nom du niveau de promotion" />
+                <Input maxLength={40} placeholder="Nom du niveau de promotion" />
             </Item>
 
             <Item
