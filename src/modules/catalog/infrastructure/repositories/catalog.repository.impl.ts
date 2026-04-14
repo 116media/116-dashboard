@@ -181,7 +181,7 @@ export class CatalogRepositoryImpl implements ICatalogRepositoryPort {
 
     async updateCustomer(
         id: string,
-        data: { fullName: string; phone?: string; company?: string; notes?: string }
+        data: { fullName: string; email: string; phone?: string; company?: string; notes?: string }
     ): Promise<Result<ICustomerEntity>> {
         try {
             const response = await apiClient.api.adminUpdateCustomer(id, data);
