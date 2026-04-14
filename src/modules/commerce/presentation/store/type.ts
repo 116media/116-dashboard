@@ -3,6 +3,7 @@ import type { IOrderDetailEntity } from "@/modules/commerce/domain/entities/IOrd
 import type { IOrderItemEntity } from "@/modules/commerce/domain/entities/IOrderItemEntity";
 import type { IOrderSummaryEntity } from "@/modules/commerce/domain/entities/IOrderSummaryEntity";
 import type { IPaymentEntity } from "@/modules/commerce/domain/entities/IPaymentEntity";
+import type { IPaymentSummaryEntity } from "@/modules/commerce/domain/entities/IPaymentSummaryEntity";
 import type { IPaginatedResult } from "@/shared/domain/types/pagination";
 import type { IBasicInitialState } from "@/shared/presentation/store/action.wrapper";
 
@@ -27,6 +28,11 @@ export type ICommerceState = {
     getOrderPayment: IBasicInitialState<IPaymentEntity>;
     listPendingPaymentOrders: IBasicInitialState<IPaginatedResult<IOrderSummaryEntity>>;
     getCustomerOrders: IBasicInitialState<IPaginatedResult<IOrderSummaryEntity>>;
+    listPayments: IBasicInitialState<IPaginatedResult<IPaymentSummaryEntity>>;
+    editOrder: IBasicInitialState<IOrderSummaryEntity>;
+    removeItem: IBasicInitialState<{ isSuccess: boolean }>;
+    removeItemTier: IBasicInitialState<{ isSuccess: boolean }>;
+    editItem: IBasicInitialState<IOrderItemEntity>;
 };
 
 export type CommerceStateKey = keyof ICommerceState;
