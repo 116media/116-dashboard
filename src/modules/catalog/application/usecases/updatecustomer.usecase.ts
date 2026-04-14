@@ -5,13 +5,19 @@ import type { Result } from "@/shared/domain/results/result";
 
 /**
  * @interface IUpdateCustomerUseCase
- * @extends {IResultUseCase<{ id: string; data: { fullName: string; phone?: string; company?: string; notes?: string } }, ICustomerEntity>}
+ * @extends {IResultUseCase<{ id: string; data: { fullName: string; email: string; phone?: string; company?: string; notes?: string } }, ICustomerEntity>}
  */
 interface IUpdateCustomerUseCase
     extends IResultUseCase<
         {
             id: string;
-            data: { fullName: string; phone?: string; company?: string; notes?: string };
+            data: {
+                fullName: string;
+                email: string;
+                phone?: string;
+                company?: string;
+                notes?: string;
+            };
         },
         ICustomerEntity
     > {}
@@ -42,7 +48,7 @@ export class UpdateCustomerUseCase implements IUpdateCustomerUseCase {
      */
     async execute(params: {
         id: string;
-        data: { fullName: string; phone?: string; company?: string; notes?: string };
+        data: { fullName: string; email: string; phone?: string; company?: string; notes?: string };
     }): Promise<Result<ICustomerEntity>> {
         return this.catalogRepository.updateCustomer(params.id, params.data);
     }
