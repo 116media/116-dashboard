@@ -4,6 +4,7 @@ import type { IOrderDetailEntity } from "@/modules/commerce/domain/entities/IOrd
 import type { IOrderItemEntity } from "@/modules/commerce/domain/entities/IOrderItemEntity";
 import type { IOrderSummaryEntity } from "@/modules/commerce/domain/entities/IOrderSummaryEntity";
 import type { IPaymentEntity } from "@/modules/commerce/domain/entities/IPaymentEntity";
+import type { IPaymentSummaryEntity } from "@/modules/commerce/domain/entities/IPaymentSummaryEntity";
 import { CommerceMapper } from "@/modules/commerce/infrastructure/mappers/commerce.mapper";
 import type { Result } from "@/shared/domain/results/result";
 import { err, ok } from "@/shared/domain/results/result";
@@ -12,7 +13,8 @@ import { apiClient } from "@/shared/infrastructure/api/client";
 import type {
     EnumCoreContentType,
     EnumOrderStatus,
-    EnumPaymentMethod
+    EnumPaymentMethod,
+    EnumPaymentStatus
 } from "@/shared/infrastructure/api/generated/116.api";
 import { ProblemMapper } from "@/shared/infrastructure/mappers/problem.mapper";
 
@@ -208,6 +210,95 @@ export class CommerceRepositoryImpl implements ICommerceRepositoryPort {
                 pageSize: paginated.pageSize,
                 count: paginated.count
             });
+        } catch (error) {
+            return err(ProblemMapper.toFailure(error));
+        }
+    }
+
+    async listPayments(params: {
+        pageIndex: number;
+        pageSize: number;
+        status?: EnumPaymentStatus;
+        method?: EnumPaymentMethod;
+        search?: string;
+    }): Promise<Result<IPaginatedResult<IPaymentSummaryEntity>>> {
+        try {
+            const response = await apiClient.instance.get("/api/v1/admin/payments", {
+                params: {
+                    pageIndex: params.pageIndex,
+                    pageSize: params.pageSize,
+                    ...(params.status ? { status: params.status } : {}),
+                    ...(params.method ? { method: params.method } : {}),
+                    ...(params.search ? { search: params.search } : {})
+                }
+            });
+            const paginated = response.data.payments;
+            return ok({
+                items: paginated.items.map(CommerceMapper.paymentSummaryFromDto),
+                pageIndex: paginated.pageIndex,
+                pageSize: paginated.pageSize,
+                count: paginated.count
+            });
+        } catch (error) {
+            return err(ProblemMapper.toFailure(error));
+        }
+    }
+
+    async editOrder(
+        id: string,
+        data: { customerId?: string; packageId?: string | null }
+    ): Promise<Result<IOrderSummaryEntity>> {
+        try {
+            const response = await apiClient.instance.patch(`/api/v1/admin/orders/${id}`, data);
+            return ok(CommerceMapper.orderSummaryFromDto(response.data.order));
+        } catch (error) {
+            return err(ProblemMapper.toFailure(error));
+        }
+    }
+
+    async removeItem(orderId: string, itemId: string): Promise<Result<{ isSuccess: boolean }>> {
+        try {
+            const response = await apiClient.instance.delete(
+                `/api/v1/admin/orders/${orderId}/items/${itemId}`
+            );
+            return ok({ isSuccess: response.data.isSuccess });
+        } catch (error) {
+            return err(ProblemMapper.toFailure(error));
+        }
+    }
+
+    async removeItemTier(
+        orderId: string,
+        itemId: string,
+        tierId: string
+    ): Promise<Result<{ isSuccess: boolean }>> {
+        try {
+            const response = await apiClient.instance.delete(
+                `/api/v1/admin/orders/${orderId}/items/${itemId}/tiers/${tierId}`
+            );
+            return ok({ isSuccess: response.data.isSuccess });
+        } catch (error) {
+            return err(ProblemMapper.toFailure(error));
+        }
+    }
+
+    async editItem(
+        orderId: string,
+        itemId: string,
+        data: {
+            contentKind?: EnumCoreContentType;
+            categoryId?: string;
+            promotionLevelId?: string | null;
+            socialBoost?: boolean;
+            isBonus?: boolean;
+        }
+    ): Promise<Result<IOrderItemEntity>> {
+        try {
+            const response = await apiClient.instance.patch(
+                `/api/v1/admin/orders/${orderId}/items/${itemId}`,
+                data
+            );
+            return ok(CommerceMapper.orderItemFromDto(response.data.item));
         } catch (error) {
             return err(ProblemMapper.toFailure(error));
         }
