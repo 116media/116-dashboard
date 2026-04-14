@@ -10,6 +10,7 @@ import {
     FORGOT_PASSWORD_PATH,
     LOGIN_PATH,
     NOT_FOUND_PATH,
+    ORDER_DETAIL_PATH,
     ORDERS_PATH,
     OVERVIEW_PATH,
     PERMISSIONS_PATH,
@@ -153,8 +154,8 @@ const protectedRoutes: RouteObject[] = [
                             />
                         ),
                         children: [
-                            { path: `${ORDERS_PATH}/:tab?`, element: <CommercePage /> },
-                            { path: `${ORDERS_PATH}/:id`, element: <OrderDetailPage /> }
+                            { path: `${ORDER_DETAIL_PATH}/:id`, element: <OrderDetailPage /> },
+                            { path: `${ORDERS_PATH}/:tab?`, element: <CommercePage /> }
                         ]
                     }
                 ]
