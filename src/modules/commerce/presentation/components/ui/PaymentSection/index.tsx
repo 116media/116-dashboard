@@ -1,7 +1,12 @@
-import { Button, Card, Descriptions, Image, Space, Typography } from "antd";
+import { Card, Flex, Typography } from "antd";
 import type { FC } from "react";
 import type { IPaymentEntity } from "@/modules/commerce/domain/entities/IPaymentEntity";
 import OrderStatusTag from "@/modules/commerce/presentation/components/ui/OrderStatusTag";
+import PaymentActions from "@/modules/commerce/presentation/components/ui/PaymentActions";
+import PaymentDetailsGrid from "@/modules/commerce/presentation/components/ui/PaymentDetailsGrid";
+import PaymentEmptyState from "@/modules/commerce/presentation/components/ui/PaymentEmptyState";
+import PaymentProofPreview from "@/modules/commerce/presentation/components/ui/PaymentProofPreview";
+import styles from "./index.module.scss";
 
 const { Title, Text } = Typography;
 
@@ -13,17 +18,19 @@ const { Title, Text } = Typography;
  * @property {IPaymentEntity | null} payment - Payment record, or null if none exists
  * @property {boolean} loading - Whether the payment record is loading
  * @property {boolean} isPendingPayment - Whether the order is in PendingPayment status
+ * @property {string} [customerName] - Customer name from the order
  * @property {() => void} onAttachProof - Handler to open the proof-upload modal
  * @property {() => void} onVerify - Handler to verify the payment
  * @property {() => void} onReject - Handler to reject the payment
  */
 interface IPaymentSectionProps {
-    payment: IPaymentEntity | null;
     loading: boolean;
-    isPendingPayment: boolean;
-    onAttachProof: () => void;
     onVerify: () => void;
     onReject: () => void;
+    customerName?: string;
+    isPendingPayment: boolean;
+    onAttachProof: () => void;
+    payment: IPaymentEntity | null;
 }
 
 /**
@@ -32,10 +39,9 @@ interface IPaymentSectionProps {
  * @component
  *
  * @description
- * Renders payment status, details card, proof preview, and
- * verify/reject action buttons. Shows contextual messages
- * based on the order and payment state (e.g. "attach proof"
- * when no proof exists, "verify/reject" when proof is uploaded).
+ * Orchestrates the payment card layout with loading, empty,
+ * and detail states. Delegates rendering to PaymentEmptyState,
+ * PaymentDetailsGrid, PaymentActions, and PaymentProofPreview.
  *
  * @param {IPaymentSectionProps} props - Component props
  * @returns {JSX.Element} The payment section card
@@ -44,6 +50,7 @@ const PaymentSection: FC<IPaymentSectionProps> = ({
     payment,
     loading,
     isPendingPayment,
+    customerName,
     onAttachProof,
     onVerify,
     onReject
@@ -58,97 +65,42 @@ const PaymentSection: FC<IPaymentSectionProps> = ({
 
     if (!payment) {
         return (
-            <Card>
-                <Space orientation="vertical">
-                    <Title level={5} style={{ margin: 0 }}>
-                        Paiement
-                    </Title>
-                    <Text type="secondary">
-                        {isPendingPayment
-                            ? "Aucun paiement enregistré."
-                            : "Le paiement sera disponible après soumission de la commande."}
-                    </Text>
-                    {isPendingPayment && (
-                        <Button type="primary" onClick={onAttachProof}>
-                            Attacher une preuve
-                        </Button>
-                    )}
-                </Space>
-            </Card>
+            <PaymentEmptyState isPendingPayment={isPendingPayment} onAttachProof={onAttachProof} />
         );
     }
 
-    const isPending = payment.status === "Pending";
+    const proofUrl = payment.paymentProof?.storageUrl;
+    const proofFileName = payment.paymentProof?.fileName ?? "";
+    const hasProof = !!payment.paymentProof && !!proofUrl;
 
     return (
         <Card>
-            <Space orientation="vertical" size="middle" style={{ width: "100%" }}>
-                <div
-                    style={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                        alignItems: "center"
-                    }}
-                >
-                    <Title level={5} style={{ margin: 0 }}>
-                        Paiement
-                    </Title>
-                    <OrderStatusTag status={payment.status} />
+            <Flex justify="space-between" align="center" className={styles.payment__header}>
+                <Title level={5} className={styles.payment__title}>
+                    Paiement
+                </Title>
+                <OrderStatusTag status={payment.status} />
+            </Flex>
+
+            <Flex gap={12} align="stretch">
+                <div className={styles.payment__details}>
+                    <Text type="secondary" strong className={styles.payment__sectionLabel}>
+                        Détails du paiement
+                    </Text>
+
+                    <PaymentDetailsGrid payment={payment} customerName={customerName} />
+                    <br />
+                    <PaymentActions
+                        payment={payment}
+                        isPendingPayment={isPendingPayment}
+                        onAttachProof={onAttachProof}
+                        onVerify={onVerify}
+                        onReject={onReject}
+                    />
                 </div>
 
-                <Descriptions column={2} size="small" bordered>
-                    <Descriptions.Item label="Montant">
-                        ${(payment.amountUsd ?? 0).toFixed(2)}
-                    </Descriptions.Item>
-                    <Descriptions.Item label="Mode de paiement">
-                        {payment.paymentMethod ?? "—"}
-                    </Descriptions.Item>
-                    {payment.receiptUrl && (
-                        <Descriptions.Item label="Reçu">
-                            <a href={payment.receiptUrl} target="_blank" rel="noopener noreferrer">
-                                Voir le reçu
-                            </a>
-                        </Descriptions.Item>
-                    )}
-                    {payment.verifiedAt && (
-                        <Descriptions.Item label="Vérifié le">
-                            {new Date(payment.verifiedAt).toLocaleString("fr-FR")}
-                        </Descriptions.Item>
-                    )}
-                </Descriptions>
-
-                {payment.paymentProof && (
-                    <div>
-                        <Text strong>Preuve de paiement :</Text>
-                        <div style={{ marginTop: 8 }}>
-                            <Image
-                                width={200}
-                                src={payment.paymentProof.storageUrl}
-                                alt={payment.paymentProof.fileName}
-                                fallback="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg=="
-                            />
-                        </div>
-                    </div>
-                )}
-
-                {isPending && isPendingPayment && (
-                    <Space>
-                        {!payment.paymentProof && (
-                            <Button onClick={onAttachProof}>Attacher une preuve</Button>
-                        )}
-                        {payment.paymentProof && (
-                            <>
-                                <Button type="primary" onClick={onVerify}>
-                                    Vérifier le paiement
-                                </Button>
-                                <Button danger onClick={onReject}>
-                                    Rejeter
-                                </Button>
-                            </>
-                        )}
-                    </Space>
-                )}
-            </Space>
+                {hasProof && <PaymentProofPreview proofUrl={proofUrl} fileName={proofFileName} />}
+            </Flex>
         </Card>
     );
 };
