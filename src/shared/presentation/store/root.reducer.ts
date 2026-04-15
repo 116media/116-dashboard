@@ -1,10 +1,14 @@
 import { combineReducers } from "@reduxjs/toolkit";
+import articlesReducer from "@/modules/articles/presentation/store";
 import authReducer from "@/modules/auth/presentation/store";
 import catalogReducer from "@/modules/catalog/presentation/store";
 import commerceReducer from "@/modules/commerce/presentation/store";
 import lookupReducer from "@/modules/lookup/presentation/store";
+import lyricsReducer from "@/modules/lyrics/presentation/store";
 import permissionsReducer from "@/modules/permissions/presentation/store";
 import rolesReducer from "@/modules/roles/presentation/store";
+import shortsReducer from "@/modules/shorts/presentation/store";
+import videosReducer from "@/modules/videos/presentation/store";
 import sessionReducer from "@/platform/session/presentation/store";
 import settingsReducer from "@/platform/settings/presentation/store";
 
@@ -24,7 +28,11 @@ export const rootReducer = combineReducers({
     permissions: permissionsReducer,
     lookup: lookupReducer,
     catalog: catalogReducer,
-    commerce: commerceReducer
+    commerce: commerceReducer,
+    articles: articlesReducer,
+    videos: videosReducer,
+    shorts: shortsReducer,
+    lyrics: lyricsReducer
 });
 
 /**
