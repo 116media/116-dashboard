@@ -28,6 +28,7 @@ export interface PaymentSummaryDto {
     status: EnumPaymentStatus;
     orderStatus: EnumOrderStatus;
     verifiedBy?: string | null;
+    verifiedByUserName?: string | null;
     verifiedAt?: string | null;
     createdAt?: string | null;
     createdBy?: string | null;
@@ -102,6 +103,7 @@ export const CommerceMapper = {
                 : null,
             status: dto.status,
             verifiedBy: dto.verifiedBy,
+            verifiedByUserName: dto.verifiedByUserName,
             verifiedAt: dto.verifiedAt,
             receiptUrl: dto.receiptUrl
         };
@@ -164,6 +166,7 @@ export const CommerceMapper = {
             status: dto.status,
             orderStatus: dto.orderStatus,
             verifiedBy: dto.verifiedBy,
+            verifiedByUserName: dto.verifiedByUserName,
             verifiedAt: dto.verifiedAt,
             createdAt: dto.createdAt,
             createdBy: dto.createdBy,
