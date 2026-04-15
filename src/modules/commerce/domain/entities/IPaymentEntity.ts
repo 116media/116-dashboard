@@ -14,6 +14,7 @@ import type {
  * @property {{ id: string; fileName: string; storageUrl: string } | null} paymentProof - Uploaded proof file
  * @property {EnumPaymentStatus} status - Current payment status
  * @property {string | null} verifiedBy - UUID of the admin who verified
+ * @property {string | null} verifiedByUserName - Display name of the admin who verified
  * @property {string | null} verifiedAt - ISO timestamp of verification
  * @property {string | null} receiptUrl - URL to the payment receipt
  */
@@ -28,6 +29,7 @@ export interface IPaymentEntity {
     } | null;
     status: EnumPaymentStatus;
     verifiedBy?: string | null;
+    verifiedByUserName?: string | null;
     verifiedAt?: string | null;
     receiptUrl?: string | null;
 }
