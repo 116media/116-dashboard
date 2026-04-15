@@ -185,6 +185,11 @@ input {
     }
 }
 
+[class~='ant-tag'] {
+    display: inline-flex;
+    align-items: center;
+}
+
 [class~='ant-btn-icon']{
     display: flex;
 }
