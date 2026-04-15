@@ -30,13 +30,10 @@ export class UpdatePermissionUseCase implements IUpdatePermissionUseCase {
     /**
      * Executes the update permission use case.
      *
-     * @param {{ id: string; data: IUpdatePermissionCredentials }} params - Permission ID and fields to update
+     * @param {{ id: string; data: IUpdatePermissionCredentials }} request - Permission ID and fields to update
      * @returns {Promise<Result<IPermissionEntity>>} `ok(IPermissionEntity)` on success, `err(Failure)` on failure
      */
-    async execute(params: {
-        id: string;
-        data: IUpdatePermissionCredentials;
-    }): Promise<Result<IPermissionEntity>> {
-        return this.permissionsRepository.update(params.id, params.data);
+    async execute(request: { id: string; data: IUpdatePermissionCredentials }): Promise<Result<IPermissionEntity>> {
+        return this.permissionsRepository.update(request.id, request.data);
     }
 }
