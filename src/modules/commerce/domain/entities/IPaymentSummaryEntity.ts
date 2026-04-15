@@ -17,6 +17,7 @@ import type {
  * @property {EnumPaymentStatus} status - Payment verification status
  * @property {EnumOrderStatus} orderStatus - Lifecycle status of the linked order
  * @property {string | null} verifiedBy - UUID of the verifying admin
+ * @property {string | null} verifiedByUserName - Display name of the verifying admin
  * @property {string | null} verifiedAt - ISO timestamp of verification
  * @property {string | null} createdAt - ISO creation timestamp
  * @property {string | null} createdBy - UUID of the creating admin
@@ -32,6 +33,7 @@ export interface IPaymentSummaryEntity {
     status: EnumPaymentStatus;
     orderStatus: EnumOrderStatus;
     verifiedBy?: string | null;
+    verifiedByUserName?: string | null;
     verifiedAt?: string | null;
     createdAt?: string | null;
     createdBy?: string | null;
