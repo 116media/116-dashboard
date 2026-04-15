@@ -3,6 +3,7 @@ import type { ISettingsRepositoryPort } from "@/platform/settings/application/re
 import type { IChangePasswordResponse } from "@/platform/settings/domain/entities/IChangePasswordResponse";
 import type { IRoleWithPermissions } from "@/platform/settings/domain/entities/IRoleWithPermissions";
 import { SettingsMapper } from "@/platform/settings/infrastructure/mappers/settings.mapper";
+import type { IChangePasswordData } from "@/platform/settings/presentation/model/IChangePasswordData";
 import type { IUpdateAccountCredentials } from "@/platform/settings/presentation/model/IUpdateAccountCredentials";
 import type { Result } from "@/shared/domain/results/result";
 import { err, ok } from "@/shared/domain/results/result";
@@ -43,10 +44,7 @@ export class SettingsRepositoryImpl implements ISettingsRepositoryPort {
         }
     }
 
-    async changePassword(data: {
-        oldPassword: string;
-        newPassword: string;
-    }): Promise<Result<IChangePasswordResponse>> {
+    async changePassword(data: IChangePasswordData): Promise<Result<IChangePasswordResponse>> {
         try {
             const response = await apiClient.api.adminChangePassword(data);
             return ok(SettingsMapper.changePasswordResponseFromDto(response.data));
