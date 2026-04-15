@@ -55,17 +55,17 @@ const PaymentsListContainer: FC = () => {
             <Flex align="center" className={styles.tableToolbar} justify="space-between">
                 <Flex gap={8} align="center">
                     <TableStatusFilter
+                        loading={list.loading}
                         value={list.statusFilter}
                         options={PAYMENT_STATUS_OPTIONS}
-                        loading={list.loading}
                         onChange={list.onStatusFilterChange}
                     />
                     <Select
-                        value={list.methodFilter}
+                        style={{ width: 160 }}
                         loading={list.loading}
                         disabled={list.loading}
+                        value={list.methodFilter}
                         onChange={list.onMethodFilterChange}
-                        style={{ width: 160 }}
                         prefix={<Button type="text" size="small" icon={<IconDollarOutlined />} />}
                         options={PAYMENT_METHOD_FILTER_OPTIONS.map((opt) => ({
                             value: opt.value,
@@ -74,10 +74,10 @@ const PaymentsListContainer: FC = () => {
                     />
                 </Flex>
                 <TableSearchInput
+                    loading={list.loading}
                     value={list.searchValue}
                     onSearch={list.onSearch}
                     onChange={list.onSearchChange}
-                    loading={list.loading}
                 />
             </Flex>
 
