@@ -1,0 +1,27 @@
+@use "@/shared/presentation/styles/dimensions.scss" as dimensions;
+
+.payment {
+    &__header {
+        margin-bottom: dimensions.$padding * 0.67;
+    }
+
+    &__title {
+        margin: 0 !important;
+    }
+
+    &__sectionLabel {
+        display: block;
+        font-size: 7pt;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        margin-bottom: calc(dimensions.$padding / 2);
+    }
+
+    &__details {
+        flex: 2;
+    }
+
+    &__actions {
+        margin-top: calc(dimensions.$padding / 2);
+    }
+}
