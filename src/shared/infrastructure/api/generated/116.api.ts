@@ -1418,6 +1418,7 @@ export interface PaymentDto {
   status: EnumPaymentStatus;
   /** @format uuid */
   verifiedBy?: string | null;
+  verifiedByUserName?: string | null;
   /** @format date-time */
   verifiedAt?: string | null;
   receiptUrl?: string | null;
@@ -1442,6 +1443,7 @@ export interface PaymentSummaryDto {
   orderStatus: EnumOrderStatus;
   /** @format uuid */
   verifiedBy?: string | null;
+  verifiedByUserName?: string | null;
   /** @format date-time */
   verifiedAt?: string | null;
 }
