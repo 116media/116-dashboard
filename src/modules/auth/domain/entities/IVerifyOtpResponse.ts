@@ -1,13 +1,13 @@
+import type { IActionResponse } from "@/shared/domain/types/action.response";
+
 /**
  * Verify OTP response entity returned after OTP verification.
  *
  * @interface IVerifyOtpResponse
+ * @extends {IActionResponse}
  *
  * @description
  * Domain entity representing the response from an OTP verification request.
- *
- * @property {boolean} isSuccess - Whether the OTP was verified successfully
+ * Extends IActionResponse for the shared `isSuccess` field.
  */
-export interface IVerifyOtpResponse {
-    isSuccess: boolean;
-}
+export interface IVerifyOtpResponse extends IActionResponse {}
