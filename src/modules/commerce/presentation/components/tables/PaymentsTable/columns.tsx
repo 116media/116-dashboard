@@ -7,6 +7,7 @@ import type {
     EnumPaymentMethod,
     EnumPaymentStatus
 } from "@/shared/infrastructure/api/generated/116.api";
+import { ADMIN_PATH } from "@/shared/presentation/constants/paths";
 import type { ITableActionItem } from "@/shared/presentation/ui/TableActionDropdown";
 import TableActionDropdown from "@/shared/presentation/ui/TableActionDropdown";
 import { dayjs } from "@/shared/presentation/utils/dayjs/dayjs.utils";
@@ -98,13 +99,15 @@ export const paymentsTableColumns = (
     },
     {
         title: "Vérifié par",
-        dataIndex: "verifiedBy",
+        dataIndex: "verifiedByUserName",
         key: "verifiedBy",
-        width: 120,
+        width: 140,
         ellipsis: true,
-        render: (id: string | null) =>
-            id ? (
-                <Text copyable={{ text: id }}>{id.slice(0, 8)}...</Text>
+        render: (_: string | null, record: IPaymentSummaryEntity) =>
+            record.verifiedBy ? (
+                <a href={`${ADMIN_PATH}/${record.verifiedBy}`}>
+                    {record.verifiedByUserName ?? record.verifiedBy.slice(0, 8)}
+                </a>
             ) : (
                 <Text type="secondary">—</Text>
             )
