@@ -48,8 +48,10 @@ export const useEditOrder = (orderId: string | null, onSuccess?: () => void): IU
         const result = await dispatch(
             editOrderAction({
                 id: orderId,
-                customerId: values.customerId,
-                packageId: values.packageId
+                data: {
+                    customerId: values.customerId,
+                    packageId: values.packageId
+                }
             })
         );
 
