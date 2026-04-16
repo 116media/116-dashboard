@@ -1,15 +1,16 @@
 import type { ICatalogRepositoryPort } from "@/modules/catalog/application/repositories/catalog.repository.port";
 import type { ICategoryPricingEntity } from "@/modules/catalog/domain/entities/ICategoryPricingEntity";
+import type { IUpdateCategoryPricingCredentials } from "@/modules/catalog/presentation/model/IUpdateCategoryPricingCredentials";
 import type { IResultUseCase } from "@/shared/application/usecases/IUseCase";
 import type { Result } from "@/shared/domain/results/result";
 
 /**
  * @interface IUpdateCategoryPricingUseCase
- * @extends {IResultUseCase<{ categoryId: string; pricingId: string; data: { priceUsd: number } }, ICategoryPricingEntity>}
+ * @extends {IResultUseCase<{ categoryId: string; pricingId: string; data: IUpdateCategoryPricingCredentials }, ICategoryPricingEntity>}
  */
 interface IUpdateCategoryPricingUseCase
     extends IResultUseCase<
-        { categoryId: string; pricingId: string; data: { priceUsd: number } },
+        { categoryId: string; pricingId: string; data: IUpdateCategoryPricingCredentials },
         ICategoryPricingEntity
     > {}
 
@@ -34,18 +35,14 @@ export class UpdateCategoryPricingUseCase implements IUpdateCategoryPricingUseCa
     /**
      * Executes the update category pricing use case.
      *
-     * @param {object} params - The category ID, pricing ID, and updated price data
+     * @param {object} request - The category ID, pricing ID, and updated price data
      * @returns {Promise<Result<ICategoryPricingEntity>>} `ok(ICategoryPricingEntity)` on success, `err(Failure)` on failure
      */
-    async execute(params: {
-        categoryId: string;
-        pricingId: string;
-        data: { priceUsd: number };
-    }): Promise<Result<ICategoryPricingEntity>> {
+    async execute(request: { categoryId: string; pricingId: string; data: IUpdateCategoryPricingCredentials }): Promise<Result<ICategoryPricingEntity>> {
         return this.catalogRepository.updateCategoryPricing(
-            params.categoryId,
-            params.pricingId,
-            params.data
+            request.categoryId,
+            request.pricingId,
+            request.data
         );
     }
 }
