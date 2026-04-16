@@ -1,12 +1,13 @@
 import type { ICommerceRepositoryPort } from "@/modules/commerce/application/repositories/commerce.repository.port";
+import type { ICommerceActionResponse } from "@/modules/commerce/domain/entities/ICommerceActionResponse";
 import type { IResultUseCase } from "@/shared/application/usecases/IUseCase";
 import type { Result } from "@/shared/domain/results/result";
 
 /**
  * @interface ISubmitOrderUseCase
- * @extends {IResultUseCase<string, { isSuccess: boolean }>}
+ * @extends {IResultUseCase<string, ICommerceActionResponse>}
  */
-interface ISubmitOrderUseCase extends IResultUseCase<string, { isSuccess: boolean }> {}
+interface ISubmitOrderUseCase extends IResultUseCase<string, ICommerceActionResponse> {}
 
 /**
  * Use case for submitting a draft order for payment.
@@ -31,9 +32,9 @@ export class SubmitOrderUseCase implements ISubmitOrderUseCase {
      * Executes the submit order use case.
      *
      * @param {string} id - The order ID to submit
-     * @returns {Promise<Result<{ isSuccess: boolean }>>} `ok({ isSuccess: boolean })` on success, `err(Failure)` on failure
+     * @returns {Promise<Result<ICommerceActionResponse>>} `ok(ICommerceActionResponse)` on success, `err(Failure)` on failure
      */
-    async execute(id: string): Promise<Result<{ isSuccess: boolean }>> {
+    async execute(id: string): Promise<Result<ICommerceActionResponse>> {
         return this.commerceRepository.submitOrder(id);
     }
 }
