@@ -1,16 +1,17 @@
 import type { ICommerceRepositoryPort } from "@/modules/commerce/application/repositories/commerce.repository.port";
 import type { IOrderSummaryEntity } from "@/modules/commerce/domain/entities/IOrderSummaryEntity";
+import type { IPaginationQueryParams } from "@/modules/commerce/presentation/model/IPaginationQueryParams";
 import type { IResultUseCase } from "@/shared/application/usecases/IUseCase";
 import type { Result } from "@/shared/domain/results/result";
 import type { IPaginatedResult } from "@/shared/domain/types/pagination";
 
 /**
  * @interface IGetCustomerOrdersUseCase
- * @extends {IResultUseCase<{ customerId: string; pageIndex: number; pageSize: number }, IPaginatedResult<IOrderSummaryEntity>>}
+ * @extends {IResultUseCase<{ customerId: string; data: IPaginationQueryParams }, IPaginatedResult<IOrderSummaryEntity>>}
  */
 interface IGetCustomerOrdersUseCase
     extends IResultUseCase<
-        { customerId: string; pageIndex: number; pageSize: number },
+        { customerId: string; data: IPaginationQueryParams },
         IPaginatedResult<IOrderSummaryEntity>
     > {}
 
@@ -36,17 +37,10 @@ export class GetCustomerOrdersUseCase implements IGetCustomerOrdersUseCase {
     /**
      * Executes the get customer orders use case.
      *
-     * @param {object} params - Parameters including customerId and pagination
+     * @param {object} request - Parameters including customerId and pagination data
      * @returns {Promise<Result<IPaginatedResult<IOrderSummaryEntity>>>} `ok(IPaginatedResult<IOrderSummaryEntity>)` on success, `err(Failure)` on failure
      */
-    async execute(params: {
-        customerId: string;
-        pageIndex: number;
-        pageSize: number;
-    }): Promise<Result<IPaginatedResult<IOrderSummaryEntity>>> {
-        return this.commerceRepository.getCustomerOrders(params.customerId, {
-            pageIndex: params.pageIndex,
-            pageSize: params.pageSize
-        });
+    async execute(request: { customerId: string; data: IPaginationQueryParams }): Promise<Result<IPaginatedResult<IOrderSummaryEntity>>> {
+        return this.commerceRepository.getCustomerOrders(request.customerId, request.data);
     }
 }
