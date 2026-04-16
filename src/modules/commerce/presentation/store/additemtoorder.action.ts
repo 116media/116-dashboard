@@ -1,7 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import type { IOrderItemEntity } from "@/modules/commerce/domain/entities/IOrderItemEntity";
+import type { IAddOrderItemCredentials } from "@/modules/commerce/presentation/model/IAddOrderItemCredentials";
 import type { Failure } from "@/shared/domain/failures/failure";
-import type { EnumCoreContentType } from "@/shared/infrastructure/api/generated/116.api";
 import container from "@/shared/infrastructure/service.locator";
 import { ActionType } from "./constants";
 
@@ -15,14 +15,7 @@ import { ActionType } from "./constants";
  */
 export const addItemToOrderAction = createAsyncThunk<
     IOrderItemEntity,
-    {
-        orderId: string;
-        contentKind: EnumCoreContentType;
-        categoryId: string;
-        promotionLevelId?: string | null;
-        socialBoost: boolean;
-        isBonus: boolean;
-    },
+    { orderId: string; data: IAddOrderItemCredentials },
     { rejectValue: Failure }
 >(ActionType.AddItemToOrder, async (params, { rejectWithValue }) => {
     const result = await container.cradle.addItemToOrderUseCase.execute(params);
