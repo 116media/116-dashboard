@@ -1,15 +1,16 @@
 import type { ICommerceRepositoryPort } from "@/modules/commerce/application/repositories/commerce.repository.port";
 import type { IItemTierEntity } from "@/modules/commerce/domain/entities/IItemTierEntity";
+import type { IAddItemTierCredentials } from "@/modules/commerce/presentation/model/IAddItemTierCredentials";
 import type { IResultUseCase } from "@/shared/application/usecases/IUseCase";
 import type { Result } from "@/shared/domain/results/result";
 
 /**
  * @interface IAddTierToItemUseCase
- * @extends {IResultUseCase<{ orderId: string; itemId: string; pricingTierId: string }, IItemTierEntity>}
+ * @extends {IResultUseCase<{ orderId: string; itemId: string; data: IAddItemTierCredentials }, IItemTierEntity>}
  */
 interface IAddTierToItemUseCase
     extends IResultUseCase<
-        { orderId: string; itemId: string; pricingTierId: string },
+        { orderId: string; itemId: string; data: IAddItemTierCredentials },
         IItemTierEntity
     > {}
 
@@ -35,16 +36,10 @@ export class AddTierToItemUseCase implements IAddTierToItemUseCase {
     /**
      * Executes the add tier to item use case.
      *
-     * @param {object} params - Tier assignment parameters including orderId, itemId, and pricingTierId
+     * @param {object} request - Tier assignment parameters including orderId, itemId, and tier data
      * @returns {Promise<Result<IItemTierEntity>>} `ok(IItemTierEntity)` on success, `err(Failure)` on failure
      */
-    async execute(params: {
-        orderId: string;
-        itemId: string;
-        pricingTierId: string;
-    }): Promise<Result<IItemTierEntity>> {
-        return this.commerceRepository.addTierToItem(params.orderId, params.itemId, {
-            pricingTierId: params.pricingTierId
-        });
+    async execute(request: { orderId: string; itemId: string; data: IAddItemTierCredentials }): Promise<Result<IItemTierEntity>> {
+        return this.commerceRepository.addTierToItem(request.orderId, request.itemId, request.data);
     }
 }
