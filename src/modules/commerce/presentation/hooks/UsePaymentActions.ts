@@ -43,7 +43,9 @@ export const usePaymentActions = (reload: () => void): IUsePaymentActions => {
         file: File,
         paymentMethod: EnumPaymentMethod
     ): Promise<void> => {
-        const result = await dispatch(attachPaymentProofAction({ orderId, file, paymentMethod }));
+        const result = await dispatch(
+            attachPaymentProofAction({ orderId, data: { file, paymentMethod } })
+        );
 
         if (attachPaymentProofAction.fulfilled.match(result)) {
             showNotification(PaymentNotification.attachProofSuccess);
@@ -58,7 +60,7 @@ export const usePaymentActions = (reload: () => void): IUsePaymentActions => {
     };
 
     const onVerify = async (orderId: string, receiptUrl: string): Promise<void> => {
-        const result = await dispatch(verifyPaymentAction({ orderId, receiptUrl }));
+        const result = await dispatch(verifyPaymentAction({ orderId, data: { receiptUrl } }));
 
         if (verifyPaymentAction.fulfilled.match(result)) {
             showNotification(PaymentNotification.verifySuccess);
@@ -73,7 +75,7 @@ export const usePaymentActions = (reload: () => void): IUsePaymentActions => {
     };
 
     const onReject = async (orderId: string, notes?: string): Promise<void> => {
-        const result = await dispatch(rejectPaymentAction({ orderId, notes }));
+        const result = await dispatch(rejectPaymentAction({ orderId, data: { notes } }));
 
         if (rejectPaymentAction.fulfilled.match(result)) {
             showNotification(PaymentNotification.rejectSuccess);
