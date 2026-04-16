@@ -54,11 +54,13 @@ export const useEditOrderItem = (
             editItemAction({
                 orderId,
                 itemId,
-                contentKind: values.contentKind,
-                categoryId: values.categoryId,
-                promotionLevelId: values.promotionLevelId,
-                socialBoost: values.socialBoost,
-                isBonus: values.isBonus
+                data: {
+                    contentKind: values.contentKind,
+                    categoryId: values.categoryId,
+                    promotionLevelId: values.promotionLevelId,
+                    socialBoost: values.socialBoost,
+                    isBonus: values.isBonus
+                }
             })
         );
 
