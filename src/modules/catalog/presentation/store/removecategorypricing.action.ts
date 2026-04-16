@@ -1,4 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
+import type { ICatalogActionResponse } from "@/modules/catalog/domain/entities/ICatalogActionResponse";
 import type { Failure } from "@/shared/domain/failures/failure";
 import container from "@/shared/infrastructure/service.locator";
 import { ActionType } from "./constants";
@@ -11,7 +12,7 @@ import { ActionType } from "./constants";
  * On success, stores `{ isSuccess: true }` in `catalog.removeCategoryPricing.data`.
  */
 export const removeCategoryPricingAction = createAsyncThunk<
-    { isSuccess: boolean },
+    ICatalogActionResponse,
     { categoryId: string; pricingId: string },
     { rejectValue: Failure }
 >(ActionType.RemoveCategoryPricing, async (params, { rejectWithValue }) => {
