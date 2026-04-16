@@ -1,17 +1,15 @@
 import type { ICommerceRepositoryPort } from "@/modules/commerce/application/repositories/commerce.repository.port";
 import type { IOrderSummaryEntity } from "@/modules/commerce/domain/entities/IOrderSummaryEntity";
+import type { ICreateOrderCredentials } from "@/modules/commerce/presentation/model/ICreateOrderCredentials";
 import type { IResultUseCase } from "@/shared/application/usecases/IUseCase";
 import type { Result } from "@/shared/domain/results/result";
 
 /**
  * @interface ICreateOrderUseCase
- * @extends {IResultUseCase<{ customerId: string; packageId?: string | null }, IOrderSummaryEntity>}
+ * @extends {IResultUseCase<ICreateOrderCredentials, IOrderSummaryEntity>}
  */
 interface ICreateOrderUseCase
-    extends IResultUseCase<
-        { customerId: string; packageId?: string | null },
-        IOrderSummaryEntity
-    > {}
+    extends IResultUseCase<ICreateOrderCredentials, IOrderSummaryEntity> {}
 
 /**
  * Use case for creating a new content order.
@@ -35,13 +33,10 @@ export class CreateOrderUseCase implements ICreateOrderUseCase {
     /**
      * Executes the create order use case.
      *
-     * @param {object} params - Order creation parameters
+     * @param {ICreateOrderCredentials} params - Order creation parameters
      * @returns {Promise<Result<IOrderSummaryEntity>>} `ok(IOrderSummaryEntity)` on success, `err(Failure)` on failure
      */
-    async execute(params: {
-        customerId: string;
-        packageId?: string | null;
-    }): Promise<Result<IOrderSummaryEntity>> {
+    async execute(params: ICreateOrderCredentials): Promise<Result<IOrderSummaryEntity>> {
         return this.commerceRepository.createOrder(params);
     }
 }
