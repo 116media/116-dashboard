@@ -1,9 +1,9 @@
+import type { IActionResponse } from "@/shared/domain/types/action.response";
+
 /**
  * Response from tag action endpoints (delete).
  *
  * @interface ITagActionResponse
- * @property {boolean} isSuccess - Whether the operation succeeded
+ * @extends {IActionResponse}
  */
-export interface ITagActionResponse {
-    isSuccess: boolean;
-}
+export interface ITagActionResponse extends IActionResponse {}
