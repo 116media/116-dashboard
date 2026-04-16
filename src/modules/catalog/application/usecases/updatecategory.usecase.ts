@@ -1,17 +1,15 @@
 import type { ICatalogRepositoryPort } from "@/modules/catalog/application/repositories/catalog.repository.port";
 import type { ICategoryEntity } from "@/modules/catalog/domain/entities/ICategoryEntity";
+import type { IUpdateCategoryCredentials } from "@/modules/catalog/presentation/model/IUpdateCategoryCredentials";
 import type { IResultUseCase } from "@/shared/application/usecases/IUseCase";
 import type { Result } from "@/shared/domain/results/result";
 
 /**
  * @interface IUpdateCategoryUseCase
- * @extends {IResultUseCase<{ id: string; data: { name: string; slug: string; description: string } }, ICategoryEntity>}
+ * @extends {IResultUseCase<{ id: string; data: IUpdateCategoryCredentials }, ICategoryEntity>}
  */
 interface IUpdateCategoryUseCase
-    extends IResultUseCase<
-        { id: string; data: { name: string; slug: string; description: string } },
-        ICategoryEntity
-    > {}
+    extends IResultUseCase<{ id: string; data: IUpdateCategoryCredentials }, ICategoryEntity> {}
 
 /**
  * Use case for updating an existing category.
@@ -34,13 +32,10 @@ export class UpdateCategoryUseCase implements IUpdateCategoryUseCase {
     /**
      * Executes the update category use case.
      *
-     * @param {object} params - The category ID and updated data
+     * @param {object} request - The category ID and updated data
      * @returns {Promise<Result<ICategoryEntity>>} `ok(ICategoryEntity)` on success, `err(Failure)` on failure
      */
-    async execute(params: {
-        id: string;
-        data: { name: string; slug: string; description: string };
-    }): Promise<Result<ICategoryEntity>> {
-        return this.catalogRepository.updateCategory(params.id, params.data);
+    async execute(request: { id: string; data: IUpdateCategoryCredentials }): Promise<Result<ICategoryEntity>> {
+        return this.catalogRepository.updateCategory(request.id, request.data);
     }
 }
