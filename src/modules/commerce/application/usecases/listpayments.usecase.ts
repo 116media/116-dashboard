@@ -1,28 +1,16 @@
 import type { ICommerceRepositoryPort } from "@/modules/commerce/application/repositories/commerce.repository.port";
 import type { IPaymentSummaryEntity } from "@/modules/commerce/domain/entities/IPaymentSummaryEntity";
+import type { IPaymentsQueryParams } from "@/modules/commerce/presentation/model/IPaymentsQueryParams";
 import type { IResultUseCase } from "@/shared/application/usecases/IUseCase";
 import type { Result } from "@/shared/domain/results/result";
 import type { IPaginatedResult } from "@/shared/domain/types/pagination";
-import type {
-    EnumPaymentMethod,
-    EnumPaymentStatus
-} from "@/shared/infrastructure/api/generated/116.api";
 
 /**
  * @interface IListPaymentsUseCase
- * @extends {IResultUseCase<{ pageIndex: number; pageSize: number; status?: EnumPaymentStatus; method?: EnumPaymentMethod; search?: string }, IPaginatedResult<IPaymentSummaryEntity>>}
+ * @extends {IResultUseCase<IPaymentsQueryParams, IPaginatedResult<IPaymentSummaryEntity>>}
  */
 interface IListPaymentsUseCase
-    extends IResultUseCase<
-        {
-            pageIndex: number;
-            pageSize: number;
-            status?: EnumPaymentStatus;
-            method?: EnumPaymentMethod;
-            search?: string;
-        },
-        IPaginatedResult<IPaymentSummaryEntity>
-    > {}
+    extends IResultUseCase<IPaymentsQueryParams, IPaginatedResult<IPaymentSummaryEntity>> {}
 
 /**
  * Use case for listing all payments.
@@ -46,16 +34,12 @@ export class ListPaymentsUseCase implements IListPaymentsUseCase {
     /**
      * Executes the list payments use case.
      *
-     * @param {object} params - Pagination and optional filter parameters
+     * @param {IPaymentsQueryParams} params - Pagination and optional filter parameters
      * @returns {Promise<Result<IPaginatedResult<IPaymentSummaryEntity>>>} `ok(IPaginatedResult<IPaymentSummaryEntity>)` on success, `err(Failure)` on failure
      */
-    async execute(params: {
-        pageIndex: number;
-        pageSize: number;
-        status?: EnumPaymentStatus;
-        method?: EnumPaymentMethod;
-        search?: string;
-    }): Promise<Result<IPaginatedResult<IPaymentSummaryEntity>>> {
+    async execute(
+        params: IPaymentsQueryParams
+    ): Promise<Result<IPaginatedResult<IPaymentSummaryEntity>>> {
         return this.commerceRepository.listPayments(params);
     }
 }
