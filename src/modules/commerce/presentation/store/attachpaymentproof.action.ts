@@ -1,6 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
+import type { IAttachPaymentProofData } from "@/modules/commerce/presentation/model/IAttachPaymentProofData";
 import type { Failure } from "@/shared/domain/failures/failure";
-import type { EnumPaymentMethod } from "@/shared/infrastructure/api/generated/116.api";
 import container from "@/shared/infrastructure/service.locator";
 import { ActionType } from "./constants";
 
@@ -14,7 +14,7 @@ import { ActionType } from "./constants";
  */
 export const attachPaymentProofAction = createAsyncThunk<
     { id: string; fileName: string; storageUrl: string },
-    { orderId: string; file: File; paymentMethod: EnumPaymentMethod },
+    { orderId: string; data: IAttachPaymentProofData },
     { rejectValue: Failure }
 >(ActionType.AttachPaymentProof, async (params, { rejectWithValue }) => {
     const result = await container.cradle.attachPaymentProofUseCase.execute(params);
