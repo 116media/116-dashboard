@@ -1,4 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
+import type { ICommerceActionResponse } from "@/modules/commerce/domain/entities/ICommerceActionResponse";
+import type { IVerifyPaymentCredentials } from "@/modules/commerce/presentation/model/IVerifyPaymentCredentials";
 import type { Failure } from "@/shared/domain/failures/failure";
 import container from "@/shared/infrastructure/service.locator";
 import { ActionType } from "./constants";
@@ -12,8 +14,8 @@ import { ActionType } from "./constants";
  * On failure, stores the backend `Failure` in `commerce.verifyPayment.error`.
  */
 export const verifyPaymentAction = createAsyncThunk<
-    { isSuccess: boolean },
-    { orderId: string; receiptUrl: string },
+    ICommerceActionResponse,
+    { orderId: string; data: IVerifyPaymentCredentials },
     { rejectValue: Failure }
 >(ActionType.VerifyPayment, async (params, { rejectWithValue }) => {
     const result = await container.cradle.verifyPaymentUseCase.execute(params);
