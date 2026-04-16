@@ -1,5 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import type { IOrderSummaryEntity } from "@/modules/commerce/domain/entities/IOrderSummaryEntity";
+import type { IPaginationQueryParams } from "@/modules/commerce/presentation/model/IPaginationQueryParams";
 import type { Failure } from "@/shared/domain/failures/failure";
 import type { IPaginatedResult } from "@/shared/domain/types/pagination";
 import container from "@/shared/infrastructure/service.locator";
@@ -15,7 +16,7 @@ import { ActionType } from "./constants";
  */
 export const listPendingPaymentOrdersAction = createAsyncThunk<
     IPaginatedResult<IOrderSummaryEntity>,
-    { pageIndex: number; pageSize: number },
+    IPaginationQueryParams,
     { rejectValue: Failure }
 >(ActionType.ListPendingPaymentOrders, async (params, { rejectWithValue }) => {
     const result = await container.cradle.listPendingPaymentOrdersUseCase.execute(params);
