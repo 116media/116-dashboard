@@ -1,25 +1,15 @@
 import type { ICommerceRepositoryPort } from "@/modules/commerce/application/repositories/commerce.repository.port";
 import type { IOrderItemEntity } from "@/modules/commerce/domain/entities/IOrderItemEntity";
+import type { IAddOrderItemCredentials } from "@/modules/commerce/presentation/model/IAddOrderItemCredentials";
 import type { IResultUseCase } from "@/shared/application/usecases/IUseCase";
 import type { Result } from "@/shared/domain/results/result";
-import type { EnumCoreContentType } from "@/shared/infrastructure/api/generated/116.api";
 
 /**
  * @interface IAddItemToOrderUseCase
- * @extends {IResultUseCase<{ orderId: string; contentKind: EnumCoreContentType; categoryId: string; promotionLevelId?: string | null; socialBoost: boolean; isBonus: boolean }, IOrderItemEntity>}
+ * @extends {IResultUseCase<{ orderId: string; data: IAddOrderItemCredentials }, IOrderItemEntity>}
  */
 interface IAddItemToOrderUseCase
-    extends IResultUseCase<
-        {
-            orderId: string;
-            contentKind: EnumCoreContentType;
-            categoryId: string;
-            promotionLevelId?: string | null;
-            socialBoost: boolean;
-            isBonus: boolean;
-        },
-        IOrderItemEntity
-    > {}
+    extends IResultUseCase<{ orderId: string; data: IAddOrderItemCredentials }, IOrderItemEntity> {}
 
 /**
  * Use case for adding a content item to an order.
@@ -43,23 +33,10 @@ export class AddItemToOrderUseCase implements IAddItemToOrderUseCase {
     /**
      * Executes the add item to order use case.
      *
-     * @param {object} params - Item details including orderId, contentKind, categoryId, and flags
+     * @param {object} request - Item details including orderId and order item data
      * @returns {Promise<Result<IOrderItemEntity>>} `ok(IOrderItemEntity)` on success, `err(Failure)` on failure
      */
-    async execute(params: {
-        orderId: string;
-        contentKind: EnumCoreContentType;
-        categoryId: string;
-        promotionLevelId?: string | null;
-        socialBoost: boolean;
-        isBonus: boolean;
-    }): Promise<Result<IOrderItemEntity>> {
-        return this.commerceRepository.addItemToOrder(params.orderId, {
-            contentKind: params.contentKind,
-            categoryId: params.categoryId,
-            promotionLevelId: params.promotionLevelId,
-            socialBoost: params.socialBoost,
-            isBonus: params.isBonus
-        });
+    async execute(request: { orderId: string; data: IAddOrderItemCredentials }): Promise<Result<IOrderItemEntity>> {
+        return this.commerceRepository.addItemToOrder(request.orderId, request.data);
     }
 }
