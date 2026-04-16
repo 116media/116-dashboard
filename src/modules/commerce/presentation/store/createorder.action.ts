@@ -1,5 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import type { IOrderSummaryEntity } from "@/modules/commerce/domain/entities/IOrderSummaryEntity";
+import type { ICreateOrderCredentials } from "@/modules/commerce/presentation/model/ICreateOrderCredentials";
 import type { Failure } from "@/shared/domain/failures/failure";
 import container from "@/shared/infrastructure/service.locator";
 import { ActionType } from "./constants";
@@ -14,7 +15,7 @@ import { ActionType } from "./constants";
  */
 export const createOrderAction = createAsyncThunk<
     IOrderSummaryEntity,
-    { customerId: string; packageId?: string | null },
+    ICreateOrderCredentials,
     { rejectValue: Failure }
 >(ActionType.CreateOrder, async (params, { rejectWithValue }) => {
     const result = await container.cradle.createOrderUseCase.execute(params);
