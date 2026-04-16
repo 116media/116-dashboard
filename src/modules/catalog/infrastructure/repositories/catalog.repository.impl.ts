@@ -1,10 +1,22 @@
 import type { ICatalogRepositoryPort } from "@/modules/catalog/application/repositories/catalog.repository.port";
+import type { ICatalogActionResponse } from "@/modules/catalog/domain/entities/ICatalogActionResponse";
 import type { ICategoryEntity } from "@/modules/catalog/domain/entities/ICategoryEntity";
 import type { ICategoryPricingEntity } from "@/modules/catalog/domain/entities/ICategoryPricingEntity";
 import type { ICustomerEntity } from "@/modules/catalog/domain/entities/ICustomerEntity";
 import type { IPackageEntity } from "@/modules/catalog/domain/entities/IPackageEntity";
 import type { IPackageSlotEntity } from "@/modules/catalog/domain/entities/IPackageSlotEntity";
 import { CatalogMapper } from "@/modules/catalog/infrastructure/mappers/catalog.mapper";
+import type { IAddCategoryPricingCredentials } from "@/modules/catalog/presentation/model/IAddCategoryPricingCredentials";
+import type { IAddPackageSlotCredentials } from "@/modules/catalog/presentation/model/IAddPackageSlotCredentials";
+import type { ICategoriesQueryParams } from "@/modules/catalog/presentation/model/ICategoriesQueryParams";
+import type { ICreateCategoryData } from "@/modules/catalog/presentation/model/ICreateCategoryData";
+import type { ICreateCustomerCredentials } from "@/modules/catalog/presentation/model/ICreateCustomerCredentials";
+import type { ICreatePackageCredentials } from "@/modules/catalog/presentation/model/ICreatePackageCredentials";
+import type { ICustomersQueryParams } from "@/modules/catalog/presentation/model/ICustomersQueryParams";
+import type { IPackagesQueryParams } from "@/modules/catalog/presentation/model/IPackagesQueryParams";
+import type { IUpdateCategoryCredentials } from "@/modules/catalog/presentation/model/IUpdateCategoryCredentials";
+import type { IUpdateCategoryPricingCredentials } from "@/modules/catalog/presentation/model/IUpdateCategoryPricingCredentials";
+import type { IUpdateCustomerCredentials } from "@/modules/catalog/presentation/model/IUpdateCustomerCredentials";
 import type { Result } from "@/shared/domain/results/result";
 import { err, ok } from "@/shared/domain/results/result";
 import type { IPaginatedResult } from "@/shared/domain/types/pagination";
@@ -15,13 +27,9 @@ import { ProblemMapper } from "@/shared/infrastructure/mappers/problem.mapper";
  * Catalog repository implementation using REST API.
  */
 export class CatalogRepositoryImpl implements ICatalogRepositoryPort {
-    async getAllCategories(params: {
-        pageIndex: number;
-        pageSize: number;
-        isActive?: boolean;
-        isFree?: boolean;
-        search?: string;
-    }): Promise<Result<IPaginatedResult<ICategoryEntity>>> {
+    async getAllCategories(
+        params: ICategoriesQueryParams
+    ): Promise<Result<IPaginatedResult<ICategoryEntity>>> {
         try {
             const response = await apiClient.api.adminGetAllCategories({
                 pageIndex: params.pageIndex,
@@ -52,7 +60,7 @@ export class CatalogRepositoryImpl implements ICatalogRepositoryPort {
 
     async createCategory(
         contentTypeId: string,
-        data: { name: string; slug: string; description: string; isFree: boolean }
+        data: ICreateCategoryData
     ): Promise<Result<ICategoryEntity>> {
         try {
             const response = await apiClient.api.adminCreateCategory(contentTypeId, data);
@@ -64,7 +72,7 @@ export class CatalogRepositoryImpl implements ICatalogRepositoryPort {
 
     async updateCategory(
         id: string,
-        data: { name: string; slug: string; description: string }
+        data: IUpdateCategoryCredentials
     ): Promise<Result<ICategoryEntity>> {
         try {
             const response = await apiClient.api.adminUpdateCategory(id, data);
@@ -94,7 +102,7 @@ export class CatalogRepositoryImpl implements ICatalogRepositoryPort {
 
     async addCategoryPricing(
         categoryId: string,
-        data: { pricingTierId: string; priceUsd: number }
+        data: IAddCategoryPricingCredentials
     ): Promise<Result<ICategoryPricingEntity>> {
         try {
             const response = await apiClient.api.adminAddCategoryPricing(categoryId, data);
@@ -107,7 +115,7 @@ export class CatalogRepositoryImpl implements ICatalogRepositoryPort {
     async updateCategoryPricing(
         categoryId: string,
         pricingId: string,
-        data: { priceUsd: number }
+        data: IUpdateCategoryPricingCredentials
     ): Promise<Result<ICategoryPricingEntity>> {
         try {
             const response = await apiClient.api.adminUpdateCategoryPricing(
@@ -124,7 +132,7 @@ export class CatalogRepositoryImpl implements ICatalogRepositoryPort {
     async removeCategoryPricing(
         categoryId: string,
         pricingId: string
-    ): Promise<Result<{ isSuccess: boolean }>> {
+    ): Promise<Result<ICatalogActionResponse>> {
         try {
             const response = await apiClient.api.adminRemoveCategoryPricing(categoryId, pricingId);
             return ok({ isSuccess: response.data.isSuccess });
@@ -133,11 +141,9 @@ export class CatalogRepositoryImpl implements ICatalogRepositoryPort {
         }
     }
 
-    async getAllCustomers(params: {
-        pageIndex: number;
-        pageSize: number;
-        search?: string;
-    }): Promise<Result<IPaginatedResult<ICustomerEntity>>> {
+    async getAllCustomers(
+        params: ICustomersQueryParams
+    ): Promise<Result<IPaginatedResult<ICustomerEntity>>> {
         try {
             const response = await apiClient.api.adminGetAllCustomers({
                 pageIndex: params.pageIndex,
@@ -164,13 +170,7 @@ export class CatalogRepositoryImpl implements ICatalogRepositoryPort {
         }
     }
 
-    async createCustomer(data: {
-        fullName: string;
-        email: string;
-        phone?: string;
-        company?: string;
-        notes?: string;
-    }): Promise<Result<ICustomerEntity>> {
+    async createCustomer(data: ICreateCustomerCredentials): Promise<Result<ICustomerEntity>> {
         try {
             const response = await apiClient.api.adminCreateCustomer(data);
             return ok(CatalogMapper.customerFromDto(response.data.customer));
@@ -181,7 +181,7 @@ export class CatalogRepositoryImpl implements ICatalogRepositoryPort {
 
     async updateCustomer(
         id: string,
-        data: { fullName: string; email: string; phone?: string; company?: string; notes?: string }
+        data: IUpdateCustomerCredentials
     ): Promise<Result<ICustomerEntity>> {
         try {
             const response = await apiClient.api.adminUpdateCustomer(id, data);
@@ -191,12 +191,9 @@ export class CatalogRepositoryImpl implements ICatalogRepositoryPort {
         }
     }
 
-    async getAllPackages(params: {
-        pageIndex: number;
-        pageSize: number;
-        isActive?: boolean;
-        search?: string;
-    }): Promise<Result<IPaginatedResult<IPackageEntity>>> {
+    async getAllPackages(
+        params: IPackagesQueryParams
+    ): Promise<Result<IPaginatedResult<IPackageEntity>>> {
         try {
             const response = await apiClient.api.adminGetAllPackages({
                 pageIndex: params.pageIndex,
@@ -224,11 +221,7 @@ export class CatalogRepositoryImpl implements ICatalogRepositoryPort {
         }
     }
 
-    async createPackage(data: {
-        name: string;
-        description: string;
-        flatPriceUsd: number;
-    }): Promise<Result<IPackageEntity>> {
+    async createPackage(data: ICreatePackageCredentials): Promise<Result<IPackageEntity>> {
         try {
             const response = await apiClient.api.adminCreatePackage(data);
             return ok(CatalogMapper.packageFromDto(response.data.package));
@@ -257,7 +250,7 @@ export class CatalogRepositoryImpl implements ICatalogRepositoryPort {
 
     async addPackageSlot(
         packageId: string,
-        data: { categoryId: string; isRequired: boolean; quantity: number }
+        data: IAddPackageSlotCredentials
     ): Promise<Result<IPackageSlotEntity>> {
         try {
             const response = await apiClient.api.adminAddPackageSlot(packageId, data);
@@ -272,7 +265,7 @@ export class CatalogRepositoryImpl implements ICatalogRepositoryPort {
     async removePackageSlot(
         packageId: string,
         slotId: string
-    ): Promise<Result<{ isSuccess: boolean }>> {
+    ): Promise<Result<ICatalogActionResponse>> {
         try {
             const response = await apiClient.api.adminRemovePackageSlot(packageId, slotId);
             return ok({ isSuccess: response.data.isSuccess });
