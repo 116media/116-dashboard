@@ -1,13 +1,18 @@
 import type { ICommerceRepositoryPort } from "@/modules/commerce/application/repositories/commerce.repository.port";
+import type { ICommerceActionResponse } from "@/modules/commerce/domain/entities/ICommerceActionResponse";
+import type { IRejectPaymentCredentials } from "@/modules/commerce/presentation/model/IRejectPaymentCredentials";
 import type { IResultUseCase } from "@/shared/application/usecases/IUseCase";
 import type { Result } from "@/shared/domain/results/result";
 
 /**
  * @interface IRejectPaymentUseCase
- * @extends {IResultUseCase<{ orderId: string; notes?: string | null }, { isSuccess: boolean }>}
+ * @extends {IResultUseCase<{ orderId: string; data: IRejectPaymentCredentials }, ICommerceActionResponse>}
  */
 interface IRejectPaymentUseCase
-    extends IResultUseCase<{ orderId: string; notes?: string | null }, { isSuccess: boolean }> {}
+    extends IResultUseCase<
+        { orderId: string; data: IRejectPaymentCredentials },
+        ICommerceActionResponse
+    > {}
 
 /**
  * Use case for rejecting an order payment.
@@ -31,15 +36,10 @@ export class RejectPaymentUseCase implements IRejectPaymentUseCase {
     /**
      * Executes the reject payment use case.
      *
-     * @param {object} params - Rejection parameters including orderId and optional notes
-     * @returns {Promise<Result<{ isSuccess: boolean }>>} `ok({ isSuccess: boolean })` on success, `err(Failure)` on failure
+     * @param {object} request - Rejection parameters including orderId and optional notes
+     * @returns {Promise<Result<ICommerceActionResponse>>} `ok(ICommerceActionResponse)` on success, `err(Failure)` on failure
      */
-    async execute(params: {
-        orderId: string;
-        notes?: string | null;
-    }): Promise<Result<{ isSuccess: boolean }>> {
-        return this.commerceRepository.rejectPayment(params.orderId, {
-            notes: params.notes
-        });
+    async execute(request: { orderId: string; data: IRejectPaymentCredentials }): Promise<Result<ICommerceActionResponse>> {
+        return this.commerceRepository.rejectPayment(request.orderId, request.data);
     }
 }
