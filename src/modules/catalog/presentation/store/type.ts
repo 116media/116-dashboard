@@ -1,3 +1,4 @@
+import type { ICatalogActionResponse } from "@/modules/catalog/domain/entities/ICatalogActionResponse";
 import type { ICategoryEntity } from "@/modules/catalog/domain/entities/ICategoryEntity";
 import type { ICategoryPricingEntity } from "@/modules/catalog/domain/entities/ICategoryPricingEntity";
 import type { ICustomerEntity } from "@/modules/catalog/domain/entities/ICustomerEntity";
@@ -22,7 +23,7 @@ export type ICatalogState = {
     deactivateCategory: IBasicInitialState<ICategoryEntity>;
     addCategoryPricing: IBasicInitialState<ICategoryPricingEntity>;
     updateCategoryPricing: IBasicInitialState<ICategoryPricingEntity>;
-    removeCategoryPricing: IBasicInitialState<{ isSuccess: boolean }>;
+    removeCategoryPricing: IBasicInitialState<ICatalogActionResponse>;
     getAllCustomers: IBasicInitialState<IPaginatedResult<ICustomerEntity>>;
     getCustomerById: IBasicInitialState<ICustomerEntity>;
     createCustomer: IBasicInitialState<ICustomerEntity>;
@@ -33,7 +34,7 @@ export type ICatalogState = {
     activatePackage: IBasicInitialState<IPackageEntity>;
     deactivatePackage: IBasicInitialState<IPackageEntity>;
     addPackageSlot: IBasicInitialState<IPackageSlotEntity>;
-    removePackageSlot: IBasicInitialState<{ isSuccess: boolean }>;
+    removePackageSlot: IBasicInitialState<ICatalogActionResponse>;
 };
 
 export type CatalogStateKey = keyof ICatalogState;
