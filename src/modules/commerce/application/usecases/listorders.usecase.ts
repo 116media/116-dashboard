@@ -1,25 +1,16 @@
 import type { ICommerceRepositoryPort } from "@/modules/commerce/application/repositories/commerce.repository.port";
 import type { IOrderSummaryEntity } from "@/modules/commerce/domain/entities/IOrderSummaryEntity";
+import type { IOrdersQueryParams } from "@/modules/commerce/presentation/model/IOrdersQueryParams";
 import type { IResultUseCase } from "@/shared/application/usecases/IUseCase";
 import type { Result } from "@/shared/domain/results/result";
 import type { IPaginatedResult } from "@/shared/domain/types/pagination";
-import type { EnumOrderStatus } from "@/shared/infrastructure/api/generated/116.api";
 
 /**
  * @interface IListOrdersUseCase
- * @extends {IResultUseCase<{ pageIndex: number; pageSize: number; status?: EnumOrderStatus; customerId?: string }, IPaginatedResult<IOrderSummaryEntity>>}
+ * @extends {IResultUseCase<IOrdersQueryParams, IPaginatedResult<IOrderSummaryEntity>>}
  */
 interface IListOrdersUseCase
-    extends IResultUseCase<
-        {
-            pageIndex: number;
-            pageSize: number;
-            status?: EnumOrderStatus;
-            customerId?: string;
-            search?: string;
-        },
-        IPaginatedResult<IOrderSummaryEntity>
-    > {}
+    extends IResultUseCase<IOrdersQueryParams, IPaginatedResult<IOrderSummaryEntity>> {}
 
 /**
  * Use case for listing all orders.
@@ -43,15 +34,12 @@ export class ListOrdersUseCase implements IListOrdersUseCase {
     /**
      * Executes the list orders use case.
      *
-     * @param {object} params - Pagination and optional filter parameters
+     * @param {IOrdersQueryParams} params - Pagination and optional filter parameters
      * @returns {Promise<Result<IPaginatedResult<IOrderSummaryEntity>>>} `ok(IPaginatedResult<IOrderSummaryEntity>)` on success, `err(Failure)` on failure
      */
-    async execute(params: {
-        pageIndex: number;
-        pageSize: number;
-        status?: EnumOrderStatus;
-        customerId?: string;
-    }): Promise<Result<IPaginatedResult<IOrderSummaryEntity>>> {
+    async execute(
+        params: IOrdersQueryParams
+    ): Promise<Result<IPaginatedResult<IOrderSummaryEntity>>> {
         return this.commerceRepository.listOrders(params);
     }
 }
