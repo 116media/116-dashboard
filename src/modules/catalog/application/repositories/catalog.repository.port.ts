@@ -1,8 +1,20 @@
+import type { ICatalogActionResponse } from "@/modules/catalog/domain/entities/ICatalogActionResponse";
 import type { ICategoryEntity } from "@/modules/catalog/domain/entities/ICategoryEntity";
 import type { ICategoryPricingEntity } from "@/modules/catalog/domain/entities/ICategoryPricingEntity";
 import type { ICustomerEntity } from "@/modules/catalog/domain/entities/ICustomerEntity";
 import type { IPackageEntity } from "@/modules/catalog/domain/entities/IPackageEntity";
 import type { IPackageSlotEntity } from "@/modules/catalog/domain/entities/IPackageSlotEntity";
+import type { IAddCategoryPricingCredentials } from "@/modules/catalog/presentation/model/IAddCategoryPricingCredentials";
+import type { IAddPackageSlotCredentials } from "@/modules/catalog/presentation/model/IAddPackageSlotCredentials";
+import type { ICategoriesQueryParams } from "@/modules/catalog/presentation/model/ICategoriesQueryParams";
+import type { ICreateCategoryData } from "@/modules/catalog/presentation/model/ICreateCategoryData";
+import type { ICreateCustomerCredentials } from "@/modules/catalog/presentation/model/ICreateCustomerCredentials";
+import type { ICreatePackageCredentials } from "@/modules/catalog/presentation/model/ICreatePackageCredentials";
+import type { ICustomersQueryParams } from "@/modules/catalog/presentation/model/ICustomersQueryParams";
+import type { IPackagesQueryParams } from "@/modules/catalog/presentation/model/IPackagesQueryParams";
+import type { IUpdateCategoryCredentials } from "@/modules/catalog/presentation/model/IUpdateCategoryCredentials";
+import type { IUpdateCategoryPricingCredentials } from "@/modules/catalog/presentation/model/IUpdateCategoryPricingCredentials";
+import type { IUpdateCustomerCredentials } from "@/modules/catalog/presentation/model/IUpdateCustomerCredentials";
 import type { Result } from "@/shared/domain/results/result";
 import type { IPaginatedResult } from "@/shared/domain/types/pagination";
 
@@ -21,13 +33,9 @@ export interface ICatalogRepositoryPort {
      * @param params - Pagination, active status, free flag, and search filters
      * @returns `ok(IPaginatedResult<ICategoryEntity>)` on success, `err(Failure)` on failure
      */
-    getAllCategories(params: {
-        pageIndex: number;
-        pageSize: number;
-        isActive?: boolean;
-        isFree?: boolean;
-        search?: string;
-    }): Promise<Result<IPaginatedResult<ICategoryEntity>>>;
+    getAllCategories(
+        params: ICategoriesQueryParams
+    ): Promise<Result<IPaginatedResult<ICategoryEntity>>>;
 
     /**
      * Fetches a single category by its ID.
@@ -46,20 +54,17 @@ export interface ICatalogRepositoryPort {
      */
     createCategory(
         contentTypeId: string,
-        data: { name: string; slug: string; description: string; isFree: boolean }
+        data: ICreateCategoryData
     ): Promise<Result<ICategoryEntity>>;
 
     /**
-     * Updates an existing category's name, slug, and description.
+     * Updates an existing category's name and description.
      *
      * @param id - The category UUID
-     * @param data - Updated name, slug, and description
+     * @param data - Updated name and description
      * @returns `ok(ICategoryEntity)` on success, `err(Failure)` on failure
      */
-    updateCategory(
-        id: string,
-        data: { name: string; slug: string; description: string }
-    ): Promise<Result<ICategoryEntity>>;
+    updateCategory(id: string, data: IUpdateCategoryCredentials): Promise<Result<ICategoryEntity>>;
 
     /**
      * Activates an inactive category.
@@ -86,7 +91,7 @@ export interface ICatalogRepositoryPort {
      */
     addCategoryPricing(
         categoryId: string,
-        data: { pricingTierId: string; priceUsd: number }
+        data: IAddCategoryPricingCredentials
     ): Promise<Result<ICategoryPricingEntity>>;
 
     /**
@@ -100,7 +105,7 @@ export interface ICatalogRepositoryPort {
     updateCategoryPricing(
         categoryId: string,
         pricingId: string,
-        data: { priceUsd: number }
+        data: IUpdateCategoryPricingCredentials
     ): Promise<Result<ICategoryPricingEntity>>;
 
     /**
@@ -113,7 +118,7 @@ export interface ICatalogRepositoryPort {
     removeCategoryPricing(
         categoryId: string,
         pricingId: string
-    ): Promise<Result<{ isSuccess: boolean }>>;
+    ): Promise<Result<ICatalogActionResponse>>;
 
     /**
      * Fetches a paginated list of B2B customers.
@@ -121,11 +126,9 @@ export interface ICatalogRepositoryPort {
      * @param params - Pagination and optional search filter
      * @returns `ok(IPaginatedResult<ICustomerEntity>)` on success, `err(Failure)` on failure
      */
-    getAllCustomers(params: {
-        pageIndex: number;
-        pageSize: number;
-        search?: string;
-    }): Promise<Result<IPaginatedResult<ICustomerEntity>>>;
+    getAllCustomers(
+        params: ICustomersQueryParams
+    ): Promise<Result<IPaginatedResult<ICustomerEntity>>>;
 
     /**
      * Fetches a single customer by their ID.
@@ -141,13 +144,7 @@ export interface ICatalogRepositoryPort {
      * @param data - Customer contact information
      * @returns `ok(ICustomerEntity)` on success, `err(Failure)` on failure
      */
-    createCustomer(data: {
-        fullName: string;
-        email: string;
-        phone?: string;
-        company?: string;
-        notes?: string;
-    }): Promise<Result<ICustomerEntity>>;
+    createCustomer(data: ICreateCustomerCredentials): Promise<Result<ICustomerEntity>>;
 
     /**
      * Updates an existing customer's information.
@@ -156,10 +153,7 @@ export interface ICatalogRepositoryPort {
      * @param data - Updated customer details
      * @returns `ok(ICustomerEntity)` on success, `err(Failure)` on failure
      */
-    updateCustomer(
-        id: string,
-        data: { fullName: string; email: string; phone?: string; company?: string; notes?: string }
-    ): Promise<Result<ICustomerEntity>>;
+    updateCustomer(id: string, data: IUpdateCustomerCredentials): Promise<Result<ICustomerEntity>>;
 
     /**
      * Fetches a paginated list of content packages.
@@ -167,12 +161,7 @@ export interface ICatalogRepositoryPort {
      * @param params - Pagination, active status, and search filters
      * @returns `ok(IPaginatedResult<IPackageEntity>)` on success, `err(Failure)` on failure
      */
-    getAllPackages(params: {
-        pageIndex: number;
-        pageSize: number;
-        isActive?: boolean;
-        search?: string;
-    }): Promise<Result<IPaginatedResult<IPackageEntity>>>;
+    getAllPackages(params: IPackagesQueryParams): Promise<Result<IPaginatedResult<IPackageEntity>>>;
 
     /**
      * Fetches a single package by its ID.
@@ -188,11 +177,7 @@ export interface ICatalogRepositoryPort {
      * @param data - Package name, description, and flat price in USD
      * @returns `ok(IPackageEntity)` on success, `err(Failure)` on failure
      */
-    createPackage(data: {
-        name: string;
-        description: string;
-        flatPriceUsd: number;
-    }): Promise<Result<IPackageEntity>>;
+    createPackage(data: ICreatePackageCredentials): Promise<Result<IPackageEntity>>;
 
     /**
      * Activates an inactive package.
@@ -219,7 +204,7 @@ export interface ICatalogRepositoryPort {
      */
     addPackageSlot(
         packageId: string,
-        data: { categoryId: string; isRequired: boolean; quantity: number }
+        data: IAddPackageSlotCredentials
     ): Promise<Result<IPackageSlotEntity>>;
 
     /**
@@ -229,5 +214,5 @@ export interface ICatalogRepositoryPort {
      * @param slotId - The slot UUID to remove
      * @returns `ok({ isSuccess })` on success, `err(Failure)` on failure
      */
-    removePackageSlot(packageId: string, slotId: string): Promise<Result<{ isSuccess: boolean }>>;
+    removePackageSlot(packageId: string, slotId: string): Promise<Result<ICatalogActionResponse>>;
 }
