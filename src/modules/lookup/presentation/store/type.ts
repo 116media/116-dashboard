@@ -1,4 +1,5 @@
 import type { IContentTypeEntity } from "@/modules/lookup/domain/entities/IContentTypeEntity";
+import type { ILookupActionResponse } from "@/modules/lookup/domain/entities/ILookupActionResponse";
 import type { IPricingTierEntity } from "@/modules/lookup/domain/entities/IPricingTierEntity";
 import type { IPromotionLevelEntity } from "@/modules/lookup/domain/entities/IPromotionLevelEntity";
 import type { ITagEntity } from "@/modules/lookup/domain/entities/ITagEntity";
@@ -33,7 +34,7 @@ export type ILookupState = {
     getTags: IBasicInitialStateList<ITagEntity>;
     createTag: IBasicInitialState<ITagEntity>;
     updateTag: IBasicInitialState<ITagEntity>;
-    deleteTag: IBasicInitialState<{ isSuccess: boolean }>;
+    deleteTag: IBasicInitialState<ILookupActionResponse>;
 };
 
 export type LookupStateKey = keyof ILookupState;
