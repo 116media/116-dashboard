@@ -1,13 +1,13 @@
 import { useCallback } from "react";
 import type { IRoleWithPermissions } from "@/platform/settings/domain/entities/IRoleWithPermissions";
 import { getRolesAction } from "@/platform/settings/presentation/store/security.action";
-import type { IApiProblemDetails } from "@/shared/infrastructure/api/type";
+import type { Failure } from "@/shared/domain/failures/failure";
 import { useAppDispatch, useAppSelector } from "@/shared/presentation/store/store";
 
 interface IUseRoles {
     roles: IRoleWithPermissions[];
     loading: boolean;
-    error: IApiProblemDetails | null | undefined;
+    error: Failure | null | undefined;
     fetchRoles: () => void;
 }
 

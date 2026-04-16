@@ -67,6 +67,12 @@ export const useResendOtp = (email: string, purpose: EOtpPurpose): IUseResendOtp
             // Reset countdown
             setCountdown(COUNTDOWN_SECONDS);
             setIsResendDisabled(true);
+        } else if (resendOtpAction.rejected.match(result) && result.payload) {
+            showNotification({
+                type: "error",
+                title: result.payload.title,
+                description: result.payload.detail
+            });
         }
     };
 

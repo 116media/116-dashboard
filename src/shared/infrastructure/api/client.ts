@@ -35,18 +35,21 @@ export const apiClient = new Api({
 const responseHandler = (response: AxiosResponse): AxiosResponse => response;
 
 /**
- * Axios error interceptor - handles non-recoverable API errors.
+ * Axios error interceptor — handles non-recoverable API errors.
  *
  * @description
- * Handles:
- * - 401 AuthenticationException: Purge Redux, redirect to login
- * - Validation errors: Normalize to first error message
- * - Other errors: Map exception codes to user-friendly titles
- * - Network errors: Return generic network error message
+ * Handles the following cases in order:
+ * - 401 AuthenticationException: Purge Redux state, redirect to login
+ * - 403 AccountNotVerifiedException: Purge Redux state, redirect to login
+ * - 423 AccountInactiveException: Purge Redux state, redirect to login
+ * - 400 ValidationException: Normalize title, set detail to first error message, preserve errors array
+ * - 429 responses: Parse Retry-After header, attach as retryAfter
+ * - Other API errors: Map exception codes to user-friendly French titles
+ * - Network errors: Return structured error with status 0
  *
- * Token expiry (AccessTokenExpiryException) is NOT handled here
- * — that is caught by the refresh token interceptor registered
- * before this one.
+ * Token expiry (AccessTokenExpiryException / RefreshTokenExpiryException)
+ * is NOT handled here — those are caught by dedicated interceptors
+ * registered before this one.
  */
 const errorHandler = async (error: AxiosError<IApiProblemDetails>): Promise<never> => {
     if (error.response) {
@@ -55,19 +58,60 @@ const errorHandler = async (error: AxiosError<IApiProblemDetails>): Promise<neve
         // Redirect on authentication failure (not token expiry)
         if (
             error.response.status === HttpStatus.UNAUTHORIZED &&
-            problemDetails.title === "AuthenticationException"
+            problemDetails.title === apiErrors.authentication.code
         ) {
             persistor.purge();
             window.location.href = LOGIN_PATH;
             return await Promise.reject(problemDetails);
         }
 
-        // Normalize validation errors to first message
+        // Redirect on unverified account
+        if (
+            error.response.status === HttpStatus.FORBIDDEN &&
+            problemDetails.title === apiErrors.accountNotVerified.code
+        ) {
+            persistor.purge();
+            window.location.href = LOGIN_PATH;
+            const normalizedError: IApiProblemDetails = {
+                ...problemDetails,
+                title: apiErrors.accountNotVerified.title
+            };
+            return await Promise.reject(normalizedError);
+        }
+
+        // Redirect on inactive/locked account
+        if (
+            error.response.status === HttpStatus.LOCKED &&
+            problemDetails.title === apiErrors.accountInactive.code
+        ) {
+            persistor.purge();
+            window.location.href = LOGIN_PATH;
+            const normalizedError: IApiProblemDetails = {
+                ...problemDetails,
+                title: apiErrors.accountInactive.title
+            };
+            return await Promise.reject(normalizedError);
+        }
+
+        // Normalize validation errors to first message (errors array preserved via spread)
         if (problemDetails.title === apiErrors.validation.code && problemDetails.errors?.length) {
             const normalizedError: IApiProblemDetails = {
                 ...problemDetails,
                 title: apiErrors.validation.title,
                 detail: problemDetails.errors[0].errorMessage
+            };
+            return await Promise.reject(normalizedError);
+        }
+
+        // Parse Retry-After header for rate-limited responses
+        if (error.response.status === HttpStatus.TOO_MANY_REQUESTS) {
+            const retryAfterHeader = error.response.headers?.["retry-after"];
+            const retryAfter = retryAfterHeader ? Number.parseInt(retryAfterHeader, 10) : undefined;
+            const errorType = Object.values(apiErrors).find((e) => e.code === problemDetails.title);
+            const normalizedError: IApiProblemDetails = {
+                ...problemDetails,
+                title: errorType?.title || problemDetails.title,
+                retryAfter: Number.isNaN(retryAfter) ? undefined : retryAfter
             };
             return await Promise.reject(normalizedError);
         }
@@ -83,8 +127,11 @@ const errorHandler = async (error: AxiosError<IApiProblemDetails>): Promise<neve
     }
 
     return await Promise.reject({
-        title: "Network Error",
-        detail: "Network error occurred. Please check your connection."
+        type: null,
+        title: "Erreur réseau",
+        status: 0,
+        detail: "Une erreur réseau est survenue. Veuillez vérifier votre connexion.",
+        instance: error.config?.url ?? null
     } as IApiProblemDetails);
 };
 

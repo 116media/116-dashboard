@@ -5,7 +5,7 @@ import { BackToLoginButton } from "@/modules/auth/presentation/components/ui/Bac
 import FormHeader from "@/modules/auth/presentation/components/ui/FormHeader";
 import type { IVerifyOtpCredentials } from "@/modules/auth/presentation/model/IVerifyOtpCredentials";
 import { ForgotPasswordValidator } from "@/modules/auth/presentation/utils/validators/forgotpassword.validator";
-import type { IApiProblemDetails } from "@/shared/infrastructure/api/type";
+import type { Failure } from "@/shared/domain/failures/failure";
 import ErrorAlert from "@/shared/presentation/ui/ErrorAlert";
 
 import styles from "./index.module.scss";
@@ -17,7 +17,7 @@ export interface IVerifyOtpForgotPasswordFormProps {
     email: string;
     form: FormInstance<IVerifyOtpCredentials>;
     loading: boolean;
-    error: IApiProblemDetails | null | undefined;
+    error: Failure | null | undefined;
     onSubmit: (values: IVerifyOtpCredentials) => void;
     countdown: number;
     isResendDisabled: boolean;
@@ -37,7 +37,7 @@ export interface IVerifyOtpForgotPasswordFormProps {
  * @param {string} props.email - User's email address to display
  * @param {FormInstance} props.form - Ant Design form instance
  * @param {boolean} props.loading - Whether verification is in progress
- * @param {IApiProblemDetails | null} props.error - Error if any
+ * @param {Failure | null} props.error - Error if any
  * @param {Function} props.onSubmit - Form submission handler
  * @param {number} props.countdown - Countdown seconds remaining for resend
  * @param {boolean} props.isResendDisabled - Whether resend button is disabled

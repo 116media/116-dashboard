@@ -100,6 +100,62 @@ Modal.confirm({
 
 ---
 
+## Error Display Pattern
+
+All API errors surface to the user via the backend's `Failure.title` and `Failure.detail`. **Never hardcode error titles or descriptions** — always use the values the server returned.
+
+There are three canonical patterns depending on the operation type:
+
+### 1. Forms — inline `<ErrorAlert>`
+
+Form components receive `error: Failure | null | undefined` as a prop and render `<ErrorAlert>` inline above the submit button. The hook exposes `error` from Redux state, and the form renders whatever is there.
+
+```tsx
+<ErrorAlert error={error} banner={false} showIcon closable />
+```
+
+Used by: `LoginForm`, `ForgotPasswordForm`, `VerifyOtpForgotPasswordForm`, `ResetPasswordForm`, `ChangePasswordForm`, `AccountInfoModal`.
+
+### 2. Fetches — `<ErrorAlert>` with retry
+
+For data-loading operations (profile, roles, sessions), containers destructure `error` and `fetchX` from the hook and render `<ErrorAlert>` with `onClose={fetchX}` so the close button doubles as a retry button.
+
+```tsx
+const { roles, loading, error, fetchRoles } = useRoles();
+
+<ErrorAlert error={error} banner showIcon closable onClose={fetchRoles} />
+```
+
+Used by: `ProfileContainer` (profile fetch), `SecurityContainer` (roles fetch, sessions fetch).
+
+### 3. Non-form mutations — `showNotification` with backend fields
+
+Mutations triggered from buttons or confirmation modals (revoke session, sign out, sign out all, avatar upload, resend OTP) have no form to attach an inline alert to. The hook checks `action.rejected.match(result)` and shows a toast built from the backend's typed `Failure`:
+
+```ts
+const result = await dispatch(revokeSessionAction(sessionId));
+
+if (revokeSessionAction.fulfilled.match(result)) {
+    showNotification(SettingsNotification.sessionRevokeSuccess);
+} else if (revokeSessionAction.rejected.match(result) && result.payload) {
+    showNotification({
+        type: "error",
+        title: result.payload.title,
+        description: result.payload.detail
+    });
+}
+```
+
+Used by: `UseSessions.onRevoke`, `UseUpdateAvatar.onUpload`, `UseSignOut.onSignOut`, `UseSignOutAll.onSignOutAll`, `UseResendOtp.handleResendOtp`.
+
+### Rule
+
+> The only hardcoded messages in the notification module are **success** messages. Error messages always come from `result.payload.title` / `result.payload.detail` (which is a `Failure` produced by `ProblemMapper.toFailure()` in the repository).
+
+The `<ErrorAlert>` component lives at `src/shared/presentation/ui/ErrorAlert/` and accepts `error: Failure | null | undefined`.
+
+---
+
 ## Settings Page Component Structure
 
 ### Page-Level Layout
@@ -228,6 +284,16 @@ Following the auth module pattern, each operation gets its own custom hook:
 ### Hook Pattern (Example)
 
 ```tsx
+import type { Failure } from "@/shared/domain/failures/failure";
+
+interface IUseChangePassword {
+    form: FormInstance<IChangePasswordCredentials>;
+    loading: boolean;
+    error: Failure | null | undefined;
+    onSubmit: (values: IChangePasswordCredentials) => void;
+    resetChangePassword: () => void;
+}
+
 export const useChangePassword = (): IUseChangePassword => {
     const dispatch = useAppDispatch();
     const [form] = useForm<IChangePasswordCredentials>();
@@ -236,18 +302,21 @@ export const useChangePassword = (): IUseChangePassword => {
         ({ settings: { changePassword } }) => changePassword
     );
 
-    const onSubmit = async (formValues: IChangePasswordCredentials): Promise<void> => {
-        const { confirmPassword, ...credentials } = formValues;
-        const result = await dispatch(changePasswordAction(credentials));
+    const onSubmit = async (values: IChangePasswordCredentials) => {
+        const { oldPassword, newPassword } = values;
+        const result = await dispatch(changePasswordAction({ oldPassword, newPassword }));
 
         if (changePasswordAction.fulfilled.match(result)) {
             form.resetFields();
             showNotification(SettingsNotification.changePasswordSuccess);
         }
+        // On rejection the Failure is automatically stored in Redux state
+        // and the form's <ErrorAlert error={error} /> renders it. No extra
+        // work needed here — form errors use Pattern 1 from "Error Display Pattern".
     };
 
     const resetChangePassword = () => {
-        dispatch(resetChangePasswordAction());
+        dispatch(settingsSlice.actions.purge(["changePassword"]));
     };
 
     return { form, error, loading, onSubmit, resetChangePassword };
@@ -261,9 +330,9 @@ export const useChangePassword = (): IUseChangePassword => {
 ### Settings Validator File
 
 ```ts
-// File: src/modules/settings/presentation/utils/validators/settings.validator.ts
+// File: src/platform/settings/presentation/utils/validators/settings.validator.ts
 
-import { ValidatorUtils } from "@/shared/lib/utils/validators/validators.utils";
+import { ValidatorUtils } from "@/shared/presentation/utils/validators/validators.utils";
 import type { Rule } from "antd/es/form";
 
 export const SettingsValidator = {
@@ -285,9 +354,9 @@ export const SettingsValidator = {
 ### Change Password Validator File
 
 ```ts
-// File: src/modules/settings/presentation/utils/validators/changepassword.validator.ts
+// File: src/platform/settings/presentation/utils/validators/changepassword.validator.ts
 
-import { ValidatorUtils } from "@/shared/lib/utils/validators/validators.utils";
+import { ValidatorUtils } from "@/shared/presentation/utils/validators/validators.utils";
 import type { Rule } from "antd/es/form";
 
 export const ChangePasswordValidator = {
@@ -320,38 +389,38 @@ export const ChangePasswordValidator = {
 
 ## Notifications
 
+Only **success** notifications are declared here. Error notifications are built at call time from the backend's `Failure.title` / `Failure.detail` — see the "Error Display Pattern" section above.
+
 ```ts
-// File: src/modules/settings/presentation/utils/notification/settings.notification.ts
+// File: src/platform/settings/presentation/utils/notification/settings.notification.ts
 
-import type { INotificationConfig } from "@/shared/lib/utils/notification/notification.utils";
+import type { INotificationConfig } from "@/shared/presentation/utils/notification/notification.utils";
 
-export const SettingsNotification: Record<string, INotificationConfig> = {
+export const SettingsNotification = {
     profileUpdateSuccess: {
         type: "success",
-        message: "Profil mis à jour",
+        title: "Profil mis à jour",
         description: "Vos informations ont été mises à jour avec succès."
-    },
+    } as INotificationConfig,
+
     avatarUpdateSuccess: {
         type: "success",
-        message: "Avatar mis à jour",
+        title: "Avatar mis à jour",
         description: "Votre photo de profil a été mise à jour avec succès."
-    },
+    } as INotificationConfig,
+
     changePasswordSuccess: {
         type: "success",
-        message: "Mot de passe modifié",
+        title: "Mot de passe modifié",
         description: "Votre mot de passe a été modifié avec succès."
-    },
+    } as INotificationConfig,
+
     sessionRevokeSuccess: {
         type: "success",
-        message: "Session révoquée",
+        title: "Session révoquée",
         description: "L'appareil a été déconnecté avec succès."
-    },
-    signOutError: {
-        type: "error",
-        message: "Erreur de déconnexion",
-        description: "Une erreur est survenue lors de la déconnexion. Veuillez réessayer."
-    }
-};
+    } as INotificationConfig
+} as const;
 ```
 
 ---
@@ -359,7 +428,7 @@ export const SettingsNotification: Record<string, INotificationConfig> = {
 ## Presentation Models
 
 ```ts
-// File: src/modules/settings/presentation/model/IUpdateAccountCredentials.ts
+// File: src/platform/settings/presentation/model/IUpdateAccountCredentials.ts
 export interface IUpdateAccountCredentials {
     email: string;
     userName: string;
@@ -370,7 +439,7 @@ export interface IUpdateAccountCredentials {
     phoneDialCode?: string | null;
 }
 
-// File: src/modules/settings/presentation/model/IChangePasswordCredentials.ts
+// File: src/platform/settings/presentation/model/IChangePasswordCredentials.ts
 export interface IChangePasswordCredentials {
     oldPassword: string;
     newPassword: string;

@@ -8,7 +8,7 @@ Form credential models, validators, and notification configuration. No dependenc
 
 ---
 
-## `src/modules/settings/presentation/model/IUpdateAccountCredentials.ts`
+## `src/platform/settings/presentation/model/IUpdateAccountCredentials.ts`
 
 - [ ] Define `IUpdateAccountCredentials` interface:
   ```ts
@@ -24,7 +24,7 @@ Form credential models, validators, and notification configuration. No dependenc
 
 ---
 
-## `src/modules/settings/presentation/model/IChangePasswordCredentials.ts`
+## `src/platform/settings/presentation/model/IChangePasswordCredentials.ts`
 
 - [ ] Define `IChangePasswordCredentials` interface:
   ```ts
@@ -35,18 +35,18 @@ Form credential models, validators, and notification configuration. No dependenc
 
 ---
 
-## `src/modules/settings/presentation/utils/validators/settings.validator.ts`
+## `src/platform/settings/presentation/utils/validators/settings.validator.ts`
 
 - [ ] Export `SettingsValidator` object
 - [ ] `userName(name)`: required, min 2, max 50 — use `ValidatorUtils.required` + `ValidatorUtils.minmax`
 - [ ] `countryName(name)`: required — use `ValidatorUtils.required`
 - [ ] `phonePartial(name, dialCode?)`: numeric only — use `ValidatorUtils.numericOnly`
-- [ ] Import `ValidatorUtils` from `@/shared/lib/utils/validators/validators.utils`
+- [ ] Import `ValidatorUtils` from `@/shared/presentation/utils/validators/validators.utils`
 - [ ] Import `Rule` from `antd/es/form`
 
 ---
 
-## `src/modules/settings/presentation/utils/validators/changepassword.validator.ts`
+## `src/platform/settings/presentation/utils/validators/changepassword.validator.ts`
 
 - [ ] Export `ChangePasswordValidator` object
 - [ ] `oldPassword(name)`: required
@@ -56,12 +56,22 @@ Form credential models, validators, and notification configuration. No dependenc
 
 ---
 
-## `src/modules/settings/presentation/utils/notification/settings.notification.ts`
+## `src/platform/settings/presentation/utils/notification/settings.notification.ts`
 
-- [ ] Export `SettingsNotification` record with 5 entries (all French):
+> **Error notifications are NOT declared here.** Every error notification is built at call time from the backend's `Failure.title` / `Failure.detail`. See [ui-components.md](../../documentations/ui-components.md#error-display-pattern). Never hardcode error messages.
+
+- [ ] Export `SettingsNotification` record with only **success** entries (all French):
   - `profileUpdateSuccess`: "Profil mis à jour" / "Vos informations ont été mises à jour avec succès."
   - `avatarUpdateSuccess`: "Avatar mis à jour" / "Votre photo de profil a été mise à jour avec succès."
   - `changePasswordSuccess`: "Mot de passe modifié" / "Votre mot de passe a été modifié avec succès."
   - `sessionRevokeSuccess`: "Session révoquée" / "L'appareil a été déconnecté avec succès."
-  - `signOutError`: type "error" / "Erreur de déconnexion" / "Une erreur est survenue lors de la déconnexion. Veuillez réessayer."
-- [ ] Import `INotificationConfig` from `@/shared/lib/utils/notification/notification.utils`
+- [ ] Import `INotificationConfig` from `@/shared/presentation/utils/notification/notification.utils`
+- [ ] Error toasts for failed mutations are created inline in the hooks:
+
+  ```ts
+  showNotification({
+      type: "error",
+      title: result.payload.title,       // from backend Failure
+      description: result.payload.detail // from backend Failure
+  });
+  ```

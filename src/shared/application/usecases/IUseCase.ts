@@ -1,21 +1,26 @@
+import type { Result } from "@/shared/domain/results/result";
+
 /**
- * Generic use case interface for application layer.
+ * Generic use case interface for operations that do not return a Result
+ * (e.g. token refresh, device initialization).
  *
- * @interface IUseCase
  * @template TRequest - The input type for the use case
  * @template TResponse - The output type for the use case
- *
- * @description
- * Base interface for all use cases in the application following Clean Architecture principles.
- * Use cases contain application business logic and orchestrate the flow of data.
  */
 export interface IUseCase<TRequest = void, TResponse = void> {
-    /**
-     * Executes the use case with the provided request data.
-     *
-     * @param {TRequest} request - The input data for the use case
-     * @returns {Promise<TResponse>} The result of the use case execution
-     * @throws {IApiProblemDetails} When the operation fails
-     */
     execute(request: TRequest): Promise<TResponse>;
+}
+
+/**
+ * Generic use case interface for operations that return a Result.
+ *
+ * Use cases that call API-backed repositories should implement this
+ * interface so errors are represented as typed Failure values rather
+ * than thrown exceptions.
+ *
+ * @template TRequest - The input type for the use case
+ * @template TResponse - The success value type inside the Result
+ */
+export interface IResultUseCase<TRequest = void, TResponse = void> {
+    execute(request: TRequest): Promise<Result<TResponse>>;
 }

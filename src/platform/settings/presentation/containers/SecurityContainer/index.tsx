@@ -8,6 +8,7 @@ import SettingsCard from "@/platform/settings/presentation/components/ui/Setting
 import SettingsPageHeader from "@/platform/settings/presentation/components/ui/SettingsPageHeader";
 import { useChangePassword } from "@/platform/settings/presentation/hooks/UseChangePassword";
 import { useRoles } from "@/platform/settings/presentation/hooks/UseRoles";
+import ErrorAlert from "@/shared/presentation/ui/ErrorAlert";
 import { IconLockOutlined } from "@/shared/presentation/ui/Icons";
 import StateRenderer from "@/shared/presentation/ui/StateRenderer";
 import { RolesLoading, SessionsLoading } from "./SecurityContainer.Loading";
@@ -24,10 +25,11 @@ import { RolesLoading, SessionsLoading } from "./SecurityContainer.Loading";
  */
 const SecurityContainer: FC = () => {
     const changePassword = useChangePassword();
-    const { roles, loading: rolesLoading, fetchRoles } = useRoles();
+    const { roles, loading: rolesLoading, error: rolesError, fetchRoles } = useRoles();
     const {
         sessions,
         loading: sessionsLoading,
+        error: sessionsError,
         revokeLoading,
         fetchSessions,
         onRevoke
@@ -56,6 +58,7 @@ const SecurityContainer: FC = () => {
                 title="Rôles & Permissions"
                 subtitle="Vos rôles assignés et les permissions associées"
             >
+                <ErrorAlert banner showIcon closable error={rolesError} onClose={fetchRoles} />
                 <StateRenderer
                     data={roles}
                     loading={rolesLoading}
@@ -82,6 +85,13 @@ const SecurityContainer: FC = () => {
                     )
                 }
             >
+                <ErrorAlert
+                    banner
+                    showIcon
+                    closable
+                    error={sessionsError}
+                    onClose={fetchSessions}
+                />
                 <StateRenderer
                     data={sessions}
                     loading={sessionsLoading}

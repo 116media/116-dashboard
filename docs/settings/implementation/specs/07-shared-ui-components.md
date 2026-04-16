@@ -4,9 +4,11 @@
 
 **Ref**: [ui-components.md](../../documentations/ui-components.md), [field-specifications.md](../../documentations/field-specifications.md)
 
+> **Note**: `ErrorAlert` already exists in the shared layer at `src/shared/presentation/ui/ErrorAlert/` and accepts `error: Failure | null | undefined`. Reuse it — do not create a settings-specific error component.
+
 ---
 
-## `src/modules/settings/presentation/components/ui/SettingsSidebar/`
+## `src/platform/settings/presentation/components/ui/SettingsSidebar/`
 
 **Files**: `index.tsx` + `index.module.scss`
 
@@ -24,7 +26,7 @@
 
 ---
 
-## `src/modules/settings/presentation/components/ui/SettingsCard/`
+## `src/platform/settings/presentation/components/ui/SettingsCard/`
 
 **Files**: `index.tsx` + `index.module.scss`
 
@@ -35,7 +37,7 @@
 
 ---
 
-## `src/modules/settings/presentation/components/ui/SettingsField/`
+## `src/platform/settings/presentation/components/ui/SettingsField/`
 
 **Files**: `index.tsx` + `index.module.scss`
 
@@ -46,7 +48,7 @@
 
 ---
 
-## `src/modules/settings/presentation/components/ui/SessionCard/`
+## `src/platform/settings/presentation/components/ui/SessionCard/`
 
 **Files**: `index.tsx` + `index.module.scss`
 
@@ -75,7 +77,7 @@
 
 ---
 
-## `src/modules/settings/presentation/components/ui/RoleCard/`
+## `src/platform/settings/presentation/components/ui/RoleCard/`
 
 **Files**: `index.tsx` + `index.module.scss`
 
@@ -95,7 +97,7 @@
 
 ---
 
-## `src/modules/settings/presentation/components/ui/ComingSoon/`
+## `src/platform/settings/presentation/components/ui/ComingSoon/`
 
 **Files**: `index.tsx` + `index.module.scss`
 

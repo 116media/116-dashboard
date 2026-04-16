@@ -23,11 +23,5 @@ export const SettingsNotification = {
         type: "success",
         title: "Session révoquée",
         description: "L'appareil a été déconnecté avec succès."
-    } as INotificationConfig,
-
-    signOutError: {
-        type: "error",
-        title: "Erreur de déconnexion",
-        description: "Une erreur est survenue lors de la déconnexion. Veuillez réessayer."
     } as INotificationConfig
 } as const;

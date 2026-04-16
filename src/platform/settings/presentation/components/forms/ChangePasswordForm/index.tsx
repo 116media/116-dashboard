@@ -4,7 +4,7 @@ import type { FC } from "react";
 import SettingsCard from "@/platform/settings/presentation/components/ui/SettingsCard";
 import type { IChangePasswordCredentials } from "@/platform/settings/presentation/model/IChangePasswordCredentials";
 import { ChangePasswordValidator } from "@/platform/settings/presentation/utils/validators/changepassword.validator";
-import type { IApiProblemDetails } from "@/shared/infrastructure/api/type";
+import type { Failure } from "@/shared/domain/failures/failure";
 import ErrorAlert from "@/shared/presentation/ui/ErrorAlert";
 import { IconLockOutlined } from "@/shared/presentation/ui/Icons";
 import styles from "./index.module.scss";
@@ -15,13 +15,13 @@ import styles from "./index.module.scss";
  * @interface IChangePasswordFormProps
  * @property {FormInstance} form - Ant Design form instance
  * @property {boolean} loading - Whether the submit action is in progress
- * @property {IApiProblemDetails | null | undefined} error - API error to display
+ * @property {Failure | null | undefined} error - API error to display
  * @property {(values: IChangePasswordCredentials) => void} onSubmit - Form submission handler
  */
 interface IChangePasswordFormProps {
     form: FormInstance<IChangePasswordCredentials>;
     loading: boolean;
-    error: IApiProblemDetails | null | undefined;
+    error: Failure | null | undefined;
     onSubmit: (values: IChangePasswordCredentials) => void;
 }
 

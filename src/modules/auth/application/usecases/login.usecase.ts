@@ -1,40 +1,29 @@
 import type { IAuthRepositoryPort } from "@/modules/auth/application/repositories/auth.repository.port";
 import type { IAuthResponse } from "@/modules/auth/domain/entities/IAuthResponse";
 import type { ILoginCredentials } from "@/modules/auth/presentation/model/ILoginCredentials";
-import type { IUseCase } from "@/shared/application/usecases/IUseCase";
+import type { IResultUseCase } from "@/shared/application/usecases/IUseCase";
+import type { Result } from "@/shared/domain/results/result";
 
 /**
- * Interface for the login use case.
- *
  * @interface ILoginUseCase
- * @extends {IUseCase<ILoginCredentials, IAuthResponse>}
+ * @extends {IResultUseCase<ILoginCredentials, IAuthResponse>}
  */
-interface ILoginUseCase extends IUseCase<ILoginCredentials, IAuthResponse> {}
+interface ILoginUseCase extends IResultUseCase<ILoginCredentials, IAuthResponse> {}
 
 /**
- * Login use case implementing business logic for user authentication.
+ * Use case for authenticating a user with email and password.
  *
  * @class LoginUseCase
  * @implements {ILoginUseCase}
  *
  * @description
- * Orchestrates the login flow:
- * 1. Authenticates user via repository
- * 2. Returns authentication response (user data persisted via encrypted redux-persist)
- *
  * Token delivery is handled by the server via HttpOnly cookies —
  * no client-side token storage is needed.
- *
- * @remarks
- * Part of the application layer in Clean Architecture.
- * Contains business rules independent of frameworks and UI.
  */
 export class LoginUseCase implements ILoginUseCase {
     private readonly authRepository: IAuthRepositoryPort;
 
     /**
-     * Creates an instance of LoginUseCase.
-     *
      * @param {IAuthRepositoryPort} authRepository - Repository for auth operations (injected)
      */
     constructor({ authRepository }: { authRepository: IAuthRepositoryPort }) {
@@ -44,11 +33,10 @@ export class LoginUseCase implements ILoginUseCase {
     /**
      * Executes the login use case.
      *
-     * @param {ILoginCredentials} credentials - Email and password
-     * @returns {Promise<IAuthResponse>} User data
-     * @throws {IApiProblemDetails} When authentication fails
+     * @param {ILoginCredentials} credentials - User email and password
+     * @returns {Promise<Result<IAuthResponse>>} `ok(IAuthResponse)` with user data on success, `err(Failure)` on failure
      */
-    async execute(credentials: ILoginCredentials): Promise<IAuthResponse> {
-        return await this.authRepository.login(credentials);
+    async execute(credentials: ILoginCredentials): Promise<Result<IAuthResponse>> {
+        return this.authRepository.login(credentials);
     }
 }

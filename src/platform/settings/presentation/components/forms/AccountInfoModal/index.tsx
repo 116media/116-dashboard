@@ -4,7 +4,7 @@ import { type FC, useEffect, useState } from "react";
 import type { IProfile } from "@/platform/settings/domain/entities/IProfile";
 import type { IUpdateAccountCredentials } from "@/platform/settings/presentation/model/IUpdateAccountCredentials";
 import { SettingsValidator } from "@/platform/settings/presentation/utils/validators/settings.validator";
-import type { IApiProblemDetails } from "@/shared/infrastructure/api/type";
+import type { Failure } from "@/shared/domain/failures/failure";
 import { COUNTRY_LIST, type ICountryObject } from "@/shared/infrastructure/constants/countries";
 import CountrySelect from "@/shared/presentation/ui/CountrySelect";
 import ErrorAlert from "@/shared/presentation/ui/ErrorAlert";
@@ -15,7 +15,7 @@ interface IAccountInfoModalProps {
     onClose: () => void;
     form: FormInstance<IUpdateAccountCredentials>;
     loading: boolean;
-    error: IApiProblemDetails | null | undefined;
+    error: Failure | null | undefined;
     onSubmit: (values: IUpdateAccountCredentials) => void;
     user: IProfile | null;
 }

@@ -5,17 +5,17 @@ import {
     forgotPasswordAction,
     resetForgotPasswordAction
 } from "@/modules/auth/presentation/store/forgotpassword.action";
-import type { IApiProblemDetails } from "@/shared/infrastructure/api/type";
+import type { Failure } from "@/shared/domain/failures/failure";
 import { useAppDispatch, useAppSelector } from "@/shared/presentation/store/store";
 
 const { useForm } = Form;
 
 interface IUseForgotPassword {
-    loading: boolean;
     email: string;
+    loading: boolean;
     isSuccess: boolean;
     resetForgotPassword: () => void;
-    error: IApiProblemDetails | null | undefined;
+    error: Failure | null | undefined;
     form: FormInstance<IForgotPasswordCredentials>;
     onSubmit: (formValues: IForgotPasswordCredentials) => Promise<void>;
 }
@@ -29,7 +29,7 @@ interface IUseForgotPassword {
  *
  * @returns Forgot password form utilities and state
  * @returns {FormInstance} form - Ant Design form instance
- * @returns {IApiProblemDetails | null} error - Forgot password error if any
+ * @returns {Failure | null} error - Forgot password error if any
  * @returns {boolean} loading - Whether forgot password request is in progress
  * @returns {boolean} isSuccess - Whether forgot password request succeeded
  * @returns {string} email - Email address from the request for client reference

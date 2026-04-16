@@ -5,7 +5,7 @@ import { setCurrentUserAction } from "@/platform/session/presentation/store/curr
 import type { IUpdateAccountCredentials } from "@/platform/settings/presentation/model/IUpdateAccountCredentials";
 import { updateAccountAction } from "@/platform/settings/presentation/store/profile.action";
 import { SettingsNotification } from "@/platform/settings/presentation/utils/notification/settings.notification";
-import type { IApiProblemDetails } from "@/shared/infrastructure/api/type";
+import type { Failure } from "@/shared/domain/failures/failure";
 import { COUNTRY_LIST, type ICountryObject } from "@/shared/infrastructure/constants/countries";
 import { useAppDispatch, useAppSelector } from "@/shared/presentation/store/store";
 import { showNotification } from "@/shared/presentation/utils/notification/notification.utils";
@@ -15,7 +15,7 @@ const { useForm, useWatch } = Form;
 interface IUseUpdateAccount {
     form: FormInstance<IUpdateAccountCredentials>;
     loading: boolean;
-    error: IApiProblemDetails | null | undefined;
+    error: Failure | null | undefined;
     isOpen: boolean;
     open: () => void;
     close: () => void;

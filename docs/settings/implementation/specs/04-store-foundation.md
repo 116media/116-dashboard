@@ -8,7 +8,7 @@ Redux slice scaffolding: constants, state type, initial state, and slice definit
 
 ---
 
-## `src/modules/settings/presentation/store/constants.ts`
+## `src/platform/settings/presentation/store/constants.ts`
 
 - [ ] Define `ActionType` object:
   ```ts
@@ -26,36 +26,39 @@ Redux slice scaffolding: constants, state type, initial state, and slice definit
 
 ---
 
-## `src/modules/settings/presentation/store/type.ts`
+## `src/platform/settings/presentation/store/type.ts`
 
-- [ ] Define `ISettingsState` type with 9 keys:
+- [ ] Define `ISettingsState` type with 9 keys using domain entities:
   ```ts
-  profile: IBasicInitialState<IProfile>
-  updateAccount: IBasicInitialState<IProfile>
-  updateAvatar: IBasicInitialState<IProfile>
-  changePassword: IBasicInitialState<IUnknownObject>
+  profile: IBasicInitialState<IUser>
+  updateAccount: IBasicInitialState<IUser>
+  updateAvatar: IBasicInitialState<IUser>
+  changePassword: IBasicInitialState<IChangePasswordResponse>
   roles: IBasicInitialState<IRoleWithPermissions[]>
   sessions: IBasicInitialStateList<ISession>
-  revokeSession: IBasicInitialState<IUnknownObject>
+  revokeSession: IBasicInitialState<IRevokeSessionResponse>
   signOut: IBasicInitialState<IUnknownObject>
   signOutAll: IBasicInitialState<IUnknownObject>
   ```
-- [ ] Import `IBasicInitialState`, `IBasicInitialStateList` from `@/core/presentation/store/action.wrapper`
-- [ ] Import domain entities from Phase 1
+- [ ] Import `IBasicInitialState`, `IBasicInitialStateList` from `@/shared/presentation/store/action.wrapper`
+- [ ] The `error` field on `IBasicInitialState` is typed as `Failure | null` (from `@/shared/domain/failures/failure`) — already configured in the shared type
+- [ ] Import `IUser` from `@/modules/auth/domain/entities/IUser`
+- [ ] Import `IChangePasswordResponse`, `IRoleWithPermissions` from `@/platform/settings/domain/entities/`
+- [ ] Import `ISession`, `IRevokeSessionResponse` from `@/platform/session/domain/entities/`
 - [ ] Export `SettingsStateKey` type for the purge reducer
 
 ---
 
-## `src/modules/settings/presentation/store/state.ts`
+## `src/platform/settings/presentation/store/state.ts`
 
 - [ ] Export `settingsInitialState: ISettingsState`
 - [ ] Use `createInitialState<T>()` for object states
 - [ ] Use `createInitialStateList<T>()` for `sessions`
-- [ ] Import helpers from `@/core/presentation/store/action.wrapper`
+- [ ] Import helpers from `@/shared/presentation/store/action.wrapper`
 
 ---
 
-## `src/modules/settings/presentation/store/index.ts`
+## `src/platform/settings/presentation/store/index.ts`
 
 - [ ] Create `settingsSlice` using `createSlice`
 - [ ] `name`: `SliceName.Settings`

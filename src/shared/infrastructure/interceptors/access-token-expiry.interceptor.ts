@@ -1,6 +1,7 @@
 import type { AxiosError, AxiosInstance, InternalAxiosRequestConfig } from "axios";
 import HttpStatus from "http-status";
 import type { IApiProblemDetails } from "@/shared/infrastructure/api/type";
+import { apiErrors } from "@/shared/infrastructure/constants/api";
 import { REFRESH_TOKEN_EXPIRED_EVENT } from "@/shared/infrastructure/interceptors/refresh-token-expiry.interceptor";
 import container from "@/shared/infrastructure/service.locator.ts";
 
@@ -60,7 +61,7 @@ export const accessTokenExpiryInterceptor = (instance: AxiosInstance) => {
 
         const isAccessTokenExpiry =
             error.response?.status === HttpStatus.UNAUTHORIZED &&
-            problemDetails?.title === "AccessTokenExpiryException";
+            problemDetails?.title === apiErrors.accessTokenExpiry.code;
 
         if (!isAccessTokenExpiry || originalRequest._retry) return Promise.reject(error);
 
@@ -83,7 +84,7 @@ export const accessTokenExpiryInterceptor = (instance: AxiosInstance) => {
 
             const isRefreshTokenExpiry =
                 axiosError.response?.status === HttpStatus.FORBIDDEN &&
-                axiosError.response?.data?.title === "RefreshTokenExpiryException";
+                axiosError.response?.data?.title === apiErrors.refreshTokenExpiry.code;
 
             if (isRefreshTokenExpiry) {
                 window.dispatchEvent(new CustomEvent(REFRESH_TOKEN_EXPIRED_EVENT));

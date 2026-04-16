@@ -4,13 +4,15 @@ Feature-specific form components that combine shared UI components with business
 
 **Ref**: [field-specifications.md](../../documentations/field-specifications.md), [ui-components.md](../../documentations/ui-components.md), [security.md](../../documentations/security.md), [profile.md](../../documentations/profile.md)
 
+> **Type note**: The `error` prop uses `Failure | null | undefined` (imported from `@/shared/domain/failures/failure`). It is passed directly to `<ErrorAlert error={error} />` — see [ui-components.md — Error Display Pattern](../../documentations/ui-components.md#error-display-pattern).
+
 ---
 
-## `src/modules/settings/presentation/components/forms/ChangePasswordForm/`
+## `src/platform/settings/presentation/components/forms/ChangePasswordForm/`
 
 **Files**: `index.tsx` + `index.module.scss`
 
-- [ ] Define props: `form: FormInstance`, `loading: boolean`, `error: IApiProblemDetails | null`, `onSubmit: (values: IChangePasswordCredentials) => void`
+- [ ] Define props: `form: FormInstance`, `loading: boolean`, `error: Failure | null | undefined`, `onSubmit: (values: IChangePasswordCredentials) => void`
 - [ ] Render inside `SettingsCard` with title "Changer le mot de passe"
 - [ ] Ant Design `Form`: `layout="vertical"`, `size="large"`, `validateTrigger={["onSubmit", "onBlur"]}`
 - [ ] Field 1 — Mot de passe actuel:
@@ -29,11 +31,11 @@ Feature-specific form components that combine shared UI components with business
 
 ---
 
-## `src/modules/settings/presentation/components/forms/AccountInfoModal/`
+## `src/platform/settings/presentation/components/forms/AccountInfoModal/`
 
 **Files**: `index.tsx` + `index.module.scss`
 
-- [ ] Define props: `isOpen: boolean`, `onClose: () => void`, `form: FormInstance`, `loading: boolean`, `error: IApiProblemDetails | null`, `onSubmit: (values: IUpdateAccountCredentials) => void`, `user: IProfile | null`
+- [ ] Define props: `isOpen: boolean`, `onClose: () => void`, `form: FormInstance`, `loading: boolean`, `error: Failure | null | undefined`, `onSubmit: (values: IUpdateAccountCredentials) => void`, `user: IProfile | null`
 - [ ] Ant Design `Modal`:
   - `title="Modifier les informations du compte"`
   - `open={isOpen}`, `onCancel={onClose}`
