@@ -1,9 +1,18 @@
 import type { ILookupRepositoryPort } from "@/modules/lookup/application/repositories/lookup.repository.port";
 import type { IContentTypeEntity } from "@/modules/lookup/domain/entities/IContentTypeEntity";
+import type { ILookupActionResponse } from "@/modules/lookup/domain/entities/ILookupActionResponse";
 import type { IPricingTierEntity } from "@/modules/lookup/domain/entities/IPricingTierEntity";
 import type { IPromotionLevelEntity } from "@/modules/lookup/domain/entities/IPromotionLevelEntity";
 import type { ITagEntity } from "@/modules/lookup/domain/entities/ITagEntity";
 import { LookupMapper } from "@/modules/lookup/infrastructure/mappers/lookup.mapper";
+import type { ICreateContentTypeCredentials } from "@/modules/lookup/presentation/model/ICreateContentTypeCredentials";
+import type { ICreatePricingTierCredentials } from "@/modules/lookup/presentation/model/ICreatePricingTierCredentials";
+import type { ICreatePromotionLevelCredentials } from "@/modules/lookup/presentation/model/ICreatePromotionLevelCredentials";
+import type { ICreateTagCredentials } from "@/modules/lookup/presentation/model/ICreateTagCredentials";
+import type { IUpdateContentTypeCredentials } from "@/modules/lookup/presentation/model/IUpdateContentTypeCredentials";
+import type { IUpdatePricingTierCredentials } from "@/modules/lookup/presentation/model/IUpdatePricingTierCredentials";
+import type { IUpdatePromotionLevelCredentials } from "@/modules/lookup/presentation/model/IUpdatePromotionLevelCredentials";
+import type { IUpdateTagCredentials } from "@/modules/lookup/presentation/model/IUpdateTagCredentials";
 import type { Result } from "@/shared/domain/results/result";
 import { err, ok } from "@/shared/domain/results/result";
 import { apiClient } from "@/shared/infrastructure/api/client";
@@ -32,7 +41,9 @@ export class LookupRepositoryImpl implements ILookupRepositoryPort {
         }
     }
 
-    async createContentType(data: { name: string }): Promise<Result<IContentTypeEntity>> {
+    async createContentType(
+        data: ICreateContentTypeCredentials
+    ): Promise<Result<IContentTypeEntity>> {
         try {
             const response = await apiClient.api.createContentType(data);
             return ok(LookupMapper.contentTypeFromDto(response.data.contentType));
@@ -43,7 +54,7 @@ export class LookupRepositoryImpl implements ILookupRepositoryPort {
 
     async updateContentType(
         id: string,
-        data: { name: string }
+        data: IUpdateContentTypeCredentials
     ): Promise<Result<IContentTypeEntity>> {
         try {
             const response = await apiClient.api.adminUpdateContentType(id, data);
@@ -81,10 +92,9 @@ export class LookupRepositoryImpl implements ILookupRepositoryPort {
         }
     }
 
-    async createPricingTier(data: {
-        name: string;
-        description: string;
-    }): Promise<Result<IPricingTierEntity>> {
+    async createPricingTier(
+        data: ICreatePricingTierCredentials
+    ): Promise<Result<IPricingTierEntity>> {
         try {
             const response = await apiClient.api.createPricingTier(data);
             return ok(LookupMapper.pricingTierFromDto(response.data.pricingTier));
@@ -95,7 +105,7 @@ export class LookupRepositoryImpl implements ILookupRepositoryPort {
 
     async updatePricingTier(
         id: string,
-        data: { name: string; description: string }
+        data: IUpdatePricingTierCredentials
     ): Promise<Result<IPricingTierEntity>> {
         try {
             const response = await apiClient.api.adminUpdatePricingTier(id, data);
@@ -133,11 +143,9 @@ export class LookupRepositoryImpl implements ILookupRepositoryPort {
         }
     }
 
-    async createPromotionLevel(data: {
-        name: string;
-        durationDays: number;
-        priceUsd: number;
-    }): Promise<Result<IPromotionLevelEntity>> {
+    async createPromotionLevel(
+        data: ICreatePromotionLevelCredentials
+    ): Promise<Result<IPromotionLevelEntity>> {
         try {
             const response = await apiClient.api.adminCreatePromotionLevel(data);
             return ok(LookupMapper.promotionLevelFromDto(response.data.promotionLevel));
@@ -148,7 +156,7 @@ export class LookupRepositoryImpl implements ILookupRepositoryPort {
 
     async updatePromotionLevel(
         id: string,
-        data: { name: string; durationDays: number; priceUsd: number }
+        data: IUpdatePromotionLevelCredentials
     ): Promise<Result<IPromotionLevelEntity>> {
         try {
             const response = await apiClient.api.adminUpdatePromotionLevel(id, data);
@@ -186,7 +194,7 @@ export class LookupRepositoryImpl implements ILookupRepositoryPort {
         }
     }
 
-    async createTag(data: { name: string; slug: string }): Promise<Result<ITagEntity>> {
+    async createTag(data: ICreateTagCredentials): Promise<Result<ITagEntity>> {
         try {
             const response = await apiClient.api.adminCreateTag(data);
             return ok(LookupMapper.tagFromDto(response.data.tag));
@@ -195,7 +203,7 @@ export class LookupRepositoryImpl implements ILookupRepositoryPort {
         }
     }
 
-    async updateTag(id: string, data: { name: string; slug: string }): Promise<Result<ITagEntity>> {
+    async updateTag(id: string, data: IUpdateTagCredentials): Promise<Result<ITagEntity>> {
         try {
             const response = await apiClient.api.adminUpdateTag(id, data);
             return ok(LookupMapper.tagFromDto(response.data.tag));
@@ -204,7 +212,7 @@ export class LookupRepositoryImpl implements ILookupRepositoryPort {
         }
     }
 
-    async deleteTag(id: string): Promise<Result<{ isSuccess: boolean }>> {
+    async deleteTag(id: string): Promise<Result<ILookupActionResponse>> {
         try {
             const response = await apiClient.api.adminDeleteTag(id);
             return ok({ isSuccess: response.data.isSuccess });
