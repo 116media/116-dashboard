@@ -1,15 +1,16 @@
 import type { ICommerceRepositoryPort } from "@/modules/commerce/application/repositories/commerce.repository.port";
+import type { ICommerceActionResponse } from "@/modules/commerce/domain/entities/ICommerceActionResponse";
 import type { IResultUseCase } from "@/shared/application/usecases/IUseCase";
 import type { Result } from "@/shared/domain/results/result";
 
 /**
  * @interface IRemoveItemTierUseCase
- * @extends {IResultUseCase<{ orderId: string; itemId: string; tierId: string }, { isSuccess: boolean }>}
+ * @extends {IResultUseCase<{ orderId: string; itemId: string; tierId: string }, ICommerceActionResponse>}
  */
 interface IRemoveItemTierUseCase
     extends IResultUseCase<
         { orderId: string; itemId: string; tierId: string },
-        { isSuccess: boolean }
+        ICommerceActionResponse
     > {}
 
 /**
@@ -33,14 +34,10 @@ export class RemoveItemTierUseCase implements IRemoveItemTierUseCase {
     /**
      * Executes the remove item tier use case.
      *
-     * @param {object} params - Parameters including orderId, itemId, and tierId
-     * @returns {Promise<Result<{ isSuccess: boolean }>>} `ok({ isSuccess: boolean })` on success, `err(Failure)` on failure
+     * @param {object} request - Parameters including orderId, itemId, and tierId
+     * @returns {Promise<Result<ICommerceActionResponse>>} `ok(ICommerceActionResponse)` on success, `err(Failure)` on failure
      */
-    async execute(params: {
-        orderId: string;
-        itemId: string;
-        tierId: string;
-    }): Promise<Result<{ isSuccess: boolean }>> {
-        return this.commerceRepository.removeItemTier(params.orderId, params.itemId, params.tierId);
+    async execute(request: { orderId: string; itemId: string; tierId: string }): Promise<Result<ICommerceActionResponse>> {
+        return this.commerceRepository.removeItemTier(request.orderId, request.itemId, request.tierId);
     }
 }
