@@ -1,3 +1,4 @@
+import type { ICommerceActionResponse } from "@/modules/commerce/domain/entities/ICommerceActionResponse";
 import type { IItemTierEntity } from "@/modules/commerce/domain/entities/IItemTierEntity";
 import type { IOrderDetailEntity } from "@/modules/commerce/domain/entities/IOrderDetailEntity";
 import type { IOrderItemEntity } from "@/modules/commerce/domain/entities/IOrderItemEntity";
@@ -18,11 +19,11 @@ export type ICommerceState = {
     createOrder: IBasicInitialState<IOrderSummaryEntity>;
     addItemToOrder: IBasicInitialState<IOrderItemEntity>;
     addTierToItem: IBasicInitialState<IItemTierEntity>;
-    submitOrder: IBasicInitialState<{ isSuccess: boolean }>;
-    cancelOrder: IBasicInitialState<{ isSuccess: boolean }>;
+    submitOrder: IBasicInitialState<ICommerceActionResponse>;
+    cancelOrder: IBasicInitialState<ICommerceActionResponse>;
     attachPaymentProof: IBasicInitialState<{ id: string; fileName: string; storageUrl: string }>;
-    verifyPayment: IBasicInitialState<{ isSuccess: boolean }>;
-    rejectPayment: IBasicInitialState<{ isSuccess: boolean }>;
+    verifyPayment: IBasicInitialState<ICommerceActionResponse>;
+    rejectPayment: IBasicInitialState<ICommerceActionResponse>;
     listOrders: IBasicInitialState<IPaginatedResult<IOrderSummaryEntity>>;
     getOrderById: IBasicInitialState<IOrderDetailEntity>;
     getOrderPayment: IBasicInitialState<IPaymentEntity>;
@@ -30,8 +31,8 @@ export type ICommerceState = {
     getCustomerOrders: IBasicInitialState<IPaginatedResult<IOrderSummaryEntity>>;
     listPayments: IBasicInitialState<IPaginatedResult<IPaymentSummaryEntity>>;
     editOrder: IBasicInitialState<IOrderSummaryEntity>;
-    removeItem: IBasicInitialState<{ isSuccess: boolean }>;
-    removeItemTier: IBasicInitialState<{ isSuccess: boolean }>;
+    removeItem: IBasicInitialState<ICommerceActionResponse>;
+    removeItemTier: IBasicInitialState<ICommerceActionResponse>;
     editItem: IBasicInitialState<IOrderItemEntity>;
 };
 
