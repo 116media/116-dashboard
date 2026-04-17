@@ -1,22 +1,22 @@
-import { Typography } from "antd";
 import type { FC } from "react";
+import VideosListContainer from "@/modules/videos/presentation/containers/VideosListContainer";
 import { APP_NAME } from "@/shared/infrastructure/constants/common";
-
-const { Title } = Typography;
 
 /**
  * Videos management page.
  *
  * @component
+ *
+ * @description
+ * Renders the videos list container with page title.
+ *
  * @returns The videos page
  */
-const VideosPage: FC = () => {
-    return (
-        <>
-            <title>{`Vidéos | ${APP_NAME}`}</title>
-            <Title level={3}>Vidéos</Title>
-        </>
-    );
-};
+const VideosPage: FC = () => (
+    <>
+        <title>{`Vidéos | ${APP_NAME}`}</title>
+        <VideosListContainer />
+    </>
+);
 
 export default VideosPage;
