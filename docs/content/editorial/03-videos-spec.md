@@ -228,7 +228,7 @@ type IVideosState = {
 | File | Fields |
 | --- | --- |
 | `IVideosQueryParams.ts` | `page: number; limit: number; status?: EContentStatus; search?: string` |
-| `ICreateVideoCredentials.ts` | `categoryId: string; title: string; description: string` |
+| `ICreateVideoCredentials.ts` | `categoryId: string; title: string; slug: string; description: string; customerId?: string; orderItemId?: string; shootingScheduledAt?: string` |
 | `IUpdateVideoCredentials.ts` | `categoryId: string; title: string; description: string` |
 | `IRejectVideoCredentials.ts` | `rejectionReason: string` |
 | `IUploadVideoThumbnailCredentials.ts` | `file: File` |
@@ -236,6 +236,59 @@ type IVideosState = {
 | `IUpdateVideoSeoCredentials.ts` | `metaTitle: string; metaDescription: string` |
 | `IUpdateVideoTagsCredentials.ts` | `tagIds: string[]` |
 | `IScheduleShootCredentials.ts` | `shootingScheduledAt: string` (ISO date string) |
+
+---
+
+## Multi-Step Creation Wizard
+
+Video creation uses a **stepper wizard** (Ant Design `Steps`) because the backend requires multiple sequential API calls. The `POST /admin/videos` creates a draft with basic info — YouTube ID, thumbnail, tags, and SEO are filled via subsequent endpoints.
+
+### Steps
+
+| Step | Title | Fields | API Calls |
+| --- | --- | --- | --- |
+| 1 | Informations | Catégorie, titre, slug, description, client (opt), commande (opt) | `POST /admin/videos` → returns `videoId` |
+| 2 | YouTube & Média | ID YouTube, vignette (upload), date de tournage | `PATCH /admin/videos/{id}/youtube` + `POST /admin/videos/{id}/thumbnail` + `PATCH /admin/videos/{id}/shoot` |
+| 3 | Tags & SEO | Sélection de tags, titre SEO (max 70), description SEO (max 160) | `PUT /admin/videos/{id}/tags` + `PATCH /admin/videos/{id}/seo` |
+| 4 | Résumé | Aperçu en lecture seule de toutes les informations | `PATCH /admin/videos/{id}/submit` (bouton Soumettre) |
+
+### Flow
+
+1. **Step 1** creates the draft via `POST`. Description is required at this step (unlike articles). The returned `videoId` is stored in wizard state.
+2. **Step 2** attaches the YouTube ID via `PATCH /youtube` (auto-downloads thumbnail from YouTube to Cloudinary). The user can optionally upload a custom thumbnail via `POST /thumbnail` and schedule a shoot date via `PATCH /shoot`. The YouTube ID is **required before publish** — the domain hard-gates on it.
+3. **Step 3** assigns tags via `PUT /tags` and sets SEO via `PATCH /seo`. Both are optional.
+4. **Step 4** shows a read-only summary. The "Soumettre" button dispatches `submitVideoAction`.
+
+### B2B Fields
+
+Same as articles — `customerId` and `orderItemId` are paired. When set, the video is linked to a B2B customer order.
+
+### Hook: `UseCreateVideoWizard`
+
+Manages the entire wizard lifecycle:
+
+- `currentStep: number` — active step index (0–3)
+- `videoId: string | null` — set after step 1 completes
+- `step1Form: FormInstance<ICreateVideoCredentials>` — step 1 form
+- `youtubeForm: FormInstance<IAttachYoutubeIdCredentials>` — step 2 YouTube form
+- `shootForm: FormInstance<IScheduleShootCredentials>` — step 2 shoot form
+- `seoForm: FormInstance<IUpdateVideoSeoCredentials>` — step 3 SEO form
+- `tagIds: string[]` — step 3 tag selection
+- `loading: boolean` — current step submission loading
+- `error: Failure | null` — current step error
+- `onNext()` — validates current step, dispatches API call, advances
+- `onPrev()` — goes back one step
+- `onSubmit()` — final submission (step 4)
+- `resetWizard()` — resets all state
+
+### Wizard Components
+
+| Component | Purpose |
+| --- | --- |
+| `VideoCreateWizard` | Orchestrates the `Steps` component and renders the active step form |
+| `VideoCreateStep1Form` | Category, title, slug, description, customer/order item fields |
+| `VideoMediaStep` | YouTube ID input, thumbnail upload, shoot date picker |
+| `VideoCreateSummary` | Read-only preview of all entered data with submit button |
 
 ---
 
@@ -383,10 +436,10 @@ Same status options as articles:
 - Handles all 6 workflow transitions: submit, approve, publish, reject, archive, delete
 - Exposes: `loading`, `error`, `onSubmit`, `onApprove`, `onPublish`, `onReject`, `onArchive`, `onDelete`
 
-### `UseCreateVideo.ts`
+### `UseCreateVideoWizard.ts`
 
-- `useForm<ICreateVideoCredentials>()`
-- Exposes: `form`, `loading`, `error`, `success`, `onSubmit`, `resetCreate`
+- Manages multi-step wizard state (see "Multi-Step Creation Wizard" section above)
+- Exposes: `currentStep`, `videoId`, `step1Form`, `youtubeForm`, `shootForm`, `seoForm`, `tagIds`, `onTagsChange`, `loading`, `error`, `onNext`, `onPrev`, `onSubmit`, `resetWizard`
 
 ### `UseUpdateVideo.ts`
 
@@ -434,7 +487,22 @@ Same status options as articles:
 
 **Path:** `src/modules/videos/presentation/components/`
 
+### `forms/VideoCreateStep1Form/index.tsx`
+
+Step 1 of the creation wizard — draft shell:
+
+| Field | Label | Component | Validation |
+| --- | --- | --- | --- |
+| `categoryId` | Catégorie | `CategorySelect` (shared) | required |
+| `title` | Titre | `Input` | required, max 200 |
+| `slug` | Slug | `Input` | required, max 250 |
+| `description` | Description | `TextArea` | required, max 2000 |
+| `customerId` | Client | `CustomerSelect` (shared) | optional, paired with `orderItemId` |
+| `orderItemId` | Commande | `OrderItemSelect` | optional, paired with `customerId` |
+
 ### `forms/VideoContentForm/index.tsx`
+
+Used for editing existing videos (not creation step 1):
 
 | Field | Label | Component | Validation |
 | --- | --- | --- | --- |
@@ -513,6 +581,18 @@ Modal wrapping `YoutubeIdForm`. AdminOnly — guard rendering on role check.
 
 Modal wrapping `ShootScheduleForm`.
 
+### `ui/VideoCreateWizard/index.tsx`
+
+Orchestrates the multi-step creation flow using Ant Design `Steps`. Renders the active step form and navigation buttons (Précédent / Suivant / Soumettre). See "Multi-Step Creation Wizard" section for details.
+
+### `ui/VideoMediaStep/index.tsx`
+
+Step 2 of the creation wizard — YouTube ID input, thumbnail upload, shoot date picker. All three sub-forms are displayed together in one step.
+
+### `ui/VideoCreateSummary/index.tsx`
+
+Read-only preview of all entered data (step 4). Displays category, title, slug, description, YouTube embed preview, thumbnail, tags, SEO fields. Includes the final "Soumettre" button.
+
 ---
 
 ## Containers and Pages
@@ -525,7 +605,7 @@ Modal wrapping `ShootScheduleForm`.
 PageHeader (title="Vidéos", subtitle="Gérer les vidéos", icon, onCreate)
 TableToolbar (statusFilter, search input)
 Table (dataSource=items, columns, server-side pagination)
-CreateEditModal (create) — VideoContentForm
+VideoCreateWizard (modal/drawer) — multi-step creation flow
 CreateEditModal (edit) — VideoContentForm
 VideoWorkflowModal — conditional per workflow action
 VideoSeoModal
@@ -604,7 +684,7 @@ const VideosPage: FC = () => (
 - [ ] Create `UseVideosList.ts` with JSDoc
 - [ ] Create `UseVideoDetail.ts` with JSDoc
 - [ ] Create `UseVideoWorkflow.ts` with JSDoc
-- [ ] Create `UseCreateVideo.ts` with JSDoc
+- [ ] Create `UseCreateVideoWizard.ts` with JSDoc
 - [ ] Create `UseUpdateVideo.ts` with JSDoc
 - [ ] Create `UseUploadVideoThumbnail.ts` with JSDoc
 - [ ] Create `UseAttachYoutubeId.ts` with JSDoc
@@ -614,6 +694,10 @@ const VideosPage: FC = () => (
 - [ ] Create `UseRejectVideo.ts` with JSDoc
 
 ### Components
+- [ ] Create `VideoCreateWizard` with JSDoc
+- [ ] Create `VideoCreateStep1Form` with JSDoc
+- [ ] Create `VideoMediaStep` with JSDoc
+- [ ] Create `VideoCreateSummary` with JSDoc
 - [ ] Create `VideoContentForm` with JSDoc
 - [ ] Create `VideoSeoForm` with JSDoc
 - [ ] Create `VideoTagsForm` with JSDoc
