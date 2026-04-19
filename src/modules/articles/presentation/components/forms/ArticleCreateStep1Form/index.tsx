@@ -1,11 +1,12 @@
 import type { FormInstance } from "antd";
-import { Form, Input, Select } from "antd";
+import { Flex, Form, Input, Select, Typography } from "antd";
 import type { FC } from "react";
 import { useMemo } from "react";
 import type { ICreateArticleCredentials } from "@/modules/articles/presentation/model/ICreateArticleCredentials";
 import { ArticlesContentValidator } from "@/modules/articles/presentation/utils/validators/articles.content.validator";
 import type { ICategoryEntity } from "@/modules/catalog/domain/entities/ICategoryEntity";
 import type { ICustomerEntity } from "@/modules/catalog/domain/entities/ICustomerEntity";
+import { usePaidOrderItems } from "@/modules/commerce/presentation/hooks/UsePaidOrderItems";
 import type { Failure } from "@/shared/domain/failures/failure";
 import { useAppSelector } from "@/shared/presentation/store/store";
 import ErrorAlert from "@/shared/presentation/ui/ErrorAlert";
@@ -46,6 +47,7 @@ const ArticleCreateStep1Form: FC<IArticleCreateStep1FormProps> = ({ form, error,
     const { data: customers } = useAppSelector(
         ({ catalog: { getAllCustomers } }) => getAllCustomers
     );
+    const orderItems = usePaidOrderItems();
 
     const categoryOptions = useMemo(
         () =>
@@ -62,7 +64,8 @@ const ArticleCreateStep1Form: FC<IArticleCreateStep1FormProps> = ({ form, error,
         () =>
             ((customers as { items: ICustomerEntity[] })?.items ?? []).map((c) => ({
                 label: c.fullName,
-                value: c.id
+                value: c.id,
+                company: c.company
             })),
         [customers]
     );
@@ -85,7 +88,6 @@ const ArticleCreateStep1Form: FC<IArticleCreateStep1FormProps> = ({ form, error,
             >
                 <Select
                     showSearch
-                    optionFilterProp="label"
                     options={categoryOptions}
                     placeholder="Sélectionner une catégorie"
                 />
@@ -95,22 +97,54 @@ const ArticleCreateStep1Form: FC<IArticleCreateStep1FormProps> = ({ form, error,
                 <Input maxLength={200} placeholder="Titre de l'article" />
             </Item>
 
-            <Item name="slug" label="Slug" rules={ArticlesContentValidator.slug("Slug")}>
-                <Input maxLength={250} placeholder="slug-de-l-article" />
-            </Item>
-
-            <Item name="customerId" label="Client (optionnel)">
+            <Item name="customerId" label="Client">
                 <Select
                     showSearch
                     allowClear
-                    optionFilterProp="label"
                     options={customerOptions}
                     placeholder="Sélectionner un client"
+                    onChange={(value) => {
+                        form.setFieldValue("orderItemId", undefined);
+                        orderItems.fetchByCustomer(value || undefined);
+                    }}
+                    optionRender={(option) => (
+                        <Flex justify="space-between" align="center">
+                            <span>{option.label}</span>
+                            {option.data.company && (
+                                <Typography.Text type="secondary" style={{ fontSize: 12 }}>
+                                    {option.data.company}
+                                </Typography.Text>
+                            )}
+                        </Flex>
+                    )}
                 />
             </Item>
 
-            <Item name="orderItemId" label="Commande (optionnel)">
-                <Input placeholder="Identifiant de la commande" />
+            <Item name="orderItemId" label="Commande">
+                <Select
+                    showSearch
+                    allowClear
+                    loading={orderItems.loading}
+                    disabled={orderItems.loading}
+                    options={orderItems.options}
+                    placeholder="Sélectionner une commande"
+                    popupMatchSelectWidth={false}
+                    optionRender={(option) => (
+                        <Flex justify="space-between" align="center" gap={16}>
+                            <Flex gap={8} align="center">
+                                <Typography.Text code style={{ fontSize: 11 }}>
+                                    {option.data.shortId}
+                                </Typography.Text>
+                                <span>{option.label}</span>
+                            </Flex>
+                            {option.data.customerName && (
+                                <Typography.Text type="secondary" style={{ fontSize: 12 }}>
+                                    {option.data.customerName}
+                                </Typography.Text>
+                            )}
+                        </Flex>
+                    )}
+                />
             </Item>
         </Form>
     );
