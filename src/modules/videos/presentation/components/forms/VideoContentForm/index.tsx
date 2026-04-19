@@ -73,7 +73,6 @@ const VideoContentForm: FC<IVideoContentFormProps> = ({ form, error, onSubmit })
             >
                 <Select
                     showSearch
-                    optionFilterProp="label"
                     options={categoryOptions}
                     placeholder="Sélectionner une catégorie"
                 />
@@ -81,10 +80,6 @@ const VideoContentForm: FC<IVideoContentFormProps> = ({ form, error, onSubmit })
 
             <Item name="title" label="Titre" rules={VideosContentValidator.title("Titre")}>
                 <Input maxLength={200} placeholder="Titre de la vidéo" />
-            </Item>
-
-            <Item name="slug" label="Slug" rules={VideosContentValidator.slug("Slug")}>
-                <Input maxLength={250} placeholder="slug-de-la-video" />
             </Item>
 
             <Item
