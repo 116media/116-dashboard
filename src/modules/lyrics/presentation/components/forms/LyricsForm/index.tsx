@@ -76,12 +76,12 @@ const LyricsForm: FC<ILyricsFormProps> = ({ form, error, onSubmit }) => {
                 <Input maxLength={10} placeholder="fr, en, sw, ..." />
             </Item>
 
-            <Item name="videoId" label="ID Video (optionnel)">
-                <Input placeholder="UUID de la video (optionnel)" />
+            <Item name="videoId" label="ID Video">
+                <Input placeholder="UUID de la video" />
             </Item>
 
-            <Item name="articleId" label="ID Article (optionnel)">
-                <Input placeholder="UUID de l'article (optionnel)" />
+            <Item name="articleId" label="ID Article">
+                <Input placeholder="UUID de l'article" />
             </Item>
         </Form>
     );
