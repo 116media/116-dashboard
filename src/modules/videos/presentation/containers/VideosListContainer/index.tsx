@@ -2,6 +2,7 @@ import { Table } from "antd";
 import { type FC, useEffect } from "react";
 import { useAuthorization } from "@/modules/auth/presentation/hooks/UseAuthorization";
 import { getAllCategoriesAction } from "@/modules/catalog/presentation/store/getallcategories.action";
+import { getAllCustomersAction } from "@/modules/catalog/presentation/store/getallcustomers.action";
 import { getTagsAction } from "@/modules/lookup/presentation/store/gettags.action";
 import type { IVideoEntity } from "@/modules/videos/domain/entities/IVideoEntity";
 import VideoContentForm from "@/modules/videos/presentation/components/forms/VideoContentForm";
@@ -64,6 +65,7 @@ const VideosListContainer: FC = () => {
 
     useEffect(() => {
         dispatch(getAllCategoriesAction({ pageIndex: 0, pageSize: 100 }));
+        dispatch(getAllCustomersAction({ pageIndex: 0, pageSize: 100 }));
         dispatch(getTagsAction());
     }, [dispatch]);
 
