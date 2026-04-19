@@ -1,13 +1,17 @@
 import { Tag, Typography } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import type { IPaymentSummaryEntity } from "@/modules/commerce/domain/entities/IPaymentSummaryEntity";
-import OrderStatusTag from "@/modules/commerce/presentation/components/ui/OrderStatusTag";
+import {
+    ORDER_STATUS_CONFIG,
+    PAYMENT_STATUS_CONFIG
+} from "@/modules/commerce/presentation/constants/order.status.config";
 import type {
     EnumOrderStatus,
     EnumPaymentMethod,
     EnumPaymentStatus
 } from "@/shared/infrastructure/api/generated/116.api";
 import { ADMIN_PATH } from "@/shared/presentation/constants/paths";
+import StatusTag from "@/shared/presentation/ui/StatusTag";
 import type { ITableActionItem } from "@/shared/presentation/ui/TableActionDropdown";
 import TableActionDropdown from "@/shared/presentation/ui/TableActionDropdown";
 import { dayjs } from "@/shared/presentation/utils/dayjs/dayjs.utils";
@@ -87,7 +91,9 @@ export const paymentsTableColumns = (
         key: "status",
         width: 140,
         align: "center",
-        render: (status: EnumPaymentStatus) => <OrderStatusTag status={status} />
+        render: (status: EnumPaymentStatus) => (
+            <StatusTag status={status} config={PAYMENT_STATUS_CONFIG} />
+        )
     },
     {
         title: "Statut commande",
@@ -95,7 +101,9 @@ export const paymentsTableColumns = (
         key: "orderStatus",
         width: 150,
         align: "center",
-        render: (status: EnumOrderStatus) => <OrderStatusTag status={status} />
+        render: (status: EnumOrderStatus) => (
+            <StatusTag status={status} config={ORDER_STATUS_CONFIG} />
+        )
     },
     {
         title: "Vérifié par",
