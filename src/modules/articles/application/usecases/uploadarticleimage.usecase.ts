@@ -38,7 +38,10 @@ export class UploadArticleImageUseCase implements IUploadArticleImageUseCase {
      * @param {object} request - The article ID and image data
      * @returns {Promise<Result<IArticleImageEntity>>} `ok(IArticleImageEntity)` on success, `err(Failure)` on failure
      */
-    async execute(request: { id: string; data: IUploadArticleImageCredentials }): Promise<Result<IArticleImageEntity>> {
+    async execute(request: {
+        id: string;
+        data: IUploadArticleImageCredentials;
+    }): Promise<Result<IArticleImageEntity>> {
         return this.articlesRepository.uploadArticleImage(request.id, request.data);
     }
 }

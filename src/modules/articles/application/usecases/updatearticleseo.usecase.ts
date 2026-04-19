@@ -35,7 +35,10 @@ export class UpdateArticleSeoUseCase implements IUpdateArticleSeoUseCase {
      * @param {object} request - The article ID and SEO metadata
      * @returns {Promise<Result<IArticleEntity>>} `ok(IArticleEntity)` on success, `err(Failure)` on failure
      */
-    async execute(request: { id: string; data: IUpdateArticleSeoCredentials }): Promise<Result<IArticleEntity>> {
+    async execute(request: {
+        id: string;
+        data: IUpdateArticleSeoCredentials;
+    }): Promise<Result<IArticleEntity>> {
         return this.articlesRepository.updateArticleSeo(request.id, request.data);
     }
 }

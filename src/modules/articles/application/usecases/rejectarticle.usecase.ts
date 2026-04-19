@@ -38,7 +38,10 @@ export class RejectArticleUseCase implements IRejectArticleUseCase {
      * @param {object} request - The article ID and rejection reason
      * @returns {Promise<Result<IArticleActionResponse>>} `ok(void)` on success, `err(Failure)` on failure
      */
-    async execute(request: { id: string; data: IRejectArticleCredentials }): Promise<Result<IArticleActionResponse>> {
+    async execute(request: {
+        id: string;
+        data: IRejectArticleCredentials;
+    }): Promise<Result<IArticleActionResponse>> {
         return this.articlesRepository.rejectArticle(request.id, request.data);
     }
 }
