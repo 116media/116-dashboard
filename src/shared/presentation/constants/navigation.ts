@@ -182,7 +182,7 @@ export const NAVIGATION_ITEMS: INavigationItem[] = [
             },
             {
                 path: SHORTS_PATH,
-                label: "Shorts",
+                label: "Réels",
                 icon: IconPlaySquareOutlined,
                 permission: { resource: "shorts", action: "read" }
             },
