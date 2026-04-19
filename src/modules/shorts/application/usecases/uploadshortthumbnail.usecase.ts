@@ -38,7 +38,10 @@ export class UploadShortThumbnailUseCase implements IUploadShortThumbnailUseCase
      * @param {object} request - The short video ID and thumbnail file data
      * @returns {Promise<Result<IShortActionResponse>>} `ok(void)` on success, `err(Failure)` on failure
      */
-    async execute(request: { id: string; data: IUploadShortThumbnailCredentials }): Promise<Result<IShortActionResponse>> {
+    async execute(request: {
+        id: string;
+        data: IUploadShortThumbnailCredentials;
+    }): Promise<Result<IShortActionResponse>> {
         return this.shortsRepository.uploadShortThumbnail(request.id, request.data);
     }
 }
