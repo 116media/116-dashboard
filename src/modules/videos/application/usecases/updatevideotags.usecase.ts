@@ -38,7 +38,10 @@ export class UpdateVideoTagsUseCase implements IUpdateVideoTagsUseCase {
      * @param {object} request - The video ID and tag IDs to assign
      * @returns {Promise<Result<IVideoActionResponse>>} `ok(IVideoActionResponse)` on success, `err(Failure)` on failure
      */
-    async execute(request: { id: string; data: IUpdateVideoTagsCredentials }): Promise<Result<IVideoActionResponse>> {
+    async execute(request: {
+        id: string;
+        data: IUpdateVideoTagsCredentials;
+    }): Promise<Result<IVideoActionResponse>> {
         return this.videosRepository.updateVideoTags(request.id, request.data);
     }
 }
