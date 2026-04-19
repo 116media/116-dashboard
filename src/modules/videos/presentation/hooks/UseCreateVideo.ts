@@ -7,6 +7,7 @@ import { VideosNotification } from "@/modules/videos/presentation/utils/notifica
 import type { Failure } from "@/shared/domain/failures/failure";
 import { useAppDispatch, useAppSelector } from "@/shared/presentation/store/store";
 import { showNotification } from "@/shared/presentation/utils/notification/notification.utils";
+import { generateSlug } from "@/shared/presentation/utils/slug/slug.utils";
 
 const { useForm } = Form;
 
@@ -47,7 +48,7 @@ export const useCreateVideo = (onSuccess?: () => void): IUseCreateVideo => {
             createVideoAction({
                 categoryId: values.categoryId,
                 title: values.title,
-                slug: values.slug,
+                slug: generateSlug(values.title, { unique: true }),
                 description: values.description,
                 customerId: values.customerId,
                 orderItemId: values.orderItemId,
