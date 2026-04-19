@@ -12,20 +12,20 @@ const SHORT_ACTION_CONFIG: Record<
     { title: string; description: string; confirmLabel: string; danger?: boolean }
 > = {
     activate: {
-        title: "Activer le court-m\u00e9trage",
-        description: "\u00cates-vous s\u00fbr de vouloir activer ce court-m\u00e9trage ?",
+        title: "Activer le réel",
+        description: "Êtes-vous sûr de vouloir activer ce réel ?",
         confirmLabel: "Activer"
     },
     deactivate: {
-        title: "D\u00e9sactiver le court-m\u00e9trage",
-        description: "\u00cates-vous s\u00fbr de vouloir d\u00e9sactiver ce court-m\u00e9trage ?",
-        confirmLabel: "D\u00e9sactiver",
+        title: "Désactiver le réel",
+        description: "Êtes-vous sûr de vouloir désactiver ce réel ?",
+        confirmLabel: "Désactiver",
         danger: true
     },
     delete: {
-        title: "Supprimer le court-m\u00e9trage",
+        title: "Supprimer le réel",
         description:
-            "\u00cates-vous s\u00fbr de vouloir supprimer d\u00e9finitivement ce court-m\u00e9trage ? Cette action est irr\u00e9versible.",
+            "Êtes-vous sûr de vouloir supprimer définitivement ce réel ? Cette action est irréversible.",
         confirmLabel: "Supprimer",
         danger: true
     }
