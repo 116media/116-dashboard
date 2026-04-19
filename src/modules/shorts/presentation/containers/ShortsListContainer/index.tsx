@@ -69,11 +69,11 @@ const ShortsListContainer: FC = () => {
             <ErrorAlert banner showIcon closable error={list.error} onClose={list.reload} />
 
             <PageHeader
-                title="Courts-m\u00e9trages"
-                subtitle="G\u00e9rer les courts-m\u00e9trages vid\u00e9o."
+                title="Réels"
                 icon={<IconPlaySquareOutlined />}
+                subtitle="Gérer les vidéos courtes."
                 onCreate={isSuperAdmin ? () => modals.setCreateOpen(true) : undefined}
-                createLabel="Cr\u00e9er un court-m\u00e9trage"
+                createLabel="Créer un réel"
             />
 
             <TableToolbar
@@ -113,8 +113,8 @@ const ShortsListContainer: FC = () => {
                     onClose={() => modals.setCreateOpen(false)}
                     onSubmit={() => createShort.form.submit()}
                     title={{
-                        create: "Cr\u00e9er un court-m\u00e9trage",
-                        edit: "Modifier le court-m\u00e9trage"
+                        create: "Créer un réel",
+                        edit: "Modifier le réel"
                     }}
                     onSuccessClose={() => {
                         modals.setCreateOpen(false);
