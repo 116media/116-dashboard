@@ -125,7 +125,6 @@ const OrderItemForm: FC<IOrderItemFormProps> = ({ form, error, onSubmit }) => {
             >
                 <Select
                     showSearch
-                    optionFilterProp="label"
                     options={categoryOptions}
                     placeholder="Sélectionner une catégorie"
                     disabled={!selectedContentKind}
@@ -141,7 +140,6 @@ const OrderItemForm: FC<IOrderItemFormProps> = ({ form, error, onSubmit }) => {
                 <Select
                     showSearch
                     allowClear
-                    optionFilterProp="label"
                     options={promotionLevelOptions}
                     placeholder="Sélectionner un niveau"
                 />
