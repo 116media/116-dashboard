@@ -61,7 +61,7 @@ const ShortThumbnailUploadModal: FC<IShortThumbnailUploadModalProps> = ({
             width={490}
             destroyOnHidden
             onCancel={handleCancel}
-            title="T\u00e9l\u00e9verser une miniature"
+            title="Téléverser une miniature"
             footer={
                 <Flex gap={8} justify="space-between" flex={1}>
                     <Button onClick={handleCancel} danger>
@@ -73,7 +73,7 @@ const ShortThumbnailUploadModal: FC<IShortThumbnailUploadModalProps> = ({
                         disabled={!file}
                         onClick={handleUpload}
                     >
-                        T\u00e9l\u00e9verser
+                        Téléverser
                     </Button>
                 </Flex>
             }
@@ -88,7 +88,7 @@ const ShortThumbnailUploadModal: FC<IShortThumbnailUploadModalProps> = ({
                     }}
                     onRemove={() => setFile(null)}
                 >
-                    <Button icon={<IconInboxOutlined />}>S\u00e9lectionner un fichier</Button>
+                    <Button icon={<IconInboxOutlined />}>Sélectionner un fichier</Button>
                 </Upload>
             </Flex>
         </Modal>
