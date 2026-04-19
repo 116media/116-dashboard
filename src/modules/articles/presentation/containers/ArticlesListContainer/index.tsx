@@ -19,6 +19,7 @@ import { useUpdateArticleTags } from "@/modules/articles/presentation/hooks/UseU
 import { useUploadArticleImage } from "@/modules/articles/presentation/hooks/UseUploadArticleImage";
 import { useAuthorization } from "@/modules/auth/presentation/hooks/UseAuthorization";
 import { getAllCategoriesAction } from "@/modules/catalog/presentation/store/getallcategories.action";
+import { getAllCustomersAction } from "@/modules/catalog/presentation/store/getallcustomers.action";
 import { getTagsAction } from "@/modules/lookup/presentation/store/gettags.action";
 import { useResizableColumns } from "@/shared/presentation/hooks/UseResizableColumns";
 import { useAppDispatch } from "@/shared/presentation/store/store";
@@ -63,6 +64,7 @@ const ArticlesListContainer: FC = () => {
 
     useEffect(() => {
         dispatch(getAllCategoriesAction({ pageIndex: 0, pageSize: 100 }));
+        dispatch(getAllCustomersAction({ pageIndex: 0, pageSize: 100 }));
         dispatch(getTagsAction());
     }, [dispatch]);
 
