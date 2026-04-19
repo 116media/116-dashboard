@@ -45,7 +45,6 @@ const VideoTagsForm: FC<IVideoTagsFormProps> = ({ tagIds, onTagsChange }) => {
             mode="multiple"
             size="large"
             showSearch
-            optionFilterProp="label"
             options={tagOptions}
             value={tagIds}
             onChange={onTagsChange}
