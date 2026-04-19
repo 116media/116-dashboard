@@ -59,18 +59,14 @@ const ShortVideoForm: FC<IShortVideoFormProps> = ({
             <ErrorAlert error={error} showIcon closable banner={false} />
 
             <Item name="title" label="Titre" rules={ShortsContentValidator.title("Titre")}>
-                <Input maxLength={200} placeholder="Titre du court-m\u00e9trage" />
+                <Input maxLength={200} placeholder="Titre du réel" />
             </Item>
 
-            <Item name="slug" label="Slug" rules={ShortsContentValidator.slug("Slug")}>
-                <Input maxLength={250} placeholder="slug-du-court-metrage" />
+            <Item name="videoId" label="ID vidéo">
+                <Input placeholder="Identifiant de la vidéo existante" />
             </Item>
 
-            <Item name="videoId" label="ID vid\u00e9o (optionnel)">
-                <Input placeholder="Identifiant de la vid\u00e9o existante" />
-            </Item>
-
-            <Item label="Fichier vid\u00e9o" required>
+            <Item label="Fichier vidéo" required>
                 <Upload
                     maxCount={1}
                     accept="video/*"
@@ -91,9 +87,7 @@ const ShortVideoForm: FC<IShortVideoFormProps> = ({
                     }}
                     onRemove={() => onVideoFileChange(null)}
                 >
-                    <Button icon={<IconInboxOutlined />}>
-                        S\u00e9lectionner un fichier vid\u00e9o
-                    </Button>
+                    <Button icon={<IconInboxOutlined />}>Sélectionner un fichier vidéo</Button>
                 </Upload>
             </Item>
         </Form>
