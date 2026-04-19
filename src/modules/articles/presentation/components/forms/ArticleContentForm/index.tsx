@@ -73,7 +73,6 @@ const ArticleContentForm: FC<IArticleContentFormProps> = ({ form, error, onSubmi
             >
                 <Select
                     showSearch
-                    optionFilterProp="label"
                     options={categoryOptions}
                     placeholder="Sélectionner une catégorie"
                 />
@@ -81,10 +80,6 @@ const ArticleContentForm: FC<IArticleContentFormProps> = ({ form, error, onSubmi
 
             <Item name="title" label="Titre" rules={ArticlesContentValidator.title("Titre")}>
                 <Input maxLength={200} placeholder="Titre de l'article" />
-            </Item>
-
-            <Item name="slug" label="Slug" rules={ArticlesContentValidator.slug("Slug")}>
-                <Input maxLength={250} placeholder="slug-de-l-article" />
             </Item>
 
             <Item
