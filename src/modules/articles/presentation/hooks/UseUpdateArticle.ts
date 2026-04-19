@@ -8,6 +8,7 @@ import { ArticlesNotification } from "@/modules/articles/presentation/utils/noti
 import type { Failure } from "@/shared/domain/failures/failure";
 import { useAppDispatch, useAppSelector } from "@/shared/presentation/store/store";
 import { showNotification } from "@/shared/presentation/utils/notification/notification.utils";
+import { generateSlug } from "@/shared/presentation/utils/slug/slug.utils";
 
 const { useForm } = Form;
 
@@ -51,7 +52,6 @@ export const useUpdateArticle = (
             form.setFieldsValue({
                 categoryId: article.categoryId,
                 title: article.title,
-                slug: article.slug,
                 headline: article.headline,
                 body: article.body,
                 coverImageUrl: article.coverImageUrl,
@@ -72,7 +72,10 @@ export const useUpdateArticle = (
         const result = await dispatch(
             updateArticleAction({
                 id: article.id,
-                data: values
+                data: {
+                    ...values,
+                    slug: generateSlug(values.title, { unique: true })
+                }
             })
         );
 
