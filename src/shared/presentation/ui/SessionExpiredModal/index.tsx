@@ -1,7 +1,7 @@
 import { Modal } from "antd";
 import { type FC, useCallback, useEffect, useState } from "react";
-import { LOGIN_PATH } from "@/shared/infrastructure/constants/paths";
 import { REFRESH_TOKEN_EXPIRED_EVENT } from "@/shared/infrastructure/interceptors/refresh-token-expiry.interceptor";
+import { LOGIN_PATH } from "@/shared/presentation/constants/paths";
 import { persistor } from "@/shared/presentation/store/store";
 
 /**

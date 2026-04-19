@@ -9,12 +9,20 @@ import container from "@/shared/infrastructure/service.locator.ts";
 export const resetResendOtpAction = () =>
     authSlice.actions.clear({ context: ActionType.AuthResendOtp });
 
+/**
+ * Async thunk to resend a new OTP code to the user's email.
+ *
+ * @description
+ * Sends a new OTP code for the specified purpose via
+ * `resendOtpUseCase`.
+ */
 export const resendOtpAction = createAsyncThunk<
     IResendOtpResponse,
     IResendOtpCredentials,
     { rejectValue: Failure }
 >(ActionType.AuthResendOtp, async (credentials: IResendOtpCredentials, { rejectWithValue }) => {
     const result = await container.cradle.resendOtpUseCase.execute(credentials);
+
     if (!result.ok) return rejectWithValue(result.error);
     return result.value;
 });

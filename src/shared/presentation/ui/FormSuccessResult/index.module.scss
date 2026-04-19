@@ -1,0 +1,5 @@
+@use "@/shared/presentation/styles/dimensions" as dimensions;
+
+.formSuccessResult {
+    padding: dimensions.$padding 0;
+}

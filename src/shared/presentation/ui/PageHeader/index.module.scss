@@ -1,0 +1,25 @@
+@use "@/shared/presentation/styles/colors.scss" as colors;
+@use "@/shared/presentation/styles/dimensions" as dimensions;
+
+.pageHeader {
+    margin-bottom: dimensions.$padding;
+    padding-bottom: 20px;
+    border-bottom: 1px solid colors.$border-light;
+
+    &__title {
+        margin: 0 !important;
+    }
+
+    &__icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 3rem;
+        height: 3rem;
+        border-radius: 10px;
+        background: colors.$background;
+        font-size: 18px;
+        color: colors.$title;
+        flex-shrink: 0;
+    }
+}

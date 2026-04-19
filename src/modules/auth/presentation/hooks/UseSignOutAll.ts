@@ -1,7 +1,7 @@
 import { Modal } from "antd";
 import { useNavigate } from "react-router";
 import { signOutAllAction } from "@/modules/auth/presentation/store/signoutall.action";
-import { LOGIN_PATH } from "@/shared/infrastructure/constants/paths";
+import { LOGIN_PATH } from "@/shared/presentation/constants/paths";
 import { persistor, useAppDispatch, useAppSelector } from "@/shared/presentation/store/store";
 import { showNotification } from "@/shared/presentation/utils/notification/notification.utils";
 

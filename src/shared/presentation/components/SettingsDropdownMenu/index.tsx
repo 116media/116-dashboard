@@ -6,7 +6,7 @@ import {
     SETTING_NOTIFICATION_PATH,
     SETTING_PROFILE_PATH,
     SETTING_SECURITY_PATH
-} from "@/shared/infrastructure/constants/paths";
+} from "@/shared/presentation/constants/paths";
 import { useAppSelector } from "@/shared/presentation/store/store";
 import {
     IconBellOutlined,

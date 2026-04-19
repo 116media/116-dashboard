@@ -8,12 +8,20 @@ import container from "@/shared/infrastructure/service.locator.ts";
 export const resetSignOutAllAction = () =>
     authSlice.actions.clear({ context: ActionType.AuthSignOutAll });
 
+/**
+ * Async thunk to sign out from all devices.
+ *
+ * @description
+ * Invalidates all active sessions for the current user
+ * across every device via `signOutAllUseCase`.
+ */
 export const signOutAllAction = createAsyncThunk<
     ISignOutAllResponse,
     void,
     { rejectValue: Failure }
 >(ActionType.AuthSignOutAll, async (_, { rejectWithValue }) => {
     const result = await container.cradle.signOutAllUseCase.execute();
+
     if (!result.ok) return rejectWithValue(result.error);
     return result.value;
 });

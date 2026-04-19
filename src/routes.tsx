@@ -1,6 +1,8 @@
 import { lazy } from "react";
 import type { RouteObject } from "react-router";
 import { Navigate } from "react-router";
+import { GuestRoute } from "@/shared/presentation/components/GuestRoute";
+import { ProtectedRoute } from "@/shared/presentation/components/ProtectedRoute";
 import {
     ADMIN_PATH,
     ADS_BANNER_PATH,
@@ -11,12 +13,12 @@ import {
     LOGIN_PATH,
     NOT_FOUND_PATH,
     OVERVIEW_PATH,
+    PERMISSIONS_PATH,
+    ROLES_PATH,
     SETTING_PATH,
     USER_PATH,
     VIDEO_PATH
-} from "@/shared/infrastructure/constants/paths";
-import { GuestRoute } from "@/shared/presentation/components/GuestRoute";
-import { ProtectedRoute } from "@/shared/presentation/components/ProtectedRoute";
+} from "@/shared/presentation/constants/paths";
 import { AuthLayout } from "@/shared/presentation/layouts/AuthLayout";
 import { DashboardLayout } from "@/shared/presentation/layouts/DashboardLayout";
 import { NotFoundPage } from "@/shared/presentation/pages/NotFoundPage";
@@ -34,6 +36,10 @@ const AdsBannerPage = lazy(() => import("@/modules/ads/presentation/pages/AdsBan
 const AdsPopupPage = lazy(() => import("@/modules/ads/presentation/pages/AdsPopupPage"));
 const AdminsPage = lazy(() => import("@/modules/users/presentation/pages/AdminsPage"));
 const UsersPage = lazy(() => import("@/modules/users/presentation/pages/UsersPage"));
+const RolesPage = lazy(() => import("@/modules/roles/presentation/pages/RolesPage"));
+const PermissionsPage = lazy(
+    () => import("@/modules/permissions/presentation/pages/PermissionsPage")
+);
 
 const guestRoutes: RouteObject[] = [
     {
@@ -65,7 +71,9 @@ const protectedRoutes: RouteObject[] = [
                     { path: ADS_BANNER_PATH, element: <AdsBannerPage /> },
                     { path: ADS_POPUP_PATH, element: <AdsPopupPage /> },
                     { path: ADMIN_PATH, element: <AdminsPage /> },
-                    { path: USER_PATH, element: <UsersPage /> }
+                    { path: USER_PATH, element: <UsersPage /> },
+                    { path: ROLES_PATH, element: <RolesPage /> },
+                    { path: PERMISSIONS_PATH, element: <PermissionsPage /> }
                 ]
             }
         ]

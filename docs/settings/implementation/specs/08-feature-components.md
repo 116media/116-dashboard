@@ -35,17 +35,14 @@ Feature-specific form components that combine shared UI components with business
 
 **Files**: `index.tsx` + `index.module.scss`
 
-- [ ] Define props: `isOpen: boolean`, `onClose: () => void`, `form: FormInstance`, `loading: boolean`, `error: Failure | null | undefined`, `onSubmit: (values: IUpdateAccountCredentials) => void`, `user: IProfile | null`
-- [ ] Ant Design `Modal`:
+- [ ] Define props: `isOpen: boolean`, `onClose: () => void`, `form: FormInstance`, `loading: boolean`, `error: Failure | null | undefined`, `success: string | null`, `onSubmit: (values: IUpdateAccountCredentials) => void`, `user: IProfile | null`
+- [ ] Use `CreateEditModal` wrapper (from `@/shared/presentation/ui/CreateEditModal`) instead of a raw Ant Design `Modal`:
   - `title="Modifier les informations du compte"`
   - `open={isOpen}`, `onCancel={onClose}`
-  - `footer={null}` (custom footer inside form)
+  - `formContext="EDIT"`, `success={success}`, `onSuccessClose={onClose}`
   - `destroyOnClose`
-  - `width={520}`
-- [ ] Ant Design `Form` inside modal: `layout="vertical"`, `size="large"`
-- [ ] Local state: `const [country, setCountry] = useState<ICountryObject>()`
-- [ ] Watch country field: `const selectedCountryName = useWatch("countryName", form)`
-- [ ] `useEffect` on `selectedCountryName`: find matching country from `countryList`, call `setCountry()`
+  - Footer buttons ("Annuler" / "Mettre à jour") are provided by `CreateEditModal` — no custom footer div needed
+- [ ] Ant Design `Form` inside `CreateEditModal`: `layout="vertical"`, `size="large"`
 - [ ] Field 1 — Adresse e-mail (full width):
   - `Input`, **disabled**
   - No validation (not submitted)
@@ -53,27 +50,11 @@ Feature-specific form components that combine shared UI components with business
   - `Input`, placeholder "Nom d'utilisateur"
   - Rules: `SettingsValidator.userName`
 - [ ] Field 3 — Indicatif téléphonique (full width):
-  - `Select` with `showSearch`, `optionLabelProp="label"`, `placeholder="Sélectionner un pays"`
+  - Use shared `CountrySelect` component (from `@/shared/presentation/ui/CountrySelect`) instead of a hand-rolled `Select` with manual `Option` mapping
   - Rules: `SettingsValidator.countryName`
-  - Import `countryList` from shared constants
-  - Map `countryList` → `Option` components:
-
-    ```tsx
-    <Option value={country.name} key={country.name} label={country.name}>
-      <div className="d-flex justify-content-between">
-        <span><img width={15} height={15} src={country.flag} alt={country.isoCode} /></span>
-        <span className="mx-2 fw-medium">{truncate(country.name, { length: 35 })}</span>
-        <span className="text-secondary">{country.dialCode}</span>
-      </div>
-    </Option>
-    ```
-
 - [ ] Field 4 — Téléphone (full width):
   - `Input` with `prefix={country?.dialCode}`, placeholder "ex: 788123456"
   - Rules: `SettingsValidator.phonePartial`
 - [ ] `ErrorAlert` below form fields
-- [ ] Custom footer:
-  - "Annuler" Button (default) → `onClose`
-  - "Mettre à jour" Button (primary, submit, loading)
 - [ ] `useEffect`: pre-populate form when `isOpen` and `user` change via `form.setFieldsValue` (userName, email, countryName, phonePartial mapped from `user.partialPhoneNumber`)
-- [ ] SCSS: modal footer layout (flex, justify-end, gap)
+- [ ] SCSS: any modal-specific overrides (most layout is handled by `CreateEditModal`)

@@ -4,7 +4,7 @@ import { ResetPasswordForm } from "@/modules/auth/presentation/components/forms/
 import { useResetPassword } from "@/modules/auth/presentation/hooks/UseResetPassword";
 import { authSlice } from "@/modules/auth/presentation/store";
 import { AuthNotification } from "@/modules/auth/presentation/utils/notification/auth.notification";
-import { LOGIN_PATH } from "@/shared/infrastructure/constants/paths";
+import { LOGIN_PATH } from "@/shared/presentation/constants/paths";
 import { useAppDispatch } from "@/shared/presentation/store/store";
 import { showNotification } from "@/shared/presentation/utils/notification/notification.utils";
 

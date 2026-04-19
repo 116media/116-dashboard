@@ -5,11 +5,11 @@ import ChangePasswordForm from "@/platform/settings/presentation/components/form
 import RoleCard from "@/platform/settings/presentation/components/ui/RoleCard";
 import SessionCard from "@/platform/settings/presentation/components/ui/SessionCard";
 import SettingsCard from "@/platform/settings/presentation/components/ui/SettingsCard";
-import SettingsPageHeader from "@/platform/settings/presentation/components/ui/SettingsPageHeader";
 import { useChangePassword } from "@/platform/settings/presentation/hooks/UseChangePassword";
 import { useRoles } from "@/platform/settings/presentation/hooks/UseRoles";
 import ErrorAlert from "@/shared/presentation/ui/ErrorAlert";
 import { IconLockOutlined } from "@/shared/presentation/ui/Icons";
+import PageHeader from "@/shared/presentation/ui/PageHeader";
 import StateRenderer from "@/shared/presentation/ui/StateRenderer";
 import { RolesLoading, SessionsLoading } from "./SecurityContainer.Loading";
 
@@ -42,10 +42,10 @@ const SecurityContainer: FC = () => {
 
     return (
         <div>
-            <SettingsPageHeader
+            <PageHeader
                 icon={<IconLockOutlined />}
                 title="Sécurité"
-                description="Gérez votre mot de passe, vos rôles et vos sessions actives."
+                subtitle="Gérez votre mot de passe, vos rôles et vos sessions actives."
             />
             <ChangePasswordForm
                 form={changePassword.form}

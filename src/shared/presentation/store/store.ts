@@ -14,7 +14,7 @@ import {
 } from "redux-persist";
 import storage from "redux-persist/es/storage";
 import { encryptTransform } from "redux-persist-transform-encrypt";
-import { LOGIN_PATH } from "@/shared/infrastructure/constants/paths";
+import { LOGIN_PATH } from "@/shared/presentation/constants/paths";
 import type { IRootState } from "./root.reducer";
 import { rootReducer } from "./root.reducer";
 import type { AppDispatch } from "./thunk.type";

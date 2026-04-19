@@ -4,7 +4,7 @@ import type { FC } from "react";
 import type { ILoginCredentials } from "@/modules/auth/presentation/model/ILoginCredentials";
 import { LoginValidator } from "@/modules/auth/presentation/utils/validators/login.validator";
 import type { Failure } from "@/shared/domain/failures/failure";
-import { FORGOT_PASSWORD_PATH } from "@/shared/infrastructure/constants/paths";
+import { FORGOT_PASSWORD_PATH } from "@/shared/presentation/constants/paths";
 import ErrorAlert from "@/shared/presentation/ui/ErrorAlert";
 import { IconLockOutlined, IconMailOutlined } from "@/shared/presentation/ui/Icons";
 

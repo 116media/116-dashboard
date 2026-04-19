@@ -16,6 +16,7 @@ interface IUseUpdateAccount {
     form: FormInstance<IUpdateAccountCredentials>;
     loading: boolean;
     error: Failure | null | undefined;
+    success: string | null;
     isOpen: boolean;
     open: () => void;
     close: () => void;
@@ -36,6 +37,7 @@ export const useUpdateAccount = (): IUseUpdateAccount => {
     const dispatch = useAppDispatch();
     const [form] = useForm<IUpdateAccountCredentials>();
     const [isOpen, setIsOpen] = useState(false);
+    const [success, setSuccess] = useState<string | null>(null);
     const [country, setCountry] = useState<ICountryObject>();
 
     const { loading, error } = useAppSelector(({ settings: { updateAccount } }) => updateAccount);
@@ -66,6 +68,7 @@ export const useUpdateAccount = (): IUseUpdateAccount => {
 
     const close = () => {
         setIsOpen(false);
+        setSuccess(null);
         form.resetFields();
     };
 
@@ -82,11 +85,11 @@ export const useUpdateAccount = (): IUseUpdateAccount => {
 
         const result = await dispatch(updateAccountAction(credentials));
         if (updateAccountAction.fulfilled.match(result)) {
-            close();
+            setSuccess(SettingsNotification.profileUpdateSuccess.description);
             showNotification(SettingsNotification.profileUpdateSuccess);
             dispatch(setCurrentUserAction(result.payload));
         }
     };
 
-    return { form, loading, error, isOpen, open, close, onSubmit };
+    return { form, loading, error, success, isOpen, open, close, onSubmit };
 };

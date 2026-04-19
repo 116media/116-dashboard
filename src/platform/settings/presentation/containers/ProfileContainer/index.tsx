@@ -3,7 +3,6 @@ import { type FC, useEffect, useRef } from "react";
 import AccountInfoModal from "@/platform/settings/presentation/components/forms/AccountInfoModal";
 import SettingsCard from "@/platform/settings/presentation/components/ui/SettingsCard";
 import SettingsField from "@/platform/settings/presentation/components/ui/SettingsField";
-import SettingsPageHeader from "@/platform/settings/presentation/components/ui/SettingsPageHeader";
 import { useProfile } from "@/platform/settings/presentation/hooks/UseProfile";
 import { useUpdateAccount } from "@/platform/settings/presentation/hooks/UseUpdateAccount";
 import { useUpdateAvatar } from "@/platform/settings/presentation/hooks/UseUpdateAvatar";
@@ -15,6 +14,7 @@ import {
     IconMobileOutlined,
     IconUserOutlined
 } from "@/shared/presentation/ui/Icons";
+import PageHeader from "@/shared/presentation/ui/PageHeader";
 import RoleBadge from "@/shared/presentation/ui/RoleBadge";
 import styles from "./index.module.scss";
 import ProfileContainerLoading from "./ProfileContainer.Loading";
@@ -64,10 +64,10 @@ const ProfileContainer: FC = () => {
 
     return (
         <div>
-            <SettingsPageHeader
+            <PageHeader
                 title="Profil"
                 icon={<IconUserOutlined />}
-                description="Gérez vos informations personnelles et votre photo de profil."
+                subtitle="Gérez vos informations personnelles et votre photo de profil."
             />
             <ErrorAlert banner showIcon closable error={profileError} onClose={fetchProfile} />
             <SettingsCard title="Photo de profil">
@@ -168,6 +168,7 @@ const ProfileContainer: FC = () => {
                 user={profile}
                 form={updateAccount.form}
                 error={updateAccount.error}
+                success={updateAccount.success}
                 isOpen={updateAccount.isOpen}
                 onClose={updateAccount.close}
                 loading={updateAccount.loading}

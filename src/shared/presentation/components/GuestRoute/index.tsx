@@ -1,6 +1,6 @@
 import type { FC } from "react";
 import { Navigate, Outlet } from "react-router";
-import { OVERVIEW_PATH } from "@/shared/infrastructure/constants/paths";
+import { OVERVIEW_PATH } from "@/shared/presentation/constants/paths";
 import { useAppSelector } from "@/shared/presentation/store/store";
 
 /**

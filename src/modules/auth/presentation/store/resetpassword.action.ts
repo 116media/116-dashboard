@@ -10,6 +10,13 @@ import container from "@/shared/infrastructure/service.locator.ts";
 export const resetResetPasswordAction = () =>
     authSlice.actions.clear({ context: ActionType.AuthResetPassword });
 
+/**
+ * Async thunk to reset the user's password.
+ *
+ * @description
+ * Reads the stored OTP code and sends it with the new password
+ * via `resetPasswordUseCase`.
+ */
 export const resetPasswordAction = createAsyncThunk<
     IResetPasswordResponse,
     IResetPasswordCredentials,
@@ -22,6 +29,7 @@ export const resetPasswordAction = createAsyncThunk<
             ...credentials,
             code: otpCode as string
         });
+
         if (!result.ok) return rejectWithValue(result.error);
         return result.value;
     }

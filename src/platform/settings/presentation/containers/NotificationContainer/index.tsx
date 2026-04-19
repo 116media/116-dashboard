@@ -1,7 +1,7 @@
 import type { FC } from "react";
 import ComingSoon from "@/platform/settings/presentation/components/ui/ComingSoon";
-import SettingsPageHeader from "@/platform/settings/presentation/components/ui/SettingsPageHeader";
 import { IconBellOutlined } from "@/shared/presentation/ui/Icons";
+import PageHeader from "@/shared/presentation/ui/PageHeader";
 
 /**
  * Container for the Notification tab in Settings.
@@ -15,10 +15,10 @@ import { IconBellOutlined } from "@/shared/presentation/ui/Icons";
 const NotificationContainer: FC = () => {
     return (
         <div>
-            <SettingsPageHeader
+            <PageHeader
                 icon={<IconBellOutlined />}
                 title="Notifications"
-                description="Configurez vos préférences de notifications."
+                subtitle="Configurez vos préférences de notifications."
             />
             <ComingSoon />
         </div>

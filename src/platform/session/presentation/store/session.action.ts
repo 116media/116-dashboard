@@ -9,24 +9,40 @@ import container from "@/shared/infrastructure/service.locator.ts";
 export const resetGetSessionsAction = () =>
     sessionSlice.actions.clear({ context: ActionType.SessionGetSessions });
 
+export const resetRevokeSessionAction = () =>
+    sessionSlice.actions.clear({ context: ActionType.SessionRevokeSession });
+
+/**
+ * Async thunk to fetch all active sessions for the current user.
+ *
+ * @description
+ * Retrieves the list of active login sessions across all devices
+ * via `getSessionsUseCase`.
+ */
 export const getSessionsAction = createAsyncThunk<ISession[], void, { rejectValue: Failure }>(
     ActionType.SessionGetSessions,
     async (_, { rejectWithValue }) => {
         const result = await container.cradle.getSessionsUseCase.execute();
+
         if (!result.ok) return rejectWithValue(result.error);
         return result.value;
     }
 );
 
-export const resetRevokeSessionAction = () =>
-    sessionSlice.actions.clear({ context: ActionType.SessionRevokeSession });
-
+/**
+ * Async thunk to revoke a specific session.
+ *
+ * @description
+ * Invalidates a session by its ID, immediately disconnecting
+ * the corresponding device via `revokeSessionUseCase`.
+ */
 export const revokeSessionAction = createAsyncThunk<
     IRevokeSessionResponse,
     string,
     { rejectValue: Failure }
 >(ActionType.SessionRevokeSession, async (sessionId, { rejectWithValue }) => {
     const result = await container.cradle.revokeSessionUseCase.execute(sessionId);
+
     if (!result.ok) return rejectWithValue(result.error);
     return result.value;
 });

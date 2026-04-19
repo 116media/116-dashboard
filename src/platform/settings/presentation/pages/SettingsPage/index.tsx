@@ -1,5 +1,4 @@
 import type { FC } from "react";
-import { Helmet, HelmetProvider } from "react-helmet-async";
 import { useNavigate, useParams } from "react-router";
 import SettingsSidebar, {
     type SettingsTab
@@ -9,7 +8,8 @@ import NotificationContainer from "@/platform/settings/presentation/containers/N
 import ProfileContainer from "@/platform/settings/presentation/containers/ProfileContainer";
 import SecurityContainer from "@/platform/settings/presentation/containers/SecurityContainer";
 import { APP_NAME } from "@/shared/infrastructure/constants/common";
-import { SETTING_PATH } from "@/shared/infrastructure/constants/paths";
+import { SETTING_PATH } from "@/shared/presentation/constants/paths";
+import { TextTransform } from "@/shared/presentation/utils/text-transform/text-transform.utils";
 import styles from "./index.module.scss";
 
 /** Maps each settings tab key to its container component. */
@@ -48,17 +48,14 @@ const SettingsPage: FC = () => {
     const ActiveContainer = containerMap[activeTab];
 
     return (
-        <HelmetProvider>
-            <Helmet>
-                <title>Paramètres | {APP_NAME}</title>
-            </Helmet>
-            <div className={styles.page}>
-                <SettingsSidebar activeTab={activeTab} onChange={handleTabChange} />
-                <div className={styles.content}>
-                    <ActiveContainer />
-                </div>
+        <div className={styles.page}>
+            <title>{`Paramètres - ${TextTransform.capitalCase(activeTab)} | ${APP_NAME}`}</title>
+
+            <SettingsSidebar activeTab={activeTab} onChange={handleTabChange} />
+            <div className={styles.page__content}>
+                <ActiveContainer />
             </div>
-        </HelmetProvider>
+        </div>
     );
 };
 

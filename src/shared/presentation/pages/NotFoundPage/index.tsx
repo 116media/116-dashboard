@@ -1,10 +1,9 @@
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import { Button, Flex, Layout, Space, Typography } from "antd";
 import type { FC } from "react";
-import { Helmet, HelmetProvider } from "react-helmet-async";
 import notFound from "@/assets/lottie/404_anim.lottie";
 import { APP_NAME } from "@/shared/infrastructure/constants/common";
-import { OVERVIEW_PATH } from "@/shared/infrastructure/constants/paths";
+import { OVERVIEW_PATH } from "@/shared/presentation/constants/paths";
 import { IconHomeOutlined } from "@/shared/presentation/ui/Icons";
 import { LottieUtils } from "@/shared/presentation/utils/lottie/lottie.utils";
 
@@ -31,29 +30,25 @@ export const NotFoundPage: FC = () => {
     const lottieOptions = LottieUtils.options(notFound);
 
     return (
-        <HelmetProvider>
-            <Content className={styles.notFound}>
-                <Helmet>
-                    <title>Page introuvable | {APP_NAME}</title>
-                </Helmet>
+        <Content className={styles.notFound}>
+            <title>{`Page introuvable | ${APP_NAME}`}</title>
 
-                <Space orientation="vertical" align="center" size="large">
-                    <DotLottieReact className={styles.notFound__lottie} {...lottieOptions} />
+            <Space orientation="vertical" align="center" size="large">
+                <DotLottieReact className={styles.notFound__lottie} {...lottieOptions} />
 
-                    <Flex justify="center">
-                        <Title data-text="title">Oops! Page non trouvée</Title>
-                    </Flex>
-                    <Button
-                        size="large"
-                        type="primary"
-                        rel="noopener"
-                        href={OVERVIEW_PATH}
-                        icon={<IconHomeOutlined />}
-                    >
-                        Retour à l'Accueil
-                    </Button>
-                </Space>
-            </Content>
-        </HelmetProvider>
+                <Flex justify="center">
+                    <Title data-text="title">Oops! Page non trouvée</Title>
+                </Flex>
+                <Button
+                    size="large"
+                    type="primary"
+                    rel="noopener"
+                    href={OVERVIEW_PATH}
+                    icon={<IconHomeOutlined />}
+                >
+                    Retour à l'Accueil
+                </Button>
+            </Space>
+        </Content>
     );
 };

@@ -1,6 +1,6 @@
 import type { FC } from "react";
 import { APP_NAME } from "@/shared/infrastructure/constants/common";
-import { OVERVIEW_PATH } from "@/shared/infrastructure/constants/paths";
+import { OVERVIEW_PATH } from "@/shared/presentation/constants/paths";
 
 /**
  * Props for the Logo component.
