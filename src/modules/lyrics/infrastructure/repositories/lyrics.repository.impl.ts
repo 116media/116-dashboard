@@ -19,9 +19,6 @@ import { ProblemMapper } from "@/shared/infrastructure/mappers/problem.mapper";
  * generated API client and mapping responses through LyricsMapper.
  */
 export class LyricsRepositoryImpl implements ILyricsRepositoryPort {
-    /**
-     * @inheritdoc
-     */
     async getAllLyrics(
         params: ILyricsQueryParams
     ): Promise<Result<IPaginatedResult<ILyricsEntity>>> {
@@ -43,9 +40,6 @@ export class LyricsRepositoryImpl implements ILyricsRepositoryPort {
         }
     }
 
-    /**
-     * @inheritdoc
-     */
     async createLyrics(data: ICreateLyricsCredentials): Promise<Result<ILyricsEntity>> {
         try {
             const response = await apiClient.api.createLyrics(data);
@@ -55,9 +49,6 @@ export class LyricsRepositoryImpl implements ILyricsRepositoryPort {
         }
     }
 
-    /**
-     * @inheritdoc
-     */
     async updateLyrics(id: string, data: IUpdateLyricsCredentials): Promise<Result<ILyricsEntity>> {
         try {
             const response = await apiClient.api.updateLyrics(id, data);
@@ -67,9 +58,6 @@ export class LyricsRepositoryImpl implements ILyricsRepositoryPort {
         }
     }
 
-    /**
-     * @inheritdoc
-     */
     async updateLyricsSeo(
         id: string,
         data: IUpdateLyricsSeoCredentials
