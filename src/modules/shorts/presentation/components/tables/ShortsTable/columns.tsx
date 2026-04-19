@@ -5,6 +5,7 @@ import {
     SHORT_DROPDOWN_ITEMS,
     type ShortAction
 } from "@/modules/shorts/presentation/constants/shorts.dropdown";
+import { ENTITY_STATUS_CONFIG } from "@/shared/presentation/constants/entity.status.config";
 import StatusTag from "@/shared/presentation/ui/StatusTag";
 import type { ITableActionItem } from "@/shared/presentation/ui/TableActionDropdown";
 import TableActionDropdown from "@/shared/presentation/ui/TableActionDropdown";
@@ -56,7 +57,9 @@ export const shortsTableColumns = (
         key: "isActive",
         width: 110,
         align: "center",
-        render: (isActive: boolean) => <StatusTag status={isActive ? "active" : "inactive"} />
+        render: (isActive: boolean) => (
+            <StatusTag status={isActive ? "active" : "inactive"} config={ENTITY_STATUS_CONFIG} />
+        )
     },
     {
         title: "Vues",
