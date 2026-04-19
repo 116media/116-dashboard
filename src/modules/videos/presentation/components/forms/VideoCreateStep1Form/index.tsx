@@ -1,9 +1,10 @@
 import type { FormInstance } from "antd";
-import { Form, Input, Select } from "antd";
+import { Flex, Form, Input, Select, Typography } from "antd";
 import type { FC } from "react";
 import { useMemo } from "react";
 import type { ICategoryEntity } from "@/modules/catalog/domain/entities/ICategoryEntity";
 import type { ICustomerEntity } from "@/modules/catalog/domain/entities/ICustomerEntity";
+import { usePaidOrderItems } from "@/modules/commerce/presentation/hooks/UsePaidOrderItems";
 import type { ICreateVideoCredentials } from "@/modules/videos/presentation/model/ICreateVideoCredentials";
 import { VideosContentValidator } from "@/modules/videos/presentation/utils/validators/videos.content.validator";
 import type { Failure } from "@/shared/domain/failures/failure";
@@ -47,6 +48,7 @@ const VideoCreateStep1Form: FC<IVideoCreateStep1FormProps> = ({ form, error, onS
     const { data: customers } = useAppSelector(
         ({ catalog: { getAllCustomers } }) => getAllCustomers
     );
+    const orderItems = usePaidOrderItems();
 
     const categoryOptions = useMemo(
         () =>
@@ -63,7 +65,8 @@ const VideoCreateStep1Form: FC<IVideoCreateStep1FormProps> = ({ form, error, onS
         () =>
             ((customers as { items: ICustomerEntity[] })?.items ?? []).map((c) => ({
                 label: c.fullName,
-                value: c.id
+                value: c.id,
+                company: c.company
             })),
         [customers]
     );
@@ -86,7 +89,6 @@ const VideoCreateStep1Form: FC<IVideoCreateStep1FormProps> = ({ form, error, onS
             >
                 <Select
                     showSearch
-                    optionFilterProp="label"
                     options={categoryOptions}
                     placeholder="Sélectionner une catégorie"
                 />
@@ -94,10 +96,6 @@ const VideoCreateStep1Form: FC<IVideoCreateStep1FormProps> = ({ form, error, onS
 
             <Item name="title" label="Titre" rules={VideosContentValidator.title("Titre")}>
                 <Input maxLength={200} placeholder="Titre de la vidéo" />
-            </Item>
-
-            <Item name="slug" label="Slug" rules={VideosContentValidator.slug("Slug")}>
-                <Input maxLength={250} placeholder="slug-de-la-video" />
             </Item>
 
             <Item
@@ -113,18 +111,54 @@ const VideoCreateStep1Form: FC<IVideoCreateStep1FormProps> = ({ form, error, onS
                 />
             </Item>
 
-            <Item name="customerId" label="Client (optionnel)">
+            <Item name="customerId" label="Client">
                 <Select
                     showSearch
                     allowClear
-                    optionFilterProp="label"
                     options={customerOptions}
                     placeholder="Sélectionner un client"
+                    onChange={(value) => {
+                        form.setFieldValue("orderItemId", undefined);
+                        orderItems.fetchByCustomer(value || undefined);
+                    }}
+                    optionRender={(option) => (
+                        <Flex justify="space-between" align="center">
+                            <span>{option.label}</span>
+                            {option.data.company && (
+                                <Typography.Text type="secondary" style={{ fontSize: 12 }}>
+                                    {option.data.company}
+                                </Typography.Text>
+                            )}
+                        </Flex>
+                    )}
                 />
             </Item>
 
-            <Item name="orderItemId" label="Commande (optionnel)">
-                <Input placeholder="Identifiant de la commande" />
+            <Item name="orderItemId" label="Commande">
+                <Select
+                    showSearch
+                    allowClear
+                    loading={orderItems.loading}
+                    disabled={orderItems.loading}
+                    options={orderItems.options}
+                    placeholder="Sélectionner une commande"
+                    popupMatchSelectWidth={false}
+                    optionRender={(option) => (
+                        <Flex justify="space-between" align="center" gap={16}>
+                            <Flex gap={8} align="center">
+                                <Typography.Text code style={{ fontSize: 11 }}>
+                                    {option.data.shortId}
+                                </Typography.Text>
+                                <span>{option.label}</span>
+                            </Flex>
+                            {option.data.customerName && (
+                                <Typography.Text type="secondary" style={{ fontSize: 12 }}>
+                                    {option.data.customerName}
+                                </Typography.Text>
+                            )}
+                        </Flex>
+                    )}
+                />
             </Item>
         </Form>
     );
