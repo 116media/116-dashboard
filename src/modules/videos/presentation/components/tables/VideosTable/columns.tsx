@@ -6,13 +6,14 @@ import {
     type VideoAction
 } from "@/modules/videos/presentation/constants/videos.dropdown";
 import type { EnumContentStatus } from "@/shared/infrastructure/api/generated/116.api";
+import { CONTENT_STATUS_CONFIG } from "@/shared/presentation/constants/content.status.config";
 import { Colors } from "@/shared/presentation/constants/theme";
-import ContentStatusTag from "@/shared/presentation/ui/ContentStatusTag";
 import {
     IconCheckCircleFilled,
     IconCloseCircleFilled,
     IconYoutubeFilled
 } from "@/shared/presentation/ui/Icons";
+import StatusTag from "@/shared/presentation/ui/StatusTag";
 import type { ITableActionItem } from "@/shared/presentation/ui/TableActionDropdown";
 import TableActionDropdown from "@/shared/presentation/ui/TableActionDropdown";
 import { dayjs } from "@/shared/presentation/utils/dayjs/dayjs.utils";
@@ -87,7 +88,9 @@ export const videosTableColumns = (
         key: "status",
         width: 160,
         align: "center",
-        render: (status: EnumContentStatus) => <ContentStatusTag status={status} />
+        render: (status: EnumContentStatus) => (
+            <StatusTag status={status} config={CONTENT_STATUS_CONFIG} />
+        )
     },
     {
         title: "En vedette",
