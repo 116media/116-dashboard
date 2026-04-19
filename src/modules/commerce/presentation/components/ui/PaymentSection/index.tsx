@@ -1,11 +1,12 @@
 import { Card, Flex, Typography } from "antd";
 import type { FC } from "react";
 import type { IPaymentEntity } from "@/modules/commerce/domain/entities/IPaymentEntity";
-import OrderStatusTag from "@/modules/commerce/presentation/components/ui/OrderStatusTag";
 import PaymentActions from "@/modules/commerce/presentation/components/ui/PaymentActions";
 import PaymentDetailsGrid from "@/modules/commerce/presentation/components/ui/PaymentDetailsGrid";
 import PaymentEmptyState from "@/modules/commerce/presentation/components/ui/PaymentEmptyState";
 import PaymentProofPreview from "@/modules/commerce/presentation/components/ui/PaymentProofPreview";
+import { PAYMENT_STATUS_CONFIG } from "@/modules/commerce/presentation/constants/order.status.config";
+import StatusTag from "@/shared/presentation/ui/StatusTag";
 import styles from "./index.module.scss";
 
 const { Title, Text } = Typography;
@@ -79,7 +80,7 @@ const PaymentSection: FC<IPaymentSectionProps> = ({
                 <Title level={5} className={styles.payment__title}>
                     Paiement
                 </Title>
-                <OrderStatusTag status={payment.status} />
+                <StatusTag status={payment.status} config={PAYMENT_STATUS_CONFIG} />
             </Flex>
 
             <Flex gap={12} align="stretch">
