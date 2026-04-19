@@ -35,7 +35,10 @@ export class AttachYoutubeIdUseCase implements IAttachYoutubeIdUseCase {
      * @param {object} request - The video ID and YouTube video ID to attach
      * @returns {Promise<Result<IVideoEntity>>} `ok(IVideoEntity)` on success, `err(Failure)` on failure
      */
-    async execute(request: { id: string; data: IAttachYoutubeIdCredentials }): Promise<Result<IVideoEntity>> {
+    async execute(request: {
+        id: string;
+        data: IAttachYoutubeIdCredentials;
+    }): Promise<Result<IVideoEntity>> {
         return this.videosRepository.attachYoutubeId(request.id, request.data);
     }
 }
