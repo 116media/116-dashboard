@@ -35,7 +35,10 @@ export class UpdateLyricsSeoUseCase implements IUpdateLyricsSeoUseCase {
      * @param {object} request - The lyrics ID and SEO metadata
      * @returns {Promise<Result<ILyricsEntity>>} `ok(ILyricsEntity)` on success, `err(Failure)` on failure
      */
-    async execute(request: { id: string; data: IUpdateLyricsSeoCredentials }): Promise<Result<ILyricsEntity>> {
+    async execute(request: {
+        id: string;
+        data: IUpdateLyricsSeoCredentials;
+    }): Promise<Result<ILyricsEntity>> {
         return this.lyricsRepository.updateLyricsSeo(request.id, request.data);
     }
 }
