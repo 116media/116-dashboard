@@ -77,7 +77,6 @@ const OrderTierForm: FC<IOrderTierFormProps> = ({ form, error, categoryName, onS
             >
                 <Select
                     showSearch
-                    optionFilterProp="label"
                     options={pricingTierOptions}
                     placeholder="Sélectionner une tranche"
                     notFoundContent={
