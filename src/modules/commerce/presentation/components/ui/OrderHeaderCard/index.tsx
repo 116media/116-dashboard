@@ -1,7 +1,7 @@
 import { Button, Card, Flex, Space, Typography } from "antd";
 import type { FC } from "react";
 import type { IOrderDetailEntity } from "@/modules/commerce/domain/entities/IOrderDetailEntity";
-import OrderStatusTag from "@/modules/commerce/presentation/components/ui/OrderStatusTag";
+import { ORDER_STATUS_CONFIG } from "@/modules/commerce/presentation/constants/order.status.config";
 import SettingsField from "@/platform/settings/presentation/components/ui/SettingsField";
 import {
     IconCalendarOutlined,
@@ -9,6 +9,7 @@ import {
     IconDollarOutlined,
     IconTagOutlined
 } from "@/shared/presentation/ui/Icons";
+import StatusTag from "@/shared/presentation/ui/StatusTag";
 import { dayjs } from "@/shared/presentation/utils/dayjs/dayjs.utils";
 import styles from "./index.module.scss";
 
@@ -67,7 +68,7 @@ const OrderHeaderCard: FC<IOrderHeaderCardProps> = ({
                 <Title level={4} className={styles.orderHeader__title}>
                     {order.customerName}
                 </Title>
-                <OrderStatusTag status={order.status} />
+                <StatusTag status={order.status} config={ORDER_STATUS_CONFIG} />
             </Flex>
 
             <Space>
