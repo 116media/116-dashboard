@@ -38,7 +38,11 @@ export class UpdateCategoryPricingUseCase implements IUpdateCategoryPricingUseCa
      * @param {object} request - The category ID, pricing ID, and updated price data
      * @returns {Promise<Result<ICategoryPricingEntity>>} `ok(ICategoryPricingEntity)` on success, `err(Failure)` on failure
      */
-    async execute(request: { categoryId: string; pricingId: string; data: IUpdateCategoryPricingCredentials }): Promise<Result<ICategoryPricingEntity>> {
+    async execute(request: {
+        categoryId: string;
+        pricingId: string;
+        data: IUpdateCategoryPricingCredentials;
+    }): Promise<Result<ICategoryPricingEntity>> {
         return this.catalogRepository.updateCategoryPricing(
             request.categoryId,
             request.pricingId,
