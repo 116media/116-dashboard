@@ -3,6 +3,7 @@ import type { ColumnsType } from "antd/es/table";
 import dayjs from "dayjs";
 import type { IRoleEntity } from "@/modules/roles/domain/entities/IRole";
 import { ROLE_DROPDOWN_ITEMS } from "@/modules/roles/presentation/constants/roles.dropdown";
+import { ENTITY_STATUS_CONFIG } from "@/shared/presentation/constants/entity.status.config";
 import StatusTag from "@/shared/presentation/ui/StatusTag";
 import type { ITableActionItem } from "@/shared/presentation/ui/TableActionDropdown";
 import TableActionDropdown from "@/shared/presentation/ui/TableActionDropdown";
@@ -82,8 +83,14 @@ export const rolesTableColumns = (
             return order(a) - order(b);
         },
         render: (_: boolean, record: IRoleEntity) => {
-            if (record.isDeleted) return <StatusTag status="deleted" />;
-            return <StatusTag status={record.isActive ? "active" : "inactive"} />;
+            if (record.isDeleted)
+                return <StatusTag status="deleted" config={ENTITY_STATUS_CONFIG} />;
+            return (
+                <StatusTag
+                    status={record.isActive ? "active" : "inactive"}
+                    config={ENTITY_STATUS_CONFIG}
+                />
+            );
         }
     },
     {
