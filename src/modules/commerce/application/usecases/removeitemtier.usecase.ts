@@ -37,7 +37,15 @@ export class RemoveItemTierUseCase implements IRemoveItemTierUseCase {
      * @param {object} request - Parameters including orderId, itemId, and tierId
      * @returns {Promise<Result<ICommerceActionResponse>>} `ok(ICommerceActionResponse)` on success, `err(Failure)` on failure
      */
-    async execute(request: { orderId: string; itemId: string; tierId: string }): Promise<Result<ICommerceActionResponse>> {
-        return this.commerceRepository.removeItemTier(request.orderId, request.itemId, request.tierId);
+    async execute(request: {
+        orderId: string;
+        itemId: string;
+        tierId: string;
+    }): Promise<Result<ICommerceActionResponse>> {
+        return this.commerceRepository.removeItemTier(
+            request.orderId,
+            request.itemId,
+            request.tierId
+        );
     }
 }
