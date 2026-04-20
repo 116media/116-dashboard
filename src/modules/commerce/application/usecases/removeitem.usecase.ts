@@ -34,7 +34,10 @@ export class RemoveItemUseCase implements IRemoveItemUseCase {
      * @param {object} request - Parameters including orderId and itemId
      * @returns {Promise<Result<ICommerceActionResponse>>} `ok(ICommerceActionResponse)` on success, `err(Failure)` on failure
      */
-    async execute(request: { orderId: string; itemId: string }): Promise<Result<ICommerceActionResponse>> {
+    async execute(request: {
+        orderId: string;
+        itemId: string;
+    }): Promise<Result<ICommerceActionResponse>> {
         return this.commerceRepository.removeItem(request.orderId, request.itemId);
     }
 }
