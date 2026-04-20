@@ -5,6 +5,7 @@ import {
     PACKAGE_DROPDOWN_ITEMS,
     type PackageAction
 } from "@/modules/catalog/presentation/constants/catalog.packages.dropdown";
+import { ENTITY_STATUS_CONFIG } from "@/shared/presentation/constants/entity.status.config";
 import StatusTag from "@/shared/presentation/ui/StatusTag";
 import type { ITableActionItem } from "@/shared/presentation/ui/TableActionDropdown";
 import TableActionDropdown from "@/shared/presentation/ui/TableActionDropdown";
@@ -70,7 +71,10 @@ export const packagesTableColumns = (
         fixed: "end",
         align: "center",
         render: (_: boolean, record: IPackageEntity) => (
-            <StatusTag status={record.isActive ? "active" : "inactive"} />
+            <StatusTag
+                status={record.isActive ? "active" : "inactive"}
+                config={ENTITY_STATUS_CONFIG}
+            />
         )
     },
     {
