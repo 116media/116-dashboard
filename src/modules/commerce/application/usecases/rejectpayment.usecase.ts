@@ -39,7 +39,10 @@ export class RejectPaymentUseCase implements IRejectPaymentUseCase {
      * @param {object} request - Rejection parameters including orderId and optional notes
      * @returns {Promise<Result<ICommerceActionResponse>>} `ok(ICommerceActionResponse)` on success, `err(Failure)` on failure
      */
-    async execute(request: { orderId: string; data: IRejectPaymentCredentials }): Promise<Result<ICommerceActionResponse>> {
+    async execute(request: {
+        orderId: string;
+        data: IRejectPaymentCredentials;
+    }): Promise<Result<ICommerceActionResponse>> {
         return this.commerceRepository.rejectPayment(request.orderId, request.data);
     }
 }
