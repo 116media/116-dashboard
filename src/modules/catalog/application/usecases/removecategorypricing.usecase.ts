@@ -34,7 +34,10 @@ export class RemoveCategoryPricingUseCase implements IRemoveCategoryPricingUseCa
      * @param {object} request - The category ID and pricing ID to remove
      * @returns {Promise<Result<ICatalogActionResponse>>} `ok(ICatalogActionResponse)` on success, `err(Failure)` on failure
      */
-    async execute(request: { categoryId: string; pricingId: string }): Promise<Result<ICatalogActionResponse>> {
+    async execute(request: {
+        categoryId: string;
+        pricingId: string;
+    }): Promise<Result<ICatalogActionResponse>> {
         return this.catalogRepository.removeCategoryPricing(request.categoryId, request.pricingId);
     }
 }
