@@ -39,7 +39,11 @@ export class AddTierToItemUseCase implements IAddTierToItemUseCase {
      * @param {object} request - Tier assignment parameters including orderId, itemId, and tier data
      * @returns {Promise<Result<IItemTierEntity>>} `ok(IItemTierEntity)` on success, `err(Failure)` on failure
      */
-    async execute(request: { orderId: string; itemId: string; data: IAddItemTierCredentials }): Promise<Result<IItemTierEntity>> {
+    async execute(request: {
+        orderId: string;
+        itemId: string;
+        data: IAddItemTierCredentials;
+    }): Promise<Result<IItemTierEntity>> {
         return this.commerceRepository.addTierToItem(request.orderId, request.itemId, request.data);
     }
 }
