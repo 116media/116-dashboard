@@ -34,7 +34,10 @@ export class RemovePackageSlotUseCase implements IRemovePackageSlotUseCase {
      * @param {object} request - The package ID and slot ID to remove
      * @returns {Promise<Result<ICatalogActionResponse>>} `ok(ICatalogActionResponse)` on success, `err(Failure)` on failure
      */
-    async execute(request: { packageId: string; slotId: string }): Promise<Result<ICatalogActionResponse>> {
+    async execute(request: {
+        packageId: string;
+        slotId: string;
+    }): Promise<Result<ICatalogActionResponse>> {
         return this.catalogRepository.removePackageSlot(request.packageId, request.slotId);
     }
 }
