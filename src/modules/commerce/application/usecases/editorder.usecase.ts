@@ -36,7 +36,10 @@ export class EditOrderUseCase implements IEditOrderUseCase {
      * @param {object} request - Order edit parameters including id, customerId, and packageId
      * @returns {Promise<Result<IOrderSummaryEntity>>} `ok(IOrderSummaryEntity)` on success, `err(Failure)` on failure
      */
-    async execute(request: { id: string; data: IEditOrderCredentials }): Promise<Result<IOrderSummaryEntity>> {
+    async execute(request: {
+        id: string;
+        data: IEditOrderCredentials;
+    }): Promise<Result<IOrderSummaryEntity>> {
         return this.commerceRepository.editOrder(request.id, request.data);
     }
 }
