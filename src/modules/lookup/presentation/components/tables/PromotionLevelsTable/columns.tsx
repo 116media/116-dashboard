@@ -5,6 +5,7 @@ import {
     PROMOTION_LEVEL_DROPDOWN_ITEMS,
     type PromotionLevelAction
 } from "@/modules/lookup/presentation/constants/lookup.promotion-levels.dropdown";
+import { ENTITY_STATUS_CONFIG } from "@/shared/presentation/constants/entity.status.config";
 import StatusTag from "@/shared/presentation/ui/StatusTag";
 import type { ITableActionItem } from "@/shared/presentation/ui/TableActionDropdown";
 import TableActionDropdown from "@/shared/presentation/ui/TableActionDropdown";
@@ -65,7 +66,10 @@ export const promotionLevelsTableColumns = (
             return order(a) - order(b);
         },
         render: (_: boolean, record: IPromotionLevelEntity) => (
-            <StatusTag status={record.isActive ? "active" : "inactive"} />
+            <StatusTag
+                status={record.isActive ? "active" : "inactive"}
+                config={ENTITY_STATUS_CONFIG}
+            />
         )
     },
     {
