@@ -38,7 +38,10 @@ export class AddCategoryPricingUseCase implements IAddCategoryPricingUseCase {
      * @param {object} request - The category ID and pricing data
      * @returns {Promise<Result<ICategoryPricingEntity>>} `ok(ICategoryPricingEntity)` on success, `err(Failure)` on failure
      */
-    async execute(request: { categoryId: string; data: IAddCategoryPricingCredentials }): Promise<Result<ICategoryPricingEntity>> {
+    async execute(request: {
+        categoryId: string;
+        data: IAddCategoryPricingCredentials;
+    }): Promise<Result<ICategoryPricingEntity>> {
         return this.catalogRepository.addCategoryPricing(request.categoryId, request.data);
     }
 }
