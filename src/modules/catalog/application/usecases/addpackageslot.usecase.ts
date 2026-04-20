@@ -38,7 +38,10 @@ export class AddPackageSlotUseCase implements IAddPackageSlotUseCase {
      * @param {object} request - The package ID and slot data
      * @returns {Promise<Result<IPackageSlotEntity>>} `ok(IPackageSlotEntity)` on success, `err(Failure)` on failure
      */
-    async execute(request: { packageId: string; data: IAddPackageSlotCredentials }): Promise<Result<IPackageSlotEntity>> {
+    async execute(request: {
+        packageId: string;
+        data: IAddPackageSlotCredentials;
+    }): Promise<Result<IPackageSlotEntity>> {
         return this.catalogRepository.addPackageSlot(request.packageId, request.data);
     }
 }
