@@ -39,7 +39,10 @@ export class VerifyPaymentUseCase implements IVerifyPaymentUseCase {
      * @param {object} request - Verification parameters including orderId and receiptUrl
      * @returns {Promise<Result<ICommerceActionResponse>>} `ok(ICommerceActionResponse)` on success, `err(Failure)` on failure
      */
-    async execute(request: { orderId: string; data: IVerifyPaymentCredentials }): Promise<Result<ICommerceActionResponse>> {
+    async execute(request: {
+        orderId: string;
+        data: IVerifyPaymentCredentials;
+    }): Promise<Result<ICommerceActionResponse>> {
         return this.commerceRepository.verifyPayment(request.orderId, request.data);
     }
 }
