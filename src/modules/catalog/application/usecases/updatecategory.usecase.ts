@@ -35,7 +35,10 @@ export class UpdateCategoryUseCase implements IUpdateCategoryUseCase {
      * @param {object} request - The category ID and updated data
      * @returns {Promise<Result<ICategoryEntity>>} `ok(ICategoryEntity)` on success, `err(Failure)` on failure
      */
-    async execute(request: { id: string; data: IUpdateCategoryCredentials }): Promise<Result<ICategoryEntity>> {
+    async execute(request: {
+        id: string;
+        data: IUpdateCategoryCredentials;
+    }): Promise<Result<ICategoryEntity>> {
         return this.catalogRepository.updateCategory(request.id, request.data);
     }
 }
