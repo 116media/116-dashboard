@@ -5,10 +5,10 @@ import { getAllCategoriesAction } from "@/modules/catalog/presentation/store/get
 import { getAllCustomersAction } from "@/modules/catalog/presentation/store/getallcustomers.action";
 import { getTagsAction } from "@/modules/lookup/presentation/store/gettags.action";
 import type { IVideoEntity } from "@/modules/videos/domain/entities/IVideoEntity";
-import VideoContentForm from "@/modules/videos/presentation/components/forms/VideoContentForm";
-import VideoCreateStep1Form from "@/modules/videos/presentation/components/forms/VideoCreateStep1Form";
+import VideoDetailsForm from "@/modules/videos/presentation/components/forms/VideoDetailsForm";
 import { videosTableColumns } from "@/modules/videos/presentation/components/tables/VideosTable/columns";
 import ShootScheduleModal from "@/modules/videos/presentation/components/ui/ShootScheduleModal";
+import VideoCreateWizard from "@/modules/videos/presentation/components/ui/VideoCreateWizard";
 import VideoSeoModal from "@/modules/videos/presentation/components/ui/VideoSeoModal";
 import VideoTagsModal from "@/modules/videos/presentation/components/ui/VideoTagsModal";
 import VideoThumbnailUploadModal from "@/modules/videos/presentation/components/ui/VideoThumbnailUploadModal";
@@ -16,7 +16,6 @@ import VideoWorkflowModal from "@/modules/videos/presentation/components/ui/Vide
 import YoutubeIdModal from "@/modules/videos/presentation/components/ui/YoutubeIdModal";
 import { VIDEO_STATUS_OPTIONS } from "@/modules/videos/presentation/constants/videos.status";
 import { useAttachYoutubeId } from "@/modules/videos/presentation/hooks/UseAttachYoutubeId";
-import { useCreateVideo } from "@/modules/videos/presentation/hooks/UseCreateVideo";
 import { useScheduleShoot } from "@/modules/videos/presentation/hooks/UseScheduleShoot";
 import { useUpdateVideo } from "@/modules/videos/presentation/hooks/UseUpdateVideo";
 import { useUpdateVideoSeo } from "@/modules/videos/presentation/hooks/UseUpdateVideoSeo";
@@ -50,7 +49,6 @@ const VideosListContainer: FC = () => {
     const dispatch = useAppDispatch();
     const list = useVideosList();
     const modals = useVideoModals(list.reload);
-    const createVideo = useCreateVideo(list.reload);
     const updateVideo = useUpdateVideo(modals.selectedEntity as IVideoEntity | null, list.reload);
     const updateSeo = useUpdateVideoSeo(modals.selectedEntity as IVideoEntity | null, list.reload);
     const updateTags = useUpdateVideoTags(
@@ -79,10 +77,10 @@ const VideosListContainer: FC = () => {
 
             <PageHeader
                 title="Vidéos"
-                subtitle="Gérer les vidéos éditoriaux."
-                icon={<IconVideoCameraFilled />}
-                onCreate={isSuperAdmin ? () => modals.setCreateOpen(true) : undefined}
                 createLabel="Créer une vidéo"
+                icon={<IconVideoCameraFilled />}
+                subtitle="Gérer les vidéos éditoriaux."
+                onCreate={isSuperAdmin ? () => modals.setCreateOpen(true) : undefined}
             />
 
             <TableToolbar
@@ -113,30 +111,14 @@ const VideosListContainer: FC = () => {
             />
 
             {modals.createOpen && (
-                <CreateEditModal
-                    width={480}
+                <VideoCreateWizard
                     open={modals.createOpen}
-                    formContext="CREATE"
-                    loading={createVideo.loading}
-                    success={createVideo.success}
                     onClose={() => modals.setCreateOpen(false)}
-                    onSubmit={() => createVideo.form.submit()}
-                    title={{
-                        create: "Créer une vidéo",
-                        edit: "Modifier la vidéo"
-                    }}
-                    onSuccessClose={() => {
+                    onSuccess={() => {
                         modals.setCreateOpen(false);
-                        createVideo.resetCreate();
                         list.reload();
                     }}
-                >
-                    <VideoCreateStep1Form
-                        form={createVideo.form}
-                        error={createVideo.error}
-                        onSubmit={createVideo.onSubmit}
-                    />
-                </CreateEditModal>
+                />
             )}
 
             {modals.editOpen && (
@@ -161,7 +143,7 @@ const VideosListContainer: FC = () => {
                         list.reload();
                     }}
                 >
-                    <VideoContentForm
+                    <VideoDetailsForm
                         form={updateVideo.form}
                         error={updateVideo.error}
                         onSubmit={updateVideo.onSubmit}
