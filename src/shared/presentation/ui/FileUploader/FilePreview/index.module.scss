@@ -1,0 +1,45 @@
+@use "@/shared/presentation/styles/dimensions.scss" as dimensions;
+@use "@/shared/presentation/styles/colors.scss" as colors;
+
+.filePreview {
+    position: relative;
+    border: 1px solid colors.$border-light;
+    border-radius: dimensions.$border-radius;
+    padding: calc(dimensions.$padding / 2);
+
+    &__meta {
+        margin-bottom: calc(dimensions.$padding / 4);
+    }
+
+    [class~="ant-image"] {
+        border-radius: dimensions.$border-radius;
+        overflow: hidden;
+
+        img {
+            border-radius: dimensions.$border-radius;
+        }
+
+        [class~="ant-image-mask"] {
+            border-radius: dimensions.$border-radius;
+        }
+    }
+
+    &__image {
+        max-width: 100%;
+        max-height: 240px;
+        border-radius: dimensions.$border-radius;
+        object-fit: cover;
+    }
+
+    &__file {
+        display: flex;
+        align-items: center;
+        gap: calc(dimensions.$padding / 2);
+        padding: calc(dimensions.$padding / 4) 0;
+    }
+
+    &__fileIcon {
+        font-size: 24px;
+        color: colors.$description;
+    }
+}

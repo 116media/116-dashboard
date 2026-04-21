@@ -1,0 +1,12 @@
+@use "@/shared/presentation/styles/dimensions.scss" as dimensions;
+@use "@/shared/presentation/styles/colors.scss" as colors;
+
+.uploadProgress {
+    border: 1px solid colors.$border-light;
+    border-radius: dimensions.$border-radius;
+    padding: calc(dimensions.$padding / 2);
+
+    &__bar {
+        margin-top: calc(dimensions.$padding / 4);
+    }
+}
