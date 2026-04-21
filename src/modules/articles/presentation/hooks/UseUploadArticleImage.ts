@@ -13,7 +13,7 @@ import { showNotification } from "@/shared/presentation/utils/notification/notif
 interface IUseUploadArticleImage {
     loading: boolean;
     error: Failure | null | undefined;
-    onUpload: (id: string, file: File, imageType: EnumArticleImageType) => Promise<void>;
+    onUpload: (id: string, file: File, imageType: EnumArticleImageType) => Promise<string | null>;
 }
 
 /**
@@ -37,18 +37,23 @@ export const useUploadArticleImage = (): IUseUploadArticleImage => {
         id: string,
         file: File,
         imageType: EnumArticleImageType
-    ): Promise<void> => {
+    ): Promise<string | null> => {
         const result = await dispatch(uploadArticleImageAction({ id, data: { file, imageType } }));
 
         if (uploadArticleImageAction.fulfilled.match(result)) {
             showNotification(ArticlesNotification.uploadImageSuccess);
-        } else if (uploadArticleImageAction.rejected.match(result) && result.payload) {
+            return result.payload.url;
+        }
+
+        if (uploadArticleImageAction.rejected.match(result) && result.payload) {
             showNotification({
                 type: "error",
                 title: result.payload.title,
                 description: result.payload.detail
             });
         }
+
+        return null;
     };
 
     return { loading, error, onUpload };
