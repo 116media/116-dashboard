@@ -13,7 +13,6 @@ interface IUseArticleModals {
     actionOpen: boolean;
     seoOpen: boolean;
     tagsOpen: boolean;
-    imageUploadOpen: boolean;
     currentAction: ArticleAction | null;
     selectedEntity: IArticleSummaryEntity | null;
     setCreateOpen: (open: boolean) => void;
@@ -21,7 +20,6 @@ interface IUseArticleModals {
     setActionOpen: (open: boolean) => void;
     setSeoOpen: (open: boolean) => void;
     setTagsOpen: (open: boolean) => void;
-    setImageUploadOpen: (open: boolean) => void;
     handleAction: (action: ArticleAction, entity: IArticleSummaryEntity) => void;
     handleActionConfirm: (
         actionMap: Record<string, (id: string) => Promise<void>>
@@ -47,8 +45,6 @@ export const useArticleModals = (reload: () => void): IUseArticleModals => {
     const [actionOpen, setActionOpen] = useState(false);
     const [seoOpen, setSeoOpen] = useState(false);
     const [tagsOpen, setTagsOpen] = useState(false);
-    const [imageUploadOpen, setImageUploadOpen] = useState(false);
-
     const [currentAction, setCurrentAction] = useState<ArticleAction | null>(null);
     const [selectedEntity, setSelectedEntity] = useState<IArticleSummaryEntity | null>(null);
 
@@ -64,9 +60,6 @@ export const useArticleModals = (reload: () => void): IUseArticleModals => {
                 break;
             case "tags":
                 setTagsOpen(true);
-                break;
-            case "upload":
-                setImageUploadOpen(true);
                 break;
             default:
                 setCurrentAction(action);
@@ -95,7 +88,6 @@ export const useArticleModals = (reload: () => void): IUseArticleModals => {
         actionOpen,
         seoOpen,
         tagsOpen,
-        imageUploadOpen,
         currentAction,
         selectedEntity,
         setCreateOpen,
@@ -103,7 +95,6 @@ export const useArticleModals = (reload: () => void): IUseArticleModals => {
         setActionOpen,
         setSeoOpen,
         setTagsOpen,
-        setImageUploadOpen,
         handleAction,
         handleActionConfirm
     };
