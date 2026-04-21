@@ -1,10 +1,9 @@
 import { Table } from "antd";
 import { type FC, useEffect } from "react";
 import type { IArticleEntity } from "@/modules/articles/domain/entities/IArticleEntity";
-import ArticleContentForm from "@/modules/articles/presentation/components/forms/ArticleContentForm";
-import ArticleCreateStep1Form from "@/modules/articles/presentation/components/forms/ArticleCreateStep1Form";
+import ArticleBodyForm from "@/modules/articles/presentation/components/forms/ArticleBodyForm";
 import { articlesTableColumns } from "@/modules/articles/presentation/components/tables/ArticlesTable/columns";
-import ArticleImageUploadModal from "@/modules/articles/presentation/components/ui/ArticleImageUploadModal";
+import ArticleCreateWizard from "@/modules/articles/presentation/components/ui/ArticleCreateWizard";
 import ArticleSeoModal from "@/modules/articles/presentation/components/ui/ArticleSeoModal";
 import ArticleTagsModal from "@/modules/articles/presentation/components/ui/ArticleTagsModal";
 import ArticleWorkflowModal from "@/modules/articles/presentation/components/ui/ArticleWorkflowModal";
@@ -12,7 +11,6 @@ import { ARTICLE_STATUS_OPTIONS } from "@/modules/articles/presentation/constant
 import { useArticleModals } from "@/modules/articles/presentation/hooks/UseArticleModals";
 import { useArticlesList } from "@/modules/articles/presentation/hooks/UseArticlesList";
 import { useArticleWorkflow } from "@/modules/articles/presentation/hooks/UseArticleWorkflow";
-import { useCreateArticle } from "@/modules/articles/presentation/hooks/UseCreateArticle";
 import { useUpdateArticle } from "@/modules/articles/presentation/hooks/UseUpdateArticle";
 import { useUpdateArticleSeo } from "@/modules/articles/presentation/hooks/UseUpdateArticleSeo";
 import { useUpdateArticleTags } from "@/modules/articles/presentation/hooks/UseUpdateArticleTags";
@@ -21,6 +19,7 @@ import { useAuthorization } from "@/modules/auth/presentation/hooks/UseAuthoriza
 import { getAllCategoriesAction } from "@/modules/catalog/presentation/store/getallcategories.action";
 import { getAllCustomersAction } from "@/modules/catalog/presentation/store/getallcustomers.action";
 import { getTagsAction } from "@/modules/lookup/presentation/store/gettags.action";
+import { EnumArticleImageType } from "@/shared/infrastructure/api/generated/116.api";
 import { useResizableColumns } from "@/shared/presentation/hooks/UseResizableColumns";
 import { useAppDispatch } from "@/shared/presentation/store/store";
 import CreateEditModal from "@/shared/presentation/ui/CreateEditModal";
@@ -45,11 +44,7 @@ const ArticlesListContainer: FC = () => {
     const dispatch = useAppDispatch();
     const list = useArticlesList();
     const modals = useArticleModals(list.reload);
-    const createArticle = useCreateArticle(list.reload);
-    const updateArticle = useUpdateArticle(
-        modals.selectedEntity as IArticleEntity | null,
-        list.reload
-    );
+    const updateArticle = useUpdateArticle(modals.selectedEntity, list.reload);
     const updateSeo = useUpdateArticleSeo(
         modals.selectedEntity as IArticleEntity | null,
         list.reload
@@ -78,20 +73,20 @@ const ArticlesListContainer: FC = () => {
 
             <PageHeader
                 title="Articles"
-                subtitle="Gérer les articles éditoriaux."
-                icon={<IconFileTextOutlined />}
-                onCreate={isSuperAdmin ? () => modals.setCreateOpen(true) : undefined}
                 createLabel="Créer un article"
+                icon={<IconFileTextOutlined />}
+                subtitle="Gérer les articles éditoriaux."
+                onCreate={isSuperAdmin ? () => modals.setCreateOpen(true) : undefined}
             />
 
             <TableToolbar
-                statusFilter={list.statusFilter}
-                onStatusFilterChange={list.onStatusFilterChange}
-                statusOptions={ARTICLE_STATUS_OPTIONS}
-                searchValue={list.searchValue}
-                onSearchChange={list.onSearchChange}
                 onSearch={list.onSearch}
                 searchLoading={list.loading}
+                searchValue={list.searchValue}
+                statusFilter={list.statusFilter}
+                onSearchChange={list.onSearchChange}
+                statusOptions={ARTICLE_STATUS_OPTIONS}
+                onStatusFilterChange={list.onStatusFilterChange}
             />
 
             <Table
@@ -112,67 +107,60 @@ const ArticlesListContainer: FC = () => {
             />
 
             {modals.createOpen && (
-                <CreateEditModal
-                    width={480}
+                <ArticleCreateWizard
                     open={modals.createOpen}
-                    formContext="CREATE"
-                    loading={createArticle.loading}
-                    success={createArticle.success}
                     onClose={() => modals.setCreateOpen(false)}
-                    onSubmit={() => createArticle.form.submit()}
-                    title={{
-                        create: "Créer un article",
-                        edit: "Modifier l'article"
-                    }}
-                    onSuccessClose={() => {
+                    onSuccess={() => {
                         modals.setCreateOpen(false);
-                        createArticle.resetCreate();
                         list.reload();
                     }}
-                >
-                    <ArticleCreateStep1Form
-                        form={createArticle.form}
-                        error={createArticle.error}
-                        onSubmit={createArticle.onSubmit}
-                    />
-                </CreateEditModal>
+                />
             )}
 
-            {modals.editOpen && (
-                <CreateEditModal
-                    width={600}
-                    open={modals.editOpen}
-                    formContext="EDIT"
-                    loading={updateArticle.loading}
-                    success={updateArticle.success}
-                    onClose={() => {
-                        modals.setEditOpen(false);
-                        updateArticle.resetUpdate();
+            <CreateEditModal
+                width={600}
+                formContext="EDIT"
+                open={modals.editOpen}
+                loading={updateArticle.loading || updateArticle.detailLoading}
+                success={updateArticle.success}
+                onClose={() => {
+                    modals.setEditOpen(false);
+                    updateArticle.resetUpdate();
+                    list.reload();
+                }}
+                onSubmit={() => updateArticle.form.submit()}
+                title={{
+                    create: "Créer un article",
+                    edit: "Modifier l'article"
+                }}
+                onSuccessClose={() => {
+                    modals.setEditOpen(false);
+                    updateArticle.resetUpdate();
+                    list.reload();
+                }}
+            >
+                <ArticleBodyForm
+                    form={updateArticle.form}
+                    error={updateArticle.error}
+                    onSubmit={updateArticle.onSubmit}
+                    onCoverUpload={async (file) => {
+                        const entityId = modals.selectedEntity?.id;
+                        if (!entityId) return "";
+                        const url = await uploadImage.onUpload(
+                            entityId,
+                            file,
+                            EnumArticleImageType.Cover
+                        );
+                        return url ?? "";
                     }}
-                    onSubmit={() => updateArticle.form.submit()}
-                    title={{
-                        create: "Créer un article",
-                        edit: "Modifier l'article"
-                    }}
-                    onSuccessClose={() => {
-                        modals.setEditOpen(false);
-                        updateArticle.resetUpdate();
-                        list.reload();
-                    }}
-                >
-                    <ArticleContentForm
-                        form={updateArticle.form}
-                        error={updateArticle.error}
-                        onSubmit={updateArticle.onSubmit}
-                    />
-                </CreateEditModal>
-            )}
+                />
+            </CreateEditModal>
 
             <ArticleWorkflowModal
                 open={modals.actionOpen}
+                loading={workflow.loading}
                 action={modals.currentAction}
                 article={modals.selectedEntity}
-                loading={workflow.loading}
                 onConfirm={() =>
                     modals.handleActionConfirm({
                         submit: workflow.onSubmit,
@@ -187,55 +175,41 @@ const ArticlesListContainer: FC = () => {
                 onCancel={() => modals.setActionOpen(false)}
             />
 
-            {modals.seoOpen && (
-                <ArticleSeoModal
-                    open={modals.seoOpen}
-                    form={updateSeo.form}
-                    loading={updateSeo.loading}
-                    success={updateSeo.success}
-                    error={updateSeo.error}
-                    onSubmit={updateSeo.onSubmit}
-                    onCancel={() => {
-                        modals.setSeoOpen(false);
-                        updateSeo.resetSeo();
-                    }}
-                    onSuccessClose={() => {
-                        modals.setSeoOpen(false);
-                        updateSeo.resetSeo();
-                        list.reload();
-                    }}
-                />
-            )}
+            <ArticleSeoModal
+                open={modals.seoOpen}
+                form={updateSeo.form}
+                loading={updateSeo.loading}
+                success={updateSeo.success}
+                error={updateSeo.error}
+                onSubmit={updateSeo.onSubmit}
+                onCancel={() => {
+                    modals.setSeoOpen(false);
+                    updateSeo.resetSeo();
+                }}
+                onSuccessClose={() => {
+                    modals.setSeoOpen(false);
+                    updateSeo.resetSeo();
+                    list.reload();
+                }}
+            />
 
-            {modals.tagsOpen && (
-                <ArticleTagsModal
-                    open={modals.tagsOpen}
-                    loading={updateTags.loading}
-                    success={updateTags.success}
-                    tagIds={updateTags.tagIds}
-                    onTagsChange={updateTags.onTagsChange}
-                    onSubmit={updateTags.onSubmit}
-                    onCancel={() => {
-                        modals.setTagsOpen(false);
-                        updateTags.resetTags();
-                    }}
-                    onSuccessClose={() => {
-                        modals.setTagsOpen(false);
-                        updateTags.resetTags();
-                        list.reload();
-                    }}
-                />
-            )}
-
-            {modals.imageUploadOpen && (
-                <ArticleImageUploadModal
-                    open={modals.imageUploadOpen}
-                    loading={uploadImage.loading}
-                    articleId={modals.selectedEntity?.id ?? null}
-                    onUpload={uploadImage.onUpload}
-                    onCancel={() => modals.setImageUploadOpen(false)}
-                />
-            )}
+            <ArticleTagsModal
+                open={modals.tagsOpen}
+                loading={updateTags.loading}
+                success={updateTags.success}
+                tagIds={updateTags.tagIds}
+                onTagsChange={updateTags.onTagsChange}
+                onSubmit={updateTags.onSubmit}
+                onCancel={() => {
+                    modals.setTagsOpen(false);
+                    updateTags.resetTags();
+                }}
+                onSuccessClose={() => {
+                    modals.setTagsOpen(false);
+                    updateTags.resetTags();
+                    list.reload();
+                }}
+            />
         </>
     );
 };
