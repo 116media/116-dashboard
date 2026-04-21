@@ -1,0 +1,27 @@
+@use "@/shared/presentation/styles/dimensions.scss" as dimensions;
+@use "@/shared/presentation/styles/colors.scss" as colors;
+
+.articleSummary {
+    &__cover {
+        border-radius: dimensions.$border-radius;
+    }
+
+    &__body {
+        border: 1px solid colors.$border-light;
+        border-radius: dimensions.$border-radius;
+        padding: dimensions.$padding;
+    }
+
+    &__bodyContent {
+        max-height: 300px;
+        overflow-y: auto;
+        font-size: 14px;
+        line-height: 1.7;
+
+        img {
+            max-width: 100%;
+            height: auto;
+            border-radius: dimensions.$border-radius;
+        }
+    }
+}
