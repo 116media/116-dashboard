@@ -42,14 +42,14 @@ const VideoTagsForm: FC<IVideoTagsFormProps> = ({ tagIds, onTagsChange }) => {
 
     return (
         <Select
-            mode="multiple"
-            size="large"
             showSearch
-            options={tagOptions}
+            size="large"
             value={tagIds}
+            mode="multiple"
+            options={tagOptions}
             onChange={onTagsChange}
-            placeholder="Sélectionner des tags"
             style={{ width: "100%" }}
+            placeholder="Sélectionner des tags"
         />
     );
 };
