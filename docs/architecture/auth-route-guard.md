@@ -105,8 +105,8 @@ interface IUser {
 // src/modules/auth/domain/entities/IAuthResponse.ts
 
 interface IAuthResponse {
-    token: string;    // JWT stored in localStorage
     user: IUser;      // Complete user with roles & permissions
+    // Note: JWT is delivered via HttpOnly cookies — no token field
 }
 ```
 
@@ -117,12 +117,13 @@ interface IAuthResponse {
 ```
 1. User submits credentials
          ↓
-2. API returns AdminLoginResponse { token, user { roles, permissions } }
+2. API returns AdminLoginResponse { user { roles, permissions } }
+   JWT is set as HttpOnly cookie by the server (not accessible to JS)
          ↓
 3. AuthMapper maps DTOs → domain entities (IUser, IRole, IPermission)
          ↓
-4. Token → localStorage via AuthStorageService.setToken()
-   User  → Redux store via auth slice (encrypted with AES-256 via redux-persist)
+4. User → Redux store via session slice (encrypted with AES-256 via redux-persist)
+   Path: session.currentUser.data
          ↓
 5. useAuthorization() reads from Redux → exposes hasPermission(), isSuperAdmin, etc.
          ↓
@@ -133,7 +134,7 @@ interface IAuthResponse {
 
 | Data            | Storage               | Mechanism                              |
 | --------------- | --------------------- | -------------------------------------- |
-| JWT Token       | `localStorage`        | `AuthStorageService.setToken()`        |
+| JWT Token       | HttpOnly cookie       | Set by server, not accessible to JS    |
 | User + Roles    | `localStorage`        | Redux Persist with AES-256 encryption  |
 | Permissions     | `localStorage`        | Redux Persist with AES-256 encryption  |
 
@@ -141,13 +142,13 @@ interface IAuthResponse {
 
 ## Authorization Hook — `useAuthorization`
 
-**Location:** `src/modules/auth/presentation/hooks/useAuthorization.ts`
+**Location:** `src/modules/auth/presentation/hooks/UseAuthorization.ts` *(planned — not yet implemented)*
 
 This is the **single source of truth** for all authorization decisions in the app.
 
 ```ts
 import { useMemo } from "react";
-import { useAppSelector } from "@/core/presentation/store/store";
+import { useAppSelector } from "@/shared/presentation/store/store";
 import type { IPermission } from "@/modules/auth/domain/entities/IPermission";
 
 const SUPERADMIN_ROLE = "SuperAdmin";
@@ -155,7 +156,7 @@ const SUPERADMIN_ROLE = "SuperAdmin";
 type PermissionCheck = Pick<IPermission, "resource" | "action">;
 
 export const useAuthorization = () => {
-    const user = useAppSelector((state) => state.auth.login.data?.user);
+    const user = useAppSelector(({ session: { currentUser } }) => currentUser.data);
 
     const isSuperAdmin = useMemo(
         () => user?.roles.some((r) => r.name === SUPERADMIN_ROLE) ?? false,
@@ -205,15 +206,15 @@ export const useAuthorization = () => {
 
 ## Route Guard — `PermissionRoute`
 
-**Location:** `src/core/presentation/components/PermissionRoute/index.tsx`
+**Location:** `src/shared/presentation/components/PermissionRoute/index.tsx` *(planned — not yet implemented)*
 
 A layout route component that gates access based on permissions.
 
 ```tsx
 import type { FC } from "react";
 import { Navigate, Outlet } from "react-router";
-import { useAuthorization } from "@/modules/auth/presentation/hooks/useAuthorization";
-import { NOT_FOUND_PATH } from "@/shared/lib/constants/paths";
+import { useAuthorization } from "@/modules/auth/presentation/hooks/UseAuthorization";
+import { NOT_FOUND_PATH } from "@/shared/presentation/constants/paths";
 import type { IPermission } from "@/modules/auth/domain/entities/IPermission";
 
 interface PermissionRouteProps {
@@ -268,7 +269,7 @@ Accessible only to **unauthenticated** users. Logged-in users are redirected to 
 ```tsx
 const guestRoutes: RouteObject[] = [
     {
-        element: <GuestRoute />,
+        element: <RouteGuard type="guest" />,
         children: [
             { path: LOGIN_PATH, element: <LoginPage /> },
             { path: FORGOT_PASSWORD_PATH, element: <ForgotPasswordPage /> }
@@ -283,17 +284,47 @@ Accessible only to **authenticated** users. Unauthenticated users are redirected
 
 Permission-gated routes are wrapped with `<PermissionRoute />`:
 
+**Current state** — no permission guards, all routes accessible to any authenticated user:
+
 ```tsx
 const protectedRoutes: RouteObject[] = [
     {
-        element: <ProtectedRoute />,          // checks JWT token existence
+        element: <RouteGuard type="protected" />,
+        children: [
+            {
+                element: <DashboardLayout />,
+                children: [
+                    { path: OVERVIEW_PATH, element: <OverviewPage /> },
+                    { path: `${SETTING_PATH}/:tab?`, element: <SettingsPage /> },
+                    { path: CONTENT_PATH, element: <ContentsPage /> },
+                    { path: VIDEO_PATH, element: <VideosPage /> },
+                    { path: ARTICLE_PATH, element: <ArticlesPage /> },
+                    { path: ADS_BANNER_PATH, element: <AdsBannerPage /> },
+                    { path: ADS_POPUP_PATH, element: <AdsPopupPage /> },
+                    { path: ADMIN_PATH, element: <AdminsPage /> },
+                    { path: USER_PATH, element: <UsersPage /> },
+                    { path: ROLES_PATH, element: <RolesPage /> },
+                    { path: PERMISSIONS_PATH, element: <PermissionsPage /> }
+                ]
+            }
+        ]
+    }
+];
+```
+
+**Target state** — with `<PermissionRoute>` guards (once implemented):
+
+```tsx
+const protectedRoutes: RouteObject[] = [
+    {
+        element: <RouteGuard type="protected" />,
         children: [
             {
                 element: <DashboardLayout />,
                 children: [
                     // Open to all authenticated users
                     { path: OVERVIEW_PATH, element: <OverviewPage /> },
-                    { path: SETTING_PATH, element: <SettingsPage /> },
+                    { path: `${SETTING_PATH}/:tab?`, element: <SettingsPage /> },
 
                     // Permission-gated routes
                     {
@@ -332,6 +363,18 @@ const protectedRoutes: RouteObject[] = [
                         children: [
                             { path: USER_PATH, element: <UsersPage /> }
                         ]
+                    },
+                    {
+                        element: <PermissionRoute permissions={[{ resource: "roles", action: "read" }]} />,
+                        children: [
+                            { path: ROLES_PATH, element: <RolesPage /> }
+                        ]
+                    },
+                    {
+                        element: <PermissionRoute permissions={[{ resource: "permissions", action: "read" }]} />,
+                        children: [
+                            { path: PERMISSIONS_PATH, element: <PermissionsPage /> }
+                        ]
                     }
                 ]
             }
@@ -353,16 +396,46 @@ const errorRoutes: RouteObject[] = [
 
 ### Route Nesting Hierarchy
 
+**Current state** (no permission guards):
+
 ```
 <Routes>
-├── GuestRoute (no token → render, has token → redirect /overview)
-│   ├── /login → LoginPage
-│   └── /forgot-password → ForgotPasswordPage
+├── RouteGuard type="guest" (no user → render, has user → redirect /overview)
+│   └── AuthLayout
+│       ├── /login → LoginPage
+│       └── /forgot-password → ForgotPasswordPage
 │
-├── ProtectedRoute (has token → render, no token → redirect /login)
+├── RouteGuard type="protected" (has user → render, no user → redirect /login)
 │   └── DashboardLayout (sidebar + header + <Outlet />)
+│       ├── /overview → OverviewPage
+│       ├── /settings/:tab? → SettingsPage
+│       ├── /contents → ContentsPage
+│       ├── /videos → VideosPage
+│       ├── /articles → ArticlesPage
+│       ├── /ads/banners → AdsBannerPage
+│       ├── /ads/popups → AdsPopupPage
+│       ├── /admins → AdminsPage
+│       ├── /users → UsersPage
+│       ├── /roles → RolesPage
+│       └── /permissions → PermissionsPage
+│
+├── /page-introuvable → NotFoundPage
+└── * → redirect to /page-introuvable
+```
+
+**Target state** (with PermissionRoute guards — see Route Configuration above):
+
+```
+<Routes>
+├── RouteGuard type="guest"
+│   └── AuthLayout
+│       ├── /login → LoginPage
+│       └── /forgot-password → ForgotPasswordPage
+│
+├── RouteGuard type="protected"
+│   └── DashboardLayout
 │       ├── /overview → OverviewPage                    [no permission required]
-│       ├── /settings → SettingsPage                    [no permission required]
+│       ├── /settings/:tab? → SettingsPage              [no permission required]
 │       ├── PermissionRoute [contents:read]
 │       │   └── /contents → ContentsPage
 │       ├── PermissionRoute [videos:read]
@@ -374,8 +447,12 @@ const errorRoutes: RouteObject[] = [
 │       │   └── /ads/popups → AdsPopupPage
 │       ├── PermissionRoute [admins:read]
 │       │   └── /admins → AdminsPage
-│       └── PermissionRoute [users:read]
-│           └── /users → UsersPage
+│       ├── PermissionRoute [users:read]
+│       │   └── /users → UsersPage
+│       ├── PermissionRoute [roles:read]
+│       │   └── /roles → RolesPage
+│       └── PermissionRoute [permissions:read]
+│           └── /permissions → PermissionsPage
 │
 ├── /page-introuvable → NotFoundPage
 └── * → redirect to /page-introuvable
@@ -487,9 +564,9 @@ const { hasEvery } = useAuthorization();
 │                         Login Flow                                  │
 │                                                                     │
 │  API Response ──→ AuthMapper ──→ Redux Store (encrypted)           │
-│  { token, user }    maps DTOs      { auth.login.data.user }       │
-│                     to entities      ├── roles: IRole[]            │
-│                                      └── permissions: IPermission[]│
+│  { user }           maps DTOs      { session.currentUser.data }   │
+│  (JWT = HttpOnly    to entities      ├── roles: IRole[]            │
+│   cookie)                            └── permissions: IPermission[]│
 └─────────────────────────────┬───────────────────────────────────────┘
                               │
                               ▼
@@ -552,21 +629,20 @@ const { isSuperAdmin, hasPermission, hasEvery, hasSome } = useAuthorization();
 | `permissions` | `{ resource, action }[]`    | required  | Required permissions                |
 | `mode`        | `"every"` \| `"some"`      | `"every"` | AND vs OR matching                  |
 
-### `<ProtectedRoute />`
+### `<RouteGuard />`
 
 ```tsx
-<ProtectedRoute />
+<RouteGuard type="protected" />
+<RouteGuard type="guest" />
 ```
 
-Checks for JWT token in localStorage. No props. Redirects to `/login` if unauthenticated.
+| Prop   | Type                          | Description                                            |
+| ------ | ----------------------------- | ------------------------------------------------------ |
+| `type` | `"protected"` \| `"guest"`   | `"protected"` → redirect to `/login` if no user. `"guest"` → redirect to `/overview` if user exists. |
 
-### `<GuestRoute />`
+**Location:** `src/shared/presentation/guards/RouteGuard/index.tsx`
 
-```tsx
-<GuestRoute />
-```
-
-Inverse of ProtectedRoute. Redirects to `/overview` if already authenticated. No props.
+Checks `session.currentUser.data` from Redux (not localStorage token). A single component replaces the separate `ProtectedRoute` and `GuestRoute` components referenced in older docs.
 
 ---
 
@@ -575,7 +651,7 @@ Inverse of ProtectedRoute. Redirects to `/overview` if already authenticated. No
 ### Adding a new permission-gated route
 
 ```tsx
-// 1. Add the path constant in src/shared/lib/constants/paths.ts
+// 1. Add the path constant in src/shared/presentation/constants/paths.ts
 export const REPORTS_PATH = "/reports";
 
 // 2. Create the lazy-loaded page
@@ -667,18 +743,18 @@ const ReportsPage = lazy(() => import("@/modules/reports/presentation/pages/Repo
 
 ## Key Files
 
-| File                                                                  | Purpose                                    |
-| --------------------------------------------------------------------- | ------------------------------------------ |
-| `src/routes.tsx`                                                      | Route configuration with permission gates  |
-| `src/modules/auth/presentation/hooks/useAuthorization.ts`            | Authorization hook (single source of truth)|
-| `src/core/presentation/components/PermissionRoute/index.tsx`         | Route-level permission guard               |
-| `src/core/presentation/components/ProtectedRoute/index.tsx`          | Authentication guard (token check)         |
-| `src/core/presentation/components/GuestRoute/index.tsx`              | Guest-only guard (no token)                |
-| `src/modules/auth/domain/entities/IPermission.ts`                    | Permission entity definition               |
-| `src/modules/auth/domain/entities/IRole.ts`                          | Role entity definition                     |
-| `src/modules/auth/domain/entities/IUser.ts`                          | User entity (carries roles + permissions)  |
-| `src/modules/auth/infrastructure/mappers/auth.mapper.ts`             | DTO → domain entity mapping                |
-| `src/modules/auth/infrastructure/storage/authstorage.service.ts`     | JWT token storage                          |
-| `src/modules/auth/presentation/store/index.ts`                       | Auth Redux slice                           |
-| `src/core/presentation/store/store.ts`                               | Redux store with encrypted persistence     |
-| `src/shared/lib/constants/paths.ts`                                  | Route path constants                       |
+| File | Purpose | Status |
+| --- | --- | --- |
+| `src/routes.tsx` | Route configuration | Exists |
+| `src/modules/auth/presentation/hooks/UseAuthorization.ts` | Authorization hook (single source of truth) | Planned |
+| `src/shared/presentation/components/PermissionRoute/index.tsx` | Route-level permission guard | Planned |
+| `src/shared/presentation/guards/RouteGuard/index.tsx` | Auth guard (guest/protected) | Exists |
+| `src/modules/auth/domain/entities/IPermission.ts` | Permission entity definition | Exists |
+| `src/modules/auth/domain/entities/IRole.ts` | Role entity definition | Exists |
+| `src/modules/auth/domain/entities/IUser.ts` | User entity (carries roles + permissions) | Exists |
+| `src/modules/auth/infrastructure/mappers/auth.mapper.ts` | DTO → domain entity mapping | Exists |
+| `src/modules/auth/infrastructure/storage/authstorage.service.ts` | OTP code storage (not JWT — JWT uses HttpOnly cookies) | Exists |
+| `src/modules/auth/presentation/store/index.ts` | Auth Redux slice | Exists |
+| `src/platform/session/presentation/store/index.ts` | Session Redux slice (currentUser lives here) | Exists |
+| `src/shared/presentation/store/store.ts` | Redux store with encrypted persistence | Exists |
+| `src/shared/presentation/constants/paths.ts` | Route path constants | Exists |

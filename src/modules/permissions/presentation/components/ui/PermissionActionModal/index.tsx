@@ -1,44 +1,9 @@
 import type { FC } from "react";
 import type { IPermissionEntity } from "@/modules/permissions/domain/entities/IPermission";
 import type { PermissionAction } from "@/modules/permissions/presentation/components/tables/PermissionsTable/columns";
+import { PERMISSION_ACTION_CONFIG } from "@/modules/permissions/presentation/constants/permissions.config";
 import type { Failure } from "@/shared/domain/failures/failure";
 import ActionModal from "@/shared/presentation/ui/ActionModal";
-
-/**
- * Action configuration mapping for each permission action type.
- */
-const ACTION_CONFIG: Record<
-    Exclude<PermissionAction, "edit">,
-    { title: string; description: string; danger: boolean }
-> = {
-    activate: {
-        title: "Activer la permission",
-        description: "Êtes-vous sûr de vouloir activer cette permission ?",
-        danger: false
-    },
-    deactivate: {
-        title: "Désactiver la permission",
-        description: "Les rôles avec cette permission perdront l'accès associé.",
-        danger: false
-    },
-    softDelete: {
-        title: "Supprimer la permission",
-        description:
-            "La permission sera désactivée et marquée comme supprimée. Cette action est réversible.",
-        danger: true
-    },
-    hardDelete: {
-        title: "Supprimer définitivement",
-        description:
-            "Cette action est irréversible. La permission et toutes ses associations seront supprimées.",
-        danger: true
-    },
-    restore: {
-        title: "Restaurer la permission",
-        description: "La permission sera restaurée et pourra être réactivée.",
-        danger: false
-    }
-};
 
 /**
  * Props for the PermissionActionModal component.
@@ -54,12 +19,12 @@ const ACTION_CONFIG: Record<
  */
 interface IPermissionActionModalProps {
     open: boolean;
-    permission: IPermissionEntity | null;
-    action: PermissionAction | null;
     loading: boolean;
-    error: Failure | null | undefined;
-    onConfirm: () => void;
     onCancel: () => void;
+    onConfirm: () => void;
+    action: PermissionAction | null;
+    error: Failure | null | undefined;
+    permission: IPermissionEntity | null;
 }
 
 /**
@@ -83,11 +48,9 @@ const PermissionActionModal: FC<IPermissionActionModalProps> = ({
     onConfirm,
     onCancel
 }) => {
-    if (!action || action === "edit" || !permission) {
-        return null;
-    }
+    const config = action ? PERMISSION_ACTION_CONFIG[action] : undefined;
 
-    const config = ACTION_CONFIG[action];
+    if (!config || !permission) return null;
 
     return (
         <ActionModal

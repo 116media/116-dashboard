@@ -3,6 +3,7 @@ import type { FC } from "react";
 import type { IPermission } from "@/modules/auth/domain/entities/IPermission";
 import type { IRoleWithPermissions } from "@/platform/settings/domain/entities/IRoleWithPermissions";
 import { IconCaretRightOutlined, IconSafetyOutlined } from "@/shared/presentation/ui/Icons";
+import StatusTag from "@/shared/presentation/ui/StatusTag";
 import { TextTransform } from "@/shared/presentation/utils/text-transform/text-transform.utils";
 import styles from "./index.module.scss";
 
@@ -58,9 +59,7 @@ const RoleCard: FC<IRoleCardProps> = ({ role, defaultOpen = false }) => {
                     {role.description}
                 </Text>
             </div>
-            <Tag color={role.isActive ? "success" : "default"} variant="outlined">
-                {role.isActive ? "Actif" : "Inactif"}
-            </Tag>
+            <StatusTag status={role.isActive ? "active" : "inactive"} />
         </Flex>
     );
 

@@ -1,5 +1,6 @@
 import { Table } from "antd";
 import { type FC, useCallback, useState } from "react";
+import { useAuthorization } from "@/modules/auth/presentation/hooks/UseAuthorization";
 import type { IPermissionEntity } from "@/modules/permissions/domain/entities/IPermission";
 import PermissionForm from "@/modules/permissions/presentation/components/forms/PermissionForm";
 import type { PermissionAction } from "@/modules/permissions/presentation/components/tables/PermissionsTable/columns";
@@ -37,8 +38,7 @@ const PermissionsListContainer: FC = () => {
     const [actionOpen, setActionOpen] = useState(false);
     const [currentAction, setCurrentAction] = useState<PermissionAction | null>(null);
 
-    // TODO: implement useIsSuperAdmin hook
-    const isSuperAdmin = true;
+    const { isSuperAdmin } = useAuthorization();
 
     const handleAction = useCallback((action: PermissionAction, permission: IPermissionEntity) => {
         setSelectedPermission(permission);
@@ -110,57 +110,61 @@ const PermissionsListContainer: FC = () => {
                 }}
             />
 
-            <CreateEditModal
-                open={createOpen}
-                loading={createPermission.loading}
-                formContext="CREATE"
-                success={createPermission.success}
-                onClose={() => setCreateOpen(false)}
-                onSubmit={() => createPermission.form.submit()}
-                title={{
-                    create: "Créer une permission",
-                    edit: "Modifier la permission"
-                }}
-                onSuccessClose={() => {
-                    setCreateOpen(false);
-                    createPermission.resetCreate();
-                    permissionsList.reload();
-                }}
-            >
-                <PermissionForm
-                    form={createPermission.form}
-                    error={createPermission.error}
+            {createOpen && (
+                <CreateEditModal
+                    open={createOpen}
+                    loading={createPermission.loading}
                     formContext="CREATE"
-                />
-            </CreateEditModal>
+                    success={createPermission.success}
+                    onClose={() => setCreateOpen(false)}
+                    onSubmit={() => createPermission.form.submit()}
+                    title={{
+                        create: "Créer une permission",
+                        edit: "Modifier la permission"
+                    }}
+                    onSuccessClose={() => {
+                        setCreateOpen(false);
+                        createPermission.resetCreate();
+                        permissionsList.reload();
+                    }}
+                >
+                    <PermissionForm
+                        form={createPermission.form}
+                        error={createPermission.error}
+                        formContext="CREATE"
+                    />
+                </CreateEditModal>
+            )}
 
-            <CreateEditModal
-                open={editOpen}
-                loading={updatePermission.loading}
-                formContext="EDIT"
-                success={updatePermission.success}
-                onClose={() => {
-                    setEditOpen(false);
-                    updatePermission.resetUpdate();
-                }}
-                onSubmit={() => updatePermission.form.submit()}
-                title={{
-                    create: "Créer une permission",
-                    edit: "Modifier la permission"
-                }}
-                onSuccessClose={() => {
-                    setEditOpen(false);
-                    updatePermission.resetUpdate();
-                    permissionsList.reload();
-                }}
-            >
-                <PermissionForm
+            {editOpen && (
+                <CreateEditModal
+                    open={editOpen}
+                    loading={updatePermission.loading}
                     formContext="EDIT"
-                    form={updatePermission.form}
-                    error={updatePermission.error}
-                    initialValues={selectedPermission}
-                />
-            </CreateEditModal>
+                    success={updatePermission.success}
+                    onClose={() => {
+                        setEditOpen(false);
+                        updatePermission.resetUpdate();
+                    }}
+                    onSubmit={() => updatePermission.form.submit()}
+                    title={{
+                        create: "Créer une permission",
+                        edit: "Modifier la permission"
+                    }}
+                    onSuccessClose={() => {
+                        setEditOpen(false);
+                        updatePermission.resetUpdate();
+                        permissionsList.reload();
+                    }}
+                >
+                    <PermissionForm
+                        formContext="EDIT"
+                        form={updatePermission.form}
+                        error={updatePermission.error}
+                        initialValues={selectedPermission}
+                    />
+                </CreateEditModal>
+            )}
 
             <PermissionActionModal
                 open={actionOpen}

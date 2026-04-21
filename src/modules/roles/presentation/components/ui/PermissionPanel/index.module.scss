@@ -1,0 +1,45 @@
+@use "@/shared/presentation/styles/dimensions.scss" as dimensions;
+@use "@/shared/presentation/styles/colors.scss" as colors;
+
+.permissionPanel {
+    flex: 1;
+    border: 1px solid colors.$border-light;
+    border-radius: dimensions.$border-radius;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+
+    &__header {
+        margin: calc(dimensions.$padding / 1.5);
+        padding: calc(dimensions.$padding / 2);
+    }
+
+    &__selectAll {
+        padding: calc(dimensions.$padding / 4) calc(dimensions.$padding * 0.75);
+
+        [class~="ant-btn"] {
+           padding: 0 !important;
+        }
+    }
+
+    &__search {
+        padding: 0 calc(dimensions.$padding * 0.75);
+        padding-bottom: calc(dimensions.$padding / 2);
+    }
+
+    &__list {
+        overflow-y: auto;
+        max-height: 320px;
+        min-height: 200px;
+
+        padding: 0 calc(dimensions.$padding * 0.75);
+        padding-bottom: dimensions.$padding;
+    }
+
+    &__empty {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 200px;
+    }
+}

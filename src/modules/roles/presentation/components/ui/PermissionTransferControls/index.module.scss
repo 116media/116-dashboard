@@ -1,0 +1,7 @@
+@use "@/shared/presentation/styles/mixins.scss" as mixins;
+
+.transferControls {
+    @include mixins.mediaMaxMD {
+        flex-direction: row !important;
+    }
+}

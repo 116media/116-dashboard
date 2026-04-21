@@ -1,0 +1,23 @@
+@use "@/shared/presentation/styles/dimensions.scss" as dimensions;
+@use "@/shared/presentation/styles/mixins.scss" as mixins;
+
+.bulkPermission {
+    &__panels {
+        display: flex;
+        gap: calc(dimensions.$padding / 2);
+
+        @include mixins.mediaMaxMD {
+            flex-direction: column;
+        }
+    }
+
+    &__actions {
+        display: flex;
+        gap: dimensions.$padding;
+        padding-top: dimensions.$padding;
+
+        @include mixins.mediaMaxMD {
+            flex-direction: column;
+        }
+    }
+}

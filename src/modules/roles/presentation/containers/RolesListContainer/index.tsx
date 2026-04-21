@@ -1,13 +1,17 @@
 import { Table } from "antd";
 import { type FC, useCallback, useState } from "react";
+import { useAuthorization } from "@/modules/auth/presentation/hooks/UseAuthorization";
 import type { IRoleEntity } from "@/modules/roles/domain/entities/IRole";
 import RoleForm from "@/modules/roles/presentation/components/forms/RoleForm";
 import type { RoleAction } from "@/modules/roles/presentation/components/tables/RolesTable/columns";
 import { rolesTableColumns } from "@/modules/roles/presentation/components/tables/RolesTable/columns";
+import BulkPermissionModal from "@/modules/roles/presentation/components/ui/BulkPermissionModal";
 import RoleActionModal from "@/modules/roles/presentation/components/ui/RoleActionModal";
+import SinglePermissionModal from "@/modules/roles/presentation/components/ui/SinglePermissionModal";
 import { ROLE_STATUS_OPTIONS } from "@/modules/roles/presentation/constants/roles.status";
 import { useCreateRole } from "@/modules/roles/presentation/hooks/UseCreateRole";
 import { useRoleActions } from "@/modules/roles/presentation/hooks/UseRoleActions";
+import { useRolePermissions } from "@/modules/roles/presentation/hooks/UseRolePermissions";
 import { useRolesList } from "@/modules/roles/presentation/hooks/UseRolesList";
 import { useUpdateRole } from "@/modules/roles/presentation/hooks/UseUpdateRole";
 import CreateEditModal from "@/shared/presentation/ui/CreateEditModal";
@@ -33,24 +37,67 @@ const RolesListContainer: FC = () => {
     const [selectedRole, setSelectedRole] = useState<IRoleEntity | null>(null);
     const updateRole = useUpdateRole(selectedRole);
     const roleActions = useRoleActions(rolesList.reload);
+    const rolePermissions = useRolePermissions(rolesList.reload);
 
     const [createOpen, setCreateOpen] = useState(false);
     const [editOpen, setEditOpen] = useState(false);
     const [actionOpen, setActionOpen] = useState(false);
+    const [permissionOpen, setPermissionOpen] = useState(false);
+    const [permissionMode, setPermissionMode] = useState<"assign" | "remove">("assign");
+    const [bulkPermissionOpen, setBulkPermissionOpen] = useState(false);
     const [currentAction, setCurrentAction] = useState<RoleAction | null>(null);
 
-    // TODO: implement useIsSuperAdmin hook
-    const isSuperAdmin = true;
+    const { isSuperAdmin } = useAuthorization();
 
-    const handleAction = useCallback((action: RoleAction, role: IRoleEntity) => {
-        setSelectedRole(role);
-        if (action === "edit") {
-            setEditOpen(true);
-        } else {
-            setCurrentAction(action);
-            setActionOpen(true);
-        }
-    }, []);
+    const handleAction = useCallback(
+        (action: RoleAction, role: IRoleEntity) => {
+            setSelectedRole(role);
+
+            switch (action) {
+                case "edit":
+                    setEditOpen(true);
+                    break;
+                case "managePermissions":
+                    rolePermissions.fetchRole(role.id);
+                    rolePermissions.fetchAllPermissions();
+                    setBulkPermissionOpen(true);
+                    break;
+                case "assignPermission":
+                    setPermissionMode("assign");
+                    rolePermissions.fetchRole(role.id);
+                    rolePermissions.fetchAllPermissions();
+                    setPermissionOpen(true);
+                    break;
+                case "removePermission":
+                    setPermissionMode("remove");
+                    rolePermissions.fetchRole(role.id);
+                    setPermissionOpen(true);
+                    break;
+                default:
+                    setCurrentAction(action);
+                    setActionOpen(true);
+                    break;
+            }
+        },
+        [rolePermissions]
+    );
+
+    const handleBulkSave = async (permissionIds: string[]) => {
+        if (!selectedRole) return;
+
+        await rolePermissions.onBulkUpdate(selectedRole.id, permissionIds);
+        setBulkPermissionOpen(false);
+    };
+
+    const handlePermissionConfirm = async (permissionId: string) => {
+        if (!selectedRole) return;
+
+        if (permissionMode === "assign") {
+            await rolePermissions.onAssign(selectedRole.id, permissionId);
+        } else await rolePermissions.onRemove(selectedRole.id, permissionId);
+
+        setPermissionOpen(false);
+    };
 
     const handleActionConfirm = async () => {
         if (!selectedRole || !currentAction) return;
@@ -113,47 +160,55 @@ const RolesListContainer: FC = () => {
                 }}
             />
 
-            <CreateEditModal
-                open={createOpen}
-                formContext="CREATE"
-                loading={createRole.loading}
-                success={createRole.success}
-                onClose={() => setCreateOpen(false)}
-                onSubmit={() => createRole.form.submit()}
-                title={{ create: "Créer un rôle", edit: "Modifier le rôle" }}
-                onSuccessClose={() => {
-                    setCreateOpen(false);
-                    createRole.resetCreate();
-                    rolesList.reload();
-                }}
-            >
-                <RoleForm form={createRole.form} error={createRole.error} formContext="CREATE" />
-            </CreateEditModal>
+            {createOpen && (
+                <CreateEditModal
+                    open={createOpen}
+                    formContext="CREATE"
+                    loading={createRole.loading}
+                    success={createRole.success}
+                    onClose={() => setCreateOpen(false)}
+                    onSubmit={() => createRole.form.submit()}
+                    title={{ create: "Créer un rôle", edit: "Modifier le rôle" }}
+                    onSuccessClose={() => {
+                        setCreateOpen(false);
+                        createRole.resetCreate();
+                        rolesList.reload();
+                    }}
+                >
+                    <RoleForm
+                        form={createRole.form}
+                        error={createRole.error}
+                        formContext="CREATE"
+                    />
+                </CreateEditModal>
+            )}
 
-            <CreateEditModal
-                open={editOpen}
-                formContext="EDIT"
-                loading={updateRole.loading}
-                success={updateRole.success}
-                onClose={() => {
-                    setEditOpen(false);
-                    updateRole.resetUpdate();
-                }}
-                onSubmit={() => updateRole.form.submit()}
-                title={{ create: "Créer un rôle", edit: "Modifier le rôle" }}
-                onSuccessClose={() => {
-                    setEditOpen(false);
-                    updateRole.resetUpdate();
-                    rolesList.reload();
-                }}
-            >
-                <RoleForm
-                    form={updateRole.form}
-                    error={updateRole.error}
+            {editOpen && (
+                <CreateEditModal
+                    open={editOpen}
                     formContext="EDIT"
-                    initialValues={selectedRole}
-                />
-            </CreateEditModal>
+                    loading={updateRole.loading}
+                    success={updateRole.success}
+                    onClose={() => {
+                        setEditOpen(false);
+                        updateRole.resetUpdate();
+                    }}
+                    onSubmit={() => updateRole.form.submit()}
+                    title={{ create: "Créer un rôle", edit: "Modifier le rôle" }}
+                    onSuccessClose={() => {
+                        setEditOpen(false);
+                        updateRole.resetUpdate();
+                        rolesList.reload();
+                    }}
+                >
+                    <RoleForm
+                        form={updateRole.form}
+                        error={updateRole.error}
+                        formContext="EDIT"
+                        initialValues={selectedRole}
+                    />
+                </CreateEditModal>
+            )}
 
             <RoleActionModal
                 open={actionOpen}
@@ -163,6 +218,38 @@ const RolesListContainer: FC = () => {
                 error={roleActions.error}
                 onConfirm={handleActionConfirm}
                 onCancel={() => setActionOpen(false)}
+            />
+
+            {bulkPermissionOpen && (
+                <BulkPermissionModal
+                    open={bulkPermissionOpen}
+                    loading={rolePermissions.bulkLoading}
+                    error={rolePermissions.bulkError}
+                    role={rolePermissions.role}
+                    permissions={rolePermissions.allPermissions}
+                    onSave={handleBulkSave}
+                    onCancel={() => setBulkPermissionOpen(false)}
+                />
+            )}
+
+            <SinglePermissionModal
+                open={permissionOpen}
+                mode={permissionMode}
+                role={rolePermissions.role}
+                permissions={rolePermissions.allPermissions}
+                permissionsLoading={rolePermissions.permissionsLoading}
+                loading={
+                    permissionMode === "assign"
+                        ? rolePermissions.assignLoading
+                        : rolePermissions.removeLoading
+                }
+                error={
+                    permissionMode === "assign"
+                        ? rolePermissions.assignError
+                        : rolePermissions.removeError
+                }
+                onConfirm={handlePermissionConfirm}
+                onCancel={() => setPermissionOpen(false)}
             />
         </>
     );

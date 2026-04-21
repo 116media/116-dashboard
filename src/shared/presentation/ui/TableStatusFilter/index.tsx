@@ -44,9 +44,9 @@ function TableStatusFilter<T extends string = string>({
     return (
         <Select
             value={value}
-            onChange={onChange}
             loading={loading}
             disabled={loading}
+            onChange={onChange}
             style={{ width: 140 }}
             prefix={<Button type="text" size="small" icon={<IconFilterOutlined />} />}
             options={options.map((opt) => ({

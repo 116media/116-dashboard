@@ -1,8 +1,6 @@
 import { lazy } from "react";
 import type { RouteObject } from "react-router";
 import { Navigate } from "react-router";
-import { GuestRoute } from "@/shared/presentation/components/GuestRoute";
-import { ProtectedRoute } from "@/shared/presentation/components/ProtectedRoute";
 import {
     ADMIN_PATH,
     ADS_BANNER_PATH,
@@ -19,6 +17,8 @@ import {
     USER_PATH,
     VIDEO_PATH
 } from "@/shared/presentation/constants/paths";
+import { PermissionRoute } from "@/shared/presentation/guards/PermissionRoute";
+import { RouteGuard } from "@/shared/presentation/guards/RouteGuard";
 import { AuthLayout } from "@/shared/presentation/layouts/AuthLayout";
 import { DashboardLayout } from "@/shared/presentation/layouts/DashboardLayout";
 import { NotFoundPage } from "@/shared/presentation/pages/NotFoundPage";
@@ -43,7 +43,7 @@ const PermissionsPage = lazy(
 
 const guestRoutes: RouteObject[] = [
     {
-        element: <GuestRoute />,
+        element: <RouteGuard type="guest" />,
         children: [
             {
                 element: <AuthLayout />,
@@ -58,22 +58,78 @@ const guestRoutes: RouteObject[] = [
 
 const protectedRoutes: RouteObject[] = [
     {
-        element: <ProtectedRoute />,
+        element: <RouteGuard type="protected" />,
         children: [
             {
                 element: <DashboardLayout />,
                 children: [
                     { path: OVERVIEW_PATH, element: <OverviewPage /> },
                     { path: `${SETTING_PATH}/:tab?`, element: <SettingsPage /> },
-                    { path: CONTENT_PATH, element: <ContentsPage /> },
-                    { path: VIDEO_PATH, element: <VideosPage /> },
-                    { path: ARTICLE_PATH, element: <ArticlesPage /> },
-                    { path: ADS_BANNER_PATH, element: <AdsBannerPage /> },
-                    { path: ADS_POPUP_PATH, element: <AdsPopupPage /> },
-                    { path: ADMIN_PATH, element: <AdminsPage /> },
-                    { path: USER_PATH, element: <UsersPage /> },
-                    { path: ROLES_PATH, element: <RolesPage /> },
-                    { path: PERMISSIONS_PATH, element: <PermissionsPage /> }
+                    {
+                        element: (
+                            <PermissionRoute
+                                permissions={[{ resource: "contents", action: "read" }]}
+                            />
+                        ),
+                        children: [{ path: CONTENT_PATH, element: <ContentsPage /> }]
+                    },
+                    {
+                        element: (
+                            <PermissionRoute
+                                permissions={[{ resource: "videos", action: "read" }]}
+                            />
+                        ),
+                        children: [{ path: VIDEO_PATH, element: <VideosPage /> }]
+                    },
+                    {
+                        element: (
+                            <PermissionRoute
+                                permissions={[{ resource: "articles", action: "read" }]}
+                            />
+                        ),
+                        children: [{ path: ARTICLE_PATH, element: <ArticlesPage /> }]
+                    },
+                    {
+                        element: (
+                            <PermissionRoute permissions={[{ resource: "ads", action: "read" }]} />
+                        ),
+                        children: [
+                            { path: ADS_BANNER_PATH, element: <AdsBannerPage /> },
+                            { path: ADS_POPUP_PATH, element: <AdsPopupPage /> }
+                        ]
+                    },
+                    {
+                        element: (
+                            <PermissionRoute
+                                permissions={[{ resource: "admins", action: "read" }]}
+                            />
+                        ),
+                        children: [{ path: ADMIN_PATH, element: <AdminsPage /> }]
+                    },
+                    {
+                        element: (
+                            <PermissionRoute
+                                permissions={[{ resource: "users", action: "read" }]}
+                            />
+                        ),
+                        children: [{ path: USER_PATH, element: <UsersPage /> }]
+                    },
+                    {
+                        element: (
+                            <PermissionRoute
+                                permissions={[{ resource: "roles", action: "read" }]}
+                            />
+                        ),
+                        children: [{ path: ROLES_PATH, element: <RolesPage /> }]
+                    },
+                    {
+                        element: (
+                            <PermissionRoute
+                                permissions={[{ resource: "permissions", action: "read" }]}
+                            />
+                        ),
+                        children: [{ path: PERMISSIONS_PATH, element: <PermissionsPage /> }]
+                    }
                 ]
             }
         ]

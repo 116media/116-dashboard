@@ -1,44 +1,9 @@
 import type { FC } from "react";
 import type { IRoleEntity } from "@/modules/roles/domain/entities/IRole";
 import type { RoleAction } from "@/modules/roles/presentation/components/tables/RolesTable/columns";
+import { ROLE_ACTION_CONFIG } from "@/modules/roles/presentation/constants/roles.config";
 import type { Failure } from "@/shared/domain/failures/failure";
 import ActionModal from "@/shared/presentation/ui/ActionModal";
-
-/**
- * Action configuration mapping for each role action type.
- */
-const ACTION_CONFIG: Record<
-    Exclude<RoleAction, "edit">,
-    { title: string; description: string; danger: boolean }
-> = {
-    activate: {
-        title: "Activer le rôle",
-        description: "Êtes-vous sûr de vouloir activer ce rôle ?",
-        danger: false
-    },
-    deactivate: {
-        title: "Désactiver le rôle",
-        description: "Les utilisateurs avec ce rôle perdront les permissions associées.",
-        danger: false
-    },
-    softDelete: {
-        title: "Supprimer le rôle",
-        description:
-            "Le rôle sera désactivé et marqué comme supprimé. Cette action est réversible.",
-        danger: true
-    },
-    hardDelete: {
-        title: "Supprimer définitivement",
-        description:
-            "Cette action est irréversible. Le rôle et toutes ses associations seront supprimés.",
-        danger: true
-    },
-    restore: {
-        title: "Restaurer le rôle",
-        description: "Le rôle sera restauré et pourra être réactivé.",
-        danger: false
-    }
-};
 
 /**
  * Props for the RoleActionModal component.
@@ -54,12 +19,12 @@ const ACTION_CONFIG: Record<
  */
 interface IRoleActionModalProps {
     open: boolean;
+    loading: boolean;
+    onCancel: () => void;
+    onConfirm: () => void;
     role: IRoleEntity | null;
     action: RoleAction | null;
-    loading: boolean;
     error: Failure | null | undefined;
-    onConfirm: () => void;
-    onCancel: () => void;
 }
 
 /**
@@ -84,11 +49,9 @@ const RoleActionModal: FC<IRoleActionModalProps> = ({
     onConfirm,
     onCancel
 }) => {
-    if (!action || action === "edit" || !role) {
-        return null;
-    }
+    const config = action ? ROLE_ACTION_CONFIG[action] : undefined;
 
-    const config = ACTION_CONFIG[action];
+    if (!config || !role) return null;
 
     return (
         <ActionModal

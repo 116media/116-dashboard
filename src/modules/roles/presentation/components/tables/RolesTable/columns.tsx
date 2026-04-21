@@ -1,7 +1,9 @@
-import { Tag, Typography } from "antd";
+import { Typography } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import dayjs from "dayjs";
 import type { IRoleEntity } from "@/modules/roles/domain/entities/IRole";
+import { ROLE_DROPDOWN_ITEMS } from "@/modules/roles/presentation/constants/roles.dropdown";
+import StatusTag from "@/shared/presentation/ui/StatusTag";
 import type { ITableActionItem } from "@/shared/presentation/ui/TableActionDropdown";
 import TableActionDropdown from "@/shared/presentation/ui/TableActionDropdown";
 
@@ -12,6 +14,9 @@ const { Text } = Typography;
  */
 export type RoleAction =
     | "edit"
+    | "managePermissions"
+    | "assignPermission"
+    | "removePermission"
     | "activate"
     | "deactivate"
     | "softDelete"
@@ -51,16 +56,8 @@ export const rolesTableColumns = (
             return order(a) - order(b);
         },
         render: (_: boolean, record: IRoleEntity) => {
-            if (record.isDeleted) return <Tag color="error">Supprimé</Tag>;
-            return record.isActive ? (
-                <Tag color="success" variant="outlined">
-                    Actif
-                </Tag>
-            ) : (
-                <Tag color="warning" variant="outlined">
-                    Inactif
-                </Tag>
-            );
+            if (record.isDeleted) return <StatusTag status="deleted" />;
+            return <StatusTag status={record.isActive ? "active" : "inactive"} />;
         }
     },
     {
@@ -90,46 +87,13 @@ export const rolesTableColumns = (
         key: "actions",
         align: "center" as const,
         render: (_: unknown, record: IRoleEntity) => {
-            const items: ITableActionItem[] = [
-                {
-                    key: "edit",
-                    label: "Modifier",
-                    onClick: () => onAction("edit", record),
-                    hidden: !isSuperAdmin
-                },
-                {
-                    key: "activate",
-                    label: "Activer",
-                    onClick: () => onAction("activate", record),
-                    hidden: !isSuperAdmin || record.isActive || record.isDeleted
-                },
-                {
-                    key: "deactivate",
-                    label: "Désactiver",
-                    onClick: () => onAction("deactivate", record),
-                    hidden: !isSuperAdmin || !record.isActive
-                },
-                {
-                    key: "softDelete",
-                    label: "Supprimer",
-                    danger: true,
-                    onClick: () => onAction("softDelete", record),
-                    hidden: !isSuperAdmin || record.isDeleted
-                },
-                {
-                    key: "restore",
-                    label: "Restaurer",
-                    onClick: () => onAction("restore", record),
-                    hidden: !isSuperAdmin || !record.isDeleted
-                },
-                {
-                    key: "hardDelete",
-                    label: "Supprimer définitivement",
-                    danger: true,
-                    onClick: () => onAction("hardDelete", record),
-                    hidden: !isSuperAdmin || !record.isDeleted
-                }
-            ];
+            const items: ITableActionItem[] = ROLE_DROPDOWN_ITEMS.map((item) => ({
+                key: item.key,
+                label: item.label,
+                danger: item.danger,
+                hidden: item.hidden(record, isSuperAdmin),
+                onClick: () => onAction(item.key, record)
+            }));
 
             return <TableActionDropdown items={items} />;
         }
