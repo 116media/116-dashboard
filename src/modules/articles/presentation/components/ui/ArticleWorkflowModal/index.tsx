@@ -25,13 +25,13 @@ const { Paragraph } = Typography;
  */
 interface IArticleWorkflowModalProps {
     open: boolean;
-    action: ArticleAction | null;
-    article: IArticleSummaryEntity | null;
     loading: boolean;
+    action: ArticleAction | null;
     error?: Failure | null | undefined;
+    article: IArticleSummaryEntity | null;
+    onCancel: () => void;
     onConfirm: () => void;
     onRejectSubmit?: (values: IRejectArticleCredentials) => void;
-    onCancel: () => void;
 }
 
 /**
@@ -99,11 +99,11 @@ const ArticleWorkflowModal: FC<IArticleWorkflowModalProps> = ({
     return (
         <ActionModal
             open={open}
-            error={error ?? null}
             loading={loading}
             onCancel={onCancel}
             title={config.title}
             onConfirm={onConfirm}
+            error={error ?? null}
             danger={config.danger}
             confirmLabel={config.confirmLabel}
             description={config.description}
