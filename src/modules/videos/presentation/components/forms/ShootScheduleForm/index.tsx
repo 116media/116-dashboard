@@ -17,8 +17,8 @@ const { Item } = Form;
  * @property {(values: IScheduleShootCredentials) => void} onSubmit - Callback when the form is submitted
  */
 interface IShootScheduleFormProps {
-    form: FormInstance<IScheduleShootCredentials>;
     error: Failure | null | undefined;
+    form: FormInstance<IScheduleShootCredentials>;
     onSubmit: (values: IScheduleShootCredentials) => void;
 }
 
@@ -54,8 +54,8 @@ const ShootScheduleForm: FC<IShootScheduleFormProps> = ({ form, error, onSubmit 
                 <DatePicker
                     showTime
                     format="DD/MM/YYYY HH:mm"
-                    placeholder="Sélectionner une date"
                     style={{ width: "100%" }}
+                    placeholder="Sélectionner une date"
                 />
             </Item>
         </Form>
