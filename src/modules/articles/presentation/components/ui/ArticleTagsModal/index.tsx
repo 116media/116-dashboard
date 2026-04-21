@@ -18,13 +18,13 @@ import FormSuccessResult from "@/shared/presentation/ui/FormSuccessResult";
  */
 interface IArticleTagsModalProps {
     open: boolean;
+    tagIds: string[];
     loading: boolean;
     success: string | null;
-    tagIds: string[];
-    onTagsChange: (ids: string[]) => void;
     onSubmit: () => void;
     onCancel: () => void;
     onSuccessClose: () => void;
+    onTagsChange: (ids: string[]) => void;
 }
 
 /**
