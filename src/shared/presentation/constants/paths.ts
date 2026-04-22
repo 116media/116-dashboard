@@ -40,6 +40,7 @@ export const SETTING_ACCOUNT_PATH = "/settings/account";
 export const CONTENT_PATH = "/contents";
 export const VIDEO_PATH = "/videos";
 export const ARTICLE_PATH = "/articles";
+export const ARTICLE_DETAIL_PATH = "/articles/detail";
 
 export const REFERENCES_PATH = "/references";
 export const CONTENT_TYPES_PATH = "/references/content-types";
