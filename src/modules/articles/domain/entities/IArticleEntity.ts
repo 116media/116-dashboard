@@ -1,5 +1,6 @@
 import type { IArticleImageEntity } from "@/modules/articles/domain/entities/IArticleImageEntity";
 import type { ITagEntity } from "@/modules/lookup/domain/entities/ITagEntity";
+import type { IAuthorEntity } from "@/shared/domain/entities/IAuthorEntity";
 import type { EnumContentStatus } from "@/shared/infrastructure/api/generated/116.api";
 
 /**
@@ -55,4 +56,5 @@ export interface IArticleEntity {
     updatedAt?: string | null;
     createdBy?: string | null;
     updatedBy?: string | null;
+    author?: IAuthorEntity | null;
 }
