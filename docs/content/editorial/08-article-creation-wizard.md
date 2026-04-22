@@ -216,7 +216,7 @@ Read-only preview using Ant Design `Descriptions`:
 | Titre | `Text strong` |
 | Catégorie | Category name |
 | Client | Customer name (if set) |
-| Accroche | Headline text (truncated) |
+| Sommaire | Headline text (truncated) |
 | Contenu | Body HTML rendered in bordered box (max-height 300px, overflow scroll) |
 | Image de couverture | Thumbnail `<img>` (if set) |
 | Tags | `Tag` components |
