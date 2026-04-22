@@ -38,7 +38,7 @@ export const SHORT_DROPDOWN_ITEMS: IShortDropdownItem[] = [
     },
     {
         key: "thumbnail",
-        label: "Téléverser une miniature",
+        label: "Importer une miniature",
         hidden: (_, isSuperAdmin) => !isSuperAdmin
     },
     {
