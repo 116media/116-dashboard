@@ -82,7 +82,15 @@ export const ArticlesMapper = {
             createdAt: dto.createdAt,
             updatedAt: dto.updatedAt,
             createdBy: dto.createdBy,
-            updatedBy: dto.updatedBy
+            updatedBy: dto.updatedBy,
+            author: dto.author
+                ? {
+                      userName: dto.author.userName,
+                      email: dto.author.email,
+                      avatarUrl: dto.author.avatarUrl,
+                      role: dto.author.role
+                  }
+                : null
         };
     },
 
