@@ -68,10 +68,10 @@ export interface IShortsRepositoryPort {
      *
      * @param id - The short video UUID
      * @param data - File to upload as thumbnail
-     * @returns void on success
+     * @returns The updated short video entity with new thumbnail URL
      */
     uploadShortThumbnail(
         id: string,
         data: IUploadShortThumbnailCredentials
-    ): Promise<Result<IShortActionResponse>>;
+    ): Promise<Result<IShortVideoEntity>>;
 }
