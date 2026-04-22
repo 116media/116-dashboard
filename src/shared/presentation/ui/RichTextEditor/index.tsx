@@ -19,6 +19,9 @@ interface IRichTextEditorProps {
     placeholder?: string;
     minHeight?: number;
     readOnly?: boolean;
+    /** "full" (default) enables all features. "simple" disables images,
+     *  embeds, links, and blockquote — text formatting only. */
+    mode?: "full" | "simple";
 }
 
 /**
@@ -38,30 +41,39 @@ const RichTextEditor: FC<IRichTextEditorProps> = ({
     onImageUpload,
     placeholder = "Commencez à écrire...",
     minHeight = 300,
-    readOnly = false
+    readOnly = false,
+    mode = "full"
 }) => {
     const skipUpdate = useRef(false);
+    const isSimple = mode === "simple";
+
+    const extensions = [
+        StarterKit.configure({
+            heading: isSimple ? false : { levels: [1, 2, 3] },
+            blockquote: isSimple ? false : {}
+        }),
+        Underline,
+        TextAlign.configure({
+            types: isSimple ? ["paragraph"] : ["heading", "paragraph"]
+        }),
+        Placeholder.configure({ placeholder }),
+        ...(isSimple
+            ? []
+            : [
+                  SocialEmbed,
+                  Image,
+                  Youtube.configure({ controls: true }),
+                  Link.configure({
+                      openOnClick: false,
+                      autolink: true,
+                      HTMLAttributes: { target: "_blank", rel: "noopener noreferrer" }
+                  })
+              ])
+    ];
 
     const editor = useEditor({
         editable: !readOnly,
-        extensions: [
-            StarterKit.configure({
-                heading: { levels: [1, 2, 3] }
-            }),
-            Underline,
-            TextAlign.configure({
-                types: ["heading", "paragraph"]
-            }),
-            SocialEmbed,
-            Image,
-            Youtube.configure({ controls: true }),
-            Link.configure({
-                openOnClick: false,
-                autolink: true,
-                HTMLAttributes: { target: "_blank", rel: "noopener noreferrer" }
-            }),
-            Placeholder.configure({ placeholder })
-        ],
+        extensions,
         content: value || "",
         onUpdate: ({ editor: e }) => {
             if (skipUpdate.current) {
@@ -80,18 +92,18 @@ const RichTextEditor: FC<IRichTextEditorProps> = ({
     }, [editor, value]);
 
     useEffect(() => {
-        if (editor) {
-            editor.setEditable(!readOnly);
-        }
+        if (editor) editor.setEditable(!readOnly);
     }, [editor, readOnly]);
 
     return (
         <div className={styles.richTextEditor}>
-            {!readOnly && <EditorToolbar editor={editor} onImageUpload={onImageUpload} />}
+            {!readOnly && (
+                <EditorToolbar editor={editor} onImageUpload={onImageUpload} mode={mode} />
+            )}
             <EditorContent
                 editor={editor}
-                className={styles.richTextEditor__content}
                 style={{ minHeight }}
+                className={styles.richTextEditor__content}
             />
         </div>
     );
