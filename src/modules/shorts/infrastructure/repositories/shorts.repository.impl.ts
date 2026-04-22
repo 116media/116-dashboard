@@ -26,7 +26,8 @@ export class ShortsRepositoryImpl implements IShortsRepositoryPort {
             const response = await apiClient.api.adminGetAllShorts({
                 pageIndex: params.pageIndex,
                 pageSize: params.pageSize,
-                search: params.search
+                search: params.search,
+                isActive: params.isActive
             });
             const paginated = response.data.shortVideos;
             return ok({
@@ -91,10 +92,11 @@ export class ShortsRepositoryImpl implements IShortsRepositoryPort {
     async uploadShortThumbnail(
         id: string,
         data: IUploadShortThumbnailCredentials
-    ): Promise<Result<IShortActionResponse>> {
+    ): Promise<Result<IShortVideoEntity>> {
         try {
             await apiClient.api.uploadShortVideoThumbnail(id, { file: data.file });
-            return ok({ isSuccess: true });
+            const refreshed = await apiClient.api.adminGetShortById(id);
+            return ok(ShortsMapper.shortFromDto(refreshed.data.shortVideo));
         } catch (error) {
             return err(ProblemMapper.toFailure(error));
         }
