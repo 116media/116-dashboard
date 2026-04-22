@@ -1,11 +1,12 @@
 import type { FormInstance } from "antd";
-import { Button, Form, Input, Upload } from "antd";
+import { Form, Input } from "antd";
 import type { FC } from "react";
 import type { ICreateShortCredentials } from "@/modules/shorts/presentation/model/ICreateShortCredentials";
 import { ShortsContentValidator } from "@/modules/shorts/presentation/utils/validators/shorts.content.validator";
 import type { Failure } from "@/shared/domain/failures/failure";
 import ErrorAlert from "@/shared/presentation/ui/ErrorAlert";
-import { IconInboxOutlined } from "@/shared/presentation/ui/Icons";
+import FileUploader from "@/shared/presentation/ui/FileUploader";
+import { IMAGE_PRESET } from "@/shared/presentation/ui/FileUploader/presets";
 
 const { Item } = Form;
 
@@ -33,20 +34,11 @@ interface IShortVideoFormProps {
  * @component
  *
  * @description
- * Renders title, slug, optional videoId fields, and a video file upload.
- * The file is captured via Ant Design Upload with `beforeUpload` returning
- * false to prevent automatic upload.
- *
- * @param {IShortVideoFormProps} props - Component props
- * @returns {JSX.Element} The rendered short video creation form
+ * Renders title, optional videoId fields, and a file upload
+ * using the shared FileUploader in deferred mode. The file is
+ * captured locally and uploaded when the form submits.
  */
-const ShortVideoForm: FC<IShortVideoFormProps> = ({
-    form,
-    error,
-    videoFile,
-    onVideoFileChange,
-    onSubmit
-}) => {
+const ShortVideoForm: FC<IShortVideoFormProps> = ({ form, error, onVideoFileChange, onSubmit }) => {
     return (
         <Form
             form={form}
@@ -67,28 +59,12 @@ const ShortVideoForm: FC<IShortVideoFormProps> = ({
             </Item>
 
             <Item label="Fichier vidéo" required>
-                <Upload
-                    maxCount={1}
-                    accept="video/*"
-                    fileList={
-                        videoFile
-                            ? [
-                                  {
-                                      uid: "-1",
-                                      name: videoFile.name,
-                                      status: "done"
-                                  }
-                              ]
-                            : []
-                    }
-                    beforeUpload={(f) => {
-                        onVideoFileChange(f as unknown as File);
-                        return false;
-                    }}
+                <FileUploader
+                    mode="deferred"
+                    preset={IMAGE_PRESET}
+                    onFileSelect={onVideoFileChange}
                     onRemove={() => onVideoFileChange(null)}
-                >
-                    <Button icon={<IconInboxOutlined />}>Sélectionner un fichier vidéo</Button>
-                </Upload>
+                />
             </Item>
         </Form>
     );
