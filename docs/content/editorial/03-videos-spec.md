@@ -18,7 +18,7 @@ Full spec for the videos module — 15 admin endpoints with a 7-step editorial w
 | PATCH | `/api/v1/admin/videos/{id}/reject` | SuperAdminOnly | Rejeter (avec raison) |
 | PATCH | `/api/v1/admin/videos/{id}/archive` | SuperAdminOnly | Archiver |
 | DELETE | `/api/v1/admin/videos/{id}` | SuperAdminOnly | Supprimer définitivement |
-| POST | `/api/v1/admin/videos/{id}/thumbnail` | AdminOrSuperAdmin | Téléverser la vignette |
+| POST | `/api/v1/admin/videos/{id}/thumbnail` | AdminOrSuperAdmin | Importer la vignette |
 | PATCH | `/api/v1/admin/videos/{id}/youtube` | AdminOnly | Associer un ID YouTube |
 | PATCH | `/api/v1/admin/videos/{id}/seo` | AdminOrSuperAdmin | Mettre à jour le SEO |
 | PUT | `/api/v1/admin/videos/{id}/tags` | AdminOrSuperAdmin | Remplacer les tags |
