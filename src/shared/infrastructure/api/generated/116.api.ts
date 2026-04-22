@@ -299,8 +299,6 @@ export interface AdminCreateLyricsRequest {
   language: string;
   /** @format uuid */
   videoId?: string | null;
-  /** @format uuid */
-  articleId?: string | null;
 }
 
 export interface AdminCreateLyricsResponse {
@@ -1077,6 +1075,7 @@ export interface ArticleDetailDto {
   tags: TagDto[];
   /** @format int32 */
   readTimeInMinutes: number;
+  author?: AuthorDto | null;
 }
 
 export interface ArticleImageDto {
@@ -1118,6 +1117,13 @@ export interface ArticleSummaryDtoPaginatedResult {
   /** @format int64 */
   count: number;
   items: ArticleSummaryDto[];
+}
+
+export interface AuthorDto {
+  userName: string;
+  email?: string | null;
+  avatarUrl?: string | null;
+  role?: string | null;
 }
 
 export interface BrowserMetrics {
@@ -1340,11 +1346,11 @@ export interface LyricsDto {
   language: string;
   /** @format uuid */
   videoId?: string | null;
-  /** @format uuid */
-  articleId?: string | null;
   metaTitle?: string | null;
   metaDescription?: string | null;
   metaKeywords?: string | null;
+  authorId: string;
+  author?: AuthorDto | null;
 }
 
 export interface LyricsDtoPaginatedResult {
@@ -1957,6 +1963,8 @@ export interface ShortVideoDto {
   shareCount: number;
   /** @format int32 */
   bookmarkCount: number;
+  authorId: string;
+  author?: AuthorDto | null;
 }
 
 export interface ShortVideoDtoPaginatedResult {
@@ -2032,6 +2040,7 @@ export interface VideoDetailDto {
   metaTitle?: string | null;
   metaDescription?: string | null;
   tags: TagDto[];
+  author?: AuthorDto | null;
 }
 
 export interface VideoInPlaylistDto {
