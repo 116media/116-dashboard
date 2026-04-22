@@ -1,15 +1,15 @@
-import { InboxOutlined } from "@ant-design/icons";
 import type { FormInstance } from "antd";
-import { Form, Select, Upload } from "antd";
-import type { FC } from "react";
+import { Form, Select } from "antd";
+import { type FC, useCallback, useState } from "react";
 import { PAYMENT_METHOD_OPTIONS } from "@/modules/commerce/presentation/constants/commerce.payment.dropdown";
 import type { IAttachPaymentProofCredentials } from "@/modules/commerce/presentation/model/IAttachPaymentProofCredentials";
 import { PaymentValidator } from "@/modules/commerce/presentation/utils/validators/commerce.payment.validator";
 import type { Failure } from "@/shared/domain/failures/failure";
 import ErrorAlert from "@/shared/presentation/ui/ErrorAlert";
+import FileUploader from "@/shared/presentation/ui/FileUploader";
+import { RAW_FILE_PRESET } from "@/shared/presentation/ui/FileUploader/presets";
 
 const { Item } = Form;
-const { Dragger } = Upload;
 
 /**
  * Props for the PaymentProofForm component.
@@ -38,6 +38,21 @@ interface IPaymentProofFormProps {
  * @returns {JSX.Element} The rendered payment proof form
  */
 const PaymentProofForm: FC<IPaymentProofFormProps> = ({ form, error, onSubmit }) => {
+    const [hasFile, setHasFile] = useState(false);
+
+    const handleFileSelect = useCallback(
+        (file: File) => {
+            form.setFieldValue("file", [{ originFileObj: file }]);
+            setHasFile(true);
+        },
+        [form]
+    );
+
+    const handleFileRemove = useCallback(() => {
+        form.setFieldValue("file", null);
+        setHasFile(false);
+    }, [form]);
+
     return (
         <Form
             form={form}
@@ -61,18 +76,15 @@ const PaymentProofForm: FC<IPaymentProofFormProps> = ({ form, error, onSubmit })
             </Item>
 
             <Item
-                name="file"
                 label="Preuve de paiement"
-                valuePropName="fileList"
-                getValueFromEvent={(e) => (Array.isArray(e) ? e : e?.fileList)}
-                rules={PaymentValidator.file("Preuve de paiement")}
+                rules={[{ required: !hasFile, message: "La preuve de paiement est requise" }]}
             >
-                <Dragger maxCount={1} beforeUpload={() => false} accept="image/*,.pdf">
-                    <p className="ant-upload-drag-icon">
-                        <InboxOutlined />
-                    </p>
-                    <p className="ant-upload-text">Cliquez ou glissez le fichier ici</p>
-                </Dragger>
+                <FileUploader
+                    mode="deferred"
+                    preset={RAW_FILE_PRESET}
+                    onFileSelect={handleFileSelect}
+                    onRemove={handleFileRemove}
+                />
             </Item>
         </Form>
     );
