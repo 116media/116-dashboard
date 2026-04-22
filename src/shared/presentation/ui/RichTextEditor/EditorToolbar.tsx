@@ -22,6 +22,7 @@ import styles from "./index.module.scss";
 interface IEditorToolbarProps {
     editor: Editor | null;
     onImageUpload?: (file: File) => Promise<string>;
+    mode?: "full" | "simple";
 }
 
 /**
@@ -33,7 +34,7 @@ interface IEditorToolbarProps {
  * Renders Ant Design buttons for text formatting, headings,
  * alignment, lists, links, images, and embeds.
  */
-const EditorToolbar: FC<IEditorToolbarProps> = ({ editor, onImageUpload }) => {
+const EditorToolbar: FC<IEditorToolbarProps> = ({ editor, onImageUpload, mode = "full" }) => {
     const fileInputRef = useRef<HTMLInputElement>(null);
     const [linkUrl, setLinkUrl] = useState("");
     const [linkOpen, setLinkOpen] = useState(false);
@@ -41,6 +42,8 @@ const EditorToolbar: FC<IEditorToolbarProps> = ({ editor, onImageUpload }) => {
     const [embedOpen, setEmbedOpen] = useState(false);
 
     if (!editor) return null;
+
+    const isSimple = mode === "simple";
 
     const handleImageClick = () => {
         fileInputRef.current?.click();
@@ -136,26 +139,30 @@ const EditorToolbar: FC<IEditorToolbarProps> = ({ editor, onImageUpload }) => {
             <Divider orientation="vertical" />
 
             {/* Headings */}
-            {btn(
-                "H1",
-                () => editor.chain().focus().toggleHeading({ level: 1 }).run(),
-                editor.isActive("heading", { level: 1 }),
-                "Titre 1"
-            )}
-            {btn(
-                "H2",
-                () => editor.chain().focus().toggleHeading({ level: 2 }).run(),
-                editor.isActive("heading", { level: 2 }),
-                "Titre 2"
-            )}
-            {btn(
-                "H3",
-                () => editor.chain().focus().toggleHeading({ level: 3 }).run(),
-                editor.isActive("heading", { level: 3 }),
-                "Titre 3"
-            )}
+            {!isSimple && (
+                <>
+                    {btn(
+                        "H1",
+                        () => editor.chain().focus().toggleHeading({ level: 1 }).run(),
+                        editor.isActive("heading", { level: 1 }),
+                        "Titre 1"
+                    )}
+                    {btn(
+                        "H2",
+                        () => editor.chain().focus().toggleHeading({ level: 2 }).run(),
+                        editor.isActive("heading", { level: 2 }),
+                        "Titre 2"
+                    )}
+                    {btn(
+                        "H3",
+                        () => editor.chain().focus().toggleHeading({ level: 3 }).run(),
+                        editor.isActive("heading", { level: 3 }),
+                        "Titre 3"
+                    )}
 
-            <Divider orientation="vertical" />
+                    <Divider orientation="vertical" />
+                </>
+            )}
 
             {/* Alignment */}
             {btn(
@@ -198,81 +205,85 @@ const EditorToolbar: FC<IEditorToolbarProps> = ({ editor, onImageUpload }) => {
                 editor.isActive("orderedList"),
                 "Liste numérotée"
             )}
-            {btn(
-                "❝",
-                () => editor.chain().focus().toggleBlockquote().run(),
-                editor.isActive("blockquote"),
-                "Citation"
+            {!isSimple && (
+                <>
+                    {btn(
+                        "❝",
+                        () => editor.chain().focus().toggleBlockquote().run(),
+                        editor.isActive("blockquote"),
+                        "Citation"
+                    )}
+
+                    <Divider orientation="vertical" />
+
+                    {/* Link */}
+                    <Popover
+                        open={linkOpen}
+                        trigger="click"
+                        onOpenChange={setLinkOpen}
+                        content={
+                            <Flex gap={8}>
+                                <Input
+                                    size="small"
+                                    value={linkUrl}
+                                    placeholder="https://..."
+                                    onChange={(e) => setLinkUrl(e.target.value)}
+                                    onPressEnter={handleLinkConfirm}
+                                    style={{ width: 240 }}
+                                />
+                                <Button size="small" type="primary" onClick={handleLinkConfirm}>
+                                    OK
+                                </Button>
+                            </Flex>
+                        }
+                    >
+                        <Tooltip title="Lien">
+                            <Button
+                                size="small"
+                                type={editor.isActive("link") ? "primary" : "text"}
+                                icon={<IconLinkOutlined />}
+                            />
+                        </Tooltip>
+                    </Popover>
+
+                    {/* Image */}
+                    <Tooltip title={onImageUpload ? "Image" : "Complétez l'étape 1 d'abord"}>
+                        <Button
+                            size="small"
+                            type="text"
+                            disabled={!onImageUpload}
+                            icon={<IconPictureOutlined />}
+                            onClick={handleImageClick}
+                        />
+                    </Tooltip>
+
+                    {/* Embed (YouTube, Facebook, Instagram, TikTok) */}
+                    <Popover
+                        open={embedOpen}
+                        trigger="click"
+                        onOpenChange={setEmbedOpen}
+                        content={
+                            <Flex vertical gap={8}>
+                                <Input
+                                    size="small"
+                                    value={embedUrl}
+                                    placeholder="YouTube, Facebook, Instagram, TikTok..."
+                                    onChange={(e) => setEmbedUrl(e.target.value)}
+                                    onPressEnter={handleEmbedConfirm}
+                                    style={{ width: 320 }}
+                                />
+                                <Button size="small" type="primary" onClick={handleEmbedConfirm}>
+                                    Insérer
+                                </Button>
+                            </Flex>
+                        }
+                    >
+                        <Tooltip title="Intégrer une vidéo ou un post">
+                            <Button size="small" type="text" icon={<IconYoutubeFilled />} />
+                        </Tooltip>
+                    </Popover>
+                </>
             )}
-
-            <Divider orientation="vertical" />
-
-            {/* Link */}
-            <Popover
-                open={linkOpen}
-                trigger="click"
-                onOpenChange={setLinkOpen}
-                content={
-                    <Flex gap={8}>
-                        <Input
-                            size="small"
-                            value={linkUrl}
-                            placeholder="https://..."
-                            onChange={(e) => setLinkUrl(e.target.value)}
-                            onPressEnter={handleLinkConfirm}
-                            style={{ width: 240 }}
-                        />
-                        <Button size="small" type="primary" onClick={handleLinkConfirm}>
-                            OK
-                        </Button>
-                    </Flex>
-                }
-            >
-                <Tooltip title="Lien">
-                    <Button
-                        size="small"
-                        type={editor.isActive("link") ? "primary" : "text"}
-                        icon={<IconLinkOutlined />}
-                    />
-                </Tooltip>
-            </Popover>
-
-            {/* Image */}
-            <Tooltip title={onImageUpload ? "Image" : "Complétez l'étape 1 d'abord"}>
-                <Button
-                    size="small"
-                    type="text"
-                    disabled={!onImageUpload}
-                    icon={<IconPictureOutlined />}
-                    onClick={handleImageClick}
-                />
-            </Tooltip>
-
-            {/* Embed (YouTube, Facebook, Instagram, TikTok) */}
-            <Popover
-                open={embedOpen}
-                trigger="click"
-                onOpenChange={setEmbedOpen}
-                content={
-                    <Flex vertical gap={8}>
-                        <Input
-                            size="small"
-                            value={embedUrl}
-                            placeholder="YouTube, Facebook, Instagram, TikTok..."
-                            onChange={(e) => setEmbedUrl(e.target.value)}
-                            onPressEnter={handleEmbedConfirm}
-                            style={{ width: 320 }}
-                        />
-                        <Button size="small" type="primary" onClick={handleEmbedConfirm}>
-                            Insérer
-                        </Button>
-                    </Flex>
-                }
-            >
-                <Tooltip title="Intégrer une vidéo ou un post">
-                    <Button size="small" type="text" icon={<IconYoutubeFilled />} />
-                </Tooltip>
-            </Popover>
         </Flex>
     );
 };
