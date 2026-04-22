@@ -1,5 +1,5 @@
 import type { FormInstance } from "antd";
-import { Checkbox, Form, Select } from "antd";
+import { Form, Select } from "antd";
 import type { FC } from "react";
 import { useMemo } from "react";
 import type { ICategoryEntity } from "@/modules/catalog/domain/entities/ICategoryEntity";
@@ -11,6 +11,8 @@ import type { Failure } from "@/shared/domain/failures/failure";
 import { EnumCoreContentType } from "@/shared/infrastructure/api/generated/116.api";
 import { useAppSelector } from "@/shared/presentation/store/store";
 import ErrorAlert from "@/shared/presentation/ui/ErrorAlert";
+import { IconFireFilled, IconHeartOutlined } from "@/shared/presentation/ui/Icons";
+import SwitchField from "@/shared/presentation/ui/SwitchField";
 
 const { Item, useWatch } = Form;
 
@@ -146,11 +148,19 @@ const OrderItemForm: FC<IOrderItemFormProps> = ({ form, error, onSubmit }) => {
             </Item>
 
             <Item name="socialBoost" valuePropName="checked">
-                <Checkbox>Boost social</Checkbox>
+                <SwitchField
+                    title="Boost social"
+                    icon={<IconFireFilled />}
+                    description="Promouvoir ce contenu sur les réseaux sociaux."
+                />
             </Item>
 
             <Item name="isBonus" valuePropName="checked">
-                <Checkbox>Bonus</Checkbox>
+                <SwitchField
+                    title="Bonus"
+                    icon={<IconHeartOutlined />}
+                    description="Cet article est offert gratuitement au client."
+                />
             </Item>
         </Form>
     );
