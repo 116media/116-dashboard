@@ -1,0 +1,9 @@
+@use "@/shared/presentation/styles/dimensions.scss" as dimensions;
+@use "@/shared/presentation/styles/colors.scss" as colors;
+
+.page {
+    background: colors.$white;
+    padding: dimensions.$padding;
+    border-radius: dimensions.$border-radius;
+    min-height: calc(100vh - 120px);
+}
