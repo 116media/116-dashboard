@@ -49,8 +49,7 @@ export const useCreateLyrics = (onSuccess?: () => void): IUseCreateLyrics => {
                 artistName: values.artistName,
                 lyricsText: values.lyricsText,
                 language: values.language,
-                videoId: values.videoId,
-                articleId: values.articleId
+                videoId: values.videoId
             })
         );
 
