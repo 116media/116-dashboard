@@ -1,0 +1,11 @@
+@use "@/shared/presentation/styles/dimensions.scss" as dimensions;
+
+.articleDetail {
+    &__back {
+        margin-bottom: dimensions.$padding;
+
+        [class~="ant-btn"]{
+            padding: 0 !important;
+        }
+    }
+}
