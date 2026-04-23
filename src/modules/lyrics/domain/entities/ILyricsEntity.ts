@@ -9,7 +9,6 @@
  * @property {string} lyricsText - Full lyrics content
  * @property {string} language - Language code of the lyrics
  * @property {string | null} videoId - Optional linked video UUID
- * @property {string | null} articleId - Optional linked article UUID
  * @property {string | null} metaTitle - SEO meta title
  * @property {string | null} metaDescription - SEO meta description
  * @property {string | null} metaKeywords - SEO meta keywords
@@ -25,7 +24,6 @@ export interface ILyricsEntity {
     lyricsText: string;
     language: string;
     videoId?: string | null;
-    articleId?: string | null;
     metaTitle?: string | null;
     metaDescription?: string | null;
     metaKeywords?: string | null;
