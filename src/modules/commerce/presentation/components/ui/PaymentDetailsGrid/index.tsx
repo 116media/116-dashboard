@@ -1,7 +1,7 @@
 import { Col, Row } from "antd";
 import type { FC } from "react";
 import type { IPaymentEntity } from "@/modules/commerce/domain/entities/IPaymentEntity";
-import SettingsField from "@/platform/settings/presentation/components/ui/SettingsField";
+import DetailField from "@/shared/presentation/ui/DetailField";
 import {
     IconClockCircleOutlined,
     IconCreditCardOutlined,
@@ -45,26 +45,26 @@ interface IPaymentDetailsGridProps {
 const PaymentDetailsGrid: FC<IPaymentDetailsGridProps> = ({ payment, customerName }) => (
     <Row gutter={[12, 12]}>
         <Col xs={24} sm={12}>
-            <SettingsField
+            <DetailField
                 label="Montant"
-                value={`$${(payment.amountUsd ?? 0).toFixed(2)}`}
                 icon={<IconDollarOutlined />}
+                value={`$${(payment.amountUsd ?? 0).toFixed(2)}`}
             />
         </Col>
         <Col xs={24} sm={12}>
-            <SettingsField
+            <DetailField
                 label="Mode de paiement"
+                icon={<IconCreditCardOutlined />}
                 value={
                     payment.paymentMethod
                         ? (PAYMENT_METHOD_LABELS[payment.paymentMethod] ?? payment.paymentMethod)
                         : undefined
                 }
-                icon={<IconCreditCardOutlined />}
             />
         </Col>
         {payment.verifiedAt && (
             <Col xs={24} sm={12}>
-                <SettingsField
+                <DetailField
                     label="Vérifié le"
                     icon={<IconClockCircleOutlined />}
                     value={dayjs(payment.verifiedAt).format("DD/MM/YYYY HH:mm")}
@@ -73,7 +73,7 @@ const PaymentDetailsGrid: FC<IPaymentDetailsGridProps> = ({ payment, customerNam
         )}
         {payment.verifiedBy && (
             <Col xs={24} sm={12}>
-                <SettingsField
+                <DetailField
                     label="Vérifié par"
                     icon={<IconUserOutlined />}
                     value={payment.verifiedByUserName ?? payment.verifiedBy}
@@ -82,7 +82,7 @@ const PaymentDetailsGrid: FC<IPaymentDetailsGridProps> = ({ payment, customerNam
         )}
         {customerName && (
             <Col xs={24} sm={12}>
-                <SettingsField label="Client" value={customerName} icon={<IconTeamOutlined />} />
+                <DetailField label="Client" value={customerName} icon={<IconTeamOutlined />} />
             </Col>
         )}
     </Row>
