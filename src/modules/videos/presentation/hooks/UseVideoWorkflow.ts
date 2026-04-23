@@ -22,7 +22,7 @@ interface IUseVideoWorkflow {
     onSubmit: (id: string) => Promise<void>;
     onApprove: (id: string) => Promise<void>;
     onPublish: (id: string) => Promise<void>;
-    onReject: (params: { id: string; data: IRejectVideoCredentials }) => Promise<void>;
+    onReject: (params: { id: string; data: IRejectVideoCredentials }) => Promise<boolean>;
     onArchive: (id: string) => Promise<void>;
     onDelete: (id: string) => Promise<void>;
 }
@@ -96,19 +96,27 @@ export const useVideoWorkflow = (reload: () => void): IUseVideoWorkflow => {
         return dispatchAction(publishVideoAction, id, VideosNotification.publishSuccess);
     };
 
-    const onReject = async (params: { id: string; data: IRejectVideoCredentials }) => {
+    const onReject = async (params: {
+        id: string;
+        data: IRejectVideoCredentials;
+    }): Promise<boolean> => {
         const result = await dispatch(rejectVideoAction(params));
 
         if (rejectVideoAction.fulfilled.match(result)) {
             showNotification(VideosNotification.rejectSuccess);
             reload();
-        } else if (rejectVideoAction.rejected.match(result) && result.payload) {
+            return true;
+        }
+
+        if (rejectVideoAction.rejected.match(result) && result.payload) {
             showNotification({
                 type: "error",
                 title: result.payload.title,
                 description: result.payload.detail
             });
         }
+
+        return false;
     };
 
     const onArchive = (id: string) => {
