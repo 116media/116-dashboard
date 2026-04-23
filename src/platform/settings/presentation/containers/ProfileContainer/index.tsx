@@ -2,10 +2,10 @@ import { Avatar, Badge, Button, Flex, Skeleton, Typography } from "antd";
 import { type FC, useEffect, useRef } from "react";
 import AccountInfoModal from "@/platform/settings/presentation/components/forms/AccountInfoModal";
 import SettingsCard from "@/platform/settings/presentation/components/ui/SettingsCard";
-import SettingsField from "@/platform/settings/presentation/components/ui/SettingsField";
 import { useProfile } from "@/platform/settings/presentation/hooks/UseProfile";
 import { useUpdateAccount } from "@/platform/settings/presentation/hooks/UseUpdateAccount";
 import { useUpdateAvatar } from "@/platform/settings/presentation/hooks/UseUpdateAvatar";
+import DetailField from "@/shared/presentation/ui/DetailField";
 import ErrorAlert from "@/shared/presentation/ui/ErrorAlert";
 import {
     IconCameraOutlined,
@@ -141,22 +141,18 @@ const ProfileContainer: FC = () => {
 
             <SettingsCard title="Informations du compte" onEdit={updateAccount.open}>
                 <div className={styles.profileContainer__fieldsGrid}>
-                    <SettingsField
+                    <DetailField
                         label="Pseudo"
                         value={profile?.userName}
                         icon={<IconUserOutlined />}
                     />
-                    <SettingsField
-                        label="Email"
-                        value={profile?.email}
-                        icon={<IconMailOutlined />}
-                    />
-                    <SettingsField
+                    <DetailField label="Email" value={profile?.email} icon={<IconMailOutlined />} />
+                    <DetailField
                         label="Pays"
                         value={profile?.countryName}
                         icon={<IconEnvironmentOutlined />}
                     />
-                    <SettingsField
+                    <DetailField
                         label="Téléphone"
                         value={phoneDisplay}
                         icon={<IconMobileOutlined />}
