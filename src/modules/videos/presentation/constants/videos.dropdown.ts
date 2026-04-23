@@ -59,7 +59,9 @@ export const VIDEO_DROPDOWN_ITEMS: IVideoDropdownItem[] = [
     {
         key: "submit",
         label: "Soumettre",
-        hidden: (r, isSuperAdmin) => !isSuperAdmin || r.status !== EnumContentStatus.Draft
+        hidden: (r, isSuperAdmin) =>
+            !isSuperAdmin ||
+            ![EnumContentStatus.Draft, EnumContentStatus.Rejected].includes(r.status)
     },
     {
         key: "approve",
