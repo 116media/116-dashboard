@@ -1,7 +1,7 @@
 import { Table } from "antd";
 import { type FC, useEffect } from "react";
 import type { IArticleEntity } from "@/modules/articles/domain/entities/IArticleEntity";
-import ArticleBodyForm from "@/modules/articles/presentation/components/forms/ArticleBodyForm";
+import ArticleDetailsForm from "@/modules/articles/presentation/components/forms/ArticleDetailsForm";
 import { articlesTableColumns } from "@/modules/articles/presentation/components/tables/ArticlesTable/columns";
 import ArticleCreateWizard from "@/modules/articles/presentation/components/ui/ArticleCreateWizard";
 import ArticleSeoModal from "@/modules/articles/presentation/components/ui/ArticleSeoModal";
@@ -139,7 +139,7 @@ const ArticlesListContainer: FC = () => {
                     list.reload();
                 }}
             >
-                <ArticleBodyForm
+                <ArticleDetailsForm
                     form={updateArticle.form}
                     error={updateArticle.error}
                     onSubmit={updateArticle.onSubmit}
@@ -159,6 +159,7 @@ const ArticlesListContainer: FC = () => {
             <ArticleWorkflowModal
                 open={modals.actionOpen}
                 loading={workflow.loading}
+                error={workflow.error}
                 action={modals.currentAction}
                 article={modals.selectedEntity}
                 onConfirm={() =>
@@ -166,12 +167,19 @@ const ArticlesListContainer: FC = () => {
                         submit: workflow.onSubmit,
                         approve: workflow.onApprove,
                         publish: workflow.onPublish,
-                        reject: (id: string) =>
-                            workflow.onReject({ id, data: { rejectionReason: "" } }),
+                        reject: async () => {},
                         archive: workflow.onArchive,
                         delete: workflow.onDelete
                     })
                 }
+                onRejectSubmit={async (values) => {
+                    if (!modals.selectedEntity) return;
+                    const success = await workflow.onReject({
+                        id: modals.selectedEntity.id,
+                        data: values
+                    });
+                    if (success) modals.setActionOpen(false);
+                }}
                 onCancel={() => modals.setActionOpen(false)}
             />
 
