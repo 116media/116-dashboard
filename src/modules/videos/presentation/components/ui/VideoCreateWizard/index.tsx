@@ -1,18 +1,15 @@
-import { Button, Divider, Flex, Form, Input, Modal, Steps, Typography } from "antd";
+import { Button, Divider, Flex, Modal, Steps, Typography } from "antd";
 import type { FC } from "react";
+import VideoContentForm from "@/modules/videos/presentation/components/forms/VideoContentForm";
 import VideoInfoForm from "@/modules/videos/presentation/components/forms/VideoInfoForm";
 import VideoSeoForm from "@/modules/videos/presentation/components/forms/VideoSeoForm";
 import VideoTagsForm from "@/modules/videos/presentation/components/forms/VideoTagsForm";
 import VideoCreateSummary from "@/modules/videos/presentation/components/ui/VideoCreateSummary";
 import { useCreateVideoWizard } from "@/modules/videos/presentation/hooks/UseCreateVideoWizard";
 import ErrorAlert from "@/shared/presentation/ui/ErrorAlert";
-import { IconFireFilled, IconStarFilled } from "@/shared/presentation/ui/Icons";
-import SwitchField from "@/shared/presentation/ui/SwitchField";
 import styles from "./index.module.scss";
 
 const { Title } = Typography;
-const { Item } = Form;
-const { TextArea } = Input;
 
 interface IVideoCreateWizardProps {
     open: boolean;
@@ -45,38 +42,7 @@ const VideoCreateWizard: FC<IVideoCreateWizardProps> = ({ open, onClose, onSucce
             error={wizard.error}
             onSubmit={() => wizard.goNext()}
         />,
-        <Form
-            key="step2"
-            form={wizard.step2Form}
-            size="large"
-            layout="vertical"
-            name="video_wizard_step2"
-        >
-            <Item name="description" label="Description">
-                <TextArea
-                    rows={4}
-                    showCount
-                    maxLength={2000}
-                    placeholder="Description de la vidéo"
-                />
-            </Item>
-
-            <Item name="socialBoost" valuePropName="checked">
-                <SwitchField
-                    icon={<IconFireFilled />}
-                    title="Boost social"
-                    description="Promouvoir cette vidéo sur les réseaux sociaux."
-                />
-            </Item>
-
-            <Item name="isFeatured" valuePropName="checked">
-                <SwitchField
-                    icon={<IconStarFilled />}
-                    title="En vedette"
-                    description="Afficher cette vidéo en avant sur la page d'accueil."
-                />
-            </Item>
-        </Form>,
+        <VideoContentForm key="step2" form={wizard.step2Form} />,
         <Flex key="step3" vertical gap={24}>
             <div>
                 <Title level={5}>Tags</Title>
@@ -100,7 +66,7 @@ const VideoCreateWizard: FC<IVideoCreateWizardProps> = ({ open, onClose, onSucce
             onCancel={handleClose}
             title="Créer une vidéo"
             footer={
-                <Flex justify="space-between">
+                <Flex justify="space-between" flex={1}>
                     <Button onClick={handleClose} danger>
                         Annuler
                     </Button>
@@ -128,6 +94,8 @@ const VideoCreateWizard: FC<IVideoCreateWizardProps> = ({ open, onClose, onSucce
             }
         >
             <Steps
+                size="small"
+                titlePlacement="vertical"
                 current={wizard.currentStep}
                 className={styles.videoWizard__steps}
                 items={STEP_TITLES.map((title) => ({ title }))}
