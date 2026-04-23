@@ -5,6 +5,7 @@ import { EnumContentStatus } from "@/shared/infrastructure/api/generated/116.api
  * Available action types for an article record.
  */
 export type ArticleAction =
+    | "view"
     | "edit"
     | "seo"
     | "tags"
@@ -41,13 +42,16 @@ interface IArticleDropdownItem {
  * - "delete" is restricted to SuperAdmin only.
  */
 export const ARTICLE_DROPDOWN_ITEMS: IArticleDropdownItem[] = [
+    { key: "view", label: "Voir", hidden: () => false },
     { key: "edit", label: "Modifier", hidden: (_, __, isAdmin) => !isAdmin },
     { key: "seo", label: "Modifier le SEO", hidden: (_, __, isAdmin) => !isAdmin },
     { key: "tags", label: "Modifier les tags", hidden: (_, __, isAdmin) => !isAdmin },
     {
         key: "submit",
         label: "Soumettre",
-        hidden: (r, isSuperAdmin) => !isSuperAdmin || r.status !== EnumContentStatus.Draft
+        hidden: (r, isSuperAdmin) =>
+            !isSuperAdmin ||
+            ![EnumContentStatus.Draft, EnumContentStatus.Rejected].includes(r.status)
     },
     {
         key: "approve",
