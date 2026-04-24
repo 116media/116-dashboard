@@ -52,7 +52,7 @@ const VideoPlayer: FC<IVideoPlayerProps> = ({ src, youtubeId, poster, maxHeight 
             playerRef.current?.destroy();
             playerRef.current = null;
         };
-    }, [youtubeId, src]);
+    }, [youtubeId]);
 
     if (!src && !youtubeId) return null;
 
@@ -64,8 +64,9 @@ const VideoPlayer: FC<IVideoPlayerProps> = ({ src, youtubeId, poster, maxHeight 
             {youtubeId ? (
                 <div data-plyr-provider="youtube" data-plyr-embed-id={youtubeId} />
             ) : (
+                // biome-ignore lint/a11y/useMediaCaption: captions not available for user-uploaded previews
                 <video playsInline controls data-poster={poster ?? undefined}>
-                    <source src={src!} type="video/mp4" />
+                    <source src={src ?? ""} type="video/mp4" />
                 </video>
             )}
         </div>
