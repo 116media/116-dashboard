@@ -94,7 +94,7 @@ export const orderItemsTableColumns = (
         width: 250,
         render: (_: unknown, record: IOrderItemEntity) =>
             (record.tiers ?? []).length > 0 ? (
-                <Space size={[0, 4]} wrap>
+                <Space size={[4, 4]} wrap>
                     {record.tiers.map((tier) => (
                         <Tag
                             key={tier.id}
