@@ -1,6 +1,7 @@
 import type { FormInstance } from "antd";
 import { Form } from "antd";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import type { IOrderItemEntity } from "@/modules/commerce/domain/entities/IOrderItemEntity";
 import type { IAddOrderItemCredentials } from "@/modules/commerce/presentation/model/IAddOrderItemCredentials";
 import { editItemAction } from "@/modules/commerce/presentation/store/edititem.action";
 import { OrdersNotification } from "@/modules/commerce/presentation/utils/notification/commerce.orders.notification";
@@ -10,11 +11,6 @@ import { showNotification } from "@/shared/presentation/utils/notification/notif
 
 const { useForm } = Form;
 
-/**
- * Return type for the edit order item hook.
- *
- * @interface IUseEditOrderItem
- */
 interface IUseEditOrderItem {
     form: FormInstance<IAddOrderItemCredentials>;
     loading: boolean;
@@ -30,15 +26,17 @@ interface IUseEditOrderItem {
  * @description
  * Manages form state, submission, and success feedback for
  * editing a content item's properties on a draft order.
+ * Pre-fills the form with the selected item's current values.
  *
  * @param orderId - The order UUID
  * @param itemId - The item UUID to edit
+ * @param item - The selected item entity for pre-filling
  * @param onSuccess - Optional callback after successful edit
- * @returns {IUseEditOrderItem} Form instance, loading/error state, submit handler, and reset function
  */
 export const useEditOrderItem = (
     orderId: string | null,
     itemId: string | null,
+    item: IOrderItemEntity | null,
     onSuccess?: () => void
 ): IUseEditOrderItem => {
     const dispatch = useAppDispatch();
@@ -46,6 +44,18 @@ export const useEditOrderItem = (
     const [success, setSuccess] = useState<string | null>(null);
 
     const { loading, error } = useAppSelector(({ commerce: { editItem } }) => editItem);
+
+    useEffect(() => {
+        if (!item) return;
+
+        form.setFieldsValue({
+            contentKind: item.contentKind,
+            categoryId: item.categoryId,
+            promotionLevelId: item.promotionLevelId,
+            socialBoost: item.socialBoost,
+            isBonus: item.isBonus
+        });
+    }, [item, form]);
 
     const onSubmit = async (values: IAddOrderItemCredentials): Promise<void> => {
         if (!orderId || !itemId) return;
