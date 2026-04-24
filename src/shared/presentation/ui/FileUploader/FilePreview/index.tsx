@@ -39,7 +39,7 @@ const FilePreview: FC<IFilePreviewProps> = ({
     const removeButton = (
         <Button
             danger
-            size="medium"
+            size="small"
             variant="outlined"
             onClick={onRemove}
             disabled={disabled}
