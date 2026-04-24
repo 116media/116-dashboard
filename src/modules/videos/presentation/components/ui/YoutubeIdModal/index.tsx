@@ -1,5 +1,5 @@
 import type { FormInstance } from "antd";
-import type { FC } from "react";
+import { type FC, useEffect } from "react";
 import YoutubeIdForm from "@/modules/videos/presentation/components/forms/YoutubeIdForm";
 import type { IAttachYoutubeIdCredentials } from "@/modules/videos/presentation/model/IAttachYoutubeIdCredentials";
 import type { Failure } from "@/shared/domain/failures/failure";
@@ -24,6 +24,7 @@ interface IYoutubeIdModalProps {
     success: string | null;
     error: Failure | null | undefined;
     form: FormInstance<IAttachYoutubeIdCredentials>;
+    initialYoutubeId?: string | null;
     onSubmit: (values: IAttachYoutubeIdCredentials) => void;
     onCancel: () => void;
     onSuccessClose: () => void;
@@ -47,10 +48,17 @@ const YoutubeIdModal: FC<IYoutubeIdModalProps> = ({
     success,
     error,
     form,
+    initialYoutubeId,
     onSubmit,
     onCancel,
     onSuccessClose
 }) => {
+    useEffect(() => {
+        if (open && initialYoutubeId) {
+            form.setFieldsValue({ youtubeVideoId: initialYoutubeId });
+        }
+    }, [open, initialYoutubeId, form]);
+
     return (
         <CreateEditModal
             open={open}
