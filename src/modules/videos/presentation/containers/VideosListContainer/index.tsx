@@ -235,6 +235,7 @@ const VideosListContainer: FC = () => {
                     loading={attachYoutube.loading}
                     success={attachYoutube.success}
                     error={attachYoutube.error}
+                    initialYoutubeId={modals.selectedEntity?.youtubeVideoId}
                     onSubmit={(values) => {
                         if (modals.selectedEntity) {
                             attachYoutube.onSubmit(modals.selectedEntity.id, values);
