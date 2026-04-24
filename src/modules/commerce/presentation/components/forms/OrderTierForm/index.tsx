@@ -8,6 +8,7 @@ import { OrderItemsValidator } from "@/modules/commerce/presentation/utils/valid
 import type { Failure } from "@/shared/domain/failures/failure";
 import { useAppSelector } from "@/shared/presentation/store/store";
 import ErrorAlert from "@/shared/presentation/ui/ErrorAlert";
+import { SelectOptionDetail } from "@/shared/presentation/ui/SelectOptions";
 
 const { Item } = Form;
 
@@ -54,8 +55,9 @@ const OrderTierForm: FC<IOrderTierFormProps> = ({ form, error, categoryName, onS
         if (!category) return [];
 
         return category.pricing.map((p) => ({
-            label: `${p.tierName} — $${p.priceUsd.toFixed(2)}`,
-            value: p.tierId
+            label: p.tierName,
+            value: p.tierId,
+            secondary: `$${p.priceUsd.toFixed(2)}`
         }));
     }, [categories, categoryName]);
 
@@ -78,6 +80,7 @@ const OrderTierForm: FC<IOrderTierFormProps> = ({ form, error, categoryName, onS
                 <Select
                     showSearch
                     options={pricingTierOptions}
+                    optionRender={SelectOptionDetail}
                     placeholder="Sélectionner une tranche"
                     notFoundContent={
                         categoryName
