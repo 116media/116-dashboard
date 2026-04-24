@@ -1,7 +1,7 @@
-import { Spin } from "antd";
 import { type FC, useEffect } from "react";
 import { useParams } from "react-router";
 import { getAllCategoriesAction } from "@/modules/catalog/presentation/store/getallcategories.action";
+import type { IOrderDetailEntity } from "@/modules/commerce/domain/entities/IOrderDetailEntity";
 import OrderForm from "@/modules/commerce/presentation/components/forms/OrderForm";
 import OrderItemForm from "@/modules/commerce/presentation/components/forms/OrderItemForm";
 import OrderTierForm from "@/modules/commerce/presentation/components/forms/OrderTierForm";
@@ -25,6 +25,7 @@ import { useAppDispatch } from "@/shared/presentation/store/store";
 import CreateEditModal from "@/shared/presentation/ui/CreateEditModal";
 import ErrorAlert from "@/shared/presentation/ui/ErrorAlert";
 import { showNotification } from "@/shared/presentation/utils/notification/notification.utils";
+import OrderDetailLoading from "./OrderDetailContainer.Loading";
 
 /**
  * Container for the order detail view.
@@ -57,14 +58,23 @@ const OrderDetailContainer: FC = () => {
         modals.setProofOpen(false);
         detail.reload();
     });
-    const editOrder = useEditOrder(orderId ?? null, () => {
-        modals.setEditOrderOpen(false);
-        detail.reload();
-    });
-    const editItem = useEditOrderItem(orderId ?? null, modals.selectedItemId, () => {
-        modals.setEditItemOpen(false);
-        detail.reload();
-    });
+    const editOrder = useEditOrder(
+        orderId ?? null,
+        (detail.order as IOrderDetailEntity) ?? null,
+        () => {
+            modals.setEditOrderOpen(false);
+            detail.reload();
+        }
+    );
+    const editItem = useEditOrderItem(
+        orderId ?? null,
+        modals.selectedItemId,
+        modals.selectedItem,
+        () => {
+            modals.setEditItemOpen(false);
+            detail.reload();
+        }
+    );
 
     useEffect(() => {
         dispatch(getAllCategoriesAction({ pageIndex: 0, pageSize: 100 }));
@@ -73,7 +83,7 @@ const OrderDetailContainer: FC = () => {
     }, [dispatch]);
 
     if (detail.loadingOrder && !detail.order) {
-        return <Spin size="large" style={{ display: "block", margin: "64px auto" }} />;
+        return <OrderDetailLoading />;
     }
 
     if (detail.error && !detail.order) {
