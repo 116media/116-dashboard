@@ -74,7 +74,9 @@ export const CommerceMapper = {
         return {
             id: dto.id,
             contentKind: dto.contentKind,
+            categoryId: dto.categoryId,
             categoryName: dto.categoryName,
+            promotionLevelId: dto.promotionLevelId,
             promotionLevelName: dto.promotionLevelName,
             promoPriceUsd: dto.promoPriceUsd,
             socialBoost: dto.socialBoost,
@@ -138,7 +140,9 @@ export const CommerceMapper = {
     orderDetailFromDto(dto: ContentOrderDetailDto): IOrderDetailEntity {
         return {
             id: dto.id,
+            customerId: dto.customerId,
             customerName: dto.customerName,
+            packageId: dto.packageId,
             status: dto.status,
             totalAmountUsd: dto.totalAmountUsd,
             items: dto.items.map(CommerceMapper.orderItemFromDto),
