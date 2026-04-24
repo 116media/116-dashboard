@@ -5,18 +5,11 @@ import type { IAttachYoutubeIdCredentials } from "@/modules/videos/presentation/
 import { VideosYoutubeValidator } from "@/modules/videos/presentation/utils/validators/videos.youtube.validator";
 import type { Failure } from "@/shared/domain/failures/failure";
 import ErrorAlert from "@/shared/presentation/ui/ErrorAlert";
+import VideoPlayer from "@/shared/presentation/ui/VideoPlayer";
 
 const { Item } = Form;
 const { Paragraph } = Typography;
 
-/**
- * Props for the YoutubeIdForm component.
- *
- * @interface IYoutubeIdFormProps
- * @property {FormInstance<IAttachYoutubeIdCredentials>} form - Ant Design form instance for field control
- * @property {Failure | null | undefined} error - Backend error to display in the alert
- * @property {(values: IAttachYoutubeIdCredentials) => void} onSubmit - Callback when the form is submitted
- */
 interface IYoutubeIdFormProps {
     error: Failure | null | undefined;
     form: FormInstance<IAttachYoutubeIdCredentials>;
@@ -24,19 +17,19 @@ interface IYoutubeIdFormProps {
 }
 
 /**
- * Form for attaching a YouTube video ID.
+ * Form for attaching a YouTube video ID with live preview.
  *
  * @component
  *
  * @description
  * Renders a single input field for the YouTube video ID with
- * helper text explaining where to find the ID. Used inside the
- * YouTube ID modal.
- *
- * @param {IYoutubeIdFormProps} props - Component props
- * @returns {JSX.Element} The rendered YouTube ID form
+ * helper text explaining where to find the ID. Shows a live
+ * Plyr-powered YouTube preview below the input when a valid
+ * ID is entered.
  */
 const YoutubeIdForm: FC<IYoutubeIdFormProps> = ({ form, error, onSubmit }) => {
+    const youtubeId = Form.useWatch("youtubeVideoId", form);
+
     return (
         <Form
             form={form}
@@ -60,6 +53,10 @@ const YoutubeIdForm: FC<IYoutubeIdFormProps> = ({ form, error, onSubmit }) => {
             >
                 <Input maxLength={20} placeholder="ex: dQw4w9WgXcQ" />
             </Item>
+
+            {youtubeId && youtubeId.length >= 8 && (
+                <VideoPlayer youtubeId={youtubeId} maxHeight={300} />
+            )}
         </Form>
     );
 };
