@@ -63,6 +63,18 @@ export const AVATAR_PRESET: IUploadPreset = {
 };
 
 /**
+ * Video file preset for short video uploads.
+ * Matches backend `ValidateVideoFile()` — 100 MB, video formats only.
+ */
+export const VIDEO_PRESET: IUploadPreset = {
+    extensions: [".mp4", ".mov", ".webm", ".avi", ".mkv", ".3gp"],
+    accept: "video/mp4,video/quicktime,video/webm,video/x-msvideo,video/x-matroska,video/3gpp",
+    maxSizeMB: 100,
+    croppable: false,
+    hint: "MP4, MOV, WebM, AVI ou MKV — 100 Mo max"
+};
+
+/**
  * File extensions that should NOT be cropped even if preset allows cropping.
  * GIF cropping destroys animation, PDF is not an image.
  */
