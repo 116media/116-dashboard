@@ -29,7 +29,13 @@ interface IShortVideoFormProps {
  * using the shared FileUploader in deferred mode with video preset.
  * Shows a Plyr-powered video preview when a file is selected.
  */
-const ShortVideoForm: FC<IShortVideoFormProps> = ({ form, error, videoFile, onVideoFileChange, onSubmit }) => {
+const ShortVideoForm: FC<IShortVideoFormProps> = ({
+    form,
+    error,
+    videoFile,
+    onVideoFileChange,
+    onSubmit
+}) => {
     const previewUrl = useMemo(
         () => (videoFile ? URL.createObjectURL(videoFile) : null),
         [videoFile]
