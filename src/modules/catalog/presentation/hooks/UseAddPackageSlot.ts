@@ -2,7 +2,10 @@ import type { FormInstance } from "antd";
 import { Form } from "antd";
 import { useState } from "react";
 import type { IAddPackageSlotCredentials } from "@/modules/catalog/presentation/model/IAddPackageSlotCredentials";
-import { addPackageSlotAction } from "@/modules/catalog/presentation/store/addpackageslot.action";
+import {
+    addPackageSlotAction,
+    resetAddPackageSlotAction
+} from "@/modules/catalog/presentation/store/addpackageslot.action";
 import { PackagesNotification } from "@/modules/catalog/presentation/utils/notification/catalog.packages.notification";
 import type { Failure } from "@/shared/domain/failures/failure";
 import { useAppDispatch, useAppSelector } from "@/shared/presentation/store/store";
@@ -60,6 +63,8 @@ export const useAddPackageSlot = (
 
     const resetAdd = () => {
         setSuccess(null);
+        form.resetFields();
+        dispatch(resetAddPackageSlotAction());
     };
 
     return { form, loading, error, success, onSubmit, resetAdd };
