@@ -18,7 +18,7 @@ export interface IBasicInitialState<T = IUnknownObject> {
     data: T;
     loading: boolean;
     fetched: boolean;
-    error?: Failure | null;
+    error?: Failure | null | undefined;
 }
 
 /**
@@ -37,7 +37,7 @@ export interface IBasicInitialStateList<T = IUnknownObject> {
     data: T[];
     loading: boolean;
     fetched: boolean;
-    error?: Error | null;
+    error?: Failure | null;
 }
 
 /**

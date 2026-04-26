@@ -8,6 +8,25 @@ import type { SignOutUseCase } from "@/modules/auth/application/usecases/signout
 import type { SignOutAllUseCase } from "@/modules/auth/application/usecases/signoutall.usecase";
 import type { VerifyOtpUseCase } from "@/modules/auth/application/usecases/verifyotp.usecase";
 import { registerAuthDependencies } from "@/modules/auth/infrastructure/dependencies/auth.dependencies";
+import type { ILookupRepositoryPort } from "@/modules/lookup/application/repositories/lookup.repository.port";
+import type { ActivateContentTypeUseCase } from "@/modules/lookup/application/usecases/activatecontenttype.usecase";
+import type { ActivatePricingTierUseCase } from "@/modules/lookup/application/usecases/activatepricingtier.usecase";
+import type { ActivatePromotionLevelUseCase } from "@/modules/lookup/application/usecases/activatepromotionlevel.usecase";
+import type { CreateContentTypeUseCase } from "@/modules/lookup/application/usecases/createcontenttype.usecase";
+import type { CreatePricingTierUseCase } from "@/modules/lookup/application/usecases/createpricingtier.usecase";
+import type { CreatePromotionLevelUseCase } from "@/modules/lookup/application/usecases/createpromotionlevel.usecase";
+import type { CreateTagUseCase } from "@/modules/lookup/application/usecases/createtag.usecase";
+import type { DeactivateContentTypeUseCase } from "@/modules/lookup/application/usecases/deactivatecontenttype.usecase";
+import type { DeactivatePricingTierUseCase } from "@/modules/lookup/application/usecases/deactivatepricingtier.usecase";
+import type { DeactivatePromotionLevelUseCase } from "@/modules/lookup/application/usecases/deactivatepromotionlevel.usecase";
+import type { GetAllContentTypesUseCase } from "@/modules/lookup/application/usecases/getallcontenttypes.usecase";
+import type { GetAllPricingTiersUseCase } from "@/modules/lookup/application/usecases/getallpricingtiers.usecase";
+import type { GetAllPromotionLevelsUseCase } from "@/modules/lookup/application/usecases/getallpromotionlevels.usecase";
+import type { GetAllTagsUseCase } from "@/modules/lookup/application/usecases/getalltags.usecase";
+import type { UpdateContentTypeUseCase } from "@/modules/lookup/application/usecases/updatecontenttype.usecase";
+import type { UpdatePricingTierUseCase } from "@/modules/lookup/application/usecases/updatepricingtier.usecase";
+import type { UpdatePromotionLevelUseCase } from "@/modules/lookup/application/usecases/updatepromotionlevel.usecase";
+import { registerLookupDependencies } from "@/modules/lookup/infrastructure/dependencies/lookup.dependencies";
 import type { IPermissionsRepositoryPort } from "@/modules/permissions/application/repositories/permissions.repository.port";
 import type { ActivatePermissionUseCase } from "@/modules/permissions/application/usecases/activatepermission.usecase";
 import type { CreatePermissionUseCase } from "@/modules/permissions/application/usecases/createpermission.usecase";
@@ -119,6 +138,28 @@ export interface Cradle {
     softDeletePermissionUseCase: SoftDeletePermissionUseCase;
     hardDeletePermissionUseCase: HardDeletePermissionUseCase;
     restorePermissionUseCase: RestorePermissionUseCase;
+
+    // Lookup repository
+    lookupRepository: ILookupRepositoryPort;
+
+    // Lookup use cases
+    getAllContentTypesUseCase: GetAllContentTypesUseCase;
+    createContentTypeUseCase: CreateContentTypeUseCase;
+    updateContentTypeUseCase: UpdateContentTypeUseCase;
+    activateContentTypeUseCase: ActivateContentTypeUseCase;
+    deactivateContentTypeUseCase: DeactivateContentTypeUseCase;
+    getAllPricingTiersUseCase: GetAllPricingTiersUseCase;
+    createPricingTierUseCase: CreatePricingTierUseCase;
+    updatePricingTierUseCase: UpdatePricingTierUseCase;
+    activatePricingTierUseCase: ActivatePricingTierUseCase;
+    deactivatePricingTierUseCase: DeactivatePricingTierUseCase;
+    getAllPromotionLevelsUseCase: GetAllPromotionLevelsUseCase;
+    createPromotionLevelUseCase: CreatePromotionLevelUseCase;
+    updatePromotionLevelUseCase: UpdatePromotionLevelUseCase;
+    activatePromotionLevelUseCase: ActivatePromotionLevelUseCase;
+    deactivatePromotionLevelUseCase: DeactivatePromotionLevelUseCase;
+    getAllTagsUseCase: GetAllTagsUseCase;
+    createTagUseCase: CreateTagUseCase;
 }
 
 /**
@@ -139,5 +180,6 @@ registerAuthDependencies(container);
 registerSettingsDependencies(container);
 registerRolesDependencies(container);
 registerPermissionsDependencies(container);
+registerLookupDependencies(container);
 
 export default container;

@@ -64,7 +64,9 @@ const ActionModal: FC<IActionModalProps> = ({
             {description && <Paragraph type="secondary">{description}</Paragraph>}
 
             <Flex justify="end" gap={8} className={styles.actionModal__footer}>
-                <Button onClick={onCancel}>Annuler</Button>
+                <Button onClick={onCancel} danger>
+                    Annuler
+                </Button>
                 <Button type="primary" danger={danger} loading={loading} onClick={onConfirm}>
                     {confirmLabel}
                 </Button>

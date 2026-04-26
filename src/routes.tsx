@@ -12,6 +12,7 @@ import {
     NOT_FOUND_PATH,
     OVERVIEW_PATH,
     PERMISSIONS_PATH,
+    REFERENCES_PATH,
     ROLES_PATH,
     SETTING_PATH,
     USER_PATH,
@@ -40,6 +41,7 @@ const RolesPage = lazy(() => import("@/modules/roles/presentation/pages/RolesPag
 const PermissionsPage = lazy(
     () => import("@/modules/permissions/presentation/pages/PermissionsPage")
 );
+const LookupPage = lazy(() => import("@/modules/lookup/presentation/pages/LookupPage"));
 
 const guestRoutes: RouteObject[] = [
     {
@@ -129,6 +131,15 @@ const protectedRoutes: RouteObject[] = [
                             />
                         ),
                         children: [{ path: PERMISSIONS_PATH, element: <PermissionsPage /> }]
+                    },
+                    {
+                        element: (
+                            <PermissionRoute
+                                permissions={[{ resource: "content-types", action: "read" }]}
+                                mode="some"
+                            />
+                        ),
+                        children: [{ path: `${REFERENCES_PATH}/:tab?`, element: <LookupPage /> }]
                     }
                 ]
             }

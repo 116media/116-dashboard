@@ -29,17 +29,34 @@ export interface INavigationItem {
 
 Update `NAVIGATION_ITEMS`:
 
-- [ ] `/overview` — no permission (always visible)
-- [ ] `/contents` — `{ resource: "contents", action: "read" }`
-- [ ] `/videos` — `{ resource: "videos", action: "read" }`
-- [ ] `/articles` — `{ resource: "articles", action: "read" }`
-- [ ] `/ads/banners` — `{ resource: "ads", action: "read" }`
-- [ ] `/ads/popups` — `{ resource: "ads", action: "read" }`
-- [ ] `/admins` — `{ resource: "admins", action: "read" }`
-- [ ] `/users` — `{ resource: "users", action: "read" }`
-- [ ] `/roles` — `{ resource: "roles", action: "read" }`
-- [ ] `/permissions` — `{ resource: "permissions", action: "read" }`
-- [ ] `/settings` — no permission (always visible)
+Navigation now uses **grouped items** with `children`. Each group is a Popover in the SideNav:
+
+- [ ] Accueil `/overview` — no permission (always visible)
+- [ ] **Références** (group) — children filtered by permission:
+  - `/references/content-types` — `{ resource: "content-types", action: "read" }`
+  - `/references/pricing-tiers` — `{ resource: "pricing-tiers", action: "read" }`
+  - `/references/promotion-levels` — `{ resource: "promotion-levels", action: "read" }`
+  - `/references/tags` — `{ resource: "tags", action: "read" }`
+- [ ] **Catalogue** (group):
+  - `/catalog/categories` — `{ resource: "categories", action: "read" }`
+  - `/catalog/customers` — `{ resource: "customers", action: "read" }`
+  - `/catalog/packages` — `{ resource: "packages", action: "read" }`
+- [ ] **Édition** (group):
+  - `/articles` — `{ resource: "articles", action: "read" }`
+  - `/videos` — `{ resource: "videos", action: "read" }`
+  - `/shorts` — `{ resource: "shorts", action: "read" }`
+  - `/lyrics` — `{ resource: "lyrics", action: "read" }`
+- [ ] **Ventes** (group):
+  - `/orders` — `{ resource: "orders", action: "read" }`
+- [ ] **Publicité** (group):
+  - `/ads/banners` — `{ resource: "ads", action: "read" }`
+  - `/ads/popups` — `{ resource: "ads", action: "read" }`
+- [ ] **Gestion** (group):
+  - `/admins` — `{ resource: "admins", action: "read" }`
+  - `/users` — `{ resource: "users", action: "read" }`
+  - `/roles` — `{ resource: "roles", action: "read" }`
+  - `/permissions` — `{ resource: "permissions", action: "read" }`
+- [ ] Paramètres `/settings` — no permission (always visible)
 
 ### 2. `src/shared/presentation/layouts/DashboardLayout/SideNav/index.tsx`
 

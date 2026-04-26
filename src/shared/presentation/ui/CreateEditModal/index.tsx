@@ -70,7 +70,9 @@ const CreateEditModal: FC<ICreateEditModalProps> = ({
             footer={
                 !success && (
                     <Flex gap={8} justify="space-between" flex={1}>
-                        <Button onClick={onClose}>Annuler</Button>
+                        <Button onClick={onClose} danger>
+                            Annuler
+                        </Button>
                         <Button type="primary" loading={loading} onClick={onSubmit}>
                             {formContext === "CREATE" ? "Créer" : "Mettre à jour"}
                         </Button>
