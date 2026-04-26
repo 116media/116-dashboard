@@ -87,7 +87,7 @@ interface IPackageEntity {
     id: string;
     name: string;
     description: string;
-    flatPriceUsd: number;
+    calculatedPriceUsd: number;
     isActive: boolean;
     slots: IPackageSlotEntity[];
     createdAt?: string | null;
