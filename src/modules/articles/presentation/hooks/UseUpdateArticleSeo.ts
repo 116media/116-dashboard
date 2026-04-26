@@ -3,7 +3,10 @@ import { Form } from "antd";
 import { useEffect, useState } from "react";
 import type { IArticleEntity } from "@/modules/articles/domain/entities/IArticleEntity";
 import type { IUpdateArticleSeoCredentials } from "@/modules/articles/presentation/model/IUpdateArticleSeoCredentials";
-import { updateArticleSeoAction } from "@/modules/articles/presentation/store/updatearticleseo.action";
+import {
+    resetUpdateArticleSeoAction,
+    updateArticleSeoAction
+} from "@/modules/articles/presentation/store/updatearticleseo.action";
 import { ArticlesNotification } from "@/modules/articles/presentation/utils/notification/articles.notification";
 import type { Failure } from "@/shared/domain/failures/failure";
 import { useAppDispatch, useAppSelector } from "@/shared/presentation/store/store";
@@ -77,6 +80,8 @@ export const useUpdateArticleSeo = (
 
     const resetSeo = () => {
         setSuccess(null);
+        form.resetFields();
+        dispatch(resetUpdateArticleSeoAction());
         form.resetFields();
     };
 
