@@ -120,6 +120,8 @@ const CategoryForm: FC<ICategoryFormProps> = ({
                 />
             </Item>
 
+            <br />
+
             <Item name="isFree" valuePropName="checked">
                 <SwitchField
                     title="Contenu gratuit"
