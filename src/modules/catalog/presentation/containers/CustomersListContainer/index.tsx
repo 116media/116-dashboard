@@ -77,12 +77,13 @@ const CustomersListContainer: FC = () => {
             {modals.createOpen && (
                 <CreateEditModal
                     width={520}
-                    open={modals.createOpen}
                     formContext="CREATE"
+                    open={modals.createOpen}
                     loading={createCustomer.loading}
                     success={createCustomer.success}
                     onClose={() => modals.setCreateOpen(false)}
                     onSubmit={() => createCustomer.form.submit()}
+                    afterClose={() => createCustomer.resetCreate()}
                     title={{
                         create: "Créer un client",
                         edit: "Modifier le client"
@@ -105,8 +106,8 @@ const CustomersListContainer: FC = () => {
             {modals.editOpen && (
                 <CreateEditModal
                     width={520}
-                    open={modals.editOpen}
                     formContext="EDIT"
+                    open={modals.editOpen}
                     loading={updateCustomer.loading}
                     success={updateCustomer.success}
                     onClose={() => {
@@ -114,6 +115,7 @@ const CustomersListContainer: FC = () => {
                         updateCustomer.resetUpdate();
                     }}
                     onSubmit={() => updateCustomer.form.submit()}
+                    afterClose={() => updateCustomer.resetUpdate()}
                     title={{
                         create: "Créer un client",
                         edit: "Modifier le client"
