@@ -10,7 +10,9 @@ import styles from "./index.module.scss";
 
 const { Text } = Typography;
 
-/** Maps permission action names to Ant Design Tag color values. */
+/**
+ * Maps permission action names to Ant Design Tag color values.
+ */
 const ACTION_TAG_COLORS: Record<string, string> = {
     read: "blue",
     write: "orange",
