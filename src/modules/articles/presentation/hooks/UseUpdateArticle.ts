@@ -5,7 +5,10 @@ import type { IArticleEntity } from "@/modules/articles/domain/entities/IArticle
 import type { IArticleSummaryEntity } from "@/modules/articles/domain/entities/IArticleSummaryEntity";
 import type { IUpdateArticleCredentials } from "@/modules/articles/presentation/model/IUpdateArticleCredentials";
 import { getArticleByIdAction } from "@/modules/articles/presentation/store/getarticlebyid.action";
-import { updateArticleAction } from "@/modules/articles/presentation/store/updatearticle.action";
+import {
+    resetUpdateArticleAction,
+    updateArticleAction
+} from "@/modules/articles/presentation/store/updatearticle.action";
 import { ArticlesNotification } from "@/modules/articles/presentation/utils/notification/articles.notification";
 import type { Failure } from "@/shared/domain/failures/failure";
 import { useAppDispatch, useAppSelector } from "@/shared/presentation/store/store";
@@ -93,6 +96,8 @@ export const useUpdateArticle = (
 
     const resetUpdate = () => {
         setSuccess(null);
+        form.resetFields();
+        dispatch(resetUpdateArticleAction());
         form.resetFields();
     };
 
