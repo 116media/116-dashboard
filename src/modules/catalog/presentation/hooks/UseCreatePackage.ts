@@ -2,7 +2,10 @@ import type { FormInstance } from "antd";
 import { Form } from "antd";
 import { useState } from "react";
 import type { ICreatePackageCredentials } from "@/modules/catalog/presentation/model/ICreatePackageCredentials";
-import { createPackageAction } from "@/modules/catalog/presentation/store/createpackage.action";
+import {
+    createPackageAction,
+    resetCreatePackageAction
+} from "@/modules/catalog/presentation/store/createpackage.action";
 import { PackagesNotification } from "@/modules/catalog/presentation/utils/notification/catalog.packages.notification";
 import type { Failure } from "@/shared/domain/failures/failure";
 import { useAppDispatch, useAppSelector } from "@/shared/presentation/store/store";
@@ -54,6 +57,8 @@ export const useCreatePackage = (onSuccess?: () => void): IUseCreatePackage => {
 
     const resetCreate = () => {
         setSuccess(null);
+        form.resetFields();
+        dispatch(resetCreatePackageAction());
     };
 
     return { form, loading, error, success, onSubmit, resetCreate };
