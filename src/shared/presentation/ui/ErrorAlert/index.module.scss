@@ -5,8 +5,18 @@
     margin: dimensions.$padding 0;
     border-radius: dimensions.$border-radius;
 
+    [class~="ant-alert-title"]{
+        margin: 0 !important;
+    }
+
     [class~="ant-alert-close-icon"]{
         font-size: 12pt;
         color: colors.$title;
+    }
+
+    [class~="ant-alert-icon"] {
+        padding: calc(dimensions.$padding / 2);
+        border-radius: dimensions.$border-radius;
+        background-color: rgba(colors.$error, 0.09);
     }
 }
