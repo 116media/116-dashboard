@@ -42,11 +42,11 @@ export const packagesTableColumns = (
     },
     {
         title: "Prix (USD)",
-        dataIndex: "flatPriceUsd",
-        key: "flatPriceUsd",
+        dataIndex: "calculatedPriceUsd",
+        key: "calculatedPriceUsd",
         width: 120,
-        sorter: (a, b) => a.flatPriceUsd - b.flatPriceUsd,
-        render: (value: number) => `${value.toFixed(2)} $`
+        sorter: (a, b) => a.calculatedPriceUsd - b.calculatedPriceUsd,
+        render: (value: number) => `${(value ?? 0).toFixed(2)} $`
     },
     {
         title: "Description",
@@ -69,7 +69,6 @@ export const packagesTableColumns = (
         key: "status",
         width: 100,
         fixed: "end",
-        align: "center",
         render: (_: boolean, record: IPackageEntity) => (
             <StatusTag
                 status={record.isActive ? "active" : "inactive"}
