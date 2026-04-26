@@ -1,8 +1,12 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import type { IArticleActionResponse } from "@/modules/articles/domain/entities/IArticleActionResponse";
+import { articlesSlice } from "@/modules/articles/presentation/store";
 import type { Failure } from "@/shared/domain/failures/failure";
 import container from "@/shared/infrastructure/service.locator";
 import { ActionType } from "./constants";
+
+export const resetArchiveArticleAction = () =>
+    articlesSlice.actions.clear({ context: ActionType.ArchiveArticle });
 
 /**
  * Async thunk to archive an article.
