@@ -12,7 +12,9 @@ import { SETTING_PATH } from "@/shared/presentation/constants/paths";
 import { TextTransform } from "@/shared/presentation/utils/text-transform/text-transform.utils";
 import styles from "./index.module.scss";
 
-/** Maps each settings tab key to its container component. */
+/**
+ * Maps each settings tab key to its container component.
+ */
 const containerMap: Record<SettingsTab, FC> = {
     profile: ProfileContainer,
     security: SecurityContainer,
@@ -20,7 +22,9 @@ const containerMap: Record<SettingsTab, FC> = {
     account: AccountContainer
 };
 
-/** Valid tab keys used to validate the URL param. */
+/**
+ * Valid tab keys used to validate the URL param.
+ */
 const VALID_TABS: SettingsTab[] = ["profile", "security", "notification", "account"];
 
 /**
