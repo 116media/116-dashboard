@@ -56,6 +56,7 @@ export enum EnumCoreContentType {
   Article = "Article",
   Video = "Video",
   Short = "Short",
+  Custom = "Custom",
 }
 
 export enum EnumContentStatus {
@@ -318,8 +319,6 @@ export interface AdminCreateOrderResponse {
 export interface AdminCreatePackageRequest {
   name: string;
   description: string;
-  /** @format double */
-  flatPriceUsd: number;
 }
 
 export interface AdminCreatePackageResponse {
@@ -1400,7 +1399,7 @@ export interface PackageDto {
   name: string;
   description: string;
   /** @format double */
-  flatPriceUsd: number;
+  calculatedPriceUsd: number;
   isActive: boolean;
   slots: PackageSlotDto[];
 }
