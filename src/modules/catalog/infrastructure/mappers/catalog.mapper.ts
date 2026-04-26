@@ -107,7 +107,7 @@ export const CatalogMapper = {
             id: dto.id,
             name: dto.name,
             description: dto.description,
-            flatPriceUsd: dto.flatPriceUsd,
+            calculatedPriceUsd: dto.calculatedPriceUsd,
             isActive: dto.isActive,
             slots: dto.slots.map(CatalogMapper.packageSlotFromDto),
             createdAt: dto.createdAt,
