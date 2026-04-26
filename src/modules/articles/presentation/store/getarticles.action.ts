@@ -1,10 +1,14 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import type { IArticleSummaryEntity } from "@/modules/articles/domain/entities/IArticleSummaryEntity";
+import { articlesSlice } from "@/modules/articles/presentation/store";
 import type { Failure } from "@/shared/domain/failures/failure";
 import type { IPaginatedResult } from "@/shared/domain/types/pagination";
 import type { EnumContentStatus } from "@/shared/infrastructure/api/generated/116.api";
 import container from "@/shared/infrastructure/service.locator";
 import { ActionType } from "./constants";
+
+export const resetGetArticlesAction = () =>
+    articlesSlice.actions.clear({ context: ActionType.GetArticles });
 
 /**
  * Async thunk to fetch a paginated list of articles.
