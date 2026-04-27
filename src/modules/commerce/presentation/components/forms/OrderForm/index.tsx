@@ -9,6 +9,7 @@ import { OrdersValidator } from "@/modules/commerce/presentation/utils/validator
 import type { Failure } from "@/shared/domain/failures/failure";
 import { useAppSelector } from "@/shared/presentation/store/store";
 import ErrorAlert from "@/shared/presentation/ui/ErrorAlert";
+import { SelectOptionDetail } from "@/shared/presentation/ui/SelectOptions";
 
 const { Item } = Form;
 
@@ -47,8 +48,9 @@ const OrderForm: FC<IOrderFormProps> = ({ form, error, onSubmit }) => {
     const customerOptions = useMemo(
         () =>
             ((customers as { items: ICustomerEntity[] })?.items ?? []).map((c) => ({
+                value: c.id,
                 label: c.fullName,
-                value: c.id
+                secondary: c.company ?? undefined
             })),
         [customers]
     );
@@ -58,8 +60,9 @@ const OrderForm: FC<IOrderFormProps> = ({ form, error, onSubmit }) => {
             ((packages as { items: IPackageEntity[] })?.items ?? [])
                 .filter((p) => p.isActive)
                 .map((p) => ({
-                    label: `${p.name} — $${p.flatPriceUsd.toFixed(2)}`,
-                    value: p.id
+                    value: p.id,
+                    label: p.name,
+                    secondary: `$${p.calculatedPriceUsd.toFixed(2)}`
                 })),
         [packages]
     );
@@ -69,14 +72,19 @@ const OrderForm: FC<IOrderFormProps> = ({ form, error, onSubmit }) => {
             form={form}
             size="large"
             layout="vertical"
-            onFinish={onSubmit}
             name="order_form"
+            onFinish={onSubmit}
             validateTrigger={["onSubmit", "onBlur"]}
         >
             <ErrorAlert error={error} showIcon closable banner={false} />
 
             <Item name="customerId" label="Client" rules={OrdersValidator.customerId("Client")}>
-                <Select showSearch options={customerOptions} placeholder="Sélectionner un client" />
+                <Select
+                    showSearch
+                    options={customerOptions}
+                    optionRender={SelectOptionDetail}
+                    placeholder="Sélectionner un client"
+                />
             </Item>
 
             <Item name="packageId" label="Package">
@@ -84,6 +92,7 @@ const OrderForm: FC<IOrderFormProps> = ({ form, error, onSubmit }) => {
                     showSearch
                     allowClear
                     options={packageOptions}
+                    optionRender={SelectOptionDetail}
                     placeholder="Sélectionner un package"
                 />
             </Item>
