@@ -1,10 +1,14 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import type { IOrderSummaryEntity } from "@/modules/commerce/domain/entities/IOrderSummaryEntity";
 import type { IPaginationQueryParams } from "@/modules/commerce/presentation/model/IPaginationQueryParams";
+import { commerceSlice } from "@/modules/commerce/presentation/store";
 import type { Failure } from "@/shared/domain/failures/failure";
 import type { IPaginatedResult } from "@/shared/domain/types/pagination";
 import container from "@/shared/infrastructure/service.locator";
 import { ActionType } from "./constants";
+
+export const resetListPendingPaymentOrdersAction = () =>
+    commerceSlice.actions.clear({ context: ActionType.ListPendingPaymentOrders });
 
 /**
  * Async thunk to fetch orders awaiting payment.
