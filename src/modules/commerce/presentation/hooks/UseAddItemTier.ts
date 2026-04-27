@@ -2,7 +2,10 @@ import type { FormInstance } from "antd";
 import { Form } from "antd";
 import { useState } from "react";
 import type { IAddItemTierCredentials } from "@/modules/commerce/presentation/model/IAddItemTierCredentials";
-import { addTierToItemAction } from "@/modules/commerce/presentation/store/addtiertoitem.action";
+import {
+    addTierToItemAction,
+    resetAddTierToItemAction
+} from "@/modules/commerce/presentation/store/addtiertoitem.action";
 import { OrdersNotification } from "@/modules/commerce/presentation/utils/notification/commerce.orders.notification";
 import type { Failure } from "@/shared/domain/failures/failure";
 import { useAppDispatch, useAppSelector } from "@/shared/presentation/store/store";
@@ -69,6 +72,8 @@ export const useAddItemTier = (
 
     const resetAddTier = () => {
         setSuccess(null);
+        form.resetFields();
+        dispatch(resetAddTierToItemAction());
     };
 
     return { form, loading, error, success, onSubmit, resetAddTier };
