@@ -17,6 +17,7 @@ import { createTagAction } from "./createtag.action";
 import { deactivateContentTypeAction } from "./deactivatecontenttype.action";
 import { deactivatePricingTierAction } from "./deactivatepricingtier.action";
 import { deactivatePromotionLevelAction } from "./deactivatepromotionlevel.action";
+import { deleteTagAction } from "./deletetag.action";
 import { getContentTypesAction } from "./getcontenttypes.action";
 import { getPricingTiersAction } from "./getpricingtiers.action";
 import { getPromotionLevelsAction } from "./getpromotionlevels.action";
@@ -26,6 +27,7 @@ import type { LookupStateKey } from "./type";
 import { updateContentTypeAction } from "./updatecontenttype.action";
 import { updatePricingTierAction } from "./updatepricingtier.action";
 import { updatePromotionLevelAction } from "./updatepromotionlevel.action";
+import { updateTagAction } from "./updatetag.action";
 
 /**
  * Redux slice for the lookup module.
@@ -117,7 +119,15 @@ export const lookupSlice = createSlice({
             // create tag
             .addCase(createTagAction.pending, ActionWrapperPending)
             .addCase(createTagAction.fulfilled, ActionWrapperFulfilled)
-            .addCase(createTagAction.rejected, ActionWrapperRejected);
+            .addCase(createTagAction.rejected, ActionWrapperRejected)
+            // update tag
+            .addCase(updateTagAction.pending, ActionWrapperPending)
+            .addCase(updateTagAction.fulfilled, ActionWrapperFulfilled)
+            .addCase(updateTagAction.rejected, ActionWrapperRejected)
+            // delete tag
+            .addCase(deleteTagAction.pending, ActionWrapperPending)
+            .addCase(deleteTagAction.fulfilled, ActionWrapperFulfilled)
+            .addCase(deleteTagAction.rejected, ActionWrapperRejected);
     }
 });
 

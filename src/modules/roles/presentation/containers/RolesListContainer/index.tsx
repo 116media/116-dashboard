@@ -14,10 +14,12 @@ import { useRoleActions } from "@/modules/roles/presentation/hooks/UseRoleAction
 import { useRolePermissions } from "@/modules/roles/presentation/hooks/UseRolePermissions";
 import { useRolesList } from "@/modules/roles/presentation/hooks/UseRolesList";
 import { useUpdateRole } from "@/modules/roles/presentation/hooks/UseUpdateRole";
+import { useResizableColumns } from "@/shared/presentation/hooks/UseResizableColumns";
 import CreateEditModal from "@/shared/presentation/ui/CreateEditModal";
 import ErrorAlert from "@/shared/presentation/ui/ErrorAlert";
 import { IconSafetyOutlined } from "@/shared/presentation/ui/Icons";
 import PageHeader from "@/shared/presentation/ui/PageHeader";
+import ResizableTitle from "@/shared/presentation/ui/ResizableTable";
 import TableToolbar from "@/shared/presentation/ui/TableToolbar";
 
 /**
@@ -33,9 +35,9 @@ import TableToolbar from "@/shared/presentation/ui/TableToolbar";
  */
 const RolesListContainer: FC = () => {
     const rolesList = useRolesList();
-    const createRole = useCreateRole();
+    const createRole = useCreateRole(rolesList.reload);
     const [selectedRole, setSelectedRole] = useState<IRoleEntity | null>(null);
-    const updateRole = useUpdateRole(selectedRole);
+    const updateRole = useUpdateRole(selectedRole, rolesList.reload);
     const roleActions = useRoleActions(rolesList.reload);
     const rolePermissions = useRolePermissions(rolesList.reload);
 
@@ -117,6 +119,10 @@ const RolesListContainer: FC = () => {
         }
     };
 
+    const { columns: tableColumns } = useResizableColumns(
+        rolesTableColumns(handleAction, isSuperAdmin)
+    );
+
     return (
         <>
             <ErrorAlert
@@ -148,9 +154,11 @@ const RolesListContainer: FC = () => {
             <Table
                 rowKey="id"
                 dataSource={rolesList.roles?.items ?? []}
-                columns={rolesTableColumns(handleAction, isSuperAdmin)}
+                columns={tableColumns}
                 loading={rolesList.loading}
-                rowSelection={{ type: "checkbox", columnWidth: 48 }}
+                components={{ header: { cell: ResizableTitle } }}
+                rowSelection={{ type: "checkbox", columnWidth: 36 }}
+                scroll={{ x: "max-content" }}
                 pagination={{
                     showSizeChanger: true,
                     current: (rolesList.roles?.pageIndex ?? 0) + 1,
@@ -179,6 +187,7 @@ const RolesListContainer: FC = () => {
                         form={createRole.form}
                         error={createRole.error}
                         formContext="CREATE"
+                        onSubmit={createRole.onSubmit}
                     />
                 </CreateEditModal>
             )}
@@ -206,6 +215,7 @@ const RolesListContainer: FC = () => {
                         error={updateRole.error}
                         formContext="EDIT"
                         initialValues={selectedRole}
+                        onSubmit={updateRole.onSubmit}
                     />
                 </CreateEditModal>
             )}

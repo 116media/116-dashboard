@@ -14,10 +14,10 @@ import { ActionType } from "./constants";
  */
 export const getPromotionLevelsAction = createAsyncThunk<
     IPromotionLevelEntity[],
-    void,
+    string | undefined,
     { rejectValue: Failure }
->(ActionType.GetPromotionLevels, async (_, { rejectWithValue }) => {
-    const result = await container.cradle.getAllPromotionLevelsUseCase.execute();
+>(ActionType.GetPromotionLevels, async (search, { rejectWithValue }) => {
+    const result = await container.cradle.getAllPromotionLevelsUseCase.execute(search);
 
     if (!result.ok) return rejectWithValue(result.error);
     return result.value;

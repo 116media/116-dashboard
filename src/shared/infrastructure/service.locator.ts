@@ -19,6 +19,7 @@ import type { CreateTagUseCase } from "@/modules/lookup/application/usecases/cre
 import type { DeactivateContentTypeUseCase } from "@/modules/lookup/application/usecases/deactivatecontenttype.usecase";
 import type { DeactivatePricingTierUseCase } from "@/modules/lookup/application/usecases/deactivatepricingtier.usecase";
 import type { DeactivatePromotionLevelUseCase } from "@/modules/lookup/application/usecases/deactivatepromotionlevel.usecase";
+import type { DeleteTagUseCase } from "@/modules/lookup/application/usecases/deletetag.usecase";
 import type { GetAllContentTypesUseCase } from "@/modules/lookup/application/usecases/getallcontenttypes.usecase";
 import type { GetAllPricingTiersUseCase } from "@/modules/lookup/application/usecases/getallpricingtiers.usecase";
 import type { GetAllPromotionLevelsUseCase } from "@/modules/lookup/application/usecases/getallpromotionlevels.usecase";
@@ -26,6 +27,7 @@ import type { GetAllTagsUseCase } from "@/modules/lookup/application/usecases/ge
 import type { UpdateContentTypeUseCase } from "@/modules/lookup/application/usecases/updatecontenttype.usecase";
 import type { UpdatePricingTierUseCase } from "@/modules/lookup/application/usecases/updatepricingtier.usecase";
 import type { UpdatePromotionLevelUseCase } from "@/modules/lookup/application/usecases/updatepromotionlevel.usecase";
+import type { UpdateTagUseCase } from "@/modules/lookup/application/usecases/updatetag.usecase";
 import { registerLookupDependencies } from "@/modules/lookup/infrastructure/dependencies/lookup.dependencies";
 import type { IPermissionsRepositoryPort } from "@/modules/permissions/application/repositories/permissions.repository.port";
 import type { ActivatePermissionUseCase } from "@/modules/permissions/application/usecases/activatepermission.usecase";
@@ -160,6 +162,8 @@ export interface Cradle {
     deactivatePromotionLevelUseCase: DeactivatePromotionLevelUseCase;
     getAllTagsUseCase: GetAllTagsUseCase;
     createTagUseCase: CreateTagUseCase;
+    updateTagUseCase: UpdateTagUseCase;
+    deleteTagUseCase: DeleteTagUseCase;
 }
 
 /**

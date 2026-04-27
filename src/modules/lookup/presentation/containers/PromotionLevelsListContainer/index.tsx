@@ -11,10 +11,12 @@ import { useCreatePromotionLevel } from "@/modules/lookup/presentation/hooks/Use
 import { usePromotionLevelActions } from "@/modules/lookup/presentation/hooks/UsePromotionLevelActions";
 import { usePromotionLevelsList } from "@/modules/lookup/presentation/hooks/UsePromotionLevelsList";
 import { useUpdatePromotionLevel } from "@/modules/lookup/presentation/hooks/UseUpdatePromotionLevel";
+import { useResizableColumns } from "@/shared/presentation/hooks/UseResizableColumns";
 import CreateEditModal from "@/shared/presentation/ui/CreateEditModal";
 import ErrorAlert from "@/shared/presentation/ui/ErrorAlert";
 import { IconStarOutlined } from "@/shared/presentation/ui/Icons";
 import PageHeader from "@/shared/presentation/ui/PageHeader";
+import ResizableTitle from "@/shared/presentation/ui/ResizableTable";
 import TableToolbar from "@/shared/presentation/ui/TableToolbar";
 
 /**
@@ -29,9 +31,9 @@ import TableToolbar from "@/shared/presentation/ui/TableToolbar";
  */
 const PromotionLevelsListContainer: FC = () => {
     const list = usePromotionLevelsList();
-    const createPromotionLevel = useCreatePromotionLevel();
+    const createPromotionLevel = useCreatePromotionLevel(list.reload);
     const [selectedEntity, setSelectedEntity] = useState<IPromotionLevelEntity | null>(null);
-    const updatePromotionLevel = useUpdatePromotionLevel(selectedEntity);
+    const updatePromotionLevel = useUpdatePromotionLevel(selectedEntity, list.reload);
     const actions = usePromotionLevelActions(list.reload);
 
     const [createOpen, setCreateOpen] = useState(false);
@@ -73,6 +75,10 @@ const PromotionLevelsListContainer: FC = () => {
         }
     };
 
+    const { columns: tableColumns } = useResizableColumns(
+        promotionLevelsTableColumns(handleAction, isSuperAdmin)
+    );
+
     return (
         <>
             <ErrorAlert banner showIcon closable error={list.error} onClose={list.reload} />
@@ -89,21 +95,26 @@ const PromotionLevelsListContainer: FC = () => {
                 statusFilter={list.statusFilter}
                 onStatusFilterChange={list.onStatusFilterChange}
                 statusOptions={PROMOTION_LEVEL_STATUS_OPTIONS}
-                searchValue=""
-                onSearchChange={() => {}}
-                onSearch={() => {}}
+                searchValue={list.searchValue}
+                onSearchChange={list.onSearchChange}
+                onSearch={list.onSearch}
+                searchLoading={list.loading}
             />
 
             <Table
                 rowKey="id"
                 dataSource={list.items}
-                columns={promotionLevelsTableColumns(handleAction, isSuperAdmin)}
+                columns={tableColumns}
                 loading={list.loading}
-                pagination={false}
+                components={{ header: { cell: ResizableTitle } }}
+                rowSelection={{ type: "checkbox", columnWidth: 36 }}
+                scroll={{ x: "max-content" }}
+                pagination={{ showSizeChanger: true, defaultPageSize: 10 }}
             />
 
             {createOpen && (
                 <CreateEditModal
+                    width={420}
                     open={createOpen}
                     formContext="CREATE"
                     loading={createPromotionLevel.loading}
@@ -124,12 +135,14 @@ const PromotionLevelsListContainer: FC = () => {
                         form={createPromotionLevel.form}
                         error={createPromotionLevel.error}
                         formContext="CREATE"
+                        onSubmit={createPromotionLevel.onSubmit}
                     />
                 </CreateEditModal>
             )}
 
             {editOpen && (
                 <CreateEditModal
+                    width={420}
                     open={editOpen}
                     formContext="EDIT"
                     loading={updatePromotionLevel.loading}
@@ -150,20 +163,21 @@ const PromotionLevelsListContainer: FC = () => {
                     }}
                 >
                     <PromotionLevelForm
+                        formContext="EDIT"
                         form={updatePromotionLevel.form}
                         error={updatePromotionLevel.error}
-                        formContext="EDIT"
                         initialValues={selectedEntity}
+                        onSubmit={updatePromotionLevel.onSubmit}
                     />
                 </CreateEditModal>
             )}
 
             <PromotionLevelActionModal
                 open={actionOpen}
-                promotionLevel={selectedEntity}
+                error={actions.error}
                 action={currentAction}
                 loading={actions.loading}
-                error={actions.error}
+                promotionLevel={selectedEntity}
                 onConfirm={handleActionConfirm}
                 onCancel={() => setActionOpen(false)}
             />

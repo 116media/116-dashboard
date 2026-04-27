@@ -9,6 +9,7 @@ import { CreateTagUseCase } from "@/modules/lookup/application/usecases/createta
 import { DeactivateContentTypeUseCase } from "@/modules/lookup/application/usecases/deactivatecontenttype.usecase";
 import { DeactivatePricingTierUseCase } from "@/modules/lookup/application/usecases/deactivatepricingtier.usecase";
 import { DeactivatePromotionLevelUseCase } from "@/modules/lookup/application/usecases/deactivatepromotionlevel.usecase";
+import { DeleteTagUseCase } from "@/modules/lookup/application/usecases/deletetag.usecase";
 import { GetAllContentTypesUseCase } from "@/modules/lookup/application/usecases/getallcontenttypes.usecase";
 import { GetAllPricingTiersUseCase } from "@/modules/lookup/application/usecases/getallpricingtiers.usecase";
 import { GetAllPromotionLevelsUseCase } from "@/modules/lookup/application/usecases/getallpromotionlevels.usecase";
@@ -16,6 +17,7 @@ import { GetAllTagsUseCase } from "@/modules/lookup/application/usecases/getallt
 import { UpdateContentTypeUseCase } from "@/modules/lookup/application/usecases/updatecontenttype.usecase";
 import { UpdatePricingTierUseCase } from "@/modules/lookup/application/usecases/updatepricingtier.usecase";
 import { UpdatePromotionLevelUseCase } from "@/modules/lookup/application/usecases/updatepromotionlevel.usecase";
+import { UpdateTagUseCase } from "@/modules/lookup/application/usecases/updatetag.usecase";
 import { LookupRepositoryImpl } from "@/modules/lookup/infrastructure/repositories/lookup.repository.impl";
 
 /**
@@ -50,6 +52,8 @@ export function registerLookupDependencies(container: AwilixContainer): void {
 
         // Tags
         getAllTagsUseCase: asClass(GetAllTagsUseCase).transient(),
-        createTagUseCase: asClass(CreateTagUseCase).transient()
+        createTagUseCase: asClass(CreateTagUseCase).transient(),
+        updateTagUseCase: asClass(UpdateTagUseCase).transient(),
+        deleteTagUseCase: asClass(DeleteTagUseCase).transient()
     });
 }

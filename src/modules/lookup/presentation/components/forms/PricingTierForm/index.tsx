@@ -3,6 +3,7 @@ import { Form, Input } from "antd";
 import type { FC } from "react";
 import { useEffect } from "react";
 import type { IPricingTierEntity } from "@/modules/lookup/domain/entities/IPricingTierEntity";
+import type { ICreatePricingTierCredentials } from "@/modules/lookup/presentation/model/ICreatePricingTierCredentials";
 import { PricingTiersValidator } from "@/modules/lookup/presentation/utils/validators/lookup.pricing-tiers.validator";
 import type { Failure } from "@/shared/domain/failures/failure";
 import type { FormContext } from "@/shared/domain/types/pagination";
@@ -25,6 +26,7 @@ interface IPricingTierFormProps {
     formContext: FormContext;
     error: Failure | null | undefined;
     initialValues?: IPricingTierEntity | null;
+    onSubmit: (values: ICreatePricingTierCredentials) => void;
 }
 
 /**
@@ -44,7 +46,8 @@ const PricingTierForm: FC<IPricingTierFormProps> = ({
     form,
     error,
     formContext,
-    initialValues
+    initialValues,
+    onSubmit
 }) => {
     useEffect(() => {
         if (formContext === "EDIT" && initialValues) {
@@ -60,6 +63,7 @@ const PricingTierForm: FC<IPricingTierFormProps> = ({
             form={form}
             size="large"
             layout="vertical"
+            onFinish={onSubmit}
             name="pricing_tier_form"
             validateTrigger={["onSubmit", "onBlur"]}
         >

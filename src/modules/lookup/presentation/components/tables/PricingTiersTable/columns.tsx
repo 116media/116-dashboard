@@ -34,6 +34,7 @@ export const pricingTiersTableColumns = (
         title: "Nom",
         dataIndex: "name",
         key: "name",
+        width: 200,
         sorter: (a, b) => a.name.localeCompare(b.name),
         render: (name: string) => <Text strong>{name}</Text>
     },
@@ -41,21 +42,9 @@ export const pricingTiersTableColumns = (
         title: "Description",
         dataIndex: "description",
         key: "description",
+        width: 250,
         ellipsis: { showTitle: true },
         render: (description: string | null) => <Text type="secondary">{description ?? "—"}</Text>
-    },
-    {
-        title: "Statut",
-        dataIndex: "isActive",
-        key: "status",
-        width: 100,
-        sorter: (a, b) => {
-            const order = (r: IPricingTierEntity) => (r.isActive ? 0 : 1);
-            return order(a) - order(b);
-        },
-        render: (_: boolean, record: IPricingTierEntity) => (
-            <StatusTag status={record.isActive ? "active" : "inactive"} />
-        )
     },
     {
         title: "Modifié le",
@@ -66,15 +55,32 @@ export const pricingTiersTableColumns = (
             new Date(a.updatedAt ?? 0).getTime() - new Date(b.updatedAt ?? 0).getTime(),
         render: (date: string | null) =>
             date ? (
-                <Text type="secondary">{dayjs(date).format("DD MMM YYYY, HH:mm")}</Text>
+                <Text type="secondary">{dayjs(date).format("DD/MM/YYYY hh:mm")}</Text>
             ) : (
                 <Text type="secondary">—</Text>
             )
     },
     {
+        title: "Statut",
+        dataIndex: "isActive",
+        key: "status",
+        width: 100,
+        fixed: "end",
+        align: "center",
+        sorter: (a, b) => {
+            const order = (r: IPricingTierEntity) => (r.isActive ? 0 : 1);
+            return order(a) - order(b);
+        },
+        render: (_: boolean, record: IPricingTierEntity) => (
+            <StatusTag status={record.isActive ? "active" : "inactive"} />
+        )
+    },
+    {
         width: 65,
+        fixed: "end",
         key: "actions",
-        align: "center" as const,
+        align: "center",
+        title: "Actions",
         render: (_: unknown, record: IPricingTierEntity) => {
             const items: ITableActionItem[] = PRICING_TIER_DROPDOWN_ITEMS.map((item) => ({
                 key: item.key,

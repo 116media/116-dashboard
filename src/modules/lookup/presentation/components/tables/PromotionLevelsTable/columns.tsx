@@ -33,6 +33,7 @@ export const promotionLevelsTableColumns = (
         title: "Nom",
         dataIndex: "name",
         key: "name",
+        width: 200,
         sorter: (a, b) => a.name.localeCompare(b.name),
         render: (name: string) => <Text strong>{name}</Text>
     },
@@ -57,6 +58,8 @@ export const promotionLevelsTableColumns = (
         dataIndex: "isActive",
         key: "status",
         width: 100,
+        fixed: "end",
+        align: "center",
         sorter: (a, b) => {
             const order = (r: IPromotionLevelEntity) => (r.isActive ? 0 : 1);
             return order(a) - order(b);
@@ -68,7 +71,9 @@ export const promotionLevelsTableColumns = (
     {
         width: 65,
         key: "actions",
-        align: "center" as const,
+        fixed: "end",
+        align: "center",
+        title: "Actions",
         render: (_: unknown, record: IPromotionLevelEntity) => {
             const items: ITableActionItem[] = PROMOTION_LEVEL_DROPDOWN_ITEMS.map((item) => ({
                 key: item.key,

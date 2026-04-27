@@ -18,7 +18,7 @@ export interface ILookupRepositoryPort {
      *
      * @returns {Promise<Result<IContentTypeEntity[]>>} `ok(IContentTypeEntity[])` on success, `err(Failure)` on failure
      */
-    getAllContentTypes(): Promise<Result<IContentTypeEntity[]>>;
+    getAllContentTypes(search?: string): Promise<Result<IContentTypeEntity[]>>;
 
     /**
      * Creates a new content type.
@@ -60,7 +60,7 @@ export interface ILookupRepositoryPort {
      *
      * @returns {Promise<Result<IPricingTierEntity[]>>} `ok(IPricingTierEntity[])` on success, `err(Failure)` on failure
      */
-    getAllPricingTiers(): Promise<Result<IPricingTierEntity[]>>;
+    getAllPricingTiers(search?: string): Promise<Result<IPricingTierEntity[]>>;
 
     /**
      * Creates a new pricing tier.
@@ -110,7 +110,7 @@ export interface ILookupRepositoryPort {
      *
      * @returns {Promise<Result<IPromotionLevelEntity[]>>} `ok(IPromotionLevelEntity[])` on success, `err(Failure)` on failure
      */
-    getAllPromotionLevels(): Promise<Result<IPromotionLevelEntity[]>>;
+    getAllPromotionLevels(search?: string): Promise<Result<IPromotionLevelEntity[]>>;
 
     /**
      * Creates a new promotion level.
@@ -163,7 +163,7 @@ export interface ILookupRepositoryPort {
      *
      * @returns {Promise<Result<ITagEntity[]>>} `ok(ITagEntity[])` on success, `err(Failure)` on failure
      */
-    getAllTags(): Promise<Result<ITagEntity[]>>;
+    getAllTags(search?: string): Promise<Result<ITagEntity[]>>;
 
     /**
      * Creates a new tag.
@@ -174,4 +174,21 @@ export interface ILookupRepositoryPort {
      * @returns {Promise<Result<ITagEntity>>} `ok(ITagEntity)` on success, `err(Failure)` on failure
      */
     createTag(data: { name: string; slug: string }): Promise<Result<ITagEntity>>;
+
+    /**
+     * Updates an existing tag's name and slug.
+     *
+     * @param {string} id - Tag UUID
+     * @param {object} data - Update payload
+     * @returns {Promise<Result<ITagEntity>>} `ok(ITagEntity)` on success, `err(Failure)` on failure
+     */
+    updateTag(id: string, data: { name: string; slug: string }): Promise<Result<ITagEntity>>;
+
+    /**
+     * Permanently deletes a tag.
+     *
+     * @param {string} id - Tag UUID
+     * @returns {Promise<Result<{ isSuccess: boolean }>>} `ok` on success, `err(Failure)` on failure
+     */
+    deleteTag(id: string): Promise<Result<{ isSuccess: boolean }>>;
 }

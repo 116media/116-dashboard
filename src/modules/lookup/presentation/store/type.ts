@@ -32,6 +32,8 @@ export type ILookupState = {
     deactivatePromotionLevel: IBasicInitialState<IPromotionLevelEntity>;
     getTags: IBasicInitialStateList<ITagEntity>;
     createTag: IBasicInitialState<ITagEntity>;
+    updateTag: IBasicInitialState<ITagEntity>;
+    deleteTag: IBasicInitialState<{ isSuccess: boolean }>;
 };
 
 export type LookupStateKey = keyof ILookupState;

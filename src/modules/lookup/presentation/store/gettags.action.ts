@@ -12,12 +12,13 @@ import { ActionType } from "./constants";
  * of tags. On success, stores the result in
  * `lookup.getTags.data`.
  */
-export const getTagsAction = createAsyncThunk<ITagEntity[], void, { rejectValue: Failure }>(
-    ActionType.GetTags,
-    async (_, { rejectWithValue }) => {
-        const result = await container.cradle.getAllTagsUseCase.execute();
+export const getTagsAction = createAsyncThunk<
+    ITagEntity[],
+    string | undefined,
+    { rejectValue: Failure }
+>(ActionType.GetTags, async (search, { rejectWithValue }) => {
+    const result = await container.cradle.getAllTagsUseCase.execute(search);
 
-        if (!result.ok) return rejectWithValue(result.error);
-        return result.value;
-    }
-);
+    if (!result.ok) return rejectWithValue(result.error);
+    return result.value;
+});

@@ -11,10 +11,12 @@ import { useCreatePermission } from "@/modules/permissions/presentation/hooks/Us
 import { usePermissionActions } from "@/modules/permissions/presentation/hooks/UsePermissionActions";
 import { usePermissionsList } from "@/modules/permissions/presentation/hooks/UsePermissionsList";
 import { useUpdatePermission } from "@/modules/permissions/presentation/hooks/UseUpdatePermission";
+import { useResizableColumns } from "@/shared/presentation/hooks/UseResizableColumns";
 import CreateEditModal from "@/shared/presentation/ui/CreateEditModal";
 import ErrorAlert from "@/shared/presentation/ui/ErrorAlert";
 import { IconUnlockOutlined } from "@/shared/presentation/ui/Icons";
 import PageHeader from "@/shared/presentation/ui/PageHeader";
+import ResizableTitle from "@/shared/presentation/ui/ResizableTable";
 import TableToolbar from "@/shared/presentation/ui/TableToolbar";
 
 /**
@@ -28,9 +30,9 @@ import TableToolbar from "@/shared/presentation/ui/TableToolbar";
  */
 const PermissionsListContainer: FC = () => {
     const permissionsList = usePermissionsList();
-    const createPermission = useCreatePermission();
+    const createPermission = useCreatePermission(permissionsList.reload);
     const [selectedPermission, setSelectedPermission] = useState<IPermissionEntity | null>(null);
-    const updatePermission = useUpdatePermission(selectedPermission);
+    const updatePermission = useUpdatePermission(selectedPermission, permissionsList.reload);
     const permissionActions = usePermissionActions(permissionsList.reload);
 
     const [createOpen, setCreateOpen] = useState(false);
@@ -67,6 +69,10 @@ const PermissionsListContainer: FC = () => {
         }
     };
 
+    const { columns: tableColumns } = useResizableColumns(
+        permissionsTableColumns(handleAction, isSuperAdmin)
+    );
+
     return (
         <div>
             <ErrorAlert
@@ -98,9 +104,11 @@ const PermissionsListContainer: FC = () => {
             <Table
                 rowKey="id"
                 dataSource={permissionsList.permissions?.items ?? []}
-                columns={permissionsTableColumns(handleAction, isSuperAdmin)}
+                columns={tableColumns}
                 loading={permissionsList.loading}
-                rowSelection={{ type: "checkbox", columnWidth: 48 }}
+                components={{ header: { cell: ResizableTitle } }}
+                rowSelection={{ type: "checkbox", columnWidth: 36 }}
+                scroll={{ x: "max-content" }}
                 pagination={{
                     showSizeChanger: true,
                     current: (permissionsList.permissions?.pageIndex ?? 0) + 1,
@@ -132,6 +140,7 @@ const PermissionsListContainer: FC = () => {
                         form={createPermission.form}
                         error={createPermission.error}
                         formContext="CREATE"
+                        onSubmit={createPermission.onSubmit}
                     />
                 </CreateEditModal>
             )}
@@ -162,6 +171,7 @@ const PermissionsListContainer: FC = () => {
                         form={updatePermission.form}
                         error={updatePermission.error}
                         initialValues={selectedPermission}
+                        onSubmit={updatePermission.onSubmit}
                     />
                 </CreateEditModal>
             )}

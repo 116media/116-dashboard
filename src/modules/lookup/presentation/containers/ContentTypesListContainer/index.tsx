@@ -11,10 +11,12 @@ import { useContentTypeActions } from "@/modules/lookup/presentation/hooks/UseCo
 import { useContentTypesList } from "@/modules/lookup/presentation/hooks/UseContentTypesList";
 import { useCreateContentType } from "@/modules/lookup/presentation/hooks/UseCreateContentType";
 import { useUpdateContentType } from "@/modules/lookup/presentation/hooks/UseUpdateContentType";
+import { useResizableColumns } from "@/shared/presentation/hooks/UseResizableColumns";
 import CreateEditModal from "@/shared/presentation/ui/CreateEditModal";
 import ErrorAlert from "@/shared/presentation/ui/ErrorAlert";
 import { IconAppstoreOutlined } from "@/shared/presentation/ui/Icons";
 import PageHeader from "@/shared/presentation/ui/PageHeader";
+import ResizableTitle from "@/shared/presentation/ui/ResizableTable";
 import TableToolbar from "@/shared/presentation/ui/TableToolbar";
 
 /**
@@ -29,9 +31,9 @@ import TableToolbar from "@/shared/presentation/ui/TableToolbar";
  */
 const ContentTypesListContainer: FC = () => {
     const list = useContentTypesList();
-    const createContentType = useCreateContentType();
+    const createContentType = useCreateContentType(list.reload);
     const [selectedEntity, setSelectedEntity] = useState<IContentTypeEntity | null>(null);
-    const updateContentType = useUpdateContentType(selectedEntity);
+    const updateContentType = useUpdateContentType(selectedEntity, list.reload);
     const actions = useContentTypeActions(list.reload);
 
     const [createOpen, setCreateOpen] = useState(false);
@@ -70,6 +72,10 @@ const ContentTypesListContainer: FC = () => {
         }
     };
 
+    const { columns: tableColumns } = useResizableColumns(
+        contentTypesTableColumns(handleAction, isSuperAdmin, isAdminOrSuperAdmin)
+    );
+
     return (
         <>
             <ErrorAlert banner showIcon closable error={list.error} onClose={list.reload} />
@@ -86,21 +92,26 @@ const ContentTypesListContainer: FC = () => {
                 statusFilter={list.statusFilter}
                 onStatusFilterChange={list.onStatusFilterChange}
                 statusOptions={CONTENT_TYPE_STATUS_OPTIONS}
-                searchValue=""
-                onSearchChange={() => {}}
-                onSearch={() => {}}
+                searchValue={list.searchValue}
+                onSearchChange={list.onSearchChange}
+                onSearch={list.onSearch}
+                searchLoading={list.loading}
             />
 
             <Table
                 rowKey="id"
-                dataSource={list.items}
-                columns={contentTypesTableColumns(handleAction, isSuperAdmin, isAdminOrSuperAdmin)}
                 loading={list.loading}
-                pagination={false}
+                dataSource={list.items}
+                columns={tableColumns}
+                rowSelection={{ type: "checkbox", columnWidth: 36 }}
+                scroll={{ x: "max-content" }}
+                components={{ header: { cell: ResizableTitle } }}
+                pagination={{ showSizeChanger: true, defaultPageSize: 10 }}
             />
 
             {createOpen && (
                 <CreateEditModal
+                    width={420}
                     open={createOpen}
                     formContext="CREATE"
                     loading={createContentType.loading}
@@ -121,12 +132,14 @@ const ContentTypesListContainer: FC = () => {
                         form={createContentType.form}
                         error={createContentType.error}
                         formContext="CREATE"
+                        onSubmit={createContentType.onSubmit}
                     />
                 </CreateEditModal>
             )}
 
             {editOpen && (
                 <CreateEditModal
+                    width={420}
                     open={editOpen}
                     formContext="EDIT"
                     loading={updateContentType.loading}
@@ -147,20 +160,21 @@ const ContentTypesListContainer: FC = () => {
                     }}
                 >
                     <ContentTypeForm
+                        formContext="EDIT"
                         form={updateContentType.form}
                         error={updateContentType.error}
-                        formContext="EDIT"
                         initialValues={selectedEntity}
+                        onSubmit={updateContentType.onSubmit}
                     />
                 </CreateEditModal>
             )}
 
             <ContentTypeActionModal
                 open={actionOpen}
-                contentType={selectedEntity}
+                error={actions.error}
                 action={currentAction}
                 loading={actions.loading}
-                error={actions.error}
+                contentType={selectedEntity}
                 onConfirm={handleActionConfirm}
                 onCancel={() => setActionOpen(false)}
             />

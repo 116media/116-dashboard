@@ -22,9 +22,10 @@ import { ProblemMapper } from "@/shared/infrastructure/mappers/problem.mapper";
  * Failure values via ProblemMapper.
  */
 export class LookupRepositoryImpl implements ILookupRepositoryPort {
-    async getAllContentTypes(): Promise<Result<IContentTypeEntity[]>> {
+    async getAllContentTypes(search?: string): Promise<Result<IContentTypeEntity[]>> {
         try {
-            const response = await apiClient.api.adminGetAllContentTypes();
+            const params = search ? { params: { search } } : {};
+            const response = await apiClient.instance.get("/api/v1/admin/content-types", params);
             return ok(response.data.contentTypes.map(LookupMapper.contentTypeFromDto));
         } catch (error) {
             return err(ProblemMapper.toFailure(error));
@@ -70,9 +71,10 @@ export class LookupRepositoryImpl implements ILookupRepositoryPort {
         }
     }
 
-    async getAllPricingTiers(): Promise<Result<IPricingTierEntity[]>> {
+    async getAllPricingTiers(search?: string): Promise<Result<IPricingTierEntity[]>> {
         try {
-            const response = await apiClient.api.adminGetAllPricingTiers();
+            const params = search ? { params: { search } } : {};
+            const response = await apiClient.instance.get("/api/v1/admin/pricing-tiers", params);
             return ok(response.data.pricingTiers.map(LookupMapper.pricingTierFromDto));
         } catch (error) {
             return err(ProblemMapper.toFailure(error));
@@ -121,9 +123,10 @@ export class LookupRepositoryImpl implements ILookupRepositoryPort {
         }
     }
 
-    async getAllPromotionLevels(): Promise<Result<IPromotionLevelEntity[]>> {
+    async getAllPromotionLevels(search?: string): Promise<Result<IPromotionLevelEntity[]>> {
         try {
-            const response = await apiClient.api.adminGetAllPromotionLevels();
+            const params = search ? { params: { search } } : {};
+            const response = await apiClient.instance.get("/api/v1/admin/promotion-levels", params);
             return ok(response.data.promotionLevels.map(LookupMapper.promotionLevelFromDto));
         } catch (error) {
             return err(ProblemMapper.toFailure(error));
@@ -173,9 +176,10 @@ export class LookupRepositoryImpl implements ILookupRepositoryPort {
         }
     }
 
-    async getAllTags(): Promise<Result<ITagEntity[]>> {
+    async getAllTags(search?: string): Promise<Result<ITagEntity[]>> {
         try {
-            const response = await apiClient.api.publicGetAllTags();
+            const params = search ? { params: { search } } : {};
+            const response = await apiClient.instance.get("/api/v1/admin/tags", params);
             return ok(response.data.tags.map(LookupMapper.tagFromDto));
         } catch (error) {
             return err(ProblemMapper.toFailure(error));
@@ -186,6 +190,24 @@ export class LookupRepositoryImpl implements ILookupRepositoryPort {
         try {
             const response = await apiClient.api.adminCreateTag(data);
             return ok(LookupMapper.tagFromDto(response.data.tag));
+        } catch (error) {
+            return err(ProblemMapper.toFailure(error));
+        }
+    }
+
+    async updateTag(id: string, data: { name: string; slug: string }): Promise<Result<ITagEntity>> {
+        try {
+            const response = await apiClient.api.adminUpdateTag(id, data);
+            return ok(LookupMapper.tagFromDto(response.data.tag));
+        } catch (error) {
+            return err(ProblemMapper.toFailure(error));
+        }
+    }
+
+    async deleteTag(id: string): Promise<Result<{ isSuccess: boolean }>> {
+        try {
+            const response = await apiClient.api.adminDeleteTag(id);
+            return ok({ isSuccess: response.data.isSuccess });
         } catch (error) {
             return err(ProblemMapper.toFailure(error));
         }

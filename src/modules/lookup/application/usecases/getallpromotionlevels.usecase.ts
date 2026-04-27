@@ -7,7 +7,8 @@ import type { Result } from "@/shared/domain/results/result";
  * @interface IGetAllPromotionLevelsUseCase
  * @extends {IResultUseCase<void, IPromotionLevelEntity[]>}
  */
-interface IGetAllPromotionLevelsUseCase extends IResultUseCase<void, IPromotionLevelEntity[]> {}
+interface IGetAllPromotionLevelsUseCase
+    extends IResultUseCase<string | undefined, IPromotionLevelEntity[]> {}
 
 /**
  * Use case for fetching all promotion levels.
@@ -30,7 +31,7 @@ export class GetAllPromotionLevelsUseCase implements IGetAllPromotionLevelsUseCa
      *
      * @returns {Promise<Result<IPromotionLevelEntity[]>>} `ok(IPromotionLevelEntity[])` on success, `err(Failure)` on failure
      */
-    async execute(): Promise<Result<IPromotionLevelEntity[]>> {
-        return this.lookupRepository.getAllPromotionLevels();
+    async execute(search?: string): Promise<Result<IPromotionLevelEntity[]>> {
+        return this.lookupRepository.getAllPromotionLevels(search);
     }
 }

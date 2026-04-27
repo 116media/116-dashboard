@@ -68,7 +68,7 @@ const CreateEditModal: FC<ICreateEditModalProps> = ({
             closable={!success}
             title={!success && modalTitle}
             footer={
-                !success && (
+                success ? null : (
                     <Flex gap={8} justify="space-between" flex={1}>
                         <Button onClick={onClose} danger>
                             Annuler

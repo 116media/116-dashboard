@@ -65,22 +65,10 @@ export const permissionsTableColumns = (
         title: "Description",
         dataIndex: "description",
         key: "description",
+        width: 250,
         ellipsis: { showTitle: true },
         sorter: (a, b) => a.description.localeCompare(b.description),
         render: (description: string) => <Text type="secondary">{description}</Text>
-    },
-    {
-        title: "Statut",
-        key: "status",
-        width: 100,
-        sorter: (a, b) => {
-            const order = (r: IPermissionEntity) => (r.isDeleted ? 2 : r.isActive ? 0 : 1);
-            return order(a) - order(b);
-        },
-        render: (_: unknown, record: IPermissionEntity) => {
-            if (record.isDeleted) return <StatusTag status="deleted" />;
-            return <StatusTag status={record.isActive ? "active" : "inactive"} />;
-        }
     },
     {
         title: "Modifié le",
@@ -91,15 +79,32 @@ export const permissionsTableColumns = (
             new Date(a.updatedAt ?? 0).getTime() - new Date(b.updatedAt ?? 0).getTime(),
         render: (date: string | null) =>
             date ? (
-                <Text type="secondary">{dayjs(date).format("DD MMM YYYY, HH:mm")}</Text>
+                <Text type="secondary">{dayjs(date).format("DD/MM/YYYY hh:mm")}</Text>
             ) : (
                 <Text type="secondary">—</Text>
             )
     },
     {
-        width: 65,
+        title: "Statut",
+        key: "status",
+        width: 100,
+        fixed: "end",
+        align: "center",
+        sorter: (a, b) => {
+            const order = (r: IPermissionEntity) => (r.isDeleted ? 2 : r.isActive ? 0 : 1);
+            return order(a) - order(b);
+        },
+        render: (_: unknown, record: IPermissionEntity) => {
+            if (record.isDeleted) return <StatusTag status="deleted" />;
+            return <StatusTag status={record.isActive ? "active" : "inactive"} />;
+        }
+    },
+    {
+        width: 50,
+        fixed: "end",
         key: "actions",
-        align: "center" as const,
+        align: "center",
+        title: "Actions",
         render: (_: unknown, record: IPermissionEntity) => {
             const items: ITableActionItem[] = PERMISSION_DROPDOWN_ITEMS.map((item) => ({
                 key: item.key,

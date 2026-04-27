@@ -443,6 +443,10 @@ export interface AdminDeleteShortVideoResponse {
   isSuccess: boolean;
 }
 
+export interface AdminDeleteTagResponse {
+  isSuccess: boolean;
+}
+
 export interface AdminDeleteVideoResponse {
   isSuccess: boolean;
 }
@@ -895,6 +899,15 @@ export interface AdminUpdateRoleRequest {
 
 export interface AdminUpdateRoleResponse {
   role: RoleDto;
+}
+
+export interface AdminUpdateTagRequest {
+  name: string;
+  slug: string;
+}
+
+export interface AdminUpdateTagResponse {
+  tag: TagDto;
 }
 
 export interface AdminUpdateVideoRequest {
@@ -8323,6 +8336,106 @@ export class Api<
       this.request<AdminActivateShortVideoResponse, ProblemDetails>({
         path: `/api/v1/admin/shorts/${id}/activate`,
         method: "PATCH",
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * @description Updates an existing content tag's name and slug.
+     * 
+     * This endpoint updates a tag by:
+     * 
+     * - Validating the new name and slug format
+     * - Checking that no other tag with the same slug already exists
+     * - Applying the name and slug changes and returning the updated tag
+     * 
+     * **Authentication Requirements:**
+     * 
+     * - User must be authenticated with a valid access token
+     * - User must have Admin or SuperAdmin role
+     * 
+     * **Request Body:**
+     * 
+     * - name: The new display name for the tag (max 50 characters)
+     * - slug: The new URL-safe identifier — lowercase letters, numbers, and hyphens only (max 60 characters)
+     * 
+     * **Response Codes:**
+     * 
+     * - Returns 200 OK with updated tag details on success
+     * - Returns 400 Bad Request if validation fails
+     * - Returns 401 Unauthorized if access token is invalid or expired
+     * - Returns 403 Forbidden if user lacks Admin role
+     * - Returns 404 Not Found if the tag does not exist
+     * - Returns 409 Conflict if another tag with the same slug already exists
+     *
+     * @tags admin::tags
+     * @name AdminUpdateTag
+     * @summary Update a content tag
+     * @request PUT:/api/v1/admin/tags/{id}
+     * @secure
+     * @response `200` `AdminUpdateTagResponse` OK
+     * @response `400` `ProblemDetails` Bad Request
+     * @response `401` `ProblemDetails` Unauthorized
+     * @response `403` `ProblemDetails` Forbidden
+     * @response `404` `ProblemDetails` Not Found
+     * @response `409` `ProblemDetails` Conflict
+     * @response `429` `ProblemDetails` Too Many Requests
+     */
+    adminUpdateTag: (
+      id: string,
+      data: AdminUpdateTagRequest,
+      params: RequestParams = {},
+    ) =>
+      this.request<AdminUpdateTagResponse, ProblemDetails>({
+        path: `/api/v1/admin/tags/${id}`,
+        method: "PUT",
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * @description Permanently and irreversibly deletes a content tag from the system.
+     * 
+     * This endpoint deletes a tag by:
+     * 
+     * - Validating the tag ID format
+     * - Locating the tag or throwing a 404 if it does not exist
+     * - Hard deleting the record from the database
+     * **Warning:** This operation is irreversible. Once deleted, the tag cannot be restored.
+     * 
+     * **Authentication Requirements:**
+     * 
+     * - User must be authenticated with a valid access token
+     * - User must have SuperAdmin role
+     * 
+     * **Response Codes:**
+     * 
+     * - Returns 200 OK with success confirmation on deletion
+     * - Returns 400 Bad Request if the ID format is invalid
+     * - Returns 401 Unauthorized if access token is invalid or expired
+     * - Returns 403 Forbidden if user lacks SuperAdmin role
+     * - Returns 404 Not Found if the tag does not exist
+     *
+     * @tags admin::tags
+     * @name AdminDeleteTag
+     * @summary Permanently delete a content tag
+     * @request DELETE:/api/v1/admin/tags/{id}
+     * @secure
+     * @response `200` `AdminDeleteTagResponse` OK
+     * @response `400` `ProblemDetails` Bad Request
+     * @response `401` `ProblemDetails` Unauthorized
+     * @response `403` `ProblemDetails` Forbidden
+     * @response `404` `ProblemDetails` Not Found
+     * @response `429` `ProblemDetails` Too Many Requests
+     */
+    adminDeleteTag: (id: string, params: RequestParams = {}) =>
+      this.request<AdminDeleteTagResponse, ProblemDetails>({
+        path: `/api/v1/admin/tags/${id}`,
+        method: "DELETE",
         secure: true,
         format: "json",
         ...params,

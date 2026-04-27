@@ -7,7 +7,7 @@ import type { Result } from "@/shared/domain/results/result";
  * @interface IGetAllTagsUseCase
  * @extends {IResultUseCase<void, ITagEntity[]>}
  */
-interface IGetAllTagsUseCase extends IResultUseCase<void, ITagEntity[]> {}
+interface IGetAllTagsUseCase extends IResultUseCase<string | undefined, ITagEntity[]> {}
 
 /**
  * Use case for fetching all tags.
@@ -30,7 +30,7 @@ export class GetAllTagsUseCase implements IGetAllTagsUseCase {
      *
      * @returns {Promise<Result<ITagEntity[]>>} `ok(ITagEntity[])` on success, `err(Failure)` on failure
      */
-    async execute(): Promise<Result<ITagEntity[]>> {
-        return this.lookupRepository.getAllTags();
+    async execute(search?: string): Promise<Result<ITagEntity[]>> {
+        return this.lookupRepository.getAllTags(search);
     }
 }

@@ -35,7 +35,7 @@ interface IUseCreateTag {
  *
  * @returns Form instance, loading/error state, success message, and submit handler
  */
-export const useCreateTag = (): IUseCreateTag => {
+export const useCreateTag = (onSuccess?: () => void): IUseCreateTag => {
     const dispatch = useAppDispatch();
     const [form] = useForm<ICreateTagCredentials>();
     const [success, setSuccess] = useState<string | null>(null);
@@ -50,6 +50,7 @@ export const useCreateTag = (): IUseCreateTag => {
             setSuccess(TagsNotification.createSuccess.description);
             showNotification(TagsNotification.createSuccess);
             form.resetFields();
+            onSuccess?.();
         }
     };
 

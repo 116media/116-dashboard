@@ -30,5 +30,7 @@ export const lookupInitialState: ILookupState = {
     activatePromotionLevel: createInitialState(),
     deactivatePromotionLevel: createInitialState(),
     getTags: createInitialStateList(),
-    createTag: createInitialState()
+    createTag: createInitialState(),
+    updateTag: createInitialState(),
+    deleteTag: createInitialState()
 };

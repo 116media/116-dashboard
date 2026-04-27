@@ -3,6 +3,7 @@ import { Form, Input } from "antd";
 import type { FC } from "react";
 import { useEffect } from "react";
 import type { IContentTypeEntity } from "@/modules/lookup/domain/entities/IContentTypeEntity";
+import type { ICreateContentTypeCredentials } from "@/modules/lookup/presentation/model/ICreateContentTypeCredentials";
 import { ContentTypesValidator } from "@/modules/lookup/presentation/utils/validators/lookup.content-types.validator";
 import type { Failure } from "@/shared/domain/failures/failure";
 import type { FormContext } from "@/shared/domain/types/pagination";
@@ -21,9 +22,10 @@ const { Item } = Form;
  */
 interface IContentTypeFormProps {
     form: FormInstance;
-    error: Failure | null | undefined;
     formContext: FormContext;
+    error: Failure | null | undefined;
     initialValues?: IContentTypeEntity | null;
+    onSubmit: (values: ICreateContentTypeCredentials) => void;
 }
 
 /**
@@ -43,7 +45,8 @@ const ContentTypeForm: FC<IContentTypeFormProps> = ({
     form,
     error,
     formContext,
-    initialValues
+    initialValues,
+    onSubmit
 }) => {
     useEffect(() => {
         if (formContext === "EDIT" && initialValues) {
@@ -58,6 +61,7 @@ const ContentTypeForm: FC<IContentTypeFormProps> = ({
             form={form}
             size="large"
             layout="vertical"
+            onFinish={onSubmit}
             name="content_type_form"
             validateTrigger={["onSubmit", "onBlur"]}
         >

@@ -2,8 +2,7 @@
 @use "@/shared/presentation/styles/dimensions.scss" as dimensions;
 
 .navPopoverMenu {
-    width: 200px;
-    padding: calc(dimensions.$padding / 4);
+    width: 180px;
 
     &__title {
         font-weight: 600;
@@ -22,13 +21,9 @@
 
         [class~="ant-menu-item"] {
             margin: 0;
-            border-radius: 6px;
-            transition: all 0.2s ease;
             width: 100%;
-
-            &:hover {
-                background: colors.$background;
-            }
+            border-radius: dimensions.$border-radius;
+            transition: all 0.2s ease;
         }
     }
 }

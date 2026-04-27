@@ -1,5 +1,5 @@
 import { Button, Menu, Popover, Tooltip } from "antd";
-import type { FC } from "react";
+import { type FC, useState } from "react";
 import { useLocation, useNavigate } from "react-router";
 import type { INavigationChildItem } from "@/shared/presentation/constants/navigation";
 
@@ -49,11 +49,14 @@ const NavPopoverMenu: FC<INavPopoverMenuProps> = ({
 }) => {
     const navigate = useNavigate();
     const location = useLocation();
+    const [open, setOpen] = useState(false);
 
     return (
         <Popover
+            open={open}
             trigger="click"
             placement="right"
+            onOpenChange={setOpen}
             content={
                 <div className={styles.navPopoverMenu}>
                     <div className={styles.navPopoverMenu__title}>{label}</div>
@@ -64,7 +67,10 @@ const NavPopoverMenu: FC<INavPopoverMenuProps> = ({
                             key: child.path,
                             label: child.label,
                             icon: <child.icon />,
-                            onClick: () => navigate(child.path)
+                            onClick: () => {
+                                navigate(child.path);
+                                setOpen(false);
+                            }
                         }))}
                     />
                 </div>

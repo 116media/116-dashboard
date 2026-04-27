@@ -3,6 +3,7 @@ import { Form, Input, InputNumber } from "antd";
 import type { FC } from "react";
 import { useEffect } from "react";
 import type { IPromotionLevelEntity } from "@/modules/lookup/domain/entities/IPromotionLevelEntity";
+import type { ICreatePromotionLevelCredentials } from "@/modules/lookup/presentation/model/ICreatePromotionLevelCredentials";
 import { PromotionLevelsValidator } from "@/modules/lookup/presentation/utils/validators/lookup.promotion-levels.validator";
 import type { Failure } from "@/shared/domain/failures/failure";
 import type { FormContext } from "@/shared/domain/types/pagination";
@@ -21,9 +22,10 @@ const { Item } = Form;
  */
 interface IPromotionLevelFormProps {
     form: FormInstance;
-    error: Failure | null | undefined;
     formContext: FormContext;
+    error: Failure | null | undefined;
     initialValues?: IPromotionLevelEntity | null;
+    onSubmit: (values: ICreatePromotionLevelCredentials) => void;
 }
 
 /**
@@ -43,7 +45,8 @@ const PromotionLevelForm: FC<IPromotionLevelFormProps> = ({
     form,
     error,
     formContext,
-    initialValues
+    initialValues,
+    onSubmit
 }) => {
     useEffect(() => {
         if (formContext === "EDIT" && initialValues) {
@@ -60,6 +63,7 @@ const PromotionLevelForm: FC<IPromotionLevelFormProps> = ({
             form={form}
             size="large"
             layout="vertical"
+            onFinish={onSubmit}
             name="promotion_level_form"
             validateTrigger={["onSubmit", "onBlur"]}
         >

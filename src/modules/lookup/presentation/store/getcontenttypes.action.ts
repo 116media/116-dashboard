@@ -14,10 +14,10 @@ import { ActionType } from "./constants";
  */
 export const getContentTypesAction = createAsyncThunk<
     IContentTypeEntity[],
-    void,
+    string | undefined,
     { rejectValue: Failure }
->(ActionType.GetContentTypes, async (_, { rejectWithValue }) => {
-    const result = await container.cradle.getAllContentTypesUseCase.execute();
+>(ActionType.GetContentTypes, async (search, { rejectWithValue }) => {
+    const result = await container.cradle.getAllContentTypesUseCase.execute(search);
 
     if (!result.ok) return rejectWithValue(result.error);
     return result.value;

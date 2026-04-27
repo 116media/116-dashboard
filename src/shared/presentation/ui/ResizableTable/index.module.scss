@@ -1,0 +1,37 @@
+@use "@/shared/presentation/styles/colors.scss" as colors;
+
+.resizableTable {
+    &__wrapper {
+        position: relative;
+    }
+
+    &__handle {
+        position: absolute;
+        right: -5px;
+        bottom: 5px;
+        z-index: 1;
+        height: 80%;
+        cursor: col-resize;
+        padding: 0;
+        border: none;
+        background: none;
+        outline: none;
+        appearance: none;
+
+        &::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            right: 5px;
+            width: 1px;
+            height: 60%;
+            transform: translateY(-50%);
+            background: colors.$border-table-hr;
+            transition: background 0.2s ease;
+        }
+
+        &:hover::after {
+            background: colors.$brand-primary;
+        }
+    }
+}

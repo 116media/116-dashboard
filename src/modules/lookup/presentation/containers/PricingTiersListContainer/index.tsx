@@ -11,10 +11,12 @@ import { useCreatePricingTier } from "@/modules/lookup/presentation/hooks/UseCre
 import { usePricingTierActions } from "@/modules/lookup/presentation/hooks/UsePricingTierActions";
 import { usePricingTiersList } from "@/modules/lookup/presentation/hooks/UsePricingTiersList";
 import { useUpdatePricingTier } from "@/modules/lookup/presentation/hooks/UseUpdatePricingTier";
+import { useResizableColumns } from "@/shared/presentation/hooks/UseResizableColumns";
 import CreateEditModal from "@/shared/presentation/ui/CreateEditModal";
 import ErrorAlert from "@/shared/presentation/ui/ErrorAlert";
 import { IconDollarOutlined } from "@/shared/presentation/ui/Icons";
 import PageHeader from "@/shared/presentation/ui/PageHeader";
+import ResizableTitle from "@/shared/presentation/ui/ResizableTable";
 import TableToolbar from "@/shared/presentation/ui/TableToolbar";
 
 /**
@@ -29,9 +31,9 @@ import TableToolbar from "@/shared/presentation/ui/TableToolbar";
  */
 const PricingTiersListContainer: FC = () => {
     const list = usePricingTiersList();
-    const createPricingTier = useCreatePricingTier();
+    const createPricingTier = useCreatePricingTier(list.reload);
     const [selectedEntity, setSelectedEntity] = useState<IPricingTierEntity | null>(null);
-    const updatePricingTier = useUpdatePricingTier(selectedEntity);
+    const updatePricingTier = useUpdatePricingTier(selectedEntity, list.reload);
     const actions = usePricingTierActions(list.reload);
 
     const [createOpen, setCreateOpen] = useState(false);
@@ -70,6 +72,10 @@ const PricingTiersListContainer: FC = () => {
         }
     };
 
+    const { columns: tableColumns } = useResizableColumns(
+        pricingTiersTableColumns(handleAction, isSuperAdmin)
+    );
+
     return (
         <>
             <ErrorAlert banner showIcon closable error={list.error} onClose={list.reload} />
@@ -86,21 +92,26 @@ const PricingTiersListContainer: FC = () => {
                 statusFilter={list.statusFilter}
                 onStatusFilterChange={list.onStatusFilterChange}
                 statusOptions={PRICING_TIER_STATUS_OPTIONS}
-                searchValue=""
-                onSearchChange={() => {}}
-                onSearch={() => {}}
+                searchValue={list.searchValue}
+                onSearchChange={list.onSearchChange}
+                onSearch={list.onSearch}
+                searchLoading={list.loading}
             />
 
             <Table
                 rowKey="id"
                 dataSource={list.items}
-                columns={pricingTiersTableColumns(handleAction, isSuperAdmin)}
+                columns={tableColumns}
                 loading={list.loading}
-                pagination={false}
+                components={{ header: { cell: ResizableTitle } }}
+                rowSelection={{ type: "checkbox", columnWidth: 36 }}
+                scroll={{ x: "max-content" }}
+                pagination={{ showSizeChanger: true, defaultPageSize: 10 }}
             />
 
             {createOpen && (
                 <CreateEditModal
+                    width={420}
                     open={createOpen}
                     formContext="CREATE"
                     loading={createPricingTier.loading}
@@ -121,12 +132,14 @@ const PricingTiersListContainer: FC = () => {
                         form={createPricingTier.form}
                         error={createPricingTier.error}
                         formContext="CREATE"
+                        onSubmit={createPricingTier.onSubmit}
                     />
                 </CreateEditModal>
             )}
 
             {editOpen && (
                 <CreateEditModal
+                    width={420}
                     open={editOpen}
                     formContext="EDIT"
                     loading={updatePricingTier.loading}
@@ -151,6 +164,7 @@ const PricingTiersListContainer: FC = () => {
                         error={updatePricingTier.error}
                         formContext="EDIT"
                         initialValues={selectedEntity}
+                        onSubmit={updatePricingTier.onSubmit}
                     />
                 </CreateEditModal>
             )}

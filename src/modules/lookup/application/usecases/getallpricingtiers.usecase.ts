@@ -7,7 +7,8 @@ import type { Result } from "@/shared/domain/results/result";
  * @interface IGetAllPricingTiersUseCase
  * @extends {IResultUseCase<void, IPricingTierEntity[]>}
  */
-interface IGetAllPricingTiersUseCase extends IResultUseCase<void, IPricingTierEntity[]> {}
+interface IGetAllPricingTiersUseCase
+    extends IResultUseCase<string | undefined, IPricingTierEntity[]> {}
 
 /**
  * Use case for fetching all pricing tiers.
@@ -30,7 +31,7 @@ export class GetAllPricingTiersUseCase implements IGetAllPricingTiersUseCase {
      *
      * @returns {Promise<Result<IPricingTierEntity[]>>} `ok(IPricingTierEntity[])` on success, `err(Failure)` on failure
      */
-    async execute(): Promise<Result<IPricingTierEntity[]>> {
-        return this.lookupRepository.getAllPricingTiers();
+    async execute(search?: string): Promise<Result<IPricingTierEntity[]>> {
+        return this.lookupRepository.getAllPricingTiers(search);
     }
 }
