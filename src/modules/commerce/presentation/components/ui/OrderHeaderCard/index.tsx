@@ -1,5 +1,5 @@
-import { Button, Card, Flex, Space, Typography } from "antd";
-import type { FC } from "react";
+import { Card, Flex, Typography } from "antd";
+import { type FC, useMemo } from "react";
 import type { IOrderDetailEntity } from "@/modules/commerce/domain/entities/IOrderDetailEntity";
 import { ORDER_STATUS_CONFIG } from "@/modules/commerce/presentation/constants/order.status.config";
 import DetailField from "@/shared/presentation/ui/DetailField";
@@ -9,6 +9,9 @@ import {
     IconDollarOutlined,
     IconTagOutlined
 } from "@/shared/presentation/ui/Icons";
+import SplitActionButton, {
+    type ISplitActionItem
+} from "@/shared/presentation/ui/SplitActionButton";
 import StatusTag from "@/shared/presentation/ui/StatusTag";
 import { dayjs } from "@/shared/presentation/utils/dayjs/dayjs.utils";
 import styles from "./index.module.scss";
@@ -61,61 +64,68 @@ const OrderHeaderCard: FC<IOrderHeaderCardProps> = ({
     onSubmitOrder,
     onCancelOrder,
     isPendingPayment
-}) => (
-    <Card>
-        <Flex justify="space-between" gap={12} align="center" className={styles.orderHeader}>
-            <Flex align="center" justify="space-between" flex={1}>
-                <Title level={4} className={styles.orderHeader__title}>
-                    {order.customerName}
-                </Title>
-                <StatusTag status={order.status} config={ORDER_STATUS_CONFIG} />
+}) => {
+    const actions = useMemo<ISplitActionItem[]>(
+        () => [
+            { key: "edit", label: "Modifier", onClick: onEditOrder, hidden: !isDraft },
+            { key: "add-item", label: "Ajouter un produit", onClick: onAddItem, hidden: !isDraft },
+            { key: "submit", label: "Soumettre", onClick: onSubmitOrder, hidden: !isDraft },
+            {
+                key: "cancel",
+                label: "Annuler",
+                danger: true,
+                onClick: onCancelOrder,
+                hidden: !isDraft && !isPendingPayment
+            }
+        ],
+        [isDraft, isPendingPayment, onEditOrder, onAddItem, onSubmitOrder, onCancelOrder]
+    );
+
+    return (
+        <Card>
+            <Flex justify="space-between" gap={24} align="center" className={styles.orderHeader}>
+                <Flex align="center" justify="space-between" flex={1}>
+                    <Title level={4} className={styles.orderHeader__title}>
+                        {order.customerName}
+                    </Title>
+                    <StatusTag status={order.status} config={ORDER_STATUS_CONFIG} />
+                </Flex>
+
+                <SplitActionButton loading={actionsLoading} items={actions} />
             </Flex>
 
-            <Space size="middle">
-                {isDraft && (
-                    <>
-                        <Button onClick={onEditOrder}>Modifier</Button>
-                        <Button onClick={onAddItem}>Ajouter un produit</Button>
-                        <Button type="primary" loading={actionsLoading} onClick={onSubmitOrder}>
-                            Soumettre
-                        </Button>
-                    </>
-                )}
-                {(isDraft || isPendingPayment) && (
-                    <Button danger loading={actionsLoading} onClick={onCancelOrder}>
-                        Annuler
-                    </Button>
-                )}
-            </Space>
-        </Flex>
+            <Text type="secondary" strong className={styles.orderHeader__sectionLabel}>
+                Détails de la commande
+            </Text>
 
-        <Text type="secondary" strong className={styles.orderHeader__sectionLabel}>
-            Détails de la commande
-        </Text>
-
-        <div className={styles.orderHeader__grid}>
-            <DetailField
-                label="Total"
-                icon={<IconDollarOutlined />}
-                value={`$${(order.totalAmountUsd ?? 0).toFixed(2)}`}
-            />
-            <DetailField label="ID" value={order.id} icon={<IconTagOutlined />} copyable />
-            <DetailField
-                label="Créée le"
-                icon={<IconClockCircleOutlined />}
-                value={
-                    order.createdAt ? dayjs(order.createdAt).format("DD/MM/YYYY HH:mm") : undefined
-                }
-            />
-            <DetailField
-                label="Mise à jour"
-                icon={<IconCalendarOutlined />}
-                value={
-                    order.updatedAt ? dayjs(order.updatedAt).format("DD/MM/YYYY HH:mm") : undefined
-                }
-            />
-        </div>
-    </Card>
-);
+            <div className={styles.orderHeader__grid}>
+                <DetailField
+                    label="Total"
+                    icon={<IconDollarOutlined />}
+                    value={`$${(order.totalAmountUsd ?? 0).toFixed(2)}`}
+                />
+                <DetailField label="ID" value={order.id} icon={<IconTagOutlined />} copyable />
+                <DetailField
+                    label="Créée le"
+                    icon={<IconClockCircleOutlined />}
+                    value={
+                        order.createdAt
+                            ? dayjs(order.createdAt).format("DD/MM/YYYY HH:mm")
+                            : undefined
+                    }
+                />
+                <DetailField
+                    label="Mise à jour"
+                    icon={<IconCalendarOutlined />}
+                    value={
+                        order.updatedAt
+                            ? dayjs(order.updatedAt).format("DD/MM/YYYY HH:mm")
+                            : undefined
+                    }
+                />
+            </div>
+        </Card>
+    );
+};
 
 export default OrderHeaderCard;
