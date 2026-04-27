@@ -1,9 +1,13 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import type { IItemTierEntity } from "@/modules/commerce/domain/entities/IItemTierEntity";
 import type { IAddItemTierCredentials } from "@/modules/commerce/presentation/model/IAddItemTierCredentials";
+import { commerceSlice } from "@/modules/commerce/presentation/store";
 import type { Failure } from "@/shared/domain/failures/failure";
 import container from "@/shared/infrastructure/service.locator";
 import { ActionType } from "./constants";
+
+export const resetAddTierToItemAction = () =>
+    commerceSlice.actions.clear({ context: ActionType.AddTierToItem });
 
 /**
  * Async thunk to attach a pricing tier to an order item.
