@@ -1,8 +1,12 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import type { IAttachPaymentProofData } from "@/modules/commerce/presentation/model/IAttachPaymentProofData";
+import { commerceSlice } from "@/modules/commerce/presentation/store";
 import type { Failure } from "@/shared/domain/failures/failure";
 import container from "@/shared/infrastructure/service.locator";
 import { ActionType } from "./constants";
+
+export const resetAttachPaymentProofAction = () =>
+    commerceSlice.actions.clear({ context: ActionType.AttachPaymentProof });
 
 /**
  * Async thunk to attach a payment proof to an order.
