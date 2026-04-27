@@ -1,9 +1,13 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import type { ICommerceActionResponse } from "@/modules/commerce/domain/entities/ICommerceActionResponse";
 import type { IRejectPaymentCredentials } from "@/modules/commerce/presentation/model/IRejectPaymentCredentials";
+import { commerceSlice } from "@/modules/commerce/presentation/store";
 import type { Failure } from "@/shared/domain/failures/failure";
 import container from "@/shared/infrastructure/service.locator";
 import { ActionType } from "./constants";
+
+export const resetRejectPaymentAction = () =>
+    commerceSlice.actions.clear({ context: ActionType.RejectPayment });
 
 /**
  * Async thunk to reject an order payment.
