@@ -40,10 +40,7 @@ const OrdersListContainer: FC = () => {
     const list = useOrdersList();
     const modals = useOrderModals(list.reload);
     const createOrder = useCreateOrder(list.reload);
-    const addItem = useAddOrderItem(modals.selectedEntity?.id ?? null, () => {
-        modals.setAddItemOpen(false);
-        list.reload();
-    });
+    const addItem = useAddOrderItem(modals.selectedEntity?.id ?? null, list.reload);
     const actions = useOrderActions(list.reload);
     const { isSuperAdmin, isAdminOrSuperAdmin } = useAuthorization();
 
@@ -100,12 +97,13 @@ const OrdersListContainer: FC = () => {
             {modals.createOpen && (
                 <CreateEditModal
                     width={480}
-                    open={modals.createOpen}
                     formContext="CREATE"
+                    open={modals.createOpen}
                     loading={createOrder.loading}
                     success={createOrder.success}
-                    onClose={() => modals.setCreateOpen(false)}
                     onSubmit={() => createOrder.form.submit()}
+                    onClose={() => modals.setCreateOpen(false)}
+                    afterClose={() => createOrder.resetCreate()}
                     title={{
                         create: "Créer une commande",
                         edit: "Modifier la commande"
@@ -127,12 +125,13 @@ const OrdersListContainer: FC = () => {
             {modals.addItemOpen && (
                 <CreateEditModal
                     width={480}
-                    open={modals.addItemOpen}
                     formContext="CREATE"
+                    open={modals.addItemOpen}
                     loading={addItem.loading}
                     success={addItem.success}
-                    onClose={() => modals.setAddItemOpen(false)}
                     onSubmit={() => addItem.form.submit()}
+                    onClose={() => modals.setAddItemOpen(false)}
+                    afterClose={() => addItem.resetAddItem()}
                     title={{
                         create: "Ajouter un produit",
                         edit: "Ajouter un produit"
