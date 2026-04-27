@@ -127,9 +127,12 @@ Export any new icons needed for navigation items (e.g., `AppstoreOutlined`, `Dol
 
 ## TODO
 
-- [ ] Add 4 path constants to `paths.ts`
-- [ ] Add 4 navigation items to `navigation.ts`
-- [ ] Add 4 lazy imports and 4 PermissionRoute entries to `routes.tsx`
-- [ ] Add `lookup` reducer to `root.reducer.ts`
-- [ ] Extend `Cradle` and call `registerLookupDependencies` in `service.locator.ts`
-- [ ] Export any needed icons in `Icons/index.tsx`
+- [x] Add 4 path constants to `paths.ts`
+- [x] Add 4 navigation items to `navigation.ts`
+- [x] Add 4 lazy imports and 4 PermissionRoute entries to `routes.tsx`
+- [x] Add `lookup` reducer to `root.reducer.ts`
+- [x] Extend `Cradle` and call `registerLookupDependencies` in `service.locator.ts`
+- [x] Export any needed icons in `Icons/index.tsx`
+- [x] Add `useDebounce` hook for search inputs (added post-spec)
+- [x] Create `StatusTag` shared component (added post-spec)
+- [x] Create `RouteGuard` to replace GuestRoute/ProtectedRoute (added post-spec)

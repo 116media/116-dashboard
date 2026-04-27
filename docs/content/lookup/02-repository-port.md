@@ -49,4 +49,6 @@ One shared port instead of 4 separate ports because:
 
 ## TODO
 
-- [ ] Create `lookup.repository.port.ts` with JSDoc on the interface and every method
+- [x] Create `lookup.repository.port.ts` with JSDoc on the interface and every method
+- [x] Add `updateTag` and `deleteTag` methods (added post-spec)
+- [x] Add `search?: string` param to all getAll methods (added post-spec)

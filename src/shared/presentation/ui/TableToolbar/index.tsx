@@ -20,12 +20,14 @@ import styles from "./index.module.scss";
  * @property {boolean} [searchLoading] - Disables search input during loading
  */
 export interface ITableToolbarProps<T extends string = string> {
-    statusFilter: T;
-    onStatusFilterChange: (value: T) => void;
-    statusOptions: IStatusOption<T>[];
-    searchValue: string;
-    onSearchChange: (value: string) => void;
-    onSearch: (value: string) => void;
+    canSearch?: boolean;
+    canFilter?: boolean;
+    statusFilter?: T;
+    onStatusFilterChange?: (value: T) => void;
+    statusOptions?: IStatusOption<T>[];
+    searchValue?: string;
+    onSearchChange?: (value: string) => void;
+    onSearch?: (value: string) => void;
     searchLoading?: boolean;
 }
 
@@ -45,6 +47,8 @@ export interface ITableToolbarProps<T extends string = string> {
  * @returns {JSX.Element} The toolbar row
  */
 function TableToolbar<T extends string = string>({
+    canSearch = true,
+    canFilter = true,
     statusFilter,
     onStatusFilterChange,
     statusOptions,
@@ -53,22 +57,33 @@ function TableToolbar<T extends string = string>({
     onSearch,
     searchLoading
 }: ITableToolbarProps<T>) {
+    const showFilter = canFilter && statusFilter && onStatusFilterChange && statusOptions;
+    const showSearch = canSearch && searchValue !== undefined && onSearchChange && onSearch;
+
     return (
-        <Flex justify="space-between" align="center" className={styles.tableToolbar}>
-            <Flex gap={8} align="center">
-                <TableStatusFilter
-                    value={statusFilter}
-                    onChange={onStatusFilterChange}
-                    options={statusOptions}
+        <Flex
+            align="center"
+            className={styles.tableToolbar}
+            justify={showFilter ? "space-between" : "flex-end"}
+        >
+            {showFilter && (
+                <Flex gap={8} align="center">
+                    <TableStatusFilter
+                        value={statusFilter}
+                        options={statusOptions}
+                        loading={searchLoading}
+                        onChange={onStatusFilterChange}
+                    />
+                </Flex>
+            )}
+            {showSearch && (
+                <TableSearchInput
+                    value={searchValue}
+                    onSearch={onSearch}
+                    onChange={onSearchChange}
                     loading={searchLoading}
                 />
-            </Flex>
-            <TableSearchInput
-                value={searchValue}
-                onChange={onSearchChange}
-                onSearch={onSearch}
-                loading={searchLoading}
-            />
+            )}
         </Flex>
     );
 }

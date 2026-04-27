@@ -88,7 +88,11 @@ Tags are simpler — no status filter, no actions, no update.
 
 ## TODO
 
-- [ ] Create 4 content type hooks with JSDoc
-- [ ] Create 4 pricing tier hooks with JSDoc
-- [ ] Create 4 promotion level hooks with JSDoc
-- [ ] Create 2 tag hooks with JSDoc
+- [x] Create 4 content type hooks with JSDoc
+- [x] Create 4 pricing tier hooks with JSDoc
+- [x] Create 4 promotion level hooks with JSDoc
+- [x] Create 2 tag hooks with JSDoc
+- [x] Create `UseUpdateTag.ts` hook (added post-spec)
+- [x] Create `UseTagActions.ts` hook for delete (added post-spec)
+- [x] Add debounced search to all list hooks (added post-spec)
+- [x] Add `onSuccess` callback to all create/update hooks (added post-spec)

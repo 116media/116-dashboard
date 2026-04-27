@@ -65,4 +65,6 @@ export class CreateContentTypeUseCase implements IResultUseCase<ICreateContentTy
 
 ## TODO
 
-- [ ] Create all 17 use case files with JSDoc
+- [x] Create all 17 use case files with JSDoc
+- [x] Create `updatetag.usecase.ts` (added post-spec)
+- [x] Create `deletetag.usecase.ts` (added post-spec)

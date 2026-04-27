@@ -111,7 +111,7 @@ const PricingTiersListContainer: FC = () => {
 
             {createOpen && (
                 <CreateEditModal
-                    width={420}
+                    width={480}
                     open={createOpen}
                     formContext="CREATE"
                     loading={createPricingTier.loading}
@@ -139,7 +139,7 @@ const PricingTiersListContainer: FC = () => {
 
             {editOpen && (
                 <CreateEditModal
-                    width={420}
+                    width={480}
                     open={editOpen}
                     formContext="EDIT"
                     loading={updatePricingTier.loading}

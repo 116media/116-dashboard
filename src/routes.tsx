@@ -6,7 +6,6 @@ import {
     ADS_BANNER_PATH,
     ADS_POPUP_PATH,
     ARTICLE_PATH,
-    CONTENT_PATH,
     FORGOT_PASSWORD_PATH,
     LOGIN_PATH,
     NOT_FOUND_PATH,
@@ -30,7 +29,6 @@ const ForgotPasswordPage = lazy(
 );
 const OverviewPage = lazy(() => import("@/modules/overview/presentation/pages/OverviewPage"));
 const SettingsPage = lazy(() => import("@/platform/settings/presentation/pages/SettingsPage"));
-const ContentsPage = lazy(() => import("@/modules/contents/presentation/pages/ContentsPage"));
 const VideosPage = lazy(() => import("@/modules/videos/presentation/pages/VideosPage"));
 const ArticlesPage = lazy(() => import("@/modules/articles/presentation/pages/ArticlesPage"));
 const AdsBannerPage = lazy(() => import("@/modules/ads/presentation/pages/AdsBannerPage"));
@@ -67,14 +65,6 @@ const protectedRoutes: RouteObject[] = [
                 children: [
                     { path: OVERVIEW_PATH, element: <OverviewPage /> },
                     { path: `${SETTING_PATH}/:tab?`, element: <SettingsPage /> },
-                    {
-                        element: (
-                            <PermissionRoute
-                                permissions={[{ resource: "contents", action: "read" }]}
-                            />
-                        ),
-                        children: [{ path: CONTENT_PATH, element: <ContentsPage /> }]
-                    },
                     {
                         element: (
                             <PermissionRoute

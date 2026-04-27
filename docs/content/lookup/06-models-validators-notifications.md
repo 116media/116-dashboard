@@ -106,6 +106,8 @@ Each file exports a config object with `createSuccess`, `updateSuccess`, `activa
 
 ## TODO
 
-- [ ] Create all 7 model files with JSDoc
-- [ ] Create all 4 validator files with JSDoc
-- [ ] Create all 4 notification files with JSDoc
+- [x] Create all 7 model files with JSDoc
+- [x] Create all 4 validator files with JSDoc
+- [x] Create all 4 notification files with JSDoc
+- [x] Create `IUpdateTagCredentials.ts` (added post-spec)
+- [x] Add `updateSuccess` and `deleteSuccess` to tags notification (added post-spec)

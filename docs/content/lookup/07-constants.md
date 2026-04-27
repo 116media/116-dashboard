@@ -89,7 +89,9 @@ Tags have no activate/deactivate — only edit (which the user confirmed should 
 
 ## TODO
 
-- [ ] Create 3 dropdown config files (content-types, pricing-tiers, promotion-levels)
-- [ ] Create 3 action config files
-- [ ] Create 3 status option files
-- [ ] Create tags dropdown config (empty or minimal)
+- [x] Create 3 dropdown config files (content-types, pricing-tiers, promotion-levels)
+- [x] Create 3 action config files
+- [x] Create 3 status option files
+- [x] Create tags dropdown config (empty or minimal)
+- [x] Create `lookup.tags.dropdown.ts` with edit and delete actions (added post-spec)
+- [x] Create `lookup.tags.config.ts` with delete action config (added post-spec)

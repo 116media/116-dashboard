@@ -393,38 +393,47 @@ const containerMap: Record<CatalogTab, FC> = {
 
 | File | Action |
 | --- | --- |
-| `src/shared/presentation/constants/navigation.ts` | Add `children` support, replace flat items with grouped + standalone items |
-| `src/shared/presentation/layouts/DashboardLayout/SideNav/index.tsx` | Handle `children` with `Popover` + `Menu`, keep `Tooltip` for standalone items |
-| `src/shared/presentation/constants/paths.ts` | Add all new path constants |
-| `src/routes.tsx` | Add tabbed routes for `/references/:tab?` and `/catalog/:tab?`, separate routes for editorial and commerce |
-| `src/modules/lookup/` | New module — Références |
-| `src/modules/catalog/` | New module — Catalogue |
-| `src/modules/editorial/` | New module — Édition (articles, videos, shorts, lyrics) |
-| `src/modules/commerce/` | New module — Ventes |
-| `src/modules/admins/` | New module — split from `users/` |
-| `src/modules/contents/` | Delete — replaced by `lookup/` |
-| `src/modules/articles/` | Delete — merged into `editorial/` |
-| `src/modules/videos/` | Delete — merged into `editorial/` |
+| `src/shared/presentation/constants/navigation.ts` | Done — 5 groups + 6 standalone items with `children` support |
+| `src/shared/presentation/layouts/DashboardLayout/SideNav/index.tsx` | Done — `Popover` for groups, `Tooltip` for standalone |
+| `src/shared/presentation/layouts/DashboardLayout/NavPopoverMenu/index.tsx` | Done — closes on item click |
+| `src/shared/presentation/constants/paths.ts` | Done — all path constants added |
+| `src/shared/presentation/ui/TableToolbar/index.tsx` | Done — `canSearch` / `canFilter` props |
+| `src/shared/presentation/ui/StatusTag/index.tsx` | Done — shared active/inactive/deleted tag |
+| `src/shared/presentation/guards/RouteGuard/index.tsx` | Done — unified guest/protected guard |
+| `src/routes.tsx` | Done — lookup tabbed route, removed contents route |
+| `src/App.tsx` | Done — global `renderEmpty` with illustrated image |
+| `src/modules/lookup/` | **Done** — full module with CRUD, search, tags update/delete |
+| `src/modules/catalog/` | Planned |
+| `src/modules/editorial/` | Planned |
+| `src/modules/commerce/` | Planned |
 
 ---
 
 ## TODO
 
 ### Navigation
-- [ ] Add `children` and `INavigationChildItem` to `INavigationItem`
-- [ ] Update `NAVIGATION_ITEMS` with 5 grouped + 7 standalone items
-- [ ] Update `SideNav` to render `Popover` for items with `children`
-- [ ] Add all new path constants to `paths.ts`
-- [ ] Update `routes.tsx` with tabbed and standalone routes
+
+- [x] Add `children` and `INavigationChildItem` to `INavigationItem`
+- [x] Update `NAVIGATION_ITEMS` with 5 grouped + 6 standalone items
+- [x] Update `SideNav` to render `Popover` for items with `children`
+- [x] Add all new path constants to `paths.ts`
+- [x] Update `routes.tsx` with tabbed and standalone routes
+- [x] Close `NavPopoverMenu` on item click
+- [x] Add `canSearch` / `canFilter` props to `TableToolbar`
+- [x] Add `StatusTag` shared component for active/inactive/deleted
+- [x] Add `RouteGuard` to replace `GuestRoute` / `ProtectedRoute`
+- [x] Set global `renderEmpty` with `Empty.PRESENTED_IMAGE_DEFAULT`
 
 ### New Modules
-- [ ] Create `src/modules/lookup/` (Références)
+
+- [x] Create `src/modules/lookup/` (Références) — full CRUD with search
 - [ ] Create `src/modules/catalog/` (Catalogue)
 - [ ] Create `src/modules/editorial/` (Édition — articles, videos, shorts, lyrics)
 - [ ] Create `src/modules/commerce/` (Ventes)
 - [ ] Create `src/modules/admins/` (split from users)
 
 ### Cleanup
-- [ ] Delete `src/modules/contents/` (replaced by lookup)
-- [ ] Delete `src/modules/articles/` (merged into editorial)
-- [ ] Delete `src/modules/videos/` (merged into editorial)
+
+- [x] Delete `src/modules/contents/` route (replaced by lookup)
+- [ ] Delete `src/modules/articles/` (merge into editorial)
+- [ ] Delete `src/modules/videos/` (merge into editorial)

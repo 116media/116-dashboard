@@ -75,7 +75,7 @@ Maps from backend `TagDto`. No audit fields, no `isActive`.
 
 ## TODO
 
-- [ ] Create `IContentTypeEntity.ts` with JSDoc
-- [ ] Create `IPricingTierEntity.ts` with JSDoc
-- [ ] Create `IPromotionLevelEntity.ts` with JSDoc
-- [ ] Create `ITagEntity.ts` with JSDoc
+- [x] Create `IContentTypeEntity.ts` with JSDoc
+- [x] Create `IPricingTierEntity.ts` with JSDoc
+- [x] Create `IPromotionLevelEntity.ts` with JSDoc
+- [x] Create `ITagEntity.ts` with JSDoc

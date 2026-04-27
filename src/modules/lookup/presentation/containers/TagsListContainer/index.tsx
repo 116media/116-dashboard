@@ -16,7 +16,7 @@ import ErrorAlert from "@/shared/presentation/ui/ErrorAlert";
 import { IconTagOutlined } from "@/shared/presentation/ui/Icons";
 import PageHeader from "@/shared/presentation/ui/PageHeader";
 import ResizableTitle from "@/shared/presentation/ui/ResizableTable";
-import TableSearchInput from "@/shared/presentation/ui/TableSearchInput";
+import TableToolbar from "@/shared/presentation/ui/TableToolbar";
 
 /**
  * Container for the tags list tab.
@@ -80,11 +80,12 @@ const TagsListContainer: FC = () => {
                 createLabel="Créer un tag"
             />
 
-            <TableSearchInput
-                value={list.searchValue}
-                onChange={list.onSearchChange}
+            <TableToolbar
+                canFilter={false}
                 onSearch={list.onSearch}
-                loading={list.loading}
+                searchLoading={list.loading}
+                searchValue={list.searchValue}
+                onSearchChange={list.onSearchChange}
             />
 
             <Table

@@ -117,6 +117,9 @@ Same pattern.
 
 ## TODO
 
-- [ ] Create 4 form components with JSDoc
-- [ ] Create 4 table column files with JSDoc
-- [ ] Create 3 action modal components with JSDoc
+- [x] Create 4 form components with JSDoc
+- [x] Create 4 table column files with JSDoc
+- [x] Create 3 action modal components with JSDoc
+- [x] Add actions column to TagsTable with edit and delete (added post-spec)
+- [x] Create `TagActionModal` for delete confirmation (added post-spec)
+- [x] Extend `TagForm` for edit mode with initialValues (added post-spec)

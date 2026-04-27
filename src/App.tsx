@@ -1,4 +1,4 @@
-import { ConfigProvider } from "antd";
+import { ConfigProvider, Empty } from "antd";
 import dayjs from "dayjs";
 import fr from "dayjs/locale/fr";
 import relativeTime from "dayjs/plugin/relativeTime";
@@ -24,7 +24,10 @@ const App: FC = () => {
     return (
         <Provider store={store}>
             <PersistGate loading={<PageLoader />} persistor={persistor}>
-                <ConfigProvider theme={Theme}>
+                <ConfigProvider
+                    theme={Theme}
+                    renderEmpty={() => <Empty image={Empty.PRESENTED_IMAGE_DEFAULT} />}
+                >
                     <BrowserRouter>
                         <NavigationProgress />
                         <SessionExpiredModal />
