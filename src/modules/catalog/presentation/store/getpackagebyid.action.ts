@@ -1,8 +1,12 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import type { IPackageEntity } from "@/modules/catalog/domain/entities/IPackageEntity";
+import { catalogSlice } from "@/modules/catalog/presentation/store";
 import type { Failure } from "@/shared/domain/failures/failure";
 import container from "@/shared/infrastructure/service.locator";
 import { ActionType } from "./constants";
+
+export const resetGetPackageByIdAction = () =>
+    catalogSlice.actions.clear({ context: ActionType.GetPackageById });
 
 /**
  * Async thunk to fetch a single package by ID.
