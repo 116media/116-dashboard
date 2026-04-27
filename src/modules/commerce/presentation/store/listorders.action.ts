@@ -1,10 +1,14 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import type { IOrderSummaryEntity } from "@/modules/commerce/domain/entities/IOrderSummaryEntity";
 import type { IOrdersQueryParams } from "@/modules/commerce/presentation/model/IOrdersQueryParams";
+import { commerceSlice } from "@/modules/commerce/presentation/store";
 import type { Failure } from "@/shared/domain/failures/failure";
 import type { IPaginatedResult } from "@/shared/domain/types/pagination";
 import container from "@/shared/infrastructure/service.locator";
 import { ActionType } from "./constants";
+
+export const resetListOrdersAction = () =>
+    commerceSlice.actions.clear({ context: ActionType.ListOrders });
 
 /**
  * Async thunk to fetch a paginated list of orders.
