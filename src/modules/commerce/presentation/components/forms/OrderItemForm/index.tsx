@@ -12,6 +12,7 @@ import { EnumCoreContentType } from "@/shared/infrastructure/api/generated/116.a
 import { useAppSelector } from "@/shared/presentation/store/store";
 import ErrorAlert from "@/shared/presentation/ui/ErrorAlert";
 import { IconFireFilled, IconHeartOutlined } from "@/shared/presentation/ui/Icons";
+import SelectOptionTagged from "@/shared/presentation/ui/SelectOptions/SelectOptionTagged";
 import SwitchField from "@/shared/presentation/ui/SwitchField";
 
 const { Item, useWatch } = Form;
@@ -21,11 +22,13 @@ const { Item, useWatch } = Form;
  *
  * @interface IOrderItemFormProps
  * @property {FormInstance} form - Ant Design form instance for field control
- * @property {Failure | null | undefined} error - Backend error to display in the alert
- * @property {(values: IAddOrderItemCredentials) => void} onSubmit - Callback when the form is submitted
+ * @property {boolean} [isBonusDefault] - Forces IsBonus on and disables the toggle (package overflow)
+ * @property {Failure | null | undefined} error - Backend error to display
+ * @property {(values: IAddOrderItemCredentials) => void} onSubmit - Form submission handler
  */
 interface IOrderItemFormProps {
     form: FormInstance;
+    isBonusDefault?: boolean;
     error: Failure | null | undefined;
     onSubmit: (values: IAddOrderItemCredentials) => void;
 }
@@ -50,7 +53,7 @@ const CONTENT_KIND_OPTIONS = [
  * @param {IOrderItemFormProps} props - Component props
  * @returns {JSX.Element} The rendered order item form
  */
-const OrderItemForm: FC<IOrderItemFormProps> = ({ form, error, onSubmit }) => {
+const OrderItemForm: FC<IOrderItemFormProps> = ({ form, error, isBonusDefault, onSubmit }) => {
     const { data: categories } = useAppSelector(
         ({ catalog: { getAllCategories } }) => getAllCategories
     );
@@ -86,8 +89,10 @@ const OrderItemForm: FC<IOrderItemFormProps> = ({ form, error, onSubmit }) => {
             ((promotionLevels as IPromotionLevelEntity[]) ?? [])
                 .filter((pl) => pl.isActive)
                 .map((pl) => ({
-                    label: `${pl.name} — ${pl.durationDays}j — $${pl.priceUsd.toFixed(2)}`,
-                    value: pl.id
+                    value: pl.id,
+                    label: pl.name,
+                    tag: `${pl.durationDays} ${pl.durationDays > 1 ? "jours" : "jour"}`,
+                    secondary: `$${pl.priceUsd.toFixed(2)}`
                 })),
         [promotionLevels]
     );
@@ -104,7 +109,7 @@ const OrderItemForm: FC<IOrderItemFormProps> = ({ form, error, onSubmit }) => {
             onFinish={onSubmit}
             name="order_item_form"
             validateTrigger={["onSubmit", "onBlur"]}
-            initialValues={{ socialBoost: false, isBonus: false }}
+            initialValues={{ socialBoost: false, isBonus: isBonusDefault ?? false }}
         >
             <ErrorAlert error={error} showIcon closable banner={false} />
 
@@ -128,8 +133,8 @@ const OrderItemForm: FC<IOrderItemFormProps> = ({ form, error, onSubmit }) => {
                 <Select
                     showSearch
                     options={categoryOptions}
-                    placeholder="Sélectionner une catégorie"
                     disabled={!selectedContentKind}
+                    placeholder="Sélectionner une catégorie"
                     notFoundContent={
                         selectedContentKind
                             ? "Aucune catégorie pour ce type"
@@ -144,6 +149,7 @@ const OrderItemForm: FC<IOrderItemFormProps> = ({ form, error, onSubmit }) => {
                     allowClear
                     options={promotionLevelOptions}
                     placeholder="Sélectionner un niveau"
+                    optionRender={SelectOptionTagged}
                 />
             </Item>
 
@@ -158,6 +164,7 @@ const OrderItemForm: FC<IOrderItemFormProps> = ({ form, error, onSubmit }) => {
             <Item name="isBonus" valuePropName="checked">
                 <SwitchField
                     title="Bonus"
+                    disabled={isBonusDefault}
                     icon={<IconHeartOutlined />}
                     description="Cet article est offert gratuitement au client."
                 />
