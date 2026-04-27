@@ -1,9 +1,13 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import type { ICategoryEntity } from "@/modules/catalog/domain/entities/ICategoryEntity";
+import { catalogSlice } from "@/modules/catalog/presentation/store";
 import type { Failure } from "@/shared/domain/failures/failure";
 import type { IPaginatedResult } from "@/shared/domain/types/pagination";
 import container from "@/shared/infrastructure/service.locator";
 import { ActionType } from "./constants";
+
+export const resetGetAllCategoriesAction = () =>
+    catalogSlice.actions.clear({ context: ActionType.GetAllCategories });
 
 /**
  * Async thunk to fetch a paginated list of categories.
