@@ -3,7 +3,10 @@ import { Form } from "antd";
 import { useEffect, useState } from "react";
 import type { IContentTypeEntity } from "@/modules/lookup/domain/entities/IContentTypeEntity";
 import type { IUpdateContentTypeCredentials } from "@/modules/lookup/presentation/model/IUpdateContentTypeCredentials";
-import { updateContentTypeAction } from "@/modules/lookup/presentation/store/updatecontenttype.action";
+import {
+    resetUpdateContentTypeAction,
+    updateContentTypeAction
+} from "@/modules/lookup/presentation/store/updatecontenttype.action";
 import { ContentTypesNotification } from "@/modules/lookup/presentation/utils/notification/lookup.content-types.notification";
 import type { Failure } from "@/shared/domain/failures/failure";
 import { useAppDispatch, useAppSelector } from "@/shared/presentation/store/store";
@@ -71,6 +74,8 @@ export const useUpdateContentType = (
 
     const resetUpdate = () => {
         setSuccess(null);
+        form.resetFields();
+        dispatch(resetUpdateContentTypeAction());
         form.resetFields();
     };
 
