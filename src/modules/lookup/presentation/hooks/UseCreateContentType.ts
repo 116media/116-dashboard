@@ -2,7 +2,10 @@ import type { FormInstance } from "antd";
 import { Form } from "antd";
 import { useState } from "react";
 import type { ICreateContentTypeCredentials } from "@/modules/lookup/presentation/model/ICreateContentTypeCredentials";
-import { createContentTypeAction } from "@/modules/lookup/presentation/store/createcontenttype.action";
+import {
+    createContentTypeAction,
+    resetCreateContentTypeAction
+} from "@/modules/lookup/presentation/store/createcontenttype.action";
 import { ContentTypesNotification } from "@/modules/lookup/presentation/utils/notification/lookup.content-types.notification";
 import type { Failure } from "@/shared/domain/failures/failure";
 import { useAppDispatch, useAppSelector } from "@/shared/presentation/store/store";
@@ -56,6 +59,8 @@ export const useCreateContentType = (onSuccess?: () => void): IUseCreateContentT
 
     const resetCreate = () => {
         setSuccess(null);
+        form.resetFields();
+        dispatch(resetCreateContentTypeAction());
     };
 
     return { form, loading, error, success, onSubmit, resetCreate };
