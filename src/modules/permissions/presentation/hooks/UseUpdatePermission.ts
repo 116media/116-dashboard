@@ -3,7 +3,10 @@ import { Form } from "antd";
 import { useEffect, useState } from "react";
 import type { IPermissionEntity } from "@/modules/permissions/domain/entities/IPermission";
 import type { IUpdatePermissionCredentials } from "@/modules/permissions/presentation/model/IUpdatePermissionCredentials";
-import { updatePermissionAction } from "@/modules/permissions/presentation/store/update.action";
+import {
+    resetUpdatePermissionAction,
+    updatePermissionAction
+} from "@/modules/permissions/presentation/store/update.action";
 import { PermissionsNotification } from "@/modules/permissions/presentation/utils/notification/permissions.notification";
 import type { Failure } from "@/shared/domain/failures/failure";
 import { useAppDispatch, useAppSelector } from "@/shared/presentation/store/store";
@@ -69,6 +72,8 @@ export const useUpdatePermission = (
 
     const resetUpdate = () => {
         setSuccess(null);
+        form.resetFields();
+        dispatch(resetUpdatePermissionAction());
         form.resetFields();
     };
 
