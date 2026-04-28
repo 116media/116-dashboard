@@ -1,9 +1,13 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import type { ICommerceActionResponse } from "@/modules/commerce/domain/entities/ICommerceActionResponse";
 import type { IVerifyPaymentCredentials } from "@/modules/commerce/presentation/model/IVerifyPaymentCredentials";
+import { commerceSlice } from "@/modules/commerce/presentation/store";
 import type { Failure } from "@/shared/domain/failures/failure";
 import container from "@/shared/infrastructure/service.locator";
 import { ActionType } from "./constants";
+
+export const resetVerifyPaymentAction = () =>
+    commerceSlice.actions.clear({ context: ActionType.VerifyPayment });
 
 /**
  * Async thunk to verify an order payment.
