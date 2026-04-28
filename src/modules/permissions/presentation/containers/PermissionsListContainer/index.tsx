@@ -121,11 +121,12 @@ const PermissionsListContainer: FC = () => {
             {createOpen && (
                 <CreateEditModal
                     open={createOpen}
-                    loading={createPermission.loading}
                     formContext="CREATE"
+                    loading={createPermission.loading}
                     success={createPermission.success}
                     onClose={() => setCreateOpen(false)}
                     onSubmit={() => createPermission.form.submit()}
+                    afterClose={() => createPermission.resetCreate()}
                     title={{
                         create: "Créer une permission",
                         edit: "Modifier la permission"
@@ -148,14 +149,15 @@ const PermissionsListContainer: FC = () => {
             {editOpen && (
                 <CreateEditModal
                     open={editOpen}
-                    loading={updatePermission.loading}
                     formContext="EDIT"
+                    loading={updatePermission.loading}
                     success={updatePermission.success}
                     onClose={() => {
                         setEditOpen(false);
                         updatePermission.resetUpdate();
                     }}
                     onSubmit={() => updatePermission.form.submit()}
+                    afterClose={() => updatePermission.resetUpdate()}
                     title={{
                         create: "Créer une permission",
                         edit: "Modifier la permission"
