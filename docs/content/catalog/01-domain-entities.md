@@ -31,7 +31,7 @@ interface ICategoryEntity {
     contentTypeName: string;
     name: string;
     slug: string;
-    description?: string | null;
+    description: string;
     isFree: boolean;
     isActive: boolean;
     pricing: ICategoryPricingEntity[];
@@ -86,7 +86,7 @@ Maps from backend `PackageSlotDto`. Nested inside `IPackageEntity.slots[]`.
 interface IPackageEntity {
     id: string;
     name: string;
-    description?: string | null;
+    description: string;
     flatPriceUsd: number;
     isActive: boolean;
     slots: IPackageSlotEntity[];

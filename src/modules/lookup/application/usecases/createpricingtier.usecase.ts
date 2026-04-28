@@ -5,10 +5,10 @@ import type { Result } from "@/shared/domain/results/result";
 
 /**
  * @interface ICreatePricingTierUseCase
- * @extends {IResultUseCase<{ name: string; description?: string }, IPricingTierEntity>}
+ * @extends {IResultUseCase<{ name: string; description: string }, IPricingTierEntity>}
  */
 interface ICreatePricingTierUseCase
-    extends IResultUseCase<{ name: string; description?: string }, IPricingTierEntity> {}
+    extends IResultUseCase<{ name: string; description: string }, IPricingTierEntity> {}
 
 /**
  * Use case for creating a new pricing tier.
@@ -29,12 +29,12 @@ export class CreatePricingTierUseCase implements ICreatePricingTierUseCase {
     /**
      * Executes the create pricing tier use case.
      *
-     * @param {{ name: string; description?: string }} data - Pricing tier name and optional description
+     * @param {{ name: string; description: string }} data - Pricing tier name and optional description
      * @returns {Promise<Result<IPricingTierEntity>>} `ok(IPricingTierEntity)` on success, `err(Failure)` on failure
      */
     async execute(data: {
         name: string;
-        description?: string;
+        description: string;
     }): Promise<Result<IPricingTierEntity>> {
         return this.lookupRepository.createPricingTier(data);
     }

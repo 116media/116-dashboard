@@ -83,7 +83,7 @@ export class LookupRepositoryImpl implements ILookupRepositoryPort {
 
     async createPricingTier(data: {
         name: string;
-        description?: string;
+        description: string;
     }): Promise<Result<IPricingTierEntity>> {
         try {
             const response = await apiClient.api.createPricingTier(data);
@@ -95,7 +95,7 @@ export class LookupRepositoryImpl implements ILookupRepositoryPort {
 
     async updatePricingTier(
         id: string,
-        data: { name: string; description?: string }
+        data: { name: string; description: string }
     ): Promise<Result<IPricingTierEntity>> {
         try {
             const response = await apiClient.api.adminUpdatePricingTier(id, data);

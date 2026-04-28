@@ -67,12 +67,12 @@ export interface ILookupRepositoryPort {
      *
      * @param {object} data - Pricing tier creation payload
      * @param {string} data.name - Pricing tier name
-     * @param {string} [data.description] - Optional description
+     * @param {string} data.description - Pricing tier description
      * @returns {Promise<Result<IPricingTierEntity>>} `ok(IPricingTierEntity)` on success, `err(Failure)` on failure
      */
     createPricingTier(data: {
         name: string;
-        description?: string;
+        description: string;
     }): Promise<Result<IPricingTierEntity>>;
 
     /**
@@ -81,12 +81,12 @@ export interface ILookupRepositoryPort {
      * @param {string} id - Pricing tier UUID
      * @param {object} data - Fields to update
      * @param {string} data.name - Updated pricing tier name
-     * @param {string} [data.description] - Updated description
+     * @param {string} data.description - Updated description
      * @returns {Promise<Result<IPricingTierEntity>>} `ok(IPricingTierEntity)` on success, `err(Failure)` on failure
      */
     updatePricingTier(
         id: string,
-        data: { name: string; description?: string }
+        data: { name: string; description: string }
     ): Promise<Result<IPricingTierEntity>>;
 
     /**

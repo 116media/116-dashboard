@@ -6,6 +6,7 @@ import {
     ADS_BANNER_PATH,
     ADS_POPUP_PATH,
     ARTICLE_PATH,
+    CATALOG_PATH,
     FORGOT_PASSWORD_PATH,
     LOGIN_PATH,
     NOT_FOUND_PATH,
@@ -40,6 +41,7 @@ const PermissionsPage = lazy(
     () => import("@/modules/permissions/presentation/pages/PermissionsPage")
 );
 const LookupPage = lazy(() => import("@/modules/lookup/presentation/pages/LookupPage"));
+const CatalogPage = lazy(() => import("@/modules/catalog/presentation/pages/CatalogPage"));
 
 const guestRoutes: RouteObject[] = [
     {
@@ -130,6 +132,15 @@ const protectedRoutes: RouteObject[] = [
                             />
                         ),
                         children: [{ path: `${REFERENCES_PATH}/:tab?`, element: <LookupPage /> }]
+                    },
+                    {
+                        element: (
+                            <PermissionRoute
+                                permissions={[{ resource: "categories", action: "read" }]}
+                                mode="some"
+                            />
+                        ),
+                        children: [{ path: `${CATALOG_PATH}/:tab?`, element: <CatalogPage /> }]
                     }
                 ]
             }

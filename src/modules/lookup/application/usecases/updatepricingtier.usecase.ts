@@ -5,11 +5,11 @@ import type { Result } from "@/shared/domain/results/result";
 
 /**
  * @interface IUpdatePricingTierUseCase
- * @extends {IResultUseCase<{ id: string; data: { name: string; description?: string } }, IPricingTierEntity>}
+ * @extends {IResultUseCase<{ id: string; data: { name: string; description: string } }, IPricingTierEntity>}
  */
 interface IUpdatePricingTierUseCase
     extends IResultUseCase<
-        { id: string; data: { name: string; description?: string } },
+        { id: string; data: { name: string; description: string } },
         IPricingTierEntity
     > {}
 
@@ -32,12 +32,12 @@ export class UpdatePricingTierUseCase implements IUpdatePricingTierUseCase {
     /**
      * Executes the update pricing tier use case.
      *
-     * @param {{ id: string; data: { name: string; description?: string } }} input - Pricing tier ID and update payload
+     * @param {{ id: string; data: { name: string; description: string } }} input - Pricing tier ID and update payload
      * @returns {Promise<Result<IPricingTierEntity>>} `ok(IPricingTierEntity)` on success, `err(Failure)` on failure
      */
     async execute(input: {
         id: string;
-        data: { name: string; description?: string };
+        data: { name: string; description: string };
     }): Promise<Result<IPricingTierEntity>> {
         return this.lookupRepository.updatePricingTier(input.id, input.data);
     }
