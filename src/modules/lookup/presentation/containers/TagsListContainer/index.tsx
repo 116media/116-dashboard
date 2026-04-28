@@ -74,12 +74,13 @@ const TagsListContainer: FC = () => {
             {modals.createOpen && (
                 <CreateEditModal
                     width={420}
-                    open={modals.createOpen}
                     formContext="CREATE"
+                    open={modals.createOpen}
                     loading={createTag.loading}
                     success={createTag.success}
-                    onClose={() => modals.setCreateOpen(false)}
                     onSubmit={() => createTag.form.submit()}
+                    onClose={() => modals.setCreateOpen(false)}
+                    afterClose={() => createTag.resetCreate()}
                     title={{ create: "Créer un tag", edit: "Modifier le tag" }}
                     onSuccessClose={() => {
                         modals.setCreateOpen(false);
@@ -99,8 +100,8 @@ const TagsListContainer: FC = () => {
             {modals.editOpen && (
                 <CreateEditModal
                     width={420}
-                    open={modals.editOpen}
                     formContext="EDIT"
+                    open={modals.editOpen}
                     loading={updateTag.loading}
                     success={updateTag.success}
                     onClose={() => {
@@ -108,6 +109,7 @@ const TagsListContainer: FC = () => {
                         updateTag.resetUpdate();
                     }}
                     onSubmit={() => updateTag.form.submit()}
+                    afterClose={() => updateTag.resetUpdate()}
                     title={{ create: "Créer un tag", edit: "Modifier le tag" }}
                     onSuccessClose={() => {
                         modals.setEditOpen(false);
