@@ -26,6 +26,7 @@ interface ILyricsSeoModalProps {
     form: FormInstance<IUpdateLyricsSeoCredentials>;
     onSubmit: (values: IUpdateLyricsSeoCredentials) => void;
     onCancel: () => void;
+    onReset?: () => void;
     onSuccessClose: () => void;
 }
 
@@ -49,7 +50,8 @@ const LyricsSeoModal: FC<ILyricsSeoModalProps> = ({
     form,
     onSubmit,
     onCancel,
-    onSuccessClose
+    onSuccessClose,
+    onReset
 }) => {
     return (
         <CreateEditModal
@@ -59,6 +61,10 @@ const LyricsSeoModal: FC<ILyricsSeoModalProps> = ({
             success={success}
             onClose={onCancel}
             onSubmit={() => form.submit()}
+            afterClose={() => {
+                form.resetFields();
+                onReset?.();
+            }}
             title={{ create: "Ajouter le SEO", edit: "Modifier le SEO" }}
             onSuccessClose={onSuccessClose}
         >
