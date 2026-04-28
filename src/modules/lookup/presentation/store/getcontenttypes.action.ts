@@ -1,8 +1,12 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import type { IContentTypeEntity } from "@/modules/lookup/domain/entities/IContentTypeEntity";
+import { lookupSlice } from "@/modules/lookup/presentation/store";
 import type { Failure } from "@/shared/domain/failures/failure";
 import container from "@/shared/infrastructure/service.locator";
 import { ActionType } from "./constants";
+
+export const resetGetContentTypesAction = () =>
+    lookupSlice.actions.clear({ context: ActionType.GetContentTypes });
 
 /**
  * Async thunk to fetch all content types.
