@@ -1,8 +1,12 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import type { ILyricsEntity } from "@/modules/lyrics/domain/entities/ILyricsEntity";
+import { lyricsSlice } from "@/modules/lyrics/presentation/store";
 import type { Failure } from "@/shared/domain/failures/failure";
 import container from "@/shared/infrastructure/service.locator";
 import { ActionType } from "./constants";
+
+export const resetUpdateLyricsAction = () =>
+    lyricsSlice.actions.clear({ context: ActionType.UpdateLyrics });
 
 /**
  * Async thunk to update an existing lyrics record.
