@@ -3,7 +3,10 @@ import { Form } from "antd";
 import { useEffect, useState } from "react";
 import type { IPromotionLevelEntity } from "@/modules/lookup/domain/entities/IPromotionLevelEntity";
 import type { IUpdatePromotionLevelCredentials } from "@/modules/lookup/presentation/model/IUpdatePromotionLevelCredentials";
-import { updatePromotionLevelAction } from "@/modules/lookup/presentation/store/updatepromotionlevel.action";
+import {
+    resetUpdatePromotionLevelAction,
+    updatePromotionLevelAction
+} from "@/modules/lookup/presentation/store/updatepromotionlevel.action";
 import { PromotionLevelsNotification } from "@/modules/lookup/presentation/utils/notification/lookup.promotion-levels.notification";
 import type { Failure } from "@/shared/domain/failures/failure";
 import { useAppDispatch, useAppSelector } from "@/shared/presentation/store/store";
@@ -73,6 +76,8 @@ export const useUpdatePromotionLevel = (
 
     const resetUpdate = () => {
         setSuccess(null);
+        form.resetFields();
+        dispatch(resetUpdatePromotionLevelAction());
         form.resetFields();
     };
 
