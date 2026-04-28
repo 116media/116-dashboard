@@ -3,7 +3,10 @@ import { Form } from "antd";
 import { useEffect, useState } from "react";
 import type { IPricingTierEntity } from "@/modules/lookup/domain/entities/IPricingTierEntity";
 import type { IUpdatePricingTierCredentials } from "@/modules/lookup/presentation/model/IUpdatePricingTierCredentials";
-import { updatePricingTierAction } from "@/modules/lookup/presentation/store/updatepricingtier.action";
+import {
+    resetUpdatePricingTierAction,
+    updatePricingTierAction
+} from "@/modules/lookup/presentation/store/updatepricingtier.action";
 import { PricingTiersNotification } from "@/modules/lookup/presentation/utils/notification/lookup.pricing-tiers.notification";
 import type { Failure } from "@/shared/domain/failures/failure";
 import { useAppDispatch, useAppSelector } from "@/shared/presentation/store/store";
@@ -72,6 +75,8 @@ export const useUpdatePricingTier = (
 
     const resetUpdate = () => {
         setSuccess(null);
+        form.resetFields();
+        dispatch(resetUpdatePricingTierAction());
         form.resetFields();
     };
 
