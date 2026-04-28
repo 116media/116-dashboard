@@ -1,8 +1,12 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import type { IPermissionActionResponse } from "@/modules/permissions/domain/entities/IPermissionActionResponse";
+import { permissionsSlice } from "@/modules/permissions/presentation/store";
 import type { Failure } from "@/shared/domain/failures/failure";
 import container from "@/shared/infrastructure/service.locator";
 import { ActionType } from "./constants";
+
+export const resetHardDeletePermissionAction = () =>
+    permissionsSlice.actions.clear({ context: ActionType.HardDeletePermission });
 
 /**
  * Async thunk to permanently delete a permission (irreversible).
