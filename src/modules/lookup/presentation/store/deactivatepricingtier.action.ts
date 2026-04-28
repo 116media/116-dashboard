@@ -1,8 +1,12 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import type { IPricingTierEntity } from "@/modules/lookup/domain/entities/IPricingTierEntity";
+import { lookupSlice } from "@/modules/lookup/presentation/store";
 import type { Failure } from "@/shared/domain/failures/failure";
 import container from "@/shared/infrastructure/service.locator";
 import { ActionType } from "./constants";
+
+export const resetDeactivatePricingTierAction = () =>
+    lookupSlice.actions.clear({ context: ActionType.DeactivatePricingTier });
 
 /**
  * Async thunk to deactivate an active pricing tier.
