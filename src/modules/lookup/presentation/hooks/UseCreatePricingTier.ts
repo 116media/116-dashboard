@@ -2,7 +2,10 @@ import type { FormInstance } from "antd";
 import { Form } from "antd";
 import { useState } from "react";
 import type { ICreatePricingTierCredentials } from "@/modules/lookup/presentation/model/ICreatePricingTierCredentials";
-import { createPricingTierAction } from "@/modules/lookup/presentation/store/createpricingtier.action";
+import {
+    createPricingTierAction,
+    resetCreatePricingTierAction
+} from "@/modules/lookup/presentation/store/createpricingtier.action";
 import { PricingTiersNotification } from "@/modules/lookup/presentation/utils/notification/lookup.pricing-tiers.notification";
 import type { Failure } from "@/shared/domain/failures/failure";
 import { useAppDispatch, useAppSelector } from "@/shared/presentation/store/store";
@@ -56,6 +59,8 @@ export const useCreatePricingTier = (onSuccess?: () => void): IUseCreatePricingT
 
     const resetCreate = () => {
         setSuccess(null);
+        form.resetFields();
+        dispatch(resetCreatePricingTierAction());
     };
 
     return { form, loading, error, success, onSubmit, resetCreate };
