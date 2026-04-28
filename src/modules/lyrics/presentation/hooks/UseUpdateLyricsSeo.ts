@@ -3,7 +3,10 @@ import { Form } from "antd";
 import { useEffect, useState } from "react";
 import type { ILyricsEntity } from "@/modules/lyrics/domain/entities/ILyricsEntity";
 import type { IUpdateLyricsSeoCredentials } from "@/modules/lyrics/presentation/model/IUpdateLyricsSeoCredentials";
-import { updateLyricsSeoAction } from "@/modules/lyrics/presentation/store/updatelyricsseo.action";
+import {
+    resetUpdateLyricsSeoAction,
+    updateLyricsSeoAction
+} from "@/modules/lyrics/presentation/store/updatelyricsseo.action";
 import { LyricsNotification } from "@/modules/lyrics/presentation/utils/notification/lyrics.notification";
 import type { Failure } from "@/shared/domain/failures/failure";
 import { useAppDispatch, useAppSelector } from "@/shared/presentation/store/store";
@@ -76,6 +79,8 @@ export const useUpdateLyricsSeo = (
 
     const resetSeo = () => {
         setSuccess(null);
+        form.resetFields();
+        dispatch(resetUpdateLyricsSeoAction());
         form.resetFields();
     };
 
