@@ -78,12 +78,13 @@ const PromotionLevelsListContainer: FC = () => {
             {modals.createOpen && (
                 <CreateEditModal
                     width={420}
-                    open={modals.createOpen}
                     formContext="CREATE"
+                    open={modals.createOpen}
                     loading={createPromotionLevel.loading}
                     success={createPromotionLevel.success}
                     onClose={() => modals.setCreateOpen(false)}
                     onSubmit={() => createPromotionLevel.form.submit()}
+                    afterClose={() => createPromotionLevel.resetCreate()}
                     title={{
                         create: "Créer un niveau de promotion",
                         edit: "Modifier le niveau de promotion"
@@ -106,8 +107,8 @@ const PromotionLevelsListContainer: FC = () => {
             {modals.editOpen && (
                 <CreateEditModal
                     width={420}
-                    open={modals.editOpen}
                     formContext="EDIT"
+                    open={modals.editOpen}
                     loading={updatePromotionLevel.loading}
                     success={updatePromotionLevel.success}
                     onClose={() => {
@@ -115,6 +116,7 @@ const PromotionLevelsListContainer: FC = () => {
                         updatePromotionLevel.resetUpdate();
                     }}
                     onSubmit={() => updatePromotionLevel.form.submit()}
+                    afterClose={() => updatePromotionLevel.resetUpdate()}
                     title={{
                         create: "Créer un niveau de promotion",
                         edit: "Modifier le niveau de promotion"
