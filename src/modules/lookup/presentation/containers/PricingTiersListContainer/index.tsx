@@ -78,12 +78,13 @@ const PricingTiersListContainer: FC = () => {
             {modals.createOpen && (
                 <CreateEditModal
                     width={480}
-                    open={modals.createOpen}
                     formContext="CREATE"
+                    open={modals.createOpen}
                     loading={createPricingTier.loading}
                     success={createPricingTier.success}
                     onClose={() => modals.setCreateOpen(false)}
                     onSubmit={() => createPricingTier.form.submit()}
+                    afterClose={() => createPricingTier.resetCreate()}
                     title={{
                         create: "Créer un niveau tarifaire",
                         edit: "Modifier le niveau tarifaire"
@@ -106,8 +107,8 @@ const PricingTiersListContainer: FC = () => {
             {modals.editOpen && (
                 <CreateEditModal
                     width={480}
-                    open={modals.editOpen}
                     formContext="EDIT"
+                    open={modals.editOpen}
                     loading={updatePricingTier.loading}
                     success={updatePricingTier.success}
                     onClose={() => {
@@ -115,6 +116,7 @@ const PricingTiersListContainer: FC = () => {
                         updatePricingTier.resetUpdate();
                     }}
                     onSubmit={() => updatePricingTier.form.submit()}
+                    afterClose={() => updatePricingTier.resetUpdate()}
                     title={{
                         create: "Créer un niveau tarifaire",
                         edit: "Modifier le niveau tarifaire"
