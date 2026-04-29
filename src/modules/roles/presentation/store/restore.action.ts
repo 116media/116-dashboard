@@ -1,8 +1,12 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import type { IRoleEntity } from "@/modules/roles/domain/entities/IRole";
+import { rolesSlice } from "@/modules/roles/presentation/store";
 import type { Failure } from "@/shared/domain/failures/failure";
 import container from "@/shared/infrastructure/service.locator";
 import { ActionType } from "./constants";
+
+export const resetRestoreRoleAction = () =>
+    rolesSlice.actions.clear({ context: ActionType.RestoreRole });
 
 /**
  * Async thunk to restore a soft-deleted role.
