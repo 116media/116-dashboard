@@ -2,7 +2,10 @@ import type { FormInstance } from "antd";
 import { Form } from "antd";
 import { useState } from "react";
 import type { IScheduleShootCredentials } from "@/modules/videos/presentation/model/IScheduleShootCredentials";
-import { scheduleShootAction } from "@/modules/videos/presentation/store/scheduleshoot.action";
+import {
+    resetScheduleShootAction,
+    scheduleShootAction
+} from "@/modules/videos/presentation/store/scheduleshoot.action";
 import { VideosNotification } from "@/modules/videos/presentation/utils/notification/videos.notification";
 import type { Failure } from "@/shared/domain/failures/failure";
 import { useAppDispatch, useAppSelector } from "@/shared/presentation/store/store";
@@ -58,6 +61,8 @@ export const useScheduleShoot = (): IUseScheduleShoot => {
 
     const resetShoot = () => {
         setSuccess(null);
+        form.resetFields();
+        dispatch(resetScheduleShootAction());
     };
 
     return { form, loading, error, success, onSubmit, resetShoot };
