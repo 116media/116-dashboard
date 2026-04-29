@@ -27,6 +27,7 @@ interface IYoutubeIdModalProps {
     initialYoutubeId?: string | null;
     onSubmit: (values: IAttachYoutubeIdCredentials) => void;
     onCancel: () => void;
+    onReset?: () => void;
     onSuccessClose: () => void;
 }
 
@@ -51,7 +52,8 @@ const YoutubeIdModal: FC<IYoutubeIdModalProps> = ({
     initialYoutubeId,
     onSubmit,
     onCancel,
-    onSuccessClose
+    onSuccessClose,
+    onReset
 }) => {
     useEffect(() => {
         if (open && initialYoutubeId) {
@@ -67,6 +69,10 @@ const YoutubeIdModal: FC<IYoutubeIdModalProps> = ({
             success={success}
             onClose={onCancel}
             onSubmit={() => form.submit()}
+            afterClose={() => {
+                form.resetFields();
+                onReset?.();
+            }}
             title={{ create: "Associer YouTube", edit: "Associer YouTube" }}
             onSuccessClose={onSuccessClose}
         >
