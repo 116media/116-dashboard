@@ -26,6 +26,7 @@ interface IVideoSeoModalProps {
     form: FormInstance<IUpdateVideoSeoCredentials>;
     onSubmit: (values: IUpdateVideoSeoCredentials) => void;
     onCancel: () => void;
+    onReset?: () => void;
     onSuccessClose: () => void;
 }
 
@@ -49,7 +50,8 @@ const VideoSeoModal: FC<IVideoSeoModalProps> = ({
     form,
     onSubmit,
     onCancel,
-    onSuccessClose
+    onSuccessClose,
+    onReset
 }) => {
     return (
         <CreateEditModal
@@ -59,8 +61,12 @@ const VideoSeoModal: FC<IVideoSeoModalProps> = ({
             success={success}
             onClose={onCancel}
             onSubmit={() => form.submit()}
-            title={{ create: "Ajouter le SEO", edit: "Modifier le SEO" }}
             onSuccessClose={onSuccessClose}
+            afterClose={() => {
+                form.resetFields();
+                onReset?.();
+            }}
+            title={{ create: "Ajouter le SEO", edit: "Modifier le SEO" }}
         >
             <VideoSeoForm form={form} error={error} onSubmit={onSubmit} />
         </CreateEditModal>
