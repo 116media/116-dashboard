@@ -1,0 +1,20 @@
+@use "@/shared/presentation/styles/colors.scss" as colors;
+@use "@/shared/presentation/styles/dimensions.scss" as dimensions;
+
+.categoryPricingList {
+    [class~="ant-card-body"] {
+        padding: dimensions.$padding !important;
+    }
+
+    &__empty {
+        margin: 0;
+        padding: dimensions.$padding;
+        border: 1px dashed colors.$border-light;
+        border-radius: dimensions.$border-radius;
+
+        [class~="ant-empty-image"] {
+            height: dimensions.$padding * 2.5;
+        }
+    }
+}
+

@@ -49,6 +49,7 @@ export const tagsTableColumns = (
     {
         width: 50,
         key: "actions",
+        title: "Actions",
         align: "center" as const,
         render: (_: unknown, record: ITagEntity) => {
             const items: ITableActionItem[] = TAG_DROPDOWN_ITEMS.map((item) => ({

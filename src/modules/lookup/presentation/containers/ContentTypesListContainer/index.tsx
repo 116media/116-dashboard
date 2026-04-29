@@ -1,5 +1,5 @@
 import { Table } from "antd";
-import { type FC, useCallback, useState } from "react";
+import type { FC } from "react";
 import { useAuthorization } from "@/modules/auth/presentation/hooks/UseAuthorization";
 import type { IContentTypeEntity } from "@/modules/lookup/domain/entities/IContentTypeEntity";
 import ContentTypeForm from "@/modules/lookup/presentation/components/forms/ContentTypeForm";
@@ -10,6 +10,7 @@ import { CONTENT_TYPE_STATUS_OPTIONS } from "@/modules/lookup/presentation/const
 import { useContentTypeActions } from "@/modules/lookup/presentation/hooks/UseContentTypeActions";
 import { useContentTypesList } from "@/modules/lookup/presentation/hooks/UseContentTypesList";
 import { useCreateContentType } from "@/modules/lookup/presentation/hooks/UseCreateContentType";
+import { useLookupModals } from "@/modules/lookup/presentation/hooks/UseLookupModals";
 import { useUpdateContentType } from "@/modules/lookup/presentation/hooks/UseUpdateContentType";
 import { useResizableColumns } from "@/shared/presentation/hooks/UseResizableColumns";
 import CreateEditModal from "@/shared/presentation/ui/CreateEditModal";
@@ -31,49 +32,14 @@ import TableToolbar from "@/shared/presentation/ui/TableToolbar";
  */
 const ContentTypesListContainer: FC = () => {
     const list = useContentTypesList();
+    const modals = useLookupModals<IContentTypeEntity, ContentTypeAction>();
     const createContentType = useCreateContentType(list.reload);
-    const [selectedEntity, setSelectedEntity] = useState<IContentTypeEntity | null>(null);
-    const updateContentType = useUpdateContentType(selectedEntity, list.reload);
+    const updateContentType = useUpdateContentType(modals.selectedEntity, list.reload);
     const actions = useContentTypeActions(list.reload);
-
-    const [createOpen, setCreateOpen] = useState(false);
-    const [editOpen, setEditOpen] = useState(false);
-    const [actionOpen, setActionOpen] = useState(false);
-    const [currentAction, setCurrentAction] = useState<ContentTypeAction | null>(null);
-
     const { isSuperAdmin, isAdminOrSuperAdmin } = useAuthorization();
 
-    const handleAction = useCallback((action: ContentTypeAction, entity: IContentTypeEntity) => {
-        setSelectedEntity(entity);
-
-        switch (action) {
-            case "edit":
-                setEditOpen(true);
-                break;
-            default:
-                setCurrentAction(action);
-                setActionOpen(true);
-                break;
-        }
-    }, []);
-
-    const handleActionConfirm = async () => {
-        if (!selectedEntity || !currentAction) return;
-
-        const actionMap = {
-            activate: actions.onActivate,
-            deactivate: actions.onDeactivate
-        } as const;
-
-        const handler = actionMap[currentAction as keyof typeof actionMap];
-        if (handler) {
-            await handler(selectedEntity.id);
-            setActionOpen(false);
-        }
-    };
-
     const { columns: tableColumns } = useResizableColumns(
-        contentTypesTableColumns(handleAction, isSuperAdmin, isAdminOrSuperAdmin)
+        contentTypesTableColumns(modals.handleAction, isSuperAdmin, isAdminOrSuperAdmin)
     );
 
     return (
@@ -84,7 +50,7 @@ const ContentTypesListContainer: FC = () => {
                 title="Types de contenu"
                 subtitle="Gérer les types de contenu disponibles."
                 icon={<IconAppstoreOutlined />}
-                onCreate={isSuperAdmin ? () => setCreateOpen(true) : undefined}
+                onCreate={isSuperAdmin ? () => modals.setCreateOpen(true) : undefined}
                 createLabel="Créer un type"
             />
 
@@ -109,21 +75,21 @@ const ContentTypesListContainer: FC = () => {
                 pagination={{ showSizeChanger: true, defaultPageSize: 10 }}
             />
 
-            {createOpen && (
+            {modals.createOpen && (
                 <CreateEditModal
                     width={420}
-                    open={createOpen}
+                    open={modals.createOpen}
                     formContext="CREATE"
                     loading={createContentType.loading}
                     success={createContentType.success}
-                    onClose={() => setCreateOpen(false)}
+                    onClose={() => modals.setCreateOpen(false)}
                     onSubmit={() => createContentType.form.submit()}
                     title={{
                         create: "Créer un type de contenu",
                         edit: "Modifier le type de contenu"
                     }}
                     onSuccessClose={() => {
-                        setCreateOpen(false);
+                        modals.setCreateOpen(false);
                         createContentType.resetCreate();
                         list.reload();
                     }}
@@ -137,15 +103,15 @@ const ContentTypesListContainer: FC = () => {
                 </CreateEditModal>
             )}
 
-            {editOpen && (
+            {modals.editOpen && (
                 <CreateEditModal
                     width={420}
-                    open={editOpen}
+                    open={modals.editOpen}
                     formContext="EDIT"
                     loading={updateContentType.loading}
                     success={updateContentType.success}
                     onClose={() => {
-                        setEditOpen(false);
+                        modals.setEditOpen(false);
                         updateContentType.resetUpdate();
                     }}
                     onSubmit={() => updateContentType.form.submit()}
@@ -154,7 +120,7 @@ const ContentTypesListContainer: FC = () => {
                         edit: "Modifier le type de contenu"
                     }}
                     onSuccessClose={() => {
-                        setEditOpen(false);
+                        modals.setEditOpen(false);
                         updateContentType.resetUpdate();
                         list.reload();
                     }}
@@ -163,20 +129,25 @@ const ContentTypesListContainer: FC = () => {
                         formContext="EDIT"
                         form={updateContentType.form}
                         error={updateContentType.error}
-                        initialValues={selectedEntity}
+                        initialValues={modals.selectedEntity}
                         onSubmit={updateContentType.onSubmit}
                     />
                 </CreateEditModal>
             )}
 
             <ContentTypeActionModal
-                open={actionOpen}
+                open={modals.actionOpen}
                 error={actions.error}
-                action={currentAction}
+                action={modals.currentAction}
                 loading={actions.loading}
-                contentType={selectedEntity}
-                onConfirm={handleActionConfirm}
-                onCancel={() => setActionOpen(false)}
+                contentType={modals.selectedEntity}
+                onConfirm={() =>
+                    modals.handleActionConfirm({
+                        activate: actions.onActivate,
+                        deactivate: actions.onDeactivate
+                    })
+                }
+                onCancel={() => modals.setActionOpen(false)}
             />
         </>
     );

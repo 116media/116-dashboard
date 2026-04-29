@@ -30,9 +30,9 @@ const isDevMode = import.meta.env.DEV;
  */
 const encryptor = encryptTransform({
     secretKey: import.meta.env.VITE_PERSIST_SECRET_KEY,
-    onError: () => {
-        persistor.purge();
-        window.location.href = LOGIN_PATH;
+    onError: async () => {
+        await persistor.purge();
+        window.location.replace(LOGIN_PATH);
     }
 });
 

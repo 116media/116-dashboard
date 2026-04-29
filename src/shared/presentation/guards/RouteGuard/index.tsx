@@ -27,7 +27,7 @@ const REDIRECT_PATH: Record<GuardType, string> = {
 export const RouteGuard: FC<IRouteGuardProps> = ({ type }) => {
     const user = useAppSelector(({ session: { currentUser } }) => currentUser.data);
 
-    const isAuthenticated = !!user;
+    const isAuthenticated = !!user?.id;
     const shouldRedirect = type === "guest" ? isAuthenticated : !isAuthenticated;
 
     if (shouldRedirect) return <Navigate to={REDIRECT_PATH[type]} replace />;

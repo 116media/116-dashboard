@@ -2,14 +2,29 @@ import type { ICatalogRepositoryPort } from "@/modules/catalog/application/repos
 import type { IResultUseCase } from "@/shared/application/usecases/IUseCase";
 import type { Result } from "@/shared/domain/results/result";
 
+/**
+ * @interface IRemoveCategoryPricingUseCase
+ */
 interface IRemoveCategoryPricingUseCase
     extends IResultUseCase<{ categoryId: string; pricingId: string }, { isSuccess: boolean }> {}
 
+/**
+ * Use case for removing a pricing tier from a category.
+ *
+ * @class RemoveCategoryPricingUseCase
+ * @implements {IRemoveCategoryPricingUseCase}
+ */
 export class RemoveCategoryPricingUseCase implements IRemoveCategoryPricingUseCase {
     private readonly catalogRepository: ICatalogRepositoryPort;
+    /**
+     * @param {ICatalogRepositoryPort} catalogRepository - Repository for catalog operations (injected)
+     */
     constructor({ catalogRepository }: { catalogRepository: ICatalogRepositoryPort }) {
         this.catalogRepository = catalogRepository;
     }
+    /**
+     * Executes the removing a pricing tier from a category use case.
+     */
     async execute(params: {
         categoryId: string;
         pricingId: string;

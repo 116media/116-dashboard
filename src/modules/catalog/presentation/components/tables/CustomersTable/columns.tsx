@@ -60,7 +60,7 @@ export const customersTableColumns = (
         title: "Actions",
         key: "actions",
         width: 80,
-        fixed: "right",
+        fixed: "end",
         align: "center",
         render: (_: unknown, record: ICustomerEntity) => {
             const items: ITableActionItem[] = CUSTOMER_DROPDOWN_ITEMS.map((item) => ({

@@ -3,7 +3,7 @@ import type { IPackageEntity } from "@/modules/catalog/domain/entities/IPackageE
 /**
  * Available action types for a package record.
  */
-export type PackageAction = "activate" | "deactivate";
+export type PackageAction = "activate" | "deactivate" | "manageSlots";
 
 interface IPackageDropdownItem {
     key: PackageAction;
@@ -28,6 +28,11 @@ interface IPackageDropdownItem {
  * - "activate" and "deactivate" are available to Admin and SuperAdmin.
  */
 export const PACKAGE_DROPDOWN_ITEMS: IPackageDropdownItem[] = [
+    {
+        key: "manageSlots",
+        label: "Gérer les slots",
+        hidden: (_, isSuperAdmin) => !isSuperAdmin
+    },
     {
         key: "activate",
         label: "Activer",

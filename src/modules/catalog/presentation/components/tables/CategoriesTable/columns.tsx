@@ -48,6 +48,14 @@ export const categoriesTableColumns = (
         sorter: (a, b) => a.contentTypeName.localeCompare(b.contentTypeName)
     },
     {
+        title: "Description",
+        dataIndex: "description",
+        key: "description",
+        width: 300,
+        ellipsis: true,
+        render: (description: string | null) => <Text type="secondary">{description ?? "—"}</Text>
+    },
+    {
         title: "Gratuit",
         dataIndex: "isFree",
         key: "isFree",
@@ -62,6 +70,7 @@ export const categoriesTableColumns = (
         dataIndex: "isActive",
         key: "status",
         width: 100,
+        fixed: "end",
         align: "center",
         render: (_: boolean, record: ICategoryEntity) => (
             <StatusTag status={record.isActive ? "active" : "inactive"} />
@@ -71,7 +80,7 @@ export const categoriesTableColumns = (
         title: "Actions",
         key: "actions",
         width: 80,
-        fixed: "right",
+        fixed: "end",
         align: "center",
         render: (_: unknown, record: ICategoryEntity) => {
             const items: ITableActionItem[] = CATEGORY_DROPDOWN_ITEMS.map((item) => ({

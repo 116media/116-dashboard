@@ -2,6 +2,7 @@ import type { FormInstance } from "antd";
 import { Form, InputNumber, Select } from "antd";
 import { type FC, useMemo } from "react";
 import type { IAddCategoryPricingCredentials } from "@/modules/catalog/presentation/model/IAddCategoryPricingCredentials";
+import { CategoriesValidator } from "@/modules/catalog/presentation/utils/validators/catalog.categories.validator";
 import type { IPricingTierEntity } from "@/modules/lookup/domain/entities/IPricingTierEntity";
 import type { Failure } from "@/shared/domain/failures/failure";
 import { useAppSelector } from "@/shared/presentation/store/store";
@@ -65,11 +66,10 @@ const CategoryPricingForm: FC<ICategoryPricingFormProps> = ({ form, error, onSub
             <Item
                 name="pricingTierId"
                 label="Niveau tarifaire"
-                rules={[{ required: true, message: "Niveau tarifaire est requis" }]}
+                rules={CategoriesValidator.pricingTierId("Niveau tarifaire")}
             >
                 <Select
                     showSearch
-                    optionFilterProp="label"
                     options={pricingTierOptions}
                     placeholder="Sélectionner un niveau tarifaire"
                 />
@@ -78,21 +78,9 @@ const CategoryPricingForm: FC<ICategoryPricingFormProps> = ({ form, error, onSub
             <Item
                 name="priceUsd"
                 label="Prix (USD)"
-                rules={[
-                    { required: true, message: "Prix en USD est requis" },
-                    {
-                        type: "number",
-                        min: 0,
-                        message: "Prix en USD doit être supérieur ou égal à 0"
-                    }
-                ]}
+                rules={CategoriesValidator.priceUsd("Prix (USD)")}
             >
-                <InputNumber
-                    min={0}
-                    step={0.5}
-                    placeholder="Prix en USD"
-                    style={{ width: "100%" }}
-                />
+                <InputNumber min={0} step={0.5} placeholder="Prix en USD" />
             </Item>
         </Form>
     );

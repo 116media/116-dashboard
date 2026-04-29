@@ -27,7 +27,7 @@ export type { PackageAction };
  * @returns Column configuration for the Ant Design Table
  */
 export const packagesTableColumns = (
-    onAction: (action: PackageAction, pkg: IPackageEntity) => void,
+    onAction: (action: PackageAction, bundle: IPackageEntity) => void,
     isSuperAdmin: boolean,
     isAdminOrSuperAdmin: boolean
 ): ColumnsType<IPackageEntity> => [
@@ -48,6 +48,14 @@ export const packagesTableColumns = (
         render: (value: number) => `${value.toFixed(2)} $`
     },
     {
+        title: "Description",
+        dataIndex: "description",
+        key: "description",
+        width: 300,
+        ellipsis: true,
+        render: (description: string | null) => <Text type="secondary">{description ?? "—"}</Text>
+    },
+    {
         title: "Slots",
         key: "slots",
         width: 80,
@@ -59,6 +67,7 @@ export const packagesTableColumns = (
         dataIndex: "isActive",
         key: "status",
         width: 100,
+        fixed: "end",
         align: "center",
         render: (_: boolean, record: IPackageEntity) => (
             <StatusTag status={record.isActive ? "active" : "inactive"} />
@@ -68,7 +77,7 @@ export const packagesTableColumns = (
         title: "Actions",
         key: "actions",
         width: 80,
-        fixed: "right",
+        fixed: "end",
         align: "center",
         render: (_: unknown, record: IPackageEntity) => {
             const items: ITableActionItem[] = PACKAGE_DROPDOWN_ITEMS.map((item) => ({

@@ -40,5 +40,42 @@ export const CategoriesValidator = {
     description: (label: string): Rule[] => [
         ValidatorUtils.required(label),
         ValidatorUtils.max(label, 300)
+    ],
+
+    /**
+     * Validates content type selection field.
+     *
+     * @param {string} label - Display name for error messages
+     * @returns {Rule[]} Array of validation rules
+     *
+     * @remarks
+     * - Required field
+     */
+    contentTypeId: (label: string): Rule[] => [ValidatorUtils.required(label)],
+
+    /**
+     * Validates pricing tier selection field.
+     *
+     * @param {string} label - Display name for error messages
+     * @returns {Rule[]} Array of validation rules
+     *
+     * @remarks
+     * - Required field
+     */
+    pricingTierId: (label: string): Rule[] => [ValidatorUtils.required(label)],
+
+    /**
+     * Validates price in USD field.
+     *
+     * @param {string} label - Display name for error messages
+     * @returns {Rule[]} Array of validation rules
+     *
+     * @remarks
+     * - Required field
+     * - Must be at least 0
+     */
+    priceUsd: (label: string): Rule[] => [
+        ValidatorUtils.required(label),
+        ValidatorUtils.numericMin(label, 0)
     ]
 } as const;

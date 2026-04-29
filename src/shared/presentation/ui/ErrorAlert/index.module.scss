@@ -1,5 +1,12 @@
 @use "@/shared/presentation/styles/dimensions.scss" as dimensions;
+@use "@/shared/presentation/styles/colors.scss" as colors;
 
 .errorAlert {
     margin: dimensions.$padding 0;
+    border-radius: dimensions.$border-radius;
+
+    [class~="ant-alert-close-icon"]{
+        font-size: 12pt;
+        color: colors.$title;
+    }
 }

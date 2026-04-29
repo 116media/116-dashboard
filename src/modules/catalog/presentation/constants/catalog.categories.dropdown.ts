@@ -3,7 +3,7 @@ import type { ICategoryEntity } from "@/modules/catalog/domain/entities/ICategor
 /**
  * Available action types for a category record.
  */
-export type CategoryAction = "edit" | "activate" | "deactivate";
+export type CategoryAction = "edit" | "activate" | "deactivate" | "managePricing";
 
 interface ICategoryDropdownItem {
     key: CategoryAction;
@@ -38,6 +38,11 @@ export const CATEGORY_DROPDOWN_ITEMS: ICategoryDropdownItem[] = [
         key: "activate",
         label: "Activer",
         hidden: (record, _, isAdminOrSuperAdmin) => !isAdminOrSuperAdmin || record.isActive
+    },
+    {
+        key: "managePricing",
+        label: "Gérer les tarifs",
+        hidden: (record, isSuperAdmin) => !isSuperAdmin || record.isFree
     },
     {
         key: "deactivate",

@@ -87,6 +87,19 @@ export const ValidatorUtils = {
         message: `${name} doit contenir uniquement des chiffres`
     }),
 
+    /**
+     * Creates a numeric minimum value validation rule.
+     *
+     * @param {string} name - Field display name for error message
+     * @param {number} min - Minimum allowed value
+     * @returns {Rule} Ant Design validation rule
+     */
+    numericMin: (name: string, min: number): Rule => ({
+        min,
+        type: "number",
+        message: `${name} doit être supérieur ou égal à ${min}`
+    }),
+
     // TODO: integrate phone number existence check via Twilio Lookup or NumVerify API on the backend
 
     /**

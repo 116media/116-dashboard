@@ -39,7 +39,6 @@ const responseHandler = (response: AxiosResponse): AxiosResponse => response;
  *
  * @description
  * Handles the following cases in order:
- * - 401 AuthenticationException: Purge Redux state, redirect to login
  * - 403 AccountNotVerifiedException: Purge Redux state, redirect to login
  * - 423 AccountInactiveException: Purge Redux state, redirect to login
  * - 400 ValidationException: Normalize title, set detail to first error message, preserve errors array
@@ -55,23 +54,13 @@ const errorHandler = async (error: AxiosError<IApiProblemDetails>): Promise<neve
     if (error.response) {
         const problemDetails = error.response.data;
 
-        // Redirect on authentication failure (not token expiry)
-        if (
-            error.response.status === HttpStatus.UNAUTHORIZED &&
-            problemDetails.title === apiErrors.authentication.code
-        ) {
-            persistor.purge();
-            window.location.href = LOGIN_PATH;
-            return await Promise.reject(problemDetails);
-        }
-
         // Redirect on unverified account
         if (
             error.response.status === HttpStatus.FORBIDDEN &&
             problemDetails.title === apiErrors.accountNotVerified.code
         ) {
-            persistor.purge();
-            window.location.href = LOGIN_PATH;
+            await persistor.purge();
+            window.location.replace(LOGIN_PATH);
             const normalizedError: IApiProblemDetails = {
                 ...problemDetails,
                 title: apiErrors.accountNotVerified.title
@@ -84,8 +73,8 @@ const errorHandler = async (error: AxiosError<IApiProblemDetails>): Promise<neve
             error.response.status === HttpStatus.LOCKED &&
             problemDetails.title === apiErrors.accountInactive.code
         ) {
-            persistor.purge();
-            window.location.href = LOGIN_PATH;
+            await persistor.purge();
+            window.location.replace(LOGIN_PATH);
             const normalizedError: IApiProblemDetails = {
                 ...problemDetails,
                 title: apiErrors.accountInactive.title

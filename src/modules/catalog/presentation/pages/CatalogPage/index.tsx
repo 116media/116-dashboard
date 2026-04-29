@@ -24,6 +24,16 @@ const TAB_LABELS: Record<CatalogTab, string> = {
     packages: "Packages"
 };
 
+/**
+ * Main catalog page with URL-driven tab navigation.
+ *
+ * @component
+ *
+ * @description
+ * Reads the active tab from the URL param (`/catalog/:tab`).
+ * Defaults to "categories" if the param is missing or invalid.
+ * Sidebar clicks update the URL, keeping browser history in sync.
+ */
 const CatalogPage: FC = () => {
     const { tab } = useParams<{ tab: string }>();
     const navigate = useNavigate();

@@ -78,7 +78,7 @@ const PromotionLevelForm: FC<IPromotionLevelFormProps> = ({
                 label="Durée (jours)"
                 rules={PromotionLevelsValidator.durationDays("Durée")}
             >
-                <InputNumber min={1} style={{ width: "100%" }} placeholder="Nombre de jours" />
+                <InputNumber min={1} placeholder="Nombre de jours" />
             </Item>
 
             <Item
@@ -86,12 +86,7 @@ const PromotionLevelForm: FC<IPromotionLevelFormProps> = ({
                 label="Prix (USD)"
                 rules={PromotionLevelsValidator.priceUsd("Prix")}
             >
-                <InputNumber
-                    min={0}
-                    step={0.5}
-                    style={{ width: "100%" }}
-                    placeholder="Prix en USD"
-                />
+                <InputNumber min={0} step={0.5} placeholder="Prix en USD" />
             </Item>
         </Form>
     );

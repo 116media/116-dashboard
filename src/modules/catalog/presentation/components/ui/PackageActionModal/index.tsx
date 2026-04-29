@@ -22,7 +22,7 @@ interface IPackageActionModalProps {
     loading: boolean;
     onCancel: () => void;
     onConfirm: () => void;
-    pkg: IPackageEntity | null;
+    bundle: IPackageEntity | null;
     action: PackageAction | null;
     error: Failure | null | undefined;
 }
@@ -42,7 +42,7 @@ interface IPackageActionModalProps {
  */
 const PackageActionModal: FC<IPackageActionModalProps> = ({
     open,
-    pkg,
+    bundle,
     action,
     loading,
     error,
@@ -51,7 +51,7 @@ const PackageActionModal: FC<IPackageActionModalProps> = ({
 }) => {
     const config = action ? PACKAGE_ACTION_CONFIG[action] : undefined;
 
-    if (!config || !pkg) return null;
+    if (!config || !bundle) return null;
 
     return (
         <ActionModal

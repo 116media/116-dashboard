@@ -1,14 +1,14 @@
 import { Table } from "antd";
-import { type FC, useCallback, useEffect, useState } from "react";
+import { type FC, useEffect } from "react";
 import { useAuthorization } from "@/modules/auth/presentation/hooks/UseAuthorization";
-import type { ICategoryEntity } from "@/modules/catalog/domain/entities/ICategoryEntity";
 import CategoryForm from "@/modules/catalog/presentation/components/forms/CategoryForm";
-import type { CategoryAction } from "@/modules/catalog/presentation/components/tables/CategoriesTable/columns";
 import { categoriesTableColumns } from "@/modules/catalog/presentation/components/tables/CategoriesTable/columns";
 import CategoryActionModal from "@/modules/catalog/presentation/components/ui/CategoryActionModal";
+import CategoryPricingPanel from "@/modules/catalog/presentation/components/ui/CategoryPricingPanel";
 import { CATEGORY_STATUS_OPTIONS } from "@/modules/catalog/presentation/constants/catalog.categories.status";
 import { useCategoriesList } from "@/modules/catalog/presentation/hooks/UseCategoriesList";
 import { useCategoryActions } from "@/modules/catalog/presentation/hooks/UseCategoryActions";
+import { useCategoryModals } from "@/modules/catalog/presentation/hooks/UseCategoryModals";
 import { useCreateCategory } from "@/modules/catalog/presentation/hooks/UseCreateCategory";
 import { useUpdateCategory } from "@/modules/catalog/presentation/hooks/UseUpdateCategory";
 import { getContentTypesAction } from "@/modules/lookup/presentation/store/getcontenttypes.action";
@@ -22,57 +22,33 @@ import PageHeader from "@/shared/presentation/ui/PageHeader";
 import ResizableTitle from "@/shared/presentation/ui/ResizableTable";
 import TableToolbar from "@/shared/presentation/ui/TableToolbar";
 
+/**
+ * Container for the categories list tab.
+ *
+ * @component
+ *
+ * @description
+ * Orchestrates the categories table, create/edit modals, action
+ * confirmation modal, and pricing management drawer. Fetches
+ * lookup data (content types, pricing tiers) on mount for form
+ * Select dropdowns. Uses server-side pagination and status filtering.
+ */
 const CategoriesListContainer: FC = () => {
     const dispatch = useAppDispatch();
     const list = useCategoriesList();
+    const modals = useCategoryModals(list.reload);
+    const createCategory = useCreateCategory(list.reload);
+    const updateCategory = useUpdateCategory(modals.selectedEntity, list.reload);
+    const actions = useCategoryActions(list.reload);
+    const { isSuperAdmin, isAdminOrSuperAdmin } = useAuthorization();
 
     useEffect(() => {
         dispatch(getContentTypesAction());
         dispatch(getPricingTiersAction());
     }, [dispatch]);
-    const createCategory = useCreateCategory(list.reload);
-    const [selectedEntity, setSelectedEntity] = useState<ICategoryEntity | null>(null);
-    const updateCategory = useUpdateCategory(selectedEntity, list.reload);
-    const actions = useCategoryActions(list.reload);
-
-    const [createOpen, setCreateOpen] = useState(false);
-    const [editOpen, setEditOpen] = useState(false);
-    const [actionOpen, setActionOpen] = useState(false);
-    const [currentAction, setCurrentAction] = useState<CategoryAction | null>(null);
-
-    const { isSuperAdmin, isAdminOrSuperAdmin } = useAuthorization();
-
-    const handleAction = useCallback((action: CategoryAction, entity: ICategoryEntity) => {
-        setSelectedEntity(entity);
-
-        switch (action) {
-            case "edit":
-                setEditOpen(true);
-                break;
-            default:
-                setCurrentAction(action);
-                setActionOpen(true);
-                break;
-        }
-    }, []);
-
-    const handleActionConfirm = async () => {
-        if (!selectedEntity || !currentAction) return;
-
-        const actionMap = {
-            activate: actions.onActivate,
-            deactivate: actions.onDeactivate
-        } as const;
-
-        const handler = actionMap[currentAction as keyof typeof actionMap];
-        if (handler) {
-            await handler(selectedEntity.id);
-            setActionOpen(false);
-        }
-    };
 
     const { columns: tableColumns } = useResizableColumns(
-        categoriesTableColumns(handleAction, isSuperAdmin, isAdminOrSuperAdmin)
+        categoriesTableColumns(modals.handleAction, isSuperAdmin, isAdminOrSuperAdmin)
     );
 
     return (
@@ -83,7 +59,7 @@ const CategoriesListContainer: FC = () => {
                 title="Catégories"
                 subtitle="Gérer les catégories de contenu."
                 icon={<IconFolderOutlined />}
-                onCreate={isSuperAdmin ? () => setCreateOpen(true) : undefined}
+                onCreate={isSuperAdmin ? () => modals.setCreateOpen(true) : undefined}
                 createLabel="Créer une catégorie"
             />
 
@@ -99,12 +75,12 @@ const CategoriesListContainer: FC = () => {
 
             <Table
                 rowKey="id"
+                scroll={{ x: "200" }}
                 loading={list.loading}
-                dataSource={list.categories?.items ?? []}
                 columns={tableColumns}
+                dataSource={list.categories?.items ?? []}
                 components={{ header: { cell: ResizableTitle } }}
                 rowSelection={{ type: "checkbox", columnWidth: 36 }}
-                scroll={{ x: "max-content" }}
                 pagination={{
                     showSizeChanger: true,
                     current: (list.categories?.pageIndex ?? 0) + 1,
@@ -114,21 +90,21 @@ const CategoriesListContainer: FC = () => {
                 }}
             />
 
-            {createOpen && (
+            {modals.createOpen && (
                 <CreateEditModal
                     width={480}
-                    open={createOpen}
+                    open={modals.createOpen}
                     formContext="CREATE"
                     loading={createCategory.loading}
                     success={createCategory.success}
-                    onClose={() => setCreateOpen(false)}
+                    onClose={() => modals.setCreateOpen(false)}
                     onSubmit={() => createCategory.form.submit()}
                     title={{
                         create: "Créer une catégorie",
                         edit: "Modifier la catégorie"
                     }}
                     onSuccessClose={() => {
-                        setCreateOpen(false);
+                        modals.setCreateOpen(false);
                         createCategory.resetCreate();
                         list.reload();
                     }}
@@ -142,15 +118,15 @@ const CategoriesListContainer: FC = () => {
                 </CreateEditModal>
             )}
 
-            {editOpen && (
+            {modals.editOpen && (
                 <CreateEditModal
                     width={480}
-                    open={editOpen}
+                    open={modals.editOpen}
                     formContext="EDIT"
                     loading={updateCategory.loading}
                     success={updateCategory.success}
                     onClose={() => {
-                        setEditOpen(false);
+                        modals.setEditOpen(false);
                         updateCategory.resetUpdate();
                     }}
                     onSubmit={() => updateCategory.form.submit()}
@@ -159,7 +135,7 @@ const CategoriesListContainer: FC = () => {
                         edit: "Modifier la catégorie"
                     }}
                     onSuccessClose={() => {
-                        setEditOpen(false);
+                        modals.setEditOpen(false);
                         updateCategory.resetUpdate();
                         list.reload();
                     }}
@@ -168,20 +144,33 @@ const CategoriesListContainer: FC = () => {
                         formContext="EDIT"
                         form={updateCategory.form}
                         error={updateCategory.error}
-                        initialValues={selectedEntity}
+                        initialValues={modals.selectedEntity}
                         onSubmit={updateCategory.onSubmit}
                     />
                 </CreateEditModal>
             )}
 
             <CategoryActionModal
-                open={actionOpen}
-                category={selectedEntity}
-                action={currentAction}
+                open={modals.actionOpen}
+                category={modals.selectedEntity}
+                action={modals.currentAction}
                 loading={actions.loading}
                 error={actions.error}
-                onConfirm={handleActionConfirm}
-                onCancel={() => setActionOpen(false)}
+                onConfirm={() =>
+                    modals.handleActionConfirm({
+                        activate: actions.onActivate,
+                        deactivate: actions.onDeactivate
+                    })
+                }
+                onCancel={() => modals.setActionOpen(false)}
+            />
+
+            <CategoryPricingPanel
+                open={modals.pricingOpen}
+                loading={modals.refreshLoading}
+                category={modals.selectedEntity}
+                onClose={() => modals.setPricingOpen(false)}
+                onSuccess={modals.refreshSelectedEntity}
             />
         </>
     );

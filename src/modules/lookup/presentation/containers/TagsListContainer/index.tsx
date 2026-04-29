@@ -1,5 +1,5 @@
 import { Table } from "antd";
-import { type FC, useCallback, useState } from "react";
+import type { FC } from "react";
 import { useAuthorization } from "@/modules/auth/presentation/hooks/UseAuthorization";
 import type { ITagEntity } from "@/modules/lookup/domain/entities/ITagEntity";
 import TagForm from "@/modules/lookup/presentation/components/forms/TagForm";
@@ -7,6 +7,7 @@ import type { TagAction } from "@/modules/lookup/presentation/components/tables/
 import { tagsTableColumns } from "@/modules/lookup/presentation/components/tables/TagsTable/columns";
 import TagActionModal from "@/modules/lookup/presentation/components/ui/TagActionModal";
 import { useCreateTag } from "@/modules/lookup/presentation/hooks/UseCreateTag";
+import { useLookupModals } from "@/modules/lookup/presentation/hooks/UseLookupModals";
 import { useTagActions } from "@/modules/lookup/presentation/hooks/UseTagActions";
 import { useTagsList } from "@/modules/lookup/presentation/hooks/UseTagsList";
 import { useUpdateTag } from "@/modules/lookup/presentation/hooks/UseUpdateTag";
@@ -29,43 +30,14 @@ import TableToolbar from "@/shared/presentation/ui/TableToolbar";
  */
 const TagsListContainer: FC = () => {
     const list = useTagsList();
+    const modals = useLookupModals<ITagEntity, TagAction>();
     const createTag = useCreateTag(list.reload);
-    const [selectedEntity, setSelectedEntity] = useState<ITagEntity | null>(null);
-    const updateTag = useUpdateTag(selectedEntity, list.reload);
+    const updateTag = useUpdateTag(modals.selectedEntity, list.reload);
     const tagActions = useTagActions(list.reload);
-
-    const [createOpen, setCreateOpen] = useState(false);
-    const [editOpen, setEditOpen] = useState(false);
-    const [actionOpen, setActionOpen] = useState(false);
-    const [currentAction, setCurrentAction] = useState<TagAction | null>(null);
-
     const { isSuperAdmin, isAdminOrSuperAdmin } = useAuthorization();
 
-    const handleAction = useCallback((action: TagAction, entity: ITagEntity) => {
-        setSelectedEntity(entity);
-
-        switch (action) {
-            case "edit":
-                setEditOpen(true);
-                break;
-            default:
-                setCurrentAction(action);
-                setActionOpen(true);
-                break;
-        }
-    }, []);
-
-    const handleActionConfirm = async () => {
-        if (!selectedEntity || !currentAction) return;
-
-        if (currentAction === "delete") {
-            await tagActions.onDelete(selectedEntity.id);
-            setActionOpen(false);
-        }
-    };
-
     const { columns: tableColumns } = useResizableColumns(
-        tagsTableColumns(handleAction, isSuperAdmin, isAdminOrSuperAdmin)
+        tagsTableColumns(modals.handleAction, isSuperAdmin, isAdminOrSuperAdmin)
     );
 
     return (
@@ -76,7 +48,7 @@ const TagsListContainer: FC = () => {
                 title="Tags"
                 subtitle="Gérer les tags disponibles."
                 icon={<IconTagOutlined />}
-                onCreate={isAdminOrSuperAdmin ? () => setCreateOpen(true) : undefined}
+                onCreate={isAdminOrSuperAdmin ? () => modals.setCreateOpen(true) : undefined}
                 createLabel="Créer un tag"
             />
 
@@ -99,18 +71,18 @@ const TagsListContainer: FC = () => {
                 pagination={{ showSizeChanger: true, defaultPageSize: 10 }}
             />
 
-            {createOpen && (
+            {modals.createOpen && (
                 <CreateEditModal
                     width={420}
-                    open={createOpen}
+                    open={modals.createOpen}
                     formContext="CREATE"
                     loading={createTag.loading}
                     success={createTag.success}
-                    onClose={() => setCreateOpen(false)}
+                    onClose={() => modals.setCreateOpen(false)}
                     onSubmit={() => createTag.form.submit()}
                     title={{ create: "Créer un tag", edit: "Modifier le tag" }}
                     onSuccessClose={() => {
-                        setCreateOpen(false);
+                        modals.setCreateOpen(false);
                         createTag.resetCreate();
                         list.reload();
                     }}
@@ -124,21 +96,21 @@ const TagsListContainer: FC = () => {
                 </CreateEditModal>
             )}
 
-            {editOpen && (
+            {modals.editOpen && (
                 <CreateEditModal
                     width={420}
-                    open={editOpen}
+                    open={modals.editOpen}
                     formContext="EDIT"
                     loading={updateTag.loading}
                     success={updateTag.success}
                     onClose={() => {
-                        setEditOpen(false);
+                        modals.setEditOpen(false);
                         updateTag.resetUpdate();
                     }}
                     onSubmit={() => updateTag.form.submit()}
                     title={{ create: "Créer un tag", edit: "Modifier le tag" }}
                     onSuccessClose={() => {
-                        setEditOpen(false);
+                        modals.setEditOpen(false);
                         updateTag.resetUpdate();
                         list.reload();
                     }}
@@ -147,20 +119,24 @@ const TagsListContainer: FC = () => {
                         form={updateTag.form}
                         error={updateTag.error}
                         formContext="EDIT"
-                        initialValues={selectedEntity}
+                        initialValues={modals.selectedEntity}
                         onSubmit={updateTag.onSubmit}
                     />
                 </CreateEditModal>
             )}
 
             <TagActionModal
-                open={actionOpen}
-                tag={selectedEntity}
-                action={currentAction}
+                open={modals.actionOpen}
+                tag={modals.selectedEntity}
+                action={modals.currentAction}
                 loading={tagActions.loading}
                 error={tagActions.error}
-                onConfirm={handleActionConfirm}
-                onCancel={() => setActionOpen(false)}
+                onConfirm={() =>
+                    modals.handleActionConfirm({
+                        delete: tagActions.onDelete
+                    })
+                }
+                onCancel={() => modals.setActionOpen(false)}
             />
         </>
     );
