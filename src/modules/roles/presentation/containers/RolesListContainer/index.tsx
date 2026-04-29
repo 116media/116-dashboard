@@ -176,6 +176,7 @@ const RolesListContainer: FC = () => {
                     success={createRole.success}
                     onClose={() => setCreateOpen(false)}
                     onSubmit={() => createRole.form.submit()}
+                    afterClose={() => createRole.resetCreate()}
                     title={{ create: "Créer un rôle", edit: "Modifier le rôle" }}
                     onSuccessClose={() => {
                         setCreateOpen(false);
@@ -203,6 +204,7 @@ const RolesListContainer: FC = () => {
                         updateRole.resetUpdate();
                     }}
                     onSubmit={() => updateRole.form.submit()}
+                    afterClose={() => updateRole.resetUpdate()}
                     title={{ create: "Créer un rôle", edit: "Modifier le rôle" }}
                     onSuccessClose={() => {
                         setEditOpen(false);
