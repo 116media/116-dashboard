@@ -2,7 +2,10 @@ import type { FormInstance } from "antd";
 import { Form } from "antd";
 import { useState } from "react";
 import type { IAttachYoutubeIdCredentials } from "@/modules/videos/presentation/model/IAttachYoutubeIdCredentials";
-import { attachYoutubeIdAction } from "@/modules/videos/presentation/store/attachyoutubeid.action";
+import {
+    attachYoutubeIdAction,
+    resetAttachYoutubeIdAction
+} from "@/modules/videos/presentation/store/attachyoutubeid.action";
 import { VideosNotification } from "@/modules/videos/presentation/utils/notification/videos.notification";
 import type { Failure } from "@/shared/domain/failures/failure";
 import { useAppDispatch, useAppSelector } from "@/shared/presentation/store/store";
@@ -58,6 +61,8 @@ export const useAttachYoutubeId = (): IUseAttachYoutubeId => {
 
     const resetYoutube = () => {
         setSuccess(null);
+        form.resetFields();
+        dispatch(resetAttachYoutubeIdAction());
     };
 
     return { form, loading, error, success, onSubmit, resetYoutube };
