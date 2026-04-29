@@ -1,8 +1,12 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import type { IShortVideoEntity } from "@/modules/shorts/domain/entities/IShortVideoEntity";
+import { shortsSlice } from "@/modules/shorts/presentation/store";
 import type { Failure } from "@/shared/domain/failures/failure";
 import container from "@/shared/infrastructure/service.locator";
 import { ActionType } from "./constants";
+
+export const resetGetShortByIdAction = () =>
+    shortsSlice.actions.clear({ context: ActionType.GetShortById });
 
 /**
  * Async thunk to fetch a single short video by ID.
