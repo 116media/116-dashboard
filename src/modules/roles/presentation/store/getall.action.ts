@@ -1,9 +1,13 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import type { IRolePaginatedResult } from "@/modules/roles/domain/entities/IRolePaginatedResult";
 import type { IRolesQueryParams } from "@/modules/roles/presentation/model/IRolesQueryParams";
+import { rolesSlice } from "@/modules/roles/presentation/store";
 import type { Failure } from "@/shared/domain/failures/failure";
 import container from "@/shared/infrastructure/service.locator";
 import { ActionType } from "./constants";
+
+export const resetGetAllRolesAction = () =>
+    rolesSlice.actions.clear({ context: ActionType.GetAllRoles });
 
 /**
  * Async thunk to fetch a paginated list of roles.
