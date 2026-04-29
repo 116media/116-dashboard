@@ -115,6 +115,7 @@ const SinglePermissionModal: FC<ISinglePermissionModalProps> = ({
             onClose={handleCancel}
             onSubmit={handleConfirm}
             onSuccessClose={handleCancel}
+            afterClose={() => setSelectedId(null)}
             title={{
                 create: "",
                 edit: mode === "assign" ? "Assigner une permission" : "Retirer une permission"
