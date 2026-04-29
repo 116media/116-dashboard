@@ -1,10 +1,14 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import type { IVideoSummaryEntity } from "@/modules/videos/domain/entities/IVideoSummaryEntity";
+import { videosSlice } from "@/modules/videos/presentation/store";
 import type { Failure } from "@/shared/domain/failures/failure";
 import type { IPaginatedResult } from "@/shared/domain/types/pagination";
 import type { EnumContentStatus } from "@/shared/infrastructure/api/generated/116.api";
 import container from "@/shared/infrastructure/service.locator";
 import { ActionType } from "./constants";
+
+export const resetGetVideosAction = () =>
+    videosSlice.actions.clear({ context: ActionType.GetVideos });
 
 /**
  * Async thunk to fetch a paginated list of videos.
