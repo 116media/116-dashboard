@@ -128,6 +128,7 @@ const VideosListContainer: FC = () => {
                     formContext="EDIT"
                     loading={updateVideo.loading}
                     success={updateVideo.success}
+                    afterClose={() => updateVideo.resetUpdate()}
                     onClose={() => {
                         modals.setEditOpen(false);
                         updateVideo.resetUpdate();
@@ -186,6 +187,7 @@ const VideosListContainer: FC = () => {
                     success={updateSeo.success}
                     error={updateSeo.error}
                     onSubmit={updateSeo.onSubmit}
+                    onReset={() => updateSeo.resetSeo()}
                     onCancel={() => {
                         modals.setSeoOpen(false);
                         updateSeo.resetSeo();
@@ -236,6 +238,7 @@ const VideosListContainer: FC = () => {
                     success={attachYoutube.success}
                     error={attachYoutube.error}
                     initialYoutubeId={modals.selectedEntity?.youtubeVideoId}
+                    onReset={() => attachYoutube.resetYoutube()}
                     onSubmit={(values) => {
                         if (modals.selectedEntity) {
                             attachYoutube.onSubmit(modals.selectedEntity.id, values);
@@ -260,6 +263,7 @@ const VideosListContainer: FC = () => {
                     loading={scheduleShoot.loading}
                     success={scheduleShoot.success}
                     error={scheduleShoot.error}
+                    onReset={() => scheduleShoot.resetShoot()}
                     onSubmit={(values) => {
                         if (modals.selectedEntity) {
                             scheduleShoot.onSubmit(modals.selectedEntity.id, values);
