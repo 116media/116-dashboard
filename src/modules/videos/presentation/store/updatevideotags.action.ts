@@ -1,8 +1,12 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import type { IVideoActionResponse } from "@/modules/videos/domain/entities/IVideoActionResponse";
+import { videosSlice } from "@/modules/videos/presentation/store";
 import type { Failure } from "@/shared/domain/failures/failure";
 import container from "@/shared/infrastructure/service.locator";
 import { ActionType } from "./constants";
+
+export const resetUpdateVideoTagsAction = () =>
+    videosSlice.actions.clear({ context: ActionType.UpdateVideoTags });
 
 /**
  * Async thunk to update tags for a video.
