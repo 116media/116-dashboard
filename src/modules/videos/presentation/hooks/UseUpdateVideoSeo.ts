@@ -3,7 +3,10 @@ import { Form } from "antd";
 import { useEffect, useState } from "react";
 import type { IVideoEntity } from "@/modules/videos/domain/entities/IVideoEntity";
 import type { IUpdateVideoSeoCredentials } from "@/modules/videos/presentation/model/IUpdateVideoSeoCredentials";
-import { updateVideoSeoAction } from "@/modules/videos/presentation/store/updatevideoseo.action";
+import {
+    resetUpdateVideoSeoAction,
+    updateVideoSeoAction
+} from "@/modules/videos/presentation/store/updatevideoseo.action";
 import { VideosNotification } from "@/modules/videos/presentation/utils/notification/videos.notification";
 import type { Failure } from "@/shared/domain/failures/failure";
 import { useAppDispatch, useAppSelector } from "@/shared/presentation/store/store";
@@ -75,6 +78,8 @@ export const useUpdateVideoSeo = (
 
     const resetSeo = () => {
         setSuccess(null);
+        form.resetFields();
+        dispatch(resetUpdateVideoSeoAction());
         form.resetFields();
     };
 
