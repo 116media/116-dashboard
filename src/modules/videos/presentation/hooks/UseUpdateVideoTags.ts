@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import type { IVideoEntity } from "@/modules/videos/domain/entities/IVideoEntity";
-import { updateVideoTagsAction } from "@/modules/videos/presentation/store/updatevideotags.action";
+import {
+    resetUpdateVideoTagsAction,
+    updateVideoTagsAction
+} from "@/modules/videos/presentation/store/updatevideotags.action";
 import { VideosNotification } from "@/modules/videos/presentation/utils/notification/videos.notification";
 import type { Failure } from "@/shared/domain/failures/failure";
 import { useAppDispatch, useAppSelector } from "@/shared/presentation/store/store";
@@ -73,6 +76,7 @@ export const useUpdateVideoTags = (
 
     const resetTags = () => {
         setSuccess(null);
+        dispatch(resetUpdateVideoTagsAction());
         setTagIds([]);
     };
 
