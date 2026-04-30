@@ -1,6 +1,7 @@
 import type { FormInstance } from "antd";
 import { Form } from "antd";
 import { useEffect, useState } from "react";
+import { usePaidOrderItems } from "@/modules/commerce/presentation/hooks/UsePaidOrderItems";
 import type { IVideoEntity } from "@/modules/videos/domain/entities/IVideoEntity";
 import type { IUpdateVideoCredentials } from "@/modules/videos/presentation/model/IUpdateVideoCredentials";
 import {
@@ -25,6 +26,7 @@ interface IUseUpdateVideo {
     loading: boolean;
     error: Failure | null | undefined;
     success: string | null;
+    orderItems: ReturnType<typeof usePaidOrderItems>;
     onSubmit: (values: IUpdateVideoCredentials) => Promise<void>;
     resetUpdate: () => void;
 }
@@ -33,10 +35,12 @@ interface IUseUpdateVideo {
  * Custom hook for the edit video form logic.
  *
  * @description
- * Manages form state, pre-population from initial values,
+ * Manages form state, pre-population from the full video entity,
  * submission, and success feedback for updating a video.
+ * When the video has a customerId, order items are fetched for
+ * that customer so the orderItemId select can display the correct value.
  *
- * @param video - The video to edit (used for pre-population and ID)
+ * @param video - The full video entity to edit (used for pre-population and ID)
  * @param onSuccess - Optional callback invoked after successful update
  * @returns Form instance, loading/error state, success message, and submit handler
  */
@@ -47,25 +51,34 @@ export const useUpdateVideo = (
     const dispatch = useAppDispatch();
     const [form] = useForm<IUpdateVideoCredentials>();
     const [success, setSuccess] = useState<string | null>(null);
+    const orderItems = usePaidOrderItems("video");
 
     const { loading, error } = useAppSelector(({ videos: { updateVideo } }) => updateVideo);
 
     useEffect(() => {
-        if (video) {
-            form.setFieldsValue({
-                categoryId: video.categoryId,
-                title: video.title,
-                description: video.description,
-                customerId: undefined,
-                orderItemId: undefined,
-                socialBoost: false,
-                isFeatured: video.isFeatured,
-                featuredUntil: video.featuredUntil,
-                metaTitle: video.metaTitle,
-                metaDescription: video.metaDescription
-            });
+        if (!video) return;
+
+        form.setFieldsValue({
+            categoryId: video.categoryId,
+            title: video.title,
+            description: video.description,
+            socialBoost: false,
+            isFeatured: video.isFeatured,
+            featuredUntil: video.featuredUntil,
+            metaTitle: video.metaTitle,
+            metaDescription: video.metaDescription
+        });
+
+        if (video.customerId) {
+            form.setFieldValue("customerId", video.customerId);
+            orderItems.fetchByCustomer(video.customerId);
         }
-    }, [video, form]);
+    }, [video, form, orderItems.fetchByCustomer]);
+
+    useEffect(() => {
+        if (!video?.orderItemId || orderItems.loading || orderItems.options.length === 0) return;
+        form.setFieldValue("orderItemId", video.orderItemId);
+    }, [video, orderItems.options, orderItems.loading, form]);
 
     const onSubmit = async (values: IUpdateVideoCredentials): Promise<void> => {
         if (!video) return;
@@ -94,5 +107,5 @@ export const useUpdateVideo = (
         form.resetFields();
     };
 
-    return { form, loading, error, success, onSubmit, resetUpdate };
+    return { form, loading, error, success, orderItems, onSubmit, resetUpdate };
 };
