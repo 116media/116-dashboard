@@ -24,6 +24,9 @@ import type { EnumContentStatus } from "@/shared/infrastructure/api/generated/11
  * @property {string | null} publishedAt - ISO timestamp of publication
  * @property {string | null} metaTitle - SEO meta title
  * @property {string | null} metaDescription - SEO meta description
+ * @property {string | null} customerId - UUID of the B2B customer, null for free content
+ * @property {string | null} customerName - Full name of the B2B customer, null for free content
+ * @property {string | null} orderItemId - UUID of the linked order item, null for free content
  * @property {IArticleImageEntity[]} images - Uploaded article images
  * @property {ITagEntity[]} tags - Assigned tags
  * @property {number} readTimeInMinutes - Estimated reading time
@@ -49,6 +52,9 @@ export interface IArticleEntity {
     publishedAt?: string | null;
     metaTitle?: string | null;
     metaDescription?: string | null;
+    customerId?: string | null;
+    customerName?: string | null;
+    orderItemId?: string | null;
     images: IArticleImageEntity[];
     tags: ITagEntity[];
     readTimeInMinutes: number;
