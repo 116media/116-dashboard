@@ -13,7 +13,7 @@ import type { EnumContentStatus } from "@/shared/infrastructure/api/generated/11
  * @property {string | null} thumbnailUrl - URL of the video thumbnail
  * @property {string} authorId - UUID of the author (identity user)
  * @property {EnumContentStatus} status - Current editorial workflow status
- * @property {string | null} youtubeVideoId - YouTube video identifier
+ * @property {string | null} youtubeVideoUrl - YouTube video identifier
  * @property {boolean} isFeatured - Whether the video is featured
  * @property {boolean} hasLyrics - Whether the video has associated lyrics
  * @property {string | null} publishedAt - ISO timestamp of publication
@@ -31,7 +31,7 @@ export interface IVideoSummaryEntity {
     thumbnailUrl?: string | null;
     authorId: string;
     status: EnumContentStatus;
-    youtubeVideoId?: string | null;
+    youtubeVideoUrl?: string | null;
     isFeatured: boolean;
     hasLyrics: boolean;
     publishedAt?: string | null;
