@@ -1,27 +1,27 @@
 import type { IVideosRepositoryPort } from "@/modules/videos/application/repositories/videos.repository.port";
 import type { IVideoEntity } from "@/modules/videos/domain/entities/IVideoEntity";
-import type { IAttachYoutubeIdCredentials } from "@/modules/videos/presentation/model/IAttachYoutubeIdCredentials";
+import type { IAttachYoutubeUrlCredentials } from "@/modules/videos/presentation/model/IAttachYoutubeUrlCredentials";
 import type { IResultUseCase } from "@/shared/application/usecases/IUseCase";
 import type { Result } from "@/shared/domain/results/result";
 
 /**
- * @interface IAttachYoutubeIdUseCase
- * @extends {IResultUseCase<{ id: string; data: IAttachYoutubeIdCredentials }, IVideoEntity>}
+ * @interface IAttachYoutubeVideoUrlUseCase
+ * @extends {IResultUseCase<{ id: string; data: IAttachYoutubeUrlCredentials }, IVideoEntity>}
  */
-interface IAttachYoutubeIdUseCase
-    extends IResultUseCase<{ id: string; data: IAttachYoutubeIdCredentials }, IVideoEntity> {}
+interface IAttachYoutubeVideoUrlUseCase
+    extends IResultUseCase<{ id: string; data: IAttachYoutubeUrlCredentials }, IVideoEntity> {}
 
 /**
  * Use case for attaching a YouTube video identifier to a video.
  *
- * @class AttachYoutubeIdUseCase
- * @implements {IAttachYoutubeIdUseCase}
+ * @class AttachYoutubeVideoUrlUseCase
+ * @implements {IAttachYoutubeVideoUrlUseCase}
  *
  * @description
  * Attaches a YouTube video ID to a video entity, linking the
  * platform video record to its YouTube counterpart via the videos repository.
  */
-export class AttachYoutubeIdUseCase implements IAttachYoutubeIdUseCase {
+export class AttachYoutubeVideoUrlUseCase implements IAttachYoutubeVideoUrlUseCase {
     private readonly videosRepository: IVideosRepositoryPort;
     /**
      * @param {IVideosRepositoryPort} videosRepository - Repository for videos operations (injected)
@@ -37,7 +37,7 @@ export class AttachYoutubeIdUseCase implements IAttachYoutubeIdUseCase {
      */
     async execute(request: {
         id: string;
-        data: IAttachYoutubeIdCredentials;
+        data: IAttachYoutubeUrlCredentials;
     }): Promise<Result<IVideoEntity>> {
         return this.videosRepository.attachYoutubeId(request.id, request.data);
     }
