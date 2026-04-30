@@ -65,17 +65,13 @@ export const videosTableColumns = (
     },
     {
         title: "YouTube",
-        dataIndex: "youtubeVideoId",
-        key: "youtubeVideoId",
+        dataIndex: "youtubeVideoUrl",
+        key: "youtubeVideoUrl",
         width: 90,
         align: "center",
-        render: (youtubeId: string | null) =>
-            youtubeId ? (
-                <Link
-                    href={`https://www.youtube.com/watch?v=${youtubeId}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                >
+        render: (youtubeVideoUrl: string | null) =>
+            youtubeVideoUrl ? (
+                <Link href={youtubeVideoUrl} target="_blank" rel="noopener noreferrer">
                     <IconYoutubeFilled style={{ color: Colors.Error, fontSize: 18 }} />
                 </Link>
             ) : (
