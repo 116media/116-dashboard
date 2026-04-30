@@ -6,7 +6,7 @@ import type { IUpdateArticleCredentials } from "@/modules/articles/presentation/
 import { ArticlesContentValidator } from "@/modules/articles/presentation/utils/validators/articles.content.validator";
 import type { ICategoryEntity } from "@/modules/catalog/domain/entities/ICategoryEntity";
 import type { ICustomerEntity } from "@/modules/catalog/domain/entities/ICustomerEntity";
-import { usePaidOrderItems } from "@/modules/commerce/presentation/hooks/UsePaidOrderItems";
+import type { IUsePaidOrderItems } from "@/modules/commerce/presentation/hooks/UsePaidOrderItems";
 import type { Failure } from "@/shared/domain/failures/failure";
 import { useAppSelector } from "@/shared/presentation/store/store";
 import ErrorAlert from "@/shared/presentation/ui/ErrorAlert";
@@ -23,6 +23,7 @@ const { TextArea } = Input;
 interface IArticleDetailsFormProps {
     form: FormInstance<IUpdateArticleCredentials>;
     error: Failure | null | undefined;
+    orderItems: IUsePaidOrderItems;
     onSubmit: (values: IUpdateArticleCredentials) => void;
     onImageUpload?: (file: File) => Promise<string>;
     onCoverUpload?: (file: File) => Promise<string>;
@@ -42,6 +43,7 @@ interface IArticleDetailsFormProps {
 const ArticleDetailsForm: FC<IArticleDetailsFormProps> = ({
     form,
     error,
+    orderItems,
     onSubmit,
     onImageUpload,
     onCoverUpload
@@ -52,12 +54,11 @@ const ArticleDetailsForm: FC<IArticleDetailsFormProps> = ({
     const { data: customers } = useAppSelector(
         ({ catalog: { getAllCustomers } }) => getAllCustomers
     );
-    const orderItems = usePaidOrderItems();
 
     const categoryOptions = useMemo(
         () =>
             ((categories as { items: ICategoryEntity[] })?.items ?? [])
-                .filter((c) => c.isActive)
+                .filter((c) => c.isActive && c.isArticleType)
                 .map((c) => ({ label: c.name, value: c.id })),
         [categories]
     );
@@ -136,12 +137,55 @@ const ArticleDetailsForm: FC<IArticleDetailsFormProps> = ({
                 />
             </Item>
 
-            <Item name="socialBoost" valuePropName="checked">
-                <SwitchField
-                    title="Boost social"
-                    icon={<IconFireFilled />}
-                    description="Promouvoir cet article sur les réseaux sociaux."
+            <Item name="customerId" label="Client">
+                <Select
+                    showSearch
+                    allowClear
+                    options={customerOptions}
+                    placeholder="Sélectionner un client"
+                    onChange={(value) => {
+                        form.setFieldValue("orderItemId", undefined);
+                        form.setFieldValue("socialBoost", false);
+                        orderItems.fetchByCustomer(value || undefined);
+                    }}
+                    optionRender={SelectOptionDetail}
                 />
+            </Item>
+
+            <Item name="orderItemId" label="Commande">
+                <Select
+                    showSearch
+                    allowClear
+                    loading={orderItems.loading}
+                    disabled={orderItems.loading}
+                    options={orderItems.options}
+                    placeholder="Sélectionner une commande"
+                    popupMatchSelectWidth={false}
+                    optionRender={SelectOptionBadged}
+                    onChange={(value) => {
+                        const option = orderItems.options.find((o) => o.value === value);
+                        form.setFieldValue("socialBoost", option ? option.socialBoost : false);
+                    }}
+                />
+            </Item>
+
+            <Item noStyle shouldUpdate={(prev, curr) => prev.orderItemId !== curr.orderItemId}>
+                {({ getFieldValue }) => {
+                    const selectedOption = orderItems.options.find(
+                        (o) => o.value === getFieldValue("orderItemId")
+                    );
+                    const locked = selectedOption !== undefined;
+                    return (
+                        <Item name="socialBoost" valuePropName="checked">
+                            <SwitchField
+                                disabled={locked}
+                                title="Boost social"
+                                icon={<IconFireFilled />}
+                                description="Promouvoir cet article sur les réseaux sociaux."
+                            />
+                        </Item>
+                    );
+                }}
             </Item>
 
             <Item name="isFeatured" valuePropName="checked">
@@ -160,33 +204,6 @@ const ArticleDetailsForm: FC<IArticleDetailsFormProps> = ({
                         </Item>
                     ) : null
                 }
-            </Item>
-
-            <Item name="customerId" label="Client">
-                <Select
-                    showSearch
-                    allowClear
-                    options={customerOptions}
-                    placeholder="Sélectionner un client"
-                    onChange={(value) => {
-                        form.setFieldValue("orderItemId", undefined);
-                        orderItems.fetchByCustomer(value || undefined);
-                    }}
-                    optionRender={SelectOptionDetail}
-                />
-            </Item>
-
-            <Item name="orderItemId" label="Commande">
-                <Select
-                    showSearch
-                    allowClear
-                    loading={orderItems.loading}
-                    disabled={orderItems.loading}
-                    options={orderItems.options}
-                    placeholder="Sélectionner une commande"
-                    popupMatchSelectWidth={false}
-                    optionRender={SelectOptionBadged}
-                />
             </Item>
         </Form>
     );
