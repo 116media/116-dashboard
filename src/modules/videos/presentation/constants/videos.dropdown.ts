@@ -72,7 +72,7 @@ export const VIDEO_DROPDOWN_ITEMS: IVideoDropdownItem[] = [
         key: "publish",
         label: "Publier",
         hidden: (r, isSuperAdmin) =>
-            !isSuperAdmin || r.status !== EnumContentStatus.Approved || !r.youtubeVideoId
+            !isSuperAdmin || r.status !== EnumContentStatus.Approved || !r.youtubeVideoUrl
     },
     {
         key: "reject",
