@@ -4,13 +4,15 @@ import type { FC } from "react";
 import { useMemo } from "react";
 import type { ICategoryEntity } from "@/modules/catalog/domain/entities/ICategoryEntity";
 import type { ICustomerEntity } from "@/modules/catalog/domain/entities/ICustomerEntity";
-import { usePaidOrderItems } from "@/modules/commerce/presentation/hooks/UsePaidOrderItems";
+import type {
+    IOrderItemOption,
+    IUsePaidOrderItems
+} from "@/modules/commerce/presentation/hooks/UsePaidOrderItems";
 import type { ICreateVideoCredentials } from "@/modules/videos/presentation/model/ICreateVideoCredentials";
 import { VideosContentValidator } from "@/modules/videos/presentation/utils/validators/videos.content.validator";
 import type { Failure } from "@/shared/domain/failures/failure";
 import { useAppSelector } from "@/shared/presentation/store/store";
 import ErrorAlert from "@/shared/presentation/ui/ErrorAlert";
-import RichTextEditor from "@/shared/presentation/ui/RichTextEditor";
 import { SelectOptionBadged, SelectOptionDetail } from "@/shared/presentation/ui/SelectOptions";
 
 const { Item } = Form;
@@ -22,11 +24,15 @@ const { Item } = Form;
  * @property {FormInstance<ICreateVideoCredentials>} form - Ant Design form instance for field control
  * @property {Failure | null | undefined} error - Backend error to display in the alert
  * @property {(values: ICreateVideoCredentials) => void} onSubmit - Callback when the form is submitted
+ * @property {IUsePaidOrderItems} orderItems - Lifted order items state from the parent wizard
+ * @property {(option: IOrderItemOption | undefined) => void} [onOrderItemChange] - Called when order item selection changes
  */
 interface IVideoInfoFormProps {
-    form: FormInstance<ICreateVideoCredentials>;
     error: Failure | null | undefined;
+    form: FormInstance<ICreateVideoCredentials>;
+    orderItems: IUsePaidOrderItems;
     onSubmit: (values: ICreateVideoCredentials) => void;
+    onOrderItemChange?: (option: IOrderItemOption | undefined) => void;
 }
 
 /**
@@ -35,26 +41,30 @@ interface IVideoInfoFormProps {
  * @component
  *
  * @description
- * Renders category, title, slug, description, optional customer,
- * and optional order item fields. Category and customer options
- * are loaded from the Redux store.
+ * Renders category, title, optional customer, and optional order item fields.
+ * Category and customer options are loaded from the Redux store.
  *
  * @param {IVideoInfoFormProps} props - Component props
  * @returns {JSX.Element} The rendered step 1 creation form
  */
-const VideoInfoForm: FC<IVideoInfoFormProps> = ({ form, error, onSubmit }) => {
+const VideoInfoForm: FC<IVideoInfoFormProps> = ({
+    form,
+    error,
+    orderItems,
+    onSubmit,
+    onOrderItemChange
+}) => {
     const { data: categories } = useAppSelector(
         ({ catalog: { getAllCategories } }) => getAllCategories
     );
     const { data: customers } = useAppSelector(
         ({ catalog: { getAllCustomers } }) => getAllCustomers
     );
-    const orderItems = usePaidOrderItems();
 
     const categoryOptions = useMemo(
         () =>
             ((categories as { items: ICategoryEntity[] })?.items ?? [])
-                .filter((c) => c.isActive)
+                .filter((c) => c.isActive && c.isVideoType)
                 .map((c) => ({
                     label: c.name,
                     value: c.id
@@ -99,18 +109,6 @@ const VideoInfoForm: FC<IVideoInfoFormProps> = ({ form, error, onSubmit }) => {
                 <Input maxLength={200} placeholder="Titre de la vidéo" />
             </Item>
 
-            <Item
-                name="description"
-                label="Description"
-                rules={VideosContentValidator.description("Description")}
-            >
-                <RichTextEditor
-                    mode="simple"
-                    minHeight={150}
-                    placeholder="Description de la vidéo"
-                />
-            </Item>
-
             <Item name="customerId" label="Client">
                 <Select
                     showSearch
@@ -135,6 +133,13 @@ const VideoInfoForm: FC<IVideoInfoFormProps> = ({ form, error, onSubmit }) => {
                     placeholder="Sélectionner une commande"
                     popupMatchSelectWidth={false}
                     optionRender={SelectOptionBadged}
+                    onChange={(value) => {
+                        const option = orderItems.options.find(
+                            (o: IOrderItemOption) => o.value === value
+                        );
+                        form.setFieldValue("socialBoost", option?.socialBoost ?? false);
+                        onOrderItemChange?.(option);
+                    }}
                 />
             </Item>
         </Form>
