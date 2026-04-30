@@ -1,7 +1,7 @@
 import type { IVideoActionResponse } from "@/modules/videos/domain/entities/IVideoActionResponse";
 import type { IVideoEntity } from "@/modules/videos/domain/entities/IVideoEntity";
 import type { IVideoSummaryEntity } from "@/modules/videos/domain/entities/IVideoSummaryEntity";
-import type { IAttachYoutubeIdCredentials } from "@/modules/videos/presentation/model/IAttachYoutubeIdCredentials";
+import type { IAttachYoutubeUrlCredentials } from "@/modules/videos/presentation/model/IAttachYoutubeUrlCredentials";
 import type { ICreateVideoCredentials } from "@/modules/videos/presentation/model/ICreateVideoCredentials";
 import type { IRejectVideoCredentials } from "@/modules/videos/presentation/model/IRejectVideoCredentials";
 import type { IScheduleShootCredentials } from "@/modules/videos/presentation/model/IScheduleShootCredentials";
@@ -125,7 +125,7 @@ export interface IVideosRepositoryPort {
      * @param data - YouTube video ID
      * @returns The updated video entity
      */
-    attachYoutubeId(id: string, data: IAttachYoutubeIdCredentials): Promise<Result<IVideoEntity>>;
+    attachYoutubeId(id: string, data: IAttachYoutubeUrlCredentials): Promise<Result<IVideoEntity>>;
 
     /**
      * Updates SEO metadata for a video.
