@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import type { IOrderDetailEntity } from "@/modules/commerce/domain/entities/IOrderDetailEntity";
 import type { IOrderItemEntity } from "@/modules/commerce/domain/entities/IOrderItemEntity";
 import { getOrderByIdAction } from "@/modules/commerce/presentation/store/getorderbyid.action";
@@ -11,23 +11,29 @@ export interface IOrderItemOption {
     label: string;
     code: string;
     secondary: string;
-    contentKind: string;
+    isArticleType: boolean;
+    isVideoType: boolean;
     categoryName: string;
+    socialBoost: boolean;
 }
 
-interface IUsePaidOrderItems {
+export interface IUsePaidOrderItems {
     options: IOrderItemOption[];
     loading: boolean;
     fetchByCustomer: (customerId?: string) => void;
 }
 
+export type ContentKindFilter = "article" | "video";
+
 const formatItemOption = (item: IOrderItemEntity, order: IOrderDetailEntity): IOrderItemOption => ({
     value: item.id,
     code: item.id.slice(0, 8),
     secondary: order.customerName,
-    contentKind: item.contentKind,
+    isArticleType: item.isArticleType,
+    isVideoType: item.isVideoType,
     categoryName: item.categoryName,
-    label: `${item.categoryName} · ${item.contentKind}`
+    socialBoost: item.socialBoost,
+    label: `${item.categoryName} · ${item.isArticleType ? "Article" : "Vidéo"}`
 });
 
 /**
@@ -39,7 +45,7 @@ const formatItemOption = (item: IOrderItemEntity, order: IOrderDetailEntity): IO
  * a short ID prefix, category, and content type for display.
  * Customer name is available for optionRender.
  */
-export const usePaidOrderItems = (): IUsePaidOrderItems => {
+export const usePaidOrderItems = (contentKind?: ContentKindFilter): IUsePaidOrderItems => {
     const dispatch = useAppDispatch();
     const [loading, setLoading] = useState(false);
     const [options, setOptions] = useState<IOrderItemOption[]>([]);
@@ -77,18 +83,20 @@ export const usePaidOrderItems = (): IUsePaidOrderItems => {
                 .filter(getOrderByIdAction.fulfilled.match)
                 .flatMap((result) => {
                     const detail = result.payload as IOrderDetailEntity;
-                    return detail.items.map((item) => formatItemOption(item, detail));
+                    return detail.items
+                        .filter((item) => {
+                            if (contentKind === "article") return item.isArticleType;
+                            if (contentKind === "video") return item.isVideoType;
+                            return true;
+                        })
+                        .map((item) => formatItemOption(item, detail));
                 });
 
             setOptions(flatItems);
             setLoading(false);
         },
-        [dispatch]
+        [dispatch, contentKind]
     );
-
-    useEffect(() => {
-        fetchByCustomer();
-    }, [fetchByCustomer]);
 
     return { options, loading, fetchByCustomer };
 };
