@@ -3,7 +3,7 @@ import type { IVideoActionResponse } from "@/modules/videos/domain/entities/IVid
 import type { IVideoEntity } from "@/modules/videos/domain/entities/IVideoEntity";
 import type { IVideoSummaryEntity } from "@/modules/videos/domain/entities/IVideoSummaryEntity";
 import { VideosMapper } from "@/modules/videos/infrastructure/mappers/videos.mapper";
-import type { IAttachYoutubeIdCredentials } from "@/modules/videos/presentation/model/IAttachYoutubeIdCredentials";
+import type { IAttachYoutubeUrlCredentials } from "@/modules/videos/presentation/model/IAttachYoutubeUrlCredentials";
 import type { ICreateVideoCredentials } from "@/modules/videos/presentation/model/ICreateVideoCredentials";
 import type { IRejectVideoCredentials } from "@/modules/videos/presentation/model/IRejectVideoCredentials";
 import type { IScheduleShootCredentials } from "@/modules/videos/presentation/model/IScheduleShootCredentials";
@@ -148,10 +148,12 @@ export class VideosRepositoryImpl implements IVideosRepositoryPort {
 
     async attachYoutubeId(
         id: string,
-        data: IAttachYoutubeIdCredentials
+        data: IAttachYoutubeUrlCredentials
     ): Promise<Result<IVideoEntity>> {
         try {
-            const response = await apiClient.api.attachYoutubeId(id, data);
+            const response = await apiClient.api.attachYoutubeVideoUrl(id, {
+                youtubeVideoUrl: data.youtubeVideoUrl
+            });
             return ok(VideosMapper.videoFromDto(response.data.video));
         } catch (error) {
             return err(ProblemMapper.toFailure(error));
