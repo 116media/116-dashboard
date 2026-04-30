@@ -14,4 +14,5 @@ export interface ICreateArticleCredentials {
     slug: string;
     customerId?: string;
     orderItemId?: string;
+    socialBoost?: boolean;
 }
