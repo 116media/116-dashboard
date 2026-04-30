@@ -7,7 +7,9 @@ import type { EnumCoreContentType } from "@/shared/infrastructure/api/generated/
  * @interface IOrderItemEntity
  *
  * @property {string} id - Unique identifier (UUID)
- * @property {EnumCoreContentType} contentKind - Type of content commissioned
+ * @property {EnumCoreContentType} contentKind - Raw content type (used when sending back to the API)
+ * @property {boolean} isArticleType - True when the item is for an Article
+ * @property {boolean} isVideoType - True when the item is for a Video
  * @property {string} categoryName - Display name of the content category
  * @property {string | null} promotionLevelName - Display name of the promotion level
  * @property {number | null} promoPriceUsd - Promotion price snapshot in USD
@@ -18,6 +20,8 @@ import type { EnumCoreContentType } from "@/shared/infrastructure/api/generated/
 export interface IOrderItemEntity {
     id: string;
     contentKind: EnumCoreContentType;
+    isArticleType: boolean;
+    isVideoType: boolean;
     categoryId: string;
     categoryName: string;
     promotionLevelId?: string | null;
