@@ -18,4 +18,5 @@ export interface ICreateVideoCredentials {
     customerId?: string;
     orderItemId?: string;
     shootingScheduledAt?: string;
+    socialBoost?: boolean;
 }
