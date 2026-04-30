@@ -4,7 +4,7 @@ import type { FC } from "react";
 import { useMemo } from "react";
 import type { ICategoryEntity } from "@/modules/catalog/domain/entities/ICategoryEntity";
 import type { ICustomerEntity } from "@/modules/catalog/domain/entities/ICustomerEntity";
-import { usePaidOrderItems } from "@/modules/commerce/presentation/hooks/UsePaidOrderItems";
+import type { IUsePaidOrderItems } from "@/modules/commerce/presentation/hooks/UsePaidOrderItems";
 import type { IUpdateVideoCredentials } from "@/modules/videos/presentation/model/IUpdateVideoCredentials";
 import { VideosContentValidator } from "@/modules/videos/presentation/utils/validators/videos.content.validator";
 import type { Failure } from "@/shared/domain/failures/failure";
@@ -28,6 +28,7 @@ const { Item } = Form;
 interface IVideoDetailsFormProps {
     error: Failure | null | undefined;
     form: FormInstance<IUpdateVideoCredentials>;
+    orderItems: IUsePaidOrderItems;
     onSubmit: (values: IUpdateVideoCredentials) => void;
 }
 
@@ -44,19 +45,18 @@ interface IVideoDetailsFormProps {
  * @param {IVideoDetailsFormProps} props - Component props
  * @returns {JSX.Element} The rendered video content form
  */
-const VideoDetailsForm: FC<IVideoDetailsFormProps> = ({ form, error, onSubmit }) => {
+const VideoDetailsForm: FC<IVideoDetailsFormProps> = ({ form, error, orderItems, onSubmit }) => {
     const { data: categories } = useAppSelector(
         ({ catalog: { getAllCategories } }) => getAllCategories
     );
     const { data: customers } = useAppSelector(
         ({ catalog: { getAllCustomers } }) => getAllCustomers
     );
-    const orderItems = usePaidOrderItems();
 
     const categoryOptions = useMemo(
         () =>
             ((categories as { items: ICategoryEntity[] })?.items ?? [])
-                .filter((c) => c.isActive)
+                .filter((c) => c.isActive && c.isVideoType)
                 .map((c) => ({ label: c.name, value: c.id })),
         [categories]
     );
@@ -110,12 +110,55 @@ const VideoDetailsForm: FC<IVideoDetailsFormProps> = ({ form, error, onSubmit })
                 />
             </Item>
 
-            <Item name="socialBoost" valuePropName="checked">
-                <SwitchField
-                    title="Boost social"
-                    icon={<IconFireFilled />}
-                    description="Promouvoir cette vidéo sur les réseaux sociaux."
+            <Item name="customerId" label="Client">
+                <Select
+                    showSearch
+                    allowClear
+                    options={customerOptions}
+                    placeholder="Sélectionner un client"
+                    onChange={(value) => {
+                        form.setFieldValue("orderItemId", undefined);
+                        form.setFieldValue("socialBoost", false);
+                        orderItems.fetchByCustomer(value || undefined);
+                    }}
+                    optionRender={SelectOptionDetail}
                 />
+            </Item>
+
+            <Item name="orderItemId" label="Commande">
+                <Select
+                    showSearch
+                    allowClear
+                    loading={orderItems.loading}
+                    disabled={orderItems.loading}
+                    options={orderItems.options}
+                    placeholder="Sélectionner une commande"
+                    popupMatchSelectWidth={false}
+                    optionRender={SelectOptionBadged}
+                    onChange={(value) => {
+                        const option = orderItems.options.find((o) => o.value === value);
+                        form.setFieldValue("socialBoost", option ? option.socialBoost : false);
+                    }}
+                />
+            </Item>
+
+            <Item noStyle shouldUpdate={(prev, curr) => prev.orderItemId !== curr.orderItemId}>
+                {({ getFieldValue }) => {
+                    const selectedOption = orderItems.options.find(
+                        (o) => o.value === getFieldValue("orderItemId")
+                    );
+                    const locked = selectedOption !== undefined;
+                    return (
+                        <Item name="socialBoost" valuePropName="checked">
+                            <SwitchField
+                                disabled={locked}
+                                title="Boost social"
+                                icon={<IconFireFilled />}
+                                description="Promouvoir cette vidéo sur les réseaux sociaux."
+                            />
+                        </Item>
+                    );
+                }}
             </Item>
 
             <Item name="isFeatured" valuePropName="checked">
@@ -134,33 +177,6 @@ const VideoDetailsForm: FC<IVideoDetailsFormProps> = ({ form, error, onSubmit })
                         </Item>
                     ) : null
                 }
-            </Item>
-
-            <Item name="customerId" label="Client">
-                <Select
-                    showSearch
-                    allowClear
-                    options={customerOptions}
-                    placeholder="Sélectionner un client"
-                    onChange={(value) => {
-                        form.setFieldValue("orderItemId", undefined);
-                        orderItems.fetchByCustomer(value || undefined);
-                    }}
-                    optionRender={SelectOptionDetail}
-                />
-            </Item>
-
-            <Item name="orderItemId" label="Commande">
-                <Select
-                    showSearch
-                    allowClear
-                    loading={orderItems.loading}
-                    disabled={orderItems.loading}
-                    options={orderItems.options}
-                    placeholder="Sélectionner une commande"
-                    popupMatchSelectWidth={false}
-                    optionRender={SelectOptionBadged}
-                />
             </Item>
         </Form>
     );
