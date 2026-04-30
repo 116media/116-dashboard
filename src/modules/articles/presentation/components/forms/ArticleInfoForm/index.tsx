@@ -6,7 +6,10 @@ import type { ICreateArticleCredentials } from "@/modules/articles/presentation/
 import { ArticlesContentValidator } from "@/modules/articles/presentation/utils/validators/articles.content.validator";
 import type { ICategoryEntity } from "@/modules/catalog/domain/entities/ICategoryEntity";
 import type { ICustomerEntity } from "@/modules/catalog/domain/entities/ICustomerEntity";
-import { usePaidOrderItems } from "@/modules/commerce/presentation/hooks/UsePaidOrderItems";
+import type {
+    IOrderItemOption,
+    IUsePaidOrderItems
+} from "@/modules/commerce/presentation/hooks/UsePaidOrderItems";
 import type { Failure } from "@/shared/domain/failures/failure";
 import { useAppSelector } from "@/shared/presentation/store/store";
 import ErrorAlert from "@/shared/presentation/ui/ErrorAlert";
@@ -21,11 +24,15 @@ const { Item } = Form;
  * @property {FormInstance<ICreateArticleCredentials>} form - Ant Design form instance for field control
  * @property {Failure | null | undefined} error - Backend error to display in the alert
  * @property {(values: ICreateArticleCredentials) => void} onSubmit - Callback when the form is submitted
+ * @property {IUsePaidOrderItems} orderItems - Lifted order items state from the parent wizard
+ * @property {(option: IOrderItemOption | undefined) => void} [onOrderItemChange] - Called when order item selection changes
  */
 interface IArticleInfoFormProps {
     error: Failure | null | undefined;
     form: FormInstance<ICreateArticleCredentials>;
+    orderItems: IUsePaidOrderItems;
     onSubmit: (values: ICreateArticleCredentials) => void;
+    onOrderItemChange?: (option: IOrderItemOption | undefined) => void;
 }
 
 /**
@@ -41,19 +48,24 @@ interface IArticleInfoFormProps {
  * @param {IArticleInfoFormProps} props - Component props
  * @returns {JSX.Element} The rendered step 1 creation form
  */
-const ArticleInfoForm: FC<IArticleInfoFormProps> = ({ form, error, onSubmit }) => {
+const ArticleInfoForm: FC<IArticleInfoFormProps> = ({
+    form,
+    error,
+    orderItems,
+    onSubmit,
+    onOrderItemChange
+}) => {
     const { data: categories } = useAppSelector(
         ({ catalog: { getAllCategories } }) => getAllCategories
     );
     const { data: customers } = useAppSelector(
         ({ catalog: { getAllCustomers } }) => getAllCustomers
     );
-    const orderItems = usePaidOrderItems();
 
     const categoryOptions = useMemo(
         () =>
             ((categories as { items: ICategoryEntity[] })?.items ?? [])
-                .filter((c) => c.isActive)
+                .filter((c) => c.isActive && c.isArticleType)
                 .map((c) => ({
                     label: c.name,
                     value: c.id
@@ -122,6 +134,12 @@ const ArticleInfoForm: FC<IArticleInfoFormProps> = ({ form, error, onSubmit }) =
                     placeholder="Sélectionner une commande"
                     popupMatchSelectWidth={false}
                     optionRender={SelectOptionBadged}
+                    onChange={(value) => {
+                        const option = orderItems.options.find(
+                            (o: IOrderItemOption) => o.value === value
+                        );
+                        onOrderItemChange?.(option);
+                    }}
                 />
             </Item>
         </Form>
