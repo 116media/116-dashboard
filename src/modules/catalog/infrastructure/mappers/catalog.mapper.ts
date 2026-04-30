@@ -10,6 +10,7 @@ import type {
     PackageDto,
     PackageSlotDto
 } from "@/shared/infrastructure/api/generated/116.api";
+import { EnumCoreContentType } from "@/shared/infrastructure/api/generated/116.api";
 
 /**
  * Mapper for converting API DTOs to domain entities in the catalog module.
@@ -50,6 +51,10 @@ export const CatalogMapper = {
             id: dto.id,
             contentTypeId: dto.contentTypeId,
             contentTypeName: dto.contentTypeName,
+            isVideoType: dto.contentTypeName === EnumCoreContentType.Video,
+            isArticleType: dto.contentTypeName === EnumCoreContentType.Article,
+            isShortType: dto.contentTypeName === EnumCoreContentType.Short,
+            isCustomType: dto.contentTypeName === EnumCoreContentType.Custom,
             name: dto.name,
             slug: dto.slug,
             description: dto.description,
