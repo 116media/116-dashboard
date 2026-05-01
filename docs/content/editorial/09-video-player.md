@@ -125,6 +125,6 @@ import VideoPlayer from "@/shared/presentation/ui/VideoPlayer";
 
 | Module | Form/Component | Preview Type |
 |--------|---------------|--------------|
-| Videos | `YoutubeIdModal` | YouTube embed preview |
+| Videos | `YoutubeUrlModal` | YouTube embed preview |
 | Shorts | `ShortVideoForm` (create) | Local file object URL |
 | Shorts | `ShortVideoForm` (update) | Existing CDN video URL |
