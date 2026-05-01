@@ -1,7 +1,5 @@
-import type {
-    EnumPaymentMethod,
-    EnumPaymentStatus
-} from "@/shared/infrastructure/api/generated/116.api";
+import type { PaymentMethod } from "@/shared/domain/enums/payment-method.enum";
+import type { PaymentStatus } from "@/shared/domain/enums/payment-status.enum";
 
 /**
  * Domain entity for a payment record attached to an order.
@@ -10,9 +8,9 @@ import type {
  *
  * @property {string} id - Unique identifier (UUID)
  * @property {number} amountUsd - Payment amount in USD
- * @property {EnumPaymentMethod | null} paymentMethod - Selected payment method
+ * @property {PaymentMethod | null} paymentMethod - Selected payment method
  * @property {{ id: string; fileName: string; storageUrl: string } | null} paymentProof - Uploaded proof file
- * @property {EnumPaymentStatus} status - Current payment status
+ * @property {PaymentStatus} status - Current payment status
  * @property {string | null} verifiedBy - UUID of the admin who verified
  * @property {string | null} verifiedByUserName - Display name of the admin who verified
  * @property {string | null} verifiedAt - ISO timestamp of verification
@@ -21,13 +19,13 @@ import type {
 export interface IPaymentEntity {
     id: string;
     amountUsd: number;
-    paymentMethod?: EnumPaymentMethod | null;
+    paymentMethod?: PaymentMethod | null;
     paymentProof?: {
         id: string;
         fileName: string;
         storageUrl: string;
     } | null;
-    status: EnumPaymentStatus;
+    status: PaymentStatus;
     verifiedBy?: string | null;
     verifiedByUserName?: string | null;
     verifiedAt?: string | null;
