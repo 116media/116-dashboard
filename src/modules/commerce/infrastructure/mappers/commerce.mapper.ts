@@ -4,16 +4,21 @@ import type { IOrderItemEntity } from "@/modules/commerce/domain/entities/IOrder
 import type { IOrderSummaryEntity } from "@/modules/commerce/domain/entities/IOrderSummaryEntity";
 import type { IPaymentEntity } from "@/modules/commerce/domain/entities/IPaymentEntity";
 import type { IPaymentSummaryEntity } from "@/modules/commerce/domain/entities/IPaymentSummaryEntity";
-import {
-    type ContentOrderDetailDto,
-    type ContentOrderSummaryDto,
-    EnumCoreContentType,
+import { mapCoreContentType } from "@/modules/commerce/infrastructure/mappers/core-content-type.mapper";
+import { mapOrderStatus } from "@/modules/commerce/infrastructure/mappers/order-status.mapper";
+import { mapPaymentMethod } from "@/modules/commerce/infrastructure/mappers/payment-method.mapper";
+import { mapPaymentStatus } from "@/modules/commerce/infrastructure/mappers/payment-status.mapper";
+import { CoreContentType } from "@/shared/domain/enums/core-content-type.enum";
+import { OrderStatus } from "@/shared/domain/enums/order-status.enum";
+import type {
+    ContentOrderDetailDto,
+    ContentOrderSummaryDto,
     EnumOrderStatus,
-    type EnumPaymentMethod,
-    type EnumPaymentStatus,
-    type ItemTierDto,
-    type OrderItemDto,
-    type PaymentDto
+    EnumPaymentMethod,
+    EnumPaymentStatus,
+    ItemTierDto,
+    OrderItemDto,
+    PaymentDto
 } from "@/shared/infrastructure/api/generated/116.api";
 
 /**
@@ -43,7 +48,7 @@ export interface PaymentSummaryDto {
  * @description
  * Provides pure transformation functions to map data transfer objects (DTOs)
  * from the API layer to clean domain entities. Handles nested object mappings
- * for items within orders and proof files within payments. Uses the generated API enum types directly for type-safe downstream usage.
+ * for items within orders and proof files within payments.
  *
  * @remarks
  * - All methods are stateless pure functions
@@ -72,11 +77,12 @@ export const CommerceMapper = {
      * @returns {IOrderItemEntity} Mapped order item entity with nested tier snapshots
      */
     orderItemFromDto(dto: OrderItemDto): IOrderItemEntity {
+        const contentKind = mapCoreContentType(dto.contentKind);
         return {
             id: dto.id,
-            contentKind: dto.contentKind,
-            isVideoType: dto.contentKind === EnumCoreContentType.Video,
-            isArticleType: dto.contentKind === EnumCoreContentType.Article,
+            contentKind,
+            isVideoType: contentKind === CoreContentType.Video,
+            isArticleType: contentKind === CoreContentType.Article,
             categoryId: dto.categoryId,
             categoryName: dto.categoryName,
             promotionLevelId: dto.promotionLevelId,
@@ -98,7 +104,7 @@ export const CommerceMapper = {
         return {
             id: dto.id,
             amountUsd: dto.amountUsd,
-            paymentMethod: dto.paymentMethod,
+            paymentMethod: dto.paymentMethod ? mapPaymentMethod(dto.paymentMethod) : null,
             paymentProof: dto.paymentProof
                 ? {
                       id: dto.paymentProof.id,
@@ -106,7 +112,7 @@ export const CommerceMapper = {
                       storageUrl: dto.paymentProof.storageUrl
                   }
                 : null,
-            status: dto.status,
+            status: mapPaymentStatus(dto.status),
             verifiedBy: dto.verifiedBy,
             verifiedByUserName: dto.verifiedByUserName,
             verifiedAt: dto.verifiedAt,
@@ -124,7 +130,7 @@ export const CommerceMapper = {
         return {
             id: dto.id,
             customerName: dto.customerName,
-            status: dto.status,
+            status: mapOrderStatus(dto.status),
             totalAmountUsd: dto.totalAmountUsd,
             itemCount: dto.itemCount,
             createdAt: dto.createdAt,
@@ -141,15 +147,14 @@ export const CommerceMapper = {
      * @returns {IOrderDetailEntity} Mapped order detail entity with nested items and payment
      */
     orderDetailFromDto(dto: ContentOrderDetailDto): IOrderDetailEntity {
+        const status = mapOrderStatus(dto.status);
         return {
             id: dto.id,
             customerId: dto.customerId,
             customerName: dto.customerName,
             packageId: dto.packageId,
-            status: dto.status,
-            hasPayment:
-                dto.status === EnumOrderStatus.PendingPayment ||
-                dto.status === EnumOrderStatus.Paid,
+            status,
+            hasPayment: status === OrderStatus.PendingPayment || status === OrderStatus.Paid,
             totalAmountUsd: dto.totalAmountUsd,
             items: dto.items.map(CommerceMapper.orderItemFromDto),
             payment: dto.payment ? CommerceMapper.paymentFromDto(dto.payment) : null,
@@ -172,9 +177,9 @@ export const CommerceMapper = {
             orderId: dto.orderId,
             customerName: dto.customerName,
             amountUsd: dto.amountUsd,
-            paymentMethod: dto.paymentMethod,
-            status: dto.status,
-            orderStatus: dto.orderStatus,
+            paymentMethod: dto.paymentMethod ? mapPaymentMethod(dto.paymentMethod) : null,
+            status: mapPaymentStatus(dto.status),
+            orderStatus: mapOrderStatus(dto.orderStatus),
             verifiedBy: dto.verifiedBy,
             verifiedByUserName: dto.verifiedByUserName,
             verifiedAt: dto.verifiedAt,
