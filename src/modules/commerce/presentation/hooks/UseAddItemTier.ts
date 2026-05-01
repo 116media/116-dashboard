@@ -46,9 +46,7 @@ export const useAddItemTier = (
     const [form] = useForm<IAddItemTierCredentials>();
     const [success, setSuccess] = useState<string | null>(null);
 
-    const { loading, error } = useAppSelector(
-        ({ commerce: { addTierToItem } }) => addTierToItem
-    );
+    const { loading, error } = useAppSelector(({ commerce: { addTierToItem } }) => addTierToItem);
 
     const onSubmit = async (values: IAddItemTierCredentials): Promise<void> => {
         if (!orderId || !itemId) return;
