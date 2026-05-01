@@ -1,4 +1,4 @@
-import type { EnumOrderStatus } from "@/shared/infrastructure/api/generated/116.api";
+import type { OrderStatus } from "@/shared/domain/enums/order-status.enum";
 
 /**
  * Domain entity for an order list summary.
@@ -7,7 +7,7 @@ import type { EnumOrderStatus } from "@/shared/infrastructure/api/generated/116.
  *
  * @property {string} id - Unique identifier (UUID)
  * @property {string} customerName - Display name of the B2B customer
- * @property {EnumOrderStatus} status - Current order status
+ * @property {OrderStatus} status - Current order status
  * @property {number} totalAmountUsd - Total order amount in USD
  * @property {number} itemCount - Number of content items in the order
  * @property {string | null} createdAt - ISO creation timestamp
@@ -18,7 +18,7 @@ import type { EnumOrderStatus } from "@/shared/infrastructure/api/generated/116.
 export interface IOrderSummaryEntity {
     id: string;
     customerName: string;
-    status: EnumOrderStatus;
+    status: OrderStatus;
     totalAmountUsd: number;
     itemCount: number;
     createdAt?: string | null;
