@@ -1,8 +1,8 @@
 import type { FormInstance } from "antd";
 import { Form } from "antd";
 import { useState } from "react";
-import type { IAttachPaymentProofCredentials } from "@/modules/commerce/presentation/model/IAttachPaymentProofCredentials";
 import { usePaymentActions } from "@/modules/commerce/presentation/hooks/UsePaymentActions";
+import type { IAttachPaymentProofCredentials } from "@/modules/commerce/presentation/model/IAttachPaymentProofCredentials";
 import type { Failure } from "@/shared/domain/failures/failure";
 
 const { useForm } = Form;
