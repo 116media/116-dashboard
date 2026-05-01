@@ -1,4 +1,4 @@
-import type { EnumContentStatus } from "@/shared/infrastructure/api/generated/116.api";
+import type { ContentStatus } from "@/shared/domain/enums/content-status.enum";
 
 /**
  * Domain entity for an article summary in list views.
@@ -13,7 +13,8 @@ import type { EnumContentStatus } from "@/shared/infrastructure/api/generated/11
  * @property {string} headline - Short summary text
  * @property {string | null} coverImageUrl - URL of the cover image
  * @property {string} authorId - UUID of the author (identity user)
- * @property {EnumContentStatus} status - Current editorial workflow status
+ * @property {ContentStatus} status - Current editorial workflow status
+ * @property {boolean} canDelete - Whether the article can be permanently deleted
  * @property {boolean} isFeatured - Whether the article is featured
  * @property {string | null} publishedAt - ISO timestamp of publication
  * @property {string | null} createdAt - ISO creation timestamp
@@ -30,7 +31,8 @@ export interface IArticleSummaryEntity {
     headline: string;
     coverImageUrl?: string | null;
     authorId: string;
-    status: EnumContentStatus;
+    status: ContentStatus;
+    canDelete: boolean;
     isFeatured: boolean;
     publishedAt?: string | null;
     createdAt?: string | null;
