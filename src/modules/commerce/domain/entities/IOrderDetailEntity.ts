@@ -1,6 +1,6 @@
 import type { IOrderItemEntity } from "@/modules/commerce/domain/entities/IOrderItemEntity";
 import type { IPaymentEntity } from "@/modules/commerce/domain/entities/IPaymentEntity";
-import type { EnumOrderStatus } from "@/shared/infrastructure/api/generated/116.api";
+import type { OrderStatus } from "@/shared/domain/enums/order-status.enum";
 
 /**
  * Domain entity for a full order detail view.
@@ -9,7 +9,7 @@ import type { EnumOrderStatus } from "@/shared/infrastructure/api/generated/116.
  *
  * @property {string} id - Unique identifier (UUID)
  * @property {string} customerName - Display name of the B2B customer
- * @property {EnumOrderStatus} status - Current order status
+ * @property {OrderStatus} status - Current order status
  * @property {boolean} hasPayment - True when status is PendingPayment or Paid; derived in the mapper
  * @property {number} totalAmountUsd - Total order amount in USD
  * @property {IOrderItemEntity[]} items - Commissioned content items
@@ -24,7 +24,7 @@ export interface IOrderDetailEntity {
     customerId: string;
     customerName: string;
     packageId?: string | null;
-    status: EnumOrderStatus;
+    status: OrderStatus;
     hasPayment: boolean;
     totalAmountUsd: number;
     items: IOrderItemEntity[];
