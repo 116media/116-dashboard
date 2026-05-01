@@ -3,6 +3,8 @@ import type { ColumnsType } from "antd/es/table";
 import type { IOrderSummaryEntity } from "@/modules/commerce/domain/entities/IOrderSummaryEntity";
 import OrderStatusTag from "@/modules/commerce/presentation/components/ui/OrderStatusTag";
 import type { EnumOrderStatus } from "@/shared/infrastructure/api/generated/116.api";
+import type { ITableActionItem } from "@/shared/presentation/ui/TableActionDropdown";
+import TableActionDropdown from "@/shared/presentation/ui/TableActionDropdown";
 import { dayjs } from "@/shared/presentation/utils/dayjs/dayjs.utils";
 
 const { Text } = Typography;
@@ -74,11 +76,19 @@ export const paymentsTableColumns = (
     {
         title: "Actions",
         key: "actions",
-        width: 100,
+        width: 80,
         fixed: "end",
         align: "center",
-        render: (_: unknown, record: IOrderSummaryEntity) => (
-            <a onClick={() => onView(record)}>Voir détails</a>
-        )
+        render: (_: unknown, record: IOrderSummaryEntity) => {
+            const items: ITableActionItem[] = [
+                {
+                    key: "view",
+                    label: "Voir détails",
+                    onClick: () => onView(record)
+                }
+            ];
+
+            return <TableActionDropdown items={items} />;
+        }
     }
 ];
