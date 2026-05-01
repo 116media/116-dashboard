@@ -22,6 +22,7 @@ import type { Result } from "@/shared/domain/results/result";
 import { err, ok } from "@/shared/domain/results/result";
 import type { IPaginatedResult } from "@/shared/domain/types/pagination";
 import { apiClient } from "@/shared/infrastructure/api/client";
+import type { EnumCoreContentType } from "@/shared/infrastructure/api/generated/116.api";
 import { ProblemMapper } from "@/shared/infrastructure/mappers/problem.mapper";
 
 /**
@@ -42,7 +43,10 @@ export class CommerceRepositoryImpl implements ICommerceRepositoryPort {
         data: IAddOrderItemCredentials
     ): Promise<Result<IOrderItemEntity>> {
         try {
-            const response = await apiClient.api.adminAddOrderItem(orderId, data);
+            const response = await apiClient.api.adminAddOrderItem(orderId, {
+                ...data,
+                contentKind: data.contentKind as unknown as EnumCoreContentType
+            });
             return ok(CommerceMapper.orderItemFromDto(response.data.item));
         } catch (error) {
             return err(ProblemMapper.toFailure(error));
@@ -130,9 +134,9 @@ export class CommerceRepositoryImpl implements ICommerceRepositoryPort {
     ): Promise<Result<IPaginatedResult<IOrderSummaryEntity>>> {
         try {
             const response = await apiClient.api.adminGetAllOrders({
-                pageIndex: params.pageIndex,
-                pageSize: params.pageSize,
                 status: params.status,
+                pageSize: params.pageSize,
+                pageIndex: params.pageIndex,
                 customerId: params.customerId,
                 ...(params.search ? { search: params.search } : {})
             } as Parameters<typeof apiClient.api.adminGetAllOrders>[0]);
