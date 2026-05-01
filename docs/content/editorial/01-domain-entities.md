@@ -130,7 +130,7 @@ interface IVideoEntity {
     authorId: string;
     status: EContentStatus;
     rejectionReason?: string | null;
-    youtubeVideoId?: string | null;
+    youtubeVideoUrl?: string | null;
     isFeatured: boolean;
     featuredUntil?: string | null;
     hasLyrics: boolean;
@@ -160,7 +160,7 @@ interface IVideoSummaryEntity {
     thumbnailUrl: string;
     authorId: string;
     status: EContentStatus;
-    youtubeVideoId?: string | null;
+    youtubeVideoUrl?: string | null;
     isFeatured: boolean;
     hasLyrics: boolean;
     publishedAt?: string | null;
