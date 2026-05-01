@@ -45,7 +45,7 @@ interface IVideosRepositoryPort {
     archiveVideo(id: string): Promise<Result<IVideoEntity>>;
     deleteVideo(id: string): Promise<Result<void>>;
     uploadVideoThumbnail(id: string, data: IUploadVideoThumbnailCredentials): Promise<Result<IVideoEntity>>;
-    attachYoutubeId(id: string, data: IAttachYoutubeIdCredentials): Promise<Result<IVideoEntity>>;
+    attachYoutubeId(id: string, data: IAttachYoutubeUrlCredentials): Promise<Result<IVideoEntity>>;
     updateVideoSeo(id: string, data: IUpdateVideoSeoCredentials): Promise<Result<IVideoEntity>>;
     updateVideoTags(id: string, data: IUpdateVideoTagsCredentials): Promise<Result<ITagEntity[]>>;
     scheduleShoot(id: string, data: IScheduleShootCredentials): Promise<Result<IVideoEntity>>;
@@ -71,7 +71,7 @@ interface IVideosRepositoryPort {
 | `archivevideo.usecase.ts` | `string` (id) | `IVideoEntity` |
 | `deletevideo.usecase.ts` | `string` (id) | `void` |
 | `uploadvideothumbnail.usecase.ts` | `{ id: string; data: IUploadVideoThumbnailCredentials }` | `IVideoEntity` |
-| `attachyoutubeid.usecase.ts` | `{ id: string; data: IAttachYoutubeIdCredentials }` | `IVideoEntity` |
+| `attachyoutubeid.usecase.ts` | `{ id: string; data: IAttachYoutubeUrlCredentials }` | `IVideoEntity` |
 | `updatevideoseo.usecase.ts` | `{ id: string; data: IUpdateVideoSeoCredentials }` | `IVideoEntity` |
 | `updatevideotags.usecase.ts` | `{ id: string; data: IUpdateVideoTagsCredentials }` | `ITagEntity[]` |
 | `scheduleshoot.usecase.ts` | `{ id: string; data: IScheduleShootCredentials }` | `IVideoEntity` |
@@ -112,7 +112,7 @@ export const VideosMapper = {
 | `archiveVideo` | `apiClient.api.adminArchiveVideo(id)` |
 | `deleteVideo` | `apiClient.api.adminDeleteVideo(id)` |
 | `uploadVideoThumbnail` | `apiClient.api.adminUploadVideoThumbnail(id, data)` |
-| `attachYoutubeId` | `apiClient.api.adminAttachYoutubeId(id, data)` |
+| `attachYoutubeId` | `apiClient.api.adminAttachYoutubeVideoUrl(id, data)` |
 | `updateVideoSeo` | `apiClient.api.adminUpdateVideoSeo(id, data)` |
 | `updateVideoTags` | `apiClient.api.adminUpdateVideoTags(id, data)` |
 | `scheduleShoot` | `apiClient.api.adminScheduleShoot(id, data)` |
@@ -139,7 +139,7 @@ export function registerVideosDependencies(container: AwilixContainer): void {
         archiveVideoUseCase: asClass(ArchiveVideoUseCase).transient(),
         deleteVideoUseCase: asClass(DeleteVideoUseCase).transient(),
         uploadVideoThumbnailUseCase: asClass(UploadVideoThumbnailUseCase).transient(),
-        attachYoutubeIdUseCase: asClass(AttachYoutubeIdUseCase).transient(),
+        attachYoutubeIdUseCase: asClass(AttachYoutubeVideoUrlUseCase).transient(),
         updateVideoSeoUseCase: asClass(UpdateVideoSeoUseCase).transient(),
         updateVideoTagsUseCase: asClass(UpdateVideoTagsUseCase).transient(),
         scheduleShootUseCase: asClass(ScheduleShootUseCase).transient(),
@@ -168,7 +168,7 @@ export const ActionType = {
     ArchiveVideo: "videos/archiveVideo",
     DeleteVideo: "videos/deleteVideo",
     UploadVideoThumbnail: "videos/uploadVideoThumbnail",
-    AttachYoutubeId: "videos/attachYoutubeId",
+    AttachYoutubeVideoUrl: "videos/attachYoutubeId",
     UpdateVideoSeo: "videos/updateVideoSeo",
     UpdateVideoTags: "videos/updateVideoTags",
     ScheduleShoot: "videos/scheduleShoot",
@@ -214,7 +214,7 @@ type IVideosState = {
 | `archivevideo.action.ts` | `string` | `IVideoEntity` |
 | `deletevideo.action.ts` | `string` | `void` |
 | `uploadvideothumbnail.action.ts` | `{ id: string; data: IUploadVideoThumbnailCredentials }` | `IVideoEntity` |
-| `attachyoutubeid.action.ts` | `{ id: string; data: IAttachYoutubeIdCredentials }` | `IVideoEntity` |
+| `attachyoutubeid.action.ts` | `{ id: string; data: IAttachYoutubeUrlCredentials }` | `IVideoEntity` |
 | `updatevideoseo.action.ts` | `{ id: string; data: IUpdateVideoSeoCredentials }` | `IVideoEntity` |
 | `updatevideotags.action.ts` | `{ id: string; data: IUpdateVideoTagsCredentials }` | `ITagEntity[]` |
 | `scheduleshoot.action.ts` | `{ id: string; data: IScheduleShootCredentials }` | `IVideoEntity` |
@@ -232,7 +232,7 @@ type IVideosState = {
 | `IUpdateVideoCredentials.ts` | `categoryId: string; title: string; description: string` |
 | `IRejectVideoCredentials.ts` | `rejectionReason: string` |
 | `IUploadVideoThumbnailCredentials.ts` | `file: File` |
-| `IAttachYoutubeIdCredentials.ts` | `youtubeVideoId: string` |
+| `IAttachYoutubeUrlCredentials.ts` | `youtubeVideoUrl: string` |
 | `IUpdateVideoSeoCredentials.ts` | `metaTitle: string; metaDescription: string` |
 | `IUpdateVideoTagsCredentials.ts` | `tagIds: string[]` |
 | `IScheduleShootCredentials.ts` | `shootingScheduledAt: string` (ISO date string) |
@@ -270,7 +270,7 @@ Manages the entire wizard lifecycle:
 - `currentStep: number` — active step index (0–3)
 - `videoId: string | null` — set after step 1 completes
 - `step1Form: FormInstance<ICreateVideoCredentials>` — step 1 form
-- `youtubeForm: FormInstance<IAttachYoutubeIdCredentials>` — step 2 YouTube form
+- `youtubeForm: FormInstance<IAttachYoutubeUrlCredentials>` — step 2 YouTube form
 - `shootForm: FormInstance<IScheduleShootCredentials>` — step 2 shoot form
 - `seoForm: FormInstance<IUpdateVideoSeoCredentials>` — step 3 SEO form
 - `tagIds: string[]` — step 3 tag selection
@@ -327,7 +327,7 @@ export const VideosRejectValidator = {
 
 ```ts
 export const VideosYoutubeValidator = {
-    youtubeVideoId: (label: string) => [required(label), max(label, 20)],
+    youtubeVideoUrl: (label: string) => [required(label), max(label, 20)],
 };
 ```
 
@@ -453,9 +453,9 @@ Same status options as articles:
 - `onUpload(id, file)` → dispatch `uploadVideoThumbnailAction` → show notification
 - Exposes: `loading`, `error`, `onUpload`
 
-### `UseAttachYoutubeId.ts`
+### `UseAttachYoutubeVideoUrl.ts`
 
-- `useForm<IAttachYoutubeIdCredentials>()`
+- `useForm<IAttachYoutubeUrlCredentials>()`
 - Exposes: `form`, `loading`, `error`, `success`, `onSubmit`, `resetYoutube`
 
 ### `UseUpdateVideoSeo.ts`
@@ -533,7 +533,7 @@ Used for editing existing videos (not creation step 1):
 
 | Field | Label | Component | Validation |
 | --- | --- | --- | --- |
-| `youtubeVideoId` | Identifiant YouTube | `Input` | required, max 20 |
+| `youtubeVideoUrl` | Identifiant YouTube | `Input` | required, max 20 |
 
 Displays a helper hint: "Saisir uniquement l'identifiant (ex: dQw4w9WgXcQ), pas l'URL complète."
 
@@ -549,7 +549,7 @@ Displays a helper hint: "Saisir uniquement l'identifiant (ex: dQw4w9WgXcQ), pas 
 | --- | --- | --- | --- |
 | Titre | `title` | Yes | `<Text strong>` |
 | Catégorie | `categoryName` | Yes | `<Text>` |
-| YouTube | `youtubeVideoId` | No | link icon if set |
+| YouTube | `youtubeVideoUrl` | No | link icon if set |
 | Statut | `status` | Yes | `<ContentStatusTag>` |
 | En vedette | `isFeatured` | Yes | `<BooleanTag>` |
 | Paroles | `hasLyrics` | No | `<BooleanTag>` |
@@ -573,7 +573,7 @@ Modal wrapping `VideoTagsForm`.
 
 Modal with file upload input (image files only). Calls `onUpload` on submit.
 
-### `ui/YoutubeIdModal/index.tsx`
+### `ui/YoutubeUrlModal/index.tsx`
 
 Modal wrapping `YoutubeIdForm`. AdminOnly — guard rendering on role check.
 
@@ -611,7 +611,7 @@ VideoWorkflowModal — conditional per workflow action
 VideoSeoModal
 VideoTagsModal
 VideoThumbnailUploadModal
-YoutubeIdModal — AdminOnly
+YoutubeUrlModal — AdminOnly
 ShootScheduleModal
 ```
 
@@ -687,7 +687,7 @@ const VideosPage: FC = () => (
 - [ ] Create `UseCreateVideoWizard.ts` with JSDoc
 - [ ] Create `UseUpdateVideo.ts` with JSDoc
 - [ ] Create `UseUploadVideoThumbnail.ts` with JSDoc
-- [ ] Create `UseAttachYoutubeId.ts` with JSDoc
+- [ ] Create `UseAttachYoutubeVideoUrl.ts` with JSDoc
 - [ ] Create `UseUpdateVideoSeo.ts` with JSDoc
 - [ ] Create `UseUpdateVideoTags.ts` with JSDoc
 - [ ] Create `UseScheduleShoot.ts` with JSDoc
@@ -709,7 +709,7 @@ const VideosPage: FC = () => (
 - [ ] Create `VideoSeoModal` with JSDoc
 - [ ] Create `VideoTagsModal` with JSDoc
 - [ ] Create `VideoThumbnailUploadModal` with JSDoc
-- [ ] Create `YoutubeIdModal` with JSDoc
+- [ ] Create `YoutubeUrlModal` with JSDoc
 - [ ] Create `ShootScheduleModal` with JSDoc
 
 ### Containers and Pages
