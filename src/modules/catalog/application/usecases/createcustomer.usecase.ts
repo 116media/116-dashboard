@@ -5,6 +5,7 @@ import type { Result } from "@/shared/domain/results/result";
 
 /**
  * @interface ICreateCustomerUseCase
+ * @extends {IResultUseCase<{ fullName: string; email: string; phone?: string; company?: string; notes?: string }, ICustomerEntity>}
  */
 interface ICreateCustomerUseCase
     extends IResultUseCase<
@@ -17,6 +18,10 @@ interface ICreateCustomerUseCase
  *
  * @class CreateCustomerUseCase
  * @implements {ICreateCustomerUseCase}
+ *
+ * @description
+ * Creates a new customer record with contact and company details
+ * via the catalog repository.
  */
 export class CreateCustomerUseCase implements ICreateCustomerUseCase {
     private readonly catalogRepository: ICatalogRepositoryPort;
@@ -27,7 +32,10 @@ export class CreateCustomerUseCase implements ICreateCustomerUseCase {
         this.catalogRepository = catalogRepository;
     }
     /**
-     * Executes the creating a new customer use case.
+     * Executes the create customer use case.
+     *
+     * @param {object} data - Customer creation data
+     * @returns {Promise<Result<ICustomerEntity>>} `ok(ICustomerEntity)` on success, `err(Failure)` on failure
      */
     async execute(data: {
         fullName: string;

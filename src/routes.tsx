@@ -10,6 +10,7 @@ import {
     FORGOT_PASSWORD_PATH,
     LOGIN_PATH,
     NOT_FOUND_PATH,
+    ORDERS_PATH,
     OVERVIEW_PATH,
     PERMISSIONS_PATH,
     REFERENCES_PATH,
@@ -42,6 +43,8 @@ const PermissionsPage = lazy(
 );
 const LookupPage = lazy(() => import("@/modules/lookup/presentation/pages/LookupPage"));
 const CatalogPage = lazy(() => import("@/modules/catalog/presentation/pages/CatalogPage"));
+const CommercePage = lazy(() => import("@/modules/commerce/presentation/pages/CommercePage"));
+const OrderDetailPage = lazy(() => import("@/modules/commerce/presentation/pages/OrderDetailPage"));
 
 const guestRoutes: RouteObject[] = [
     {
@@ -141,6 +144,18 @@ const protectedRoutes: RouteObject[] = [
                             />
                         ),
                         children: [{ path: `${CATALOG_PATH}/:tab?`, element: <CatalogPage /> }]
+                    },
+                    {
+                        element: (
+                            <PermissionRoute
+                                permissions={[{ resource: "orders", action: "read" }]}
+                                mode="some"
+                            />
+                        ),
+                        children: [
+                            { path: `${ORDERS_PATH}/:tab?`, element: <CommercePage /> },
+                            { path: `${ORDERS_PATH}/:id`, element: <OrderDetailPage /> }
+                        ]
                     }
                 ]
             }

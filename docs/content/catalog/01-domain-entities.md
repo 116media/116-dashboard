@@ -103,8 +103,8 @@ Maps from backend `PackageDto` which includes auditable fields. `slots` lists wh
 
 ## TODO
 
-- [ ] Create `ICategoryPricingEntity.ts` with JSDoc
-- [ ] Create `ICategoryEntity.ts` with JSDoc
-- [ ] Create `ICustomerEntity.ts` with JSDoc
-- [ ] Create `IPackageSlotEntity.ts` with JSDoc
-- [ ] Create `IPackageEntity.ts` with JSDoc
+- [x] Create `ICategoryPricingEntity.ts` with JSDoc
+- [x] Create `ICategoryEntity.ts` with JSDoc
+- [x] Create `ICustomerEntity.ts` with JSDoc
+- [x] Create `IPackageSlotEntity.ts` with JSDoc
+- [x] Create `IPackageEntity.ts` with JSDoc

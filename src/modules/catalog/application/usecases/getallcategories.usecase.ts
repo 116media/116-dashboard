@@ -6,6 +6,7 @@ import type { IPaginatedResult } from "@/shared/domain/types/pagination";
 
 /**
  * @interface IGetAllCategoriesUseCase
+ * @extends {IResultUseCase<{ pageIndex: number; pageSize: number; isActive?: boolean; isFree?: boolean; search?: string }, IPaginatedResult<ICategoryEntity>>}
  */
 interface IGetAllCategoriesUseCase
     extends IResultUseCase<
@@ -24,6 +25,10 @@ interface IGetAllCategoriesUseCase
  *
  * @class GetAllCategoriesUseCase
  * @implements {IGetAllCategoriesUseCase}
+ *
+ * @description
+ * Retrieves a paginated list of categories with optional filters
+ * for active status, free tier, and search term via the catalog repository.
  */
 export class GetAllCategoriesUseCase implements IGetAllCategoriesUseCase {
     private readonly catalogRepository: ICatalogRepositoryPort;
@@ -34,7 +39,10 @@ export class GetAllCategoriesUseCase implements IGetAllCategoriesUseCase {
         this.catalogRepository = catalogRepository;
     }
     /**
-     * Executes the fetching all categories use case.
+     * Executes the get all categories use case.
+     *
+     * @param {object} params - Pagination and filter parameters
+     * @returns {Promise<Result<IPaginatedResult<ICategoryEntity>>>} `ok(IPaginatedResult<ICategoryEntity>)` on success, `err(Failure)` on failure
      */
     async execute(params: {
         pageIndex: number;

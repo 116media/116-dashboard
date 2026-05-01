@@ -77,7 +77,7 @@ Each file exports a config object with the relevant success keys for that operat
 | `createSuccess` | "Commande créée" | "La commande a été créée avec succès." |
 | `addItemSuccess` | "Article ajouté" | "L'article a été ajouté à la commande avec succès." |
 | `addTierSuccess` | "Tranche ajoutée" | "La tranche tarifaire a été ajoutée à l'article avec succès." |
-| `submitSuccess` | "Commande soumise" | "La commande a été soumise et est en attente de paiement." |
+| `submitSuccess` | "Commande soumise" | "La commande a été soumise et est paiement en cours." |
 | `cancelSuccess` | "Commande annulée" | "La commande a été annulée avec succès." |
 
 ### `commerce.payment.notification.ts`

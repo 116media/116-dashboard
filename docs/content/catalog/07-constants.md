@@ -79,6 +79,6 @@ Options: `all` ("Tous"), `active` ("Actifs"), `inactive` ("Inactifs")
 
 ## TODO
 
-- [ ] Create 3 dropdown config files (categories, customers, packages)
-- [ ] Create 2 action config files (categories, packages — customers have none)
-- [ ] Create 2 status option files (categories, packages — customers have none)
+- [x] Create 3 dropdown config files (categories, customers, packages)
+- [x] Create 2 action config files (categories, packages — customers have none)
+- [x] Create 2 status option files (categories, packages — customers have none)

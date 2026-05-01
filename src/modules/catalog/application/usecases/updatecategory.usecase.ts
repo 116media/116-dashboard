@@ -5,6 +5,7 @@ import type { Result } from "@/shared/domain/results/result";
 
 /**
  * @interface IUpdateCategoryUseCase
+ * @extends {IResultUseCase<{ id: string; data: { name: string; slug: string; description: string } }, ICategoryEntity>}
  */
 interface IUpdateCategoryUseCase
     extends IResultUseCase<
@@ -17,6 +18,10 @@ interface IUpdateCategoryUseCase
  *
  * @class UpdateCategoryUseCase
  * @implements {IUpdateCategoryUseCase}
+ *
+ * @description
+ * Updates an existing category's name, slug, and description
+ * via the catalog repository.
  */
 export class UpdateCategoryUseCase implements IUpdateCategoryUseCase {
     private readonly catalogRepository: ICatalogRepositoryPort;
@@ -27,7 +32,10 @@ export class UpdateCategoryUseCase implements IUpdateCategoryUseCase {
         this.catalogRepository = catalogRepository;
     }
     /**
-     * Executes the updating an existing category use case.
+     * Executes the update category use case.
+     *
+     * @param {object} params - The category ID and updated data
+     * @returns {Promise<Result<ICategoryEntity>>} `ok(ICategoryEntity)` on success, `err(Failure)` on failure
      */
     async execute(params: {
         id: string;

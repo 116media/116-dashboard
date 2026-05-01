@@ -256,7 +256,7 @@ Renders a colored `Tag` component for each `EContentStatus` value:
 | Status | Label | Color |
 | --- | --- | --- |
 | `Draft` | "Brouillon" | `default` |
-| `PendingPayment` | "En attente de paiement" | `orange` |
+| `PendingPayment` | "paiement en cours" | `orange` |
 | `PendingReview` | "En attente de revue" | `blue` |
 | `Approved` | "Approuvé" | `cyan` |
 | `Published` | "Publié" | `green` |

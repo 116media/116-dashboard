@@ -1,6 +1,7 @@
 import { combineReducers } from "@reduxjs/toolkit";
 import authReducer from "@/modules/auth/presentation/store";
 import catalogReducer from "@/modules/catalog/presentation/store";
+import commerceReducer from "@/modules/commerce/presentation/store";
 import lookupReducer from "@/modules/lookup/presentation/store";
 import permissionsReducer from "@/modules/permissions/presentation/store";
 import rolesReducer from "@/modules/roles/presentation/store";
@@ -22,7 +23,8 @@ export const rootReducer = combineReducers({
     roles: rolesReducer,
     permissions: permissionsReducer,
     lookup: lookupReducer,
-    catalog: catalogReducer
+    catalog: catalogReducer,
+    commerce: commerceReducer
 });
 
 /**

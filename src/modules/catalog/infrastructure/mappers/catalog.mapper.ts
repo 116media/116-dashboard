@@ -12,9 +12,25 @@ import type {
 } from "@/shared/infrastructure/api/generated/116.api";
 
 /**
- * Maps catalog DTOs from the generated API to domain entities.
+ * Mapper for converting API DTOs to domain entities in the catalog module.
+ *
+ * @description
+ * Provides pure transformation functions to map data transfer objects (DTOs)
+ * from the API layer to clean domain entities. Handles nested object mappings
+ * for pricing tiers within categories and slots within packages.
+ *
+ * @remarks
+ * - All methods are stateless pure functions
+ * - Marked as const to prevent accidental mutation
+ * - Part of the infrastructure layer
  */
 export const CatalogMapper = {
+    /**
+     * Maps CategoryPricingDto to ICategoryPricingEntity domain entity.
+     *
+     * @param {CategoryPricingDto} dto - Category pricing data from API
+     * @returns {ICategoryPricingEntity} Mapped category pricing entity
+     */
     categoryPricingFromDto(dto: CategoryPricingDto): ICategoryPricingEntity {
         return {
             tierId: dto.tierId,
@@ -23,6 +39,12 @@ export const CatalogMapper = {
         };
     },
 
+    /**
+     * Maps CategoryDto to ICategoryEntity domain entity.
+     *
+     * @param {CategoryDto} dto - Category data from API
+     * @returns {ICategoryEntity} Mapped category entity with nested pricing tiers
+     */
     categoryFromDto(dto: CategoryDto): ICategoryEntity {
         return {
             id: dto.id,
@@ -37,6 +59,12 @@ export const CatalogMapper = {
         };
     },
 
+    /**
+     * Maps CustomerDto to ICustomerEntity domain entity.
+     *
+     * @param {CustomerDto} dto - Customer data from API
+     * @returns {ICustomerEntity} Mapped customer entity with audit timestamps
+     */
     customerFromDto(dto: CustomerDto): ICustomerEntity {
         return {
             id: dto.id,
@@ -52,6 +80,12 @@ export const CatalogMapper = {
         };
     },
 
+    /**
+     * Maps PackageSlotDto to IPackageSlotEntity domain entity.
+     *
+     * @param {PackageSlotDto} dto - Package slot data from API
+     * @returns {IPackageSlotEntity} Mapped package slot entity
+     */
     packageSlotFromDto(dto: PackageSlotDto): IPackageSlotEntity {
         return {
             id: dto.id,
@@ -62,6 +96,12 @@ export const CatalogMapper = {
         };
     },
 
+    /**
+     * Maps PackageDto to IPackageEntity domain entity.
+     *
+     * @param {PackageDto} dto - Package data from API
+     * @returns {IPackageEntity} Mapped package entity with nested slots
+     */
     packageFromDto(dto: PackageDto): IPackageEntity {
         return {
             id: dto.id,

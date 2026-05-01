@@ -5,6 +5,7 @@ import type { Result } from "@/shared/domain/results/result";
 
 /**
  * @interface IUpdateCustomerUseCase
+ * @extends {IResultUseCase<{ id: string; data: { fullName: string; phone?: string; company?: string; notes?: string } }, ICustomerEntity>}
  */
 interface IUpdateCustomerUseCase
     extends IResultUseCase<
@@ -20,6 +21,10 @@ interface IUpdateCustomerUseCase
  *
  * @class UpdateCustomerUseCase
  * @implements {IUpdateCustomerUseCase}
+ *
+ * @description
+ * Updates an existing customer's name, phone, company, and notes
+ * via the catalog repository.
  */
 export class UpdateCustomerUseCase implements IUpdateCustomerUseCase {
     private readonly catalogRepository: ICatalogRepositoryPort;
@@ -30,7 +35,10 @@ export class UpdateCustomerUseCase implements IUpdateCustomerUseCase {
         this.catalogRepository = catalogRepository;
     }
     /**
-     * Executes the updating an existing customer use case.
+     * Executes the update customer use case.
+     *
+     * @param {object} params - The customer ID and updated data
+     * @returns {Promise<Result<ICustomerEntity>>} `ok(ICustomerEntity)` on success, `err(Failure)` on failure
      */
     async execute(params: {
         id: string;

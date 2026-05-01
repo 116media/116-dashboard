@@ -71,4 +71,4 @@ async execute({ id, data }: { id: string; data: IUpdateCategoryCredentials }): P
 
 ## TODO
 
-- [ ] Create all 21 use case files with JSDoc
+- [x] Create all 21 use case files with JSDoc

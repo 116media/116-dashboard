@@ -6,6 +6,7 @@ import type { IPaginatedResult } from "@/shared/domain/types/pagination";
 
 /**
  * @interface IGetAllPackagesUseCase
+ * @extends {IResultUseCase<{ pageIndex: number; pageSize: number; isActive?: boolean; search?: string }, IPaginatedResult<IPackageEntity>>}
  */
 interface IGetAllPackagesUseCase
     extends IResultUseCase<
@@ -18,6 +19,10 @@ interface IGetAllPackagesUseCase
  *
  * @class GetAllPackagesUseCase
  * @implements {IGetAllPackagesUseCase}
+ *
+ * @description
+ * Retrieves a paginated list of packages with optional filters
+ * for active status and search term via the catalog repository.
  */
 export class GetAllPackagesUseCase implements IGetAllPackagesUseCase {
     private readonly catalogRepository: ICatalogRepositoryPort;
@@ -28,7 +33,10 @@ export class GetAllPackagesUseCase implements IGetAllPackagesUseCase {
         this.catalogRepository = catalogRepository;
     }
     /**
-     * Executes the fetching all packages use case.
+     * Executes the get all packages use case.
+     *
+     * @param {object} params - Pagination and filter parameters
+     * @returns {Promise<Result<IPaginatedResult<IPackageEntity>>>} `ok(IPaginatedResult<IPackageEntity>)` on success, `err(Failure)` on failure
      */
     async execute(params: {
         pageIndex: number;

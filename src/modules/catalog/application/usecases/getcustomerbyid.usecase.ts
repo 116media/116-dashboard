@@ -5,6 +5,7 @@ import type { Result } from "@/shared/domain/results/result";
 
 /**
  * @interface IGetCustomerByIdUseCase
+ * @extends {IResultUseCase<string, ICustomerEntity>}
  */
 interface IGetCustomerByIdUseCase extends IResultUseCase<string, ICustomerEntity> {}
 
@@ -13,6 +14,10 @@ interface IGetCustomerByIdUseCase extends IResultUseCase<string, ICustomerEntity
  *
  * @class GetCustomerByIdUseCase
  * @implements {IGetCustomerByIdUseCase}
+ *
+ * @description
+ * Retrieves a single customer by their unique identifier
+ * via the catalog repository.
  */
 export class GetCustomerByIdUseCase implements IGetCustomerByIdUseCase {
     private readonly catalogRepository: ICatalogRepositoryPort;
@@ -23,7 +28,10 @@ export class GetCustomerByIdUseCase implements IGetCustomerByIdUseCase {
         this.catalogRepository = catalogRepository;
     }
     /**
-     * Executes the fetching a customer by ID use case.
+     * Executes the get customer by ID use case.
+     *
+     * @param {string} id - The unique identifier of the customer
+     * @returns {Promise<Result<ICustomerEntity>>} `ok(ICustomerEntity)` on success, `err(Failure)` on failure
      */
     async execute(id: string): Promise<Result<ICustomerEntity>> {
         return this.catalogRepository.getCustomerById(id);

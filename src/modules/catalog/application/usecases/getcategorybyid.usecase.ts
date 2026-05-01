@@ -5,6 +5,7 @@ import type { Result } from "@/shared/domain/results/result";
 
 /**
  * @interface IGetCategoryByIdUseCase
+ * @extends {IResultUseCase<string, ICategoryEntity>}
  */
 interface IGetCategoryByIdUseCase extends IResultUseCase<string, ICategoryEntity> {}
 
@@ -13,6 +14,10 @@ interface IGetCategoryByIdUseCase extends IResultUseCase<string, ICategoryEntity
  *
  * @class GetCategoryByIdUseCase
  * @implements {IGetCategoryByIdUseCase}
+ *
+ * @description
+ * Retrieves a single category by its unique identifier
+ * via the catalog repository.
  */
 export class GetCategoryByIdUseCase implements IGetCategoryByIdUseCase {
     private readonly catalogRepository: ICatalogRepositoryPort;
@@ -23,7 +28,10 @@ export class GetCategoryByIdUseCase implements IGetCategoryByIdUseCase {
         this.catalogRepository = catalogRepository;
     }
     /**
-     * Executes the fetching a category by ID use case.
+     * Executes the get category by ID use case.
+     *
+     * @param {string} id - The unique identifier of the category
+     * @returns {Promise<Result<ICategoryEntity>>} `ok(ICategoryEntity)` on success, `err(Failure)` on failure
      */
     async execute(id: string): Promise<Result<ICategoryEntity>> {
         return this.catalogRepository.getCategoryById(id);

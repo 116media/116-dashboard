@@ -5,6 +5,7 @@ import type { Result } from "@/shared/domain/results/result";
 
 /**
  * @interface IGetPackageByIdUseCase
+ * @extends {IResultUseCase<string, IPackageEntity>}
  */
 interface IGetPackageByIdUseCase extends IResultUseCase<string, IPackageEntity> {}
 
@@ -13,6 +14,10 @@ interface IGetPackageByIdUseCase extends IResultUseCase<string, IPackageEntity> 
  *
  * @class GetPackageByIdUseCase
  * @implements {IGetPackageByIdUseCase}
+ *
+ * @description
+ * Retrieves a single package by its unique identifier
+ * via the catalog repository.
  */
 export class GetPackageByIdUseCase implements IGetPackageByIdUseCase {
     private readonly catalogRepository: ICatalogRepositoryPort;
@@ -23,7 +28,10 @@ export class GetPackageByIdUseCase implements IGetPackageByIdUseCase {
         this.catalogRepository = catalogRepository;
     }
     /**
-     * Executes the fetching a package by ID use case.
+     * Executes the get package by ID use case.
+     *
+     * @param {string} id - The unique identifier of the package
+     * @returns {Promise<Result<IPackageEntity>>} `ok(IPackageEntity)` on success, `err(Failure)` on failure
      */
     async execute(id: string): Promise<Result<IPackageEntity>> {
         return this.catalogRepository.getPackageById(id);

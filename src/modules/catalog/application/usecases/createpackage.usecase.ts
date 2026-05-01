@@ -5,6 +5,7 @@ import type { Result } from "@/shared/domain/results/result";
 
 /**
  * @interface ICreatePackageUseCase
+ * @extends {IResultUseCase<{ name: string; description: string; flatPriceUsd: number }, IPackageEntity>}
  */
 interface ICreatePackageUseCase
     extends IResultUseCase<
@@ -17,6 +18,10 @@ interface ICreatePackageUseCase
  *
  * @class CreatePackageUseCase
  * @implements {ICreatePackageUseCase}
+ *
+ * @description
+ * Creates a new package with a name, description, and flat USD price
+ * via the catalog repository.
  */
 export class CreatePackageUseCase implements ICreatePackageUseCase {
     private readonly catalogRepository: ICatalogRepositoryPort;
@@ -27,7 +32,10 @@ export class CreatePackageUseCase implements ICreatePackageUseCase {
         this.catalogRepository = catalogRepository;
     }
     /**
-     * Executes the creating a new package use case.
+     * Executes the create package use case.
+     *
+     * @param {object} data - Package creation data
+     * @returns {Promise<Result<IPackageEntity>>} `ok(IPackageEntity)` on success, `err(Failure)` on failure
      */
     async execute(data: {
         name: string;

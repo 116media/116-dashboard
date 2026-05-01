@@ -4,6 +4,7 @@ import type { Result } from "@/shared/domain/results/result";
 
 /**
  * @interface IRemovePackageSlotUseCase
+ * @extends {IResultUseCase<{ packageId: string; slotId: string }, { isSuccess: boolean }>}
  */
 interface IRemovePackageSlotUseCase
     extends IResultUseCase<{ packageId: string; slotId: string }, { isSuccess: boolean }> {}
@@ -13,6 +14,10 @@ interface IRemovePackageSlotUseCase
  *
  * @class RemovePackageSlotUseCase
  * @implements {IRemovePackageSlotUseCase}
+ *
+ * @description
+ * Removes an existing slot from a package
+ * via the catalog repository.
  */
 export class RemovePackageSlotUseCase implements IRemovePackageSlotUseCase {
     private readonly catalogRepository: ICatalogRepositoryPort;
@@ -23,7 +28,10 @@ export class RemovePackageSlotUseCase implements IRemovePackageSlotUseCase {
         this.catalogRepository = catalogRepository;
     }
     /**
-     * Executes the removing a slot from a package use case.
+     * Executes the remove package slot use case.
+     *
+     * @param {object} params - The package ID and slot ID to remove
+     * @returns {Promise<Result<{ isSuccess: boolean }>>} `ok({ isSuccess: boolean })` on success, `err(Failure)` on failure
      */
     async execute(params: {
         packageId: string;

@@ -115,9 +115,9 @@ Export any new icons needed for navigation items (e.g., `TeamOutlined`, `GiftOut
 
 ## TODO
 
-- [ ] Add 3 path constants to `paths.ts`
-- [ ] Add 3 navigation items to `navigation.ts`
-- [ ] Add 3 lazy imports and 3 PermissionRoute entries to `routes.tsx`
-- [ ] Add `catalog` reducer to `root.reducer.ts`
-- [ ] Extend `Cradle` and call `registerCatalogDependencies` in `service.locator.ts`
-- [ ] Export any needed icons in `Icons/index.tsx`
+- [x] Add 3 path constants to `paths.ts`
+- [x] Add 3 navigation items to `navigation.ts`
+- [x] Add 3 lazy imports and 3 PermissionRoute entries to `routes.tsx`
+- [x] Add `catalog` reducer to `root.reducer.ts`
+- [x] Extend `Cradle` and call `registerCatalogDependencies` in `service.locator.ts`
+- [x] Export any needed icons in `Icons/index.tsx`
