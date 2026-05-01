@@ -1,5 +1,5 @@
 import type { IItemTierEntity } from "@/modules/commerce/domain/entities/IItemTierEntity";
-import type { EnumCoreContentType } from "@/shared/infrastructure/api/generated/116.api";
+import type { CoreContentType } from "@/shared/domain/enums/core-content-type.enum";
 
 /**
  * Domain entity for a commissioned content item within an order.
@@ -7,7 +7,7 @@ import type { EnumCoreContentType } from "@/shared/infrastructure/api/generated/
  * @interface IOrderItemEntity
  *
  * @property {string} id - Unique identifier (UUID)
- * @property {EnumCoreContentType} contentKind - Raw content type (used when sending back to the API)
+ * @property {CoreContentType} contentKind - Content type (Article, Video, Short, Custom)
  * @property {boolean} isArticleType - True when the item is for an Article
  * @property {boolean} isVideoType - True when the item is for a Video
  * @property {string} categoryName - Display name of the content category
@@ -19,7 +19,7 @@ import type { EnumCoreContentType } from "@/shared/infrastructure/api/generated/
  */
 export interface IOrderItemEntity {
     id: string;
-    contentKind: EnumCoreContentType;
+    contentKind: CoreContentType;
     isArticleType: boolean;
     isVideoType: boolean;
     categoryId: string;
