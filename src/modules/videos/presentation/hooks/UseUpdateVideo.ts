@@ -1,5 +1,6 @@
 import type { FormInstance } from "antd";
 import { Form } from "antd";
+import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import { usePaidOrderItems } from "@/modules/commerce/presentation/hooks/UsePaidOrderItems";
 import type { IVideoEntity } from "@/modules/videos/domain/entities/IVideoEntity";
@@ -64,7 +65,7 @@ export const useUpdateVideo = (
             description: video.description,
             socialBoost: false,
             isFeatured: video.isFeatured,
-            featuredUntil: video.featuredUntil,
+            featuredUntil: video.featuredUntil ? dayjs(video.featuredUntil) : null,
             metaTitle: video.metaTitle,
             metaDescription: video.metaDescription
         });
@@ -83,12 +84,14 @@ export const useUpdateVideo = (
     const onSubmit = async (values: IUpdateVideoCredentials): Promise<void> => {
         if (!video) return;
 
+        const { featuredUntil, ...rest } = values;
         const result = await dispatch(
             updateVideoAction({
                 id: video.id,
                 data: {
-                    ...values,
-                    slug: generateSlug(values.title, { unique: true })
+                    ...rest,
+                    slug: generateSlug(values.title, { unique: true }),
+                    featuredUntil: featuredUntil ? dayjs(featuredUntil).toISOString() : null
                 }
             })
         );
