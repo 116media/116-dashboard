@@ -1,5 +1,5 @@
 import type { IVideoSummaryEntity } from "@/modules/videos/domain/entities/IVideoSummaryEntity";
-import { EnumContentStatus } from "@/shared/infrastructure/api/generated/116.api";
+import { ContentStatus } from "@/shared/domain/enums/content-status.enum";
 
 /**
  * Available action types for a video record.
@@ -60,19 +60,18 @@ export const VIDEO_DROPDOWN_ITEMS: IVideoDropdownItem[] = [
         key: "submit",
         label: "Soumettre",
         hidden: (r, isSuperAdmin) =>
-            !isSuperAdmin ||
-            ![EnumContentStatus.Draft, EnumContentStatus.Rejected].includes(r.status)
+            !isSuperAdmin || ![ContentStatus.Draft, ContentStatus.Rejected].includes(r.status)
     },
     {
         key: "approve",
         label: "Approuver",
-        hidden: (r, isSuperAdmin) => !isSuperAdmin || r.status !== EnumContentStatus.PendingReview
+        hidden: (r, isSuperAdmin) => !isSuperAdmin || r.status !== ContentStatus.PendingReview
     },
     {
         key: "publish",
         label: "Publier",
         hidden: (r, isSuperAdmin) =>
-            !isSuperAdmin || r.status !== EnumContentStatus.Approved || !r.youtubeVideoUrl
+            !isSuperAdmin || r.status !== ContentStatus.Approved || !r.youtubeVideoUrl
     },
     {
         key: "reject",
@@ -80,14 +79,18 @@ export const VIDEO_DROPDOWN_ITEMS: IVideoDropdownItem[] = [
         danger: true,
         hidden: (r, isSuperAdmin) =>
             !isSuperAdmin ||
-            ![EnumContentStatus.PendingReview, EnumContentStatus.Approved].includes(r.status)
+            ![ContentStatus.PendingReview, ContentStatus.Approved].includes(r.status)
     },
     {
         key: "archive",
         label: "Archiver",
         hidden: (r, isSuperAdmin) =>
-            !isSuperAdmin ||
-            ![EnumContentStatus.Published, EnumContentStatus.Rejected].includes(r.status)
+            !isSuperAdmin || ![ContentStatus.Published, ContentStatus.Rejected].includes(r.status)
     },
-    { key: "delete", label: "Supprimer", danger: true, hidden: (_, isSuperAdmin) => !isSuperAdmin }
+    {
+        danger: true,
+        key: "delete",
+        label: "Supprimer",
+        hidden: (r, isSuperAdmin) => !isSuperAdmin || !r.canDelete
+    }
 ];
