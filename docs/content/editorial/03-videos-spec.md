@@ -18,7 +18,7 @@ Full spec for the videos module — 15 admin endpoints with a 7-step editorial w
 | PATCH | `/api/v1/admin/videos/{id}/reject` | SuperAdminOnly | Rejeter (avec raison) |
 | PATCH | `/api/v1/admin/videos/{id}/archive` | SuperAdminOnly | Archiver |
 | DELETE | `/api/v1/admin/videos/{id}` | SuperAdminOnly | Supprimer définitivement |
-| POST | `/api/v1/admin/videos/{id}/thumbnail` | AdminOrSuperAdmin | Importer la vignette |
+| POST | `/api/v1/admin/videos/{id}/thumbnail` | AdminOrSuperAdmin | Importer la miniature |
 | PATCH | `/api/v1/admin/videos/{id}/youtube` | AdminOnly | Associer un ID YouTube |
 | PATCH | `/api/v1/admin/videos/{id}/seo` | AdminOrSuperAdmin | Mettre à jour le SEO |
 | PUT | `/api/v1/admin/videos/{id}/tags` | AdminOrSuperAdmin | Remplacer les tags |
@@ -248,7 +248,7 @@ Video creation uses a **stepper wizard** (Ant Design `Steps`) because the backen
 | Step | Title | Fields | API Calls |
 | --- | --- | --- | --- |
 | 1 | Informations | Catégorie, titre, slug, description, client (opt), commande (opt) | `POST /admin/videos` → returns `videoId` |
-| 2 | YouTube & Média | ID YouTube, vignette (upload), date de tournage | `PATCH /admin/videos/{id}/youtube` + `POST /admin/videos/{id}/thumbnail` + `PATCH /admin/videos/{id}/shoot` |
+| 2 | YouTube & Média | ID YouTube, miniature (upload), date de tournage | `PATCH /admin/videos/{id}/youtube` + `POST /admin/videos/{id}/thumbnail` + `PATCH /admin/videos/{id}/shoot` |
 | 3 | Tags & SEO | Sélection de tags, titre SEO (max 70), description SEO (max 160) | `PUT /admin/videos/{id}/tags` + `PATCH /admin/videos/{id}/seo` |
 | 4 | Résumé | Aperçu en lecture seule de toutes les informations | `PATCH /admin/videos/{id}/submit` (bouton Soumettre) |
 
@@ -357,7 +357,7 @@ export const VideosShootValidator = {
 | `rejectSuccess` | "Vidéo rejetée" | "La vidéo a été rejetée." |
 | `archiveSuccess` | "Vidéo archivée" | "La vidéo a été archivée avec succès." |
 | `deleteSuccess` | "Vidéo supprimée" | "La vidéo a été supprimée définitivement." |
-| `uploadThumbnailSuccess` | "Vignette téléversée" | "La vignette a été téléversée avec succès." |
+| `uploadThumbnailSuccess` | "Miniature uploadée" | "La miniature a été uploadée avec succès." |
 | `attachYoutubeSuccess` | "YouTube associé" | "L'identifiant YouTube a été associé avec succès." |
 | `updateSeoSuccess` | "SEO mis à jour" | "Les informations SEO ont été mises à jour." |
 | `updateTagsSuccess` | "Tags mis à jour" | "Les tags de la vidéo ont été mis à jour." |
@@ -376,7 +376,7 @@ export const VideosShootValidator = {
 | `edit` | "Modifier" | `!isAdminOrSuperAdmin` |
 | `seo` | "Modifier le SEO" | `!isAdminOrSuperAdmin` |
 | `tags` | "Modifier les tags" | `!isAdminOrSuperAdmin` |
-| `thumbnail` | "Changer la vignette" | `!isAdminOrSuperAdmin` |
+| `thumbnail` | "Changer la miniature" | `!isAdminOrSuperAdmin` |
 | `shoot` | "Planifier le tournage" | `!isAdminOrSuperAdmin` |
 | `youtube` | "Associer YouTube" | `!isAdmin` (AdminOnly) |
 | `submit` | "Soumettre" | `!isSuperAdmin \|\| status !== Draft` |
