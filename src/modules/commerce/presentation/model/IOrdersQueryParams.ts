@@ -1,5 +1,5 @@
+import type { OrderStatus } from "@/shared/domain/enums/order-status.enum";
 import type { IPaginationParams } from "@/shared/domain/types/pagination";
-import type { EnumOrderStatus } from "@/shared/infrastructure/api/generated/116.api";
 
 /**
  * Query parameters for listing orders with pagination and optional filters.
@@ -7,10 +7,10 @@ import type { EnumOrderStatus } from "@/shared/infrastructure/api/generated/116.
  * @interface IOrdersQueryParams
  * @extends {IPaginationParams}
  *
- * @property {EnumOrderStatus} [status] - Optional order status filter
+ * @property {OrderStatus} [status] - Optional order status filter
  * @property {string} [customerId] - Optional customer filter
  */
 export interface IOrdersQueryParams extends IPaginationParams {
-    status?: EnumOrderStatus;
+    status?: OrderStatus;
     customerId?: string;
 }
