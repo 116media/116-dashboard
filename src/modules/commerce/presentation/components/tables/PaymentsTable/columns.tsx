@@ -5,11 +5,9 @@ import {
     ORDER_STATUS_CONFIG,
     PAYMENT_STATUS_CONFIG
 } from "@/modules/commerce/presentation/constants/order.status.config";
-import type {
-    EnumOrderStatus,
-    EnumPaymentMethod,
-    EnumPaymentStatus
-} from "@/shared/infrastructure/api/generated/116.api";
+import type { OrderStatus } from "@/shared/domain/enums/order-status.enum";
+import type { PaymentMethod } from "@/shared/domain/enums/payment-method.enum";
+import type { PaymentStatus } from "@/shared/domain/enums/payment-status.enum";
 import { ADMIN_PATH } from "@/shared/presentation/constants/paths";
 import StatusTag from "@/shared/presentation/ui/StatusTag";
 import type { ITableActionItem } from "@/shared/presentation/ui/TableActionDropdown";
@@ -78,7 +76,7 @@ export const paymentsTableColumns = (
         key: "paymentMethod",
         width: 150,
         align: "center",
-        render: (method: EnumPaymentMethod | null) =>
+        render: (method: PaymentMethod | null) =>
             method ? (
                 <Tag>{PAYMENT_METHOD_LABELS[method] ?? method}</Tag>
             ) : (
@@ -91,7 +89,7 @@ export const paymentsTableColumns = (
         key: "status",
         width: 140,
         align: "center",
-        render: (status: EnumPaymentStatus) => (
+        render: (status: PaymentStatus) => (
             <StatusTag status={status} config={PAYMENT_STATUS_CONFIG} />
         )
     },
@@ -101,9 +99,7 @@ export const paymentsTableColumns = (
         key: "orderStatus",
         width: 150,
         align: "center",
-        render: (status: EnumOrderStatus) => (
-            <StatusTag status={status} config={ORDER_STATUS_CONFIG} />
-        )
+        render: (status: OrderStatus) => <StatusTag status={status} config={ORDER_STATUS_CONFIG} />
     },
     {
         title: "Vérifié par",
