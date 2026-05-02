@@ -1,5 +1,5 @@
+import type { ContentStatus } from "@/shared/domain/enums/content-status.enum";
 import type { IPaginationParams } from "@/shared/domain/types/pagination";
-import type { EnumContentStatus } from "@/shared/infrastructure/api/generated/116.api";
 
 /**
  * Query parameters for listing videos with pagination and optional filters.
@@ -7,10 +7,10 @@ import type { EnumContentStatus } from "@/shared/infrastructure/api/generated/11
  * @interface IVideosQueryParams
  * @extends {IPaginationParams}
  *
- * @property {EnumContentStatus} [status] - Optional content status filter
+ * @property {ContentStatus} [status] - Optional content status filter
  * @property {string} [categoryId] - Optional category filter
  */
 export interface IVideosQueryParams extends IPaginationParams {
-    status?: EnumContentStatus;
+    status?: ContentStatus;
     categoryId?: string;
 }
