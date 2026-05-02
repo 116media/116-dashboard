@@ -1,7 +1,7 @@
 import { Button, Flex, Tag, Typography } from "antd";
 import type { FC } from "react";
 import type { ISession } from "@/platform/session/domain/entities/ISession";
-import { EnumDevice } from "@/shared/infrastructure/api/generated/116.api";
+import { Device } from "@/platform/session/domain/enums/device.enum";
 import {
     IconApiOutlined,
     IconCarOutlined,
@@ -33,16 +33,16 @@ interface ISessionCardProps {
 /**
  * Maps device types to their corresponding Ant Design icon components.
  */
-const deviceIconMap: Record<EnumDevice, FC> = {
-    [EnumDevice.Desktop]: IconDesktopOutlined,
-    [EnumDevice.Mobile]: IconMobileOutlined,
-    [EnumDevice.Tablet]: IconTabletOutlined,
-    [EnumDevice.Watch]: IconClockCircleOutlined,
-    [EnumDevice.Tv]: IconDesktopOutlined,
-    [EnumDevice.Console]: IconDesktopOutlined,
-    [EnumDevice.Car]: IconCarOutlined,
-    [EnumDevice.IoT]: IconApiOutlined,
-    [EnumDevice.Unknown]: IconQuestionCircleOutlined
+const deviceIconMap: Record<Device, FC> = {
+    [Device.Desktop]: IconDesktopOutlined,
+    [Device.Mobile]: IconMobileOutlined,
+    [Device.Tablet]: IconTabletOutlined,
+    [Device.Watch]: IconClockCircleOutlined,
+    [Device.Tv]: IconDesktopOutlined,
+    [Device.Console]: IconDesktopOutlined,
+    [Device.Car]: IconCarOutlined,
+    [Device.IoT]: IconApiOutlined,
+    [Device.Unknown]: IconQuestionCircleOutlined
 };
 
 /**
