@@ -1,14 +1,12 @@
 import type { PaymentMethodFilter } from "@/modules/commerce/presentation/hooks/UsePaymentsList";
+import { PaymentMethod } from "@/shared/domain/enums/payment-method.enum";
+import { PaymentStatus } from "@/shared/domain/enums/payment-status.enum";
 import type { IStatusOption } from "@/shared/domain/types/pagination";
-import {
-    EnumPaymentMethod,
-    EnumPaymentStatus
-} from "@/shared/infrastructure/api/generated/116.api";
 
 /**
  * Status filter values for the payments list.
  */
-export type PaymentStatusFilter = "all" | EnumPaymentStatus;
+export type PaymentStatusFilter = "all" | PaymentStatus;
 
 /**
  * Status filter options for the payments table toolbar.
@@ -19,9 +17,9 @@ export type PaymentStatusFilter = "all" | EnumPaymentStatus;
  */
 export const PAYMENT_STATUS_OPTIONS: IStatusOption<PaymentStatusFilter>[] = [
     { value: "all", label: "Tous" },
-    { value: EnumPaymentStatus.Pending, label: "En attente" },
-    { value: EnumPaymentStatus.Verified, label: "Vérifié" },
-    { value: EnumPaymentStatus.Rejected, label: "Rejeté" }
+    { value: PaymentStatus.Pending, label: "En attente" },
+    { value: PaymentStatus.Verified, label: "Vérifié" },
+    { value: PaymentStatus.Rejected, label: "Rejeté" }
 ];
 
 /**
@@ -33,7 +31,7 @@ export const PAYMENT_STATUS_OPTIONS: IStatusOption<PaymentStatusFilter>[] = [
  */
 export const PAYMENT_METHOD_FILTER_OPTIONS: IStatusOption<PaymentMethodFilter>[] = [
     { value: "all", label: "Tous" },
-    { value: EnumPaymentMethod.BankTransfer, label: "Virement" },
-    { value: EnumPaymentMethod.MobileMoney, label: "Mobile Money" },
-    { value: EnumPaymentMethod.Cash, label: "Espèces" }
+    { value: PaymentMethod.BankTransfer, label: "Virement" },
+    { value: PaymentMethod.MobileMoney, label: "Mobile Money" },
+    { value: PaymentMethod.Cash, label: "Espèces" }
 ];
