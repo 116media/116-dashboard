@@ -1,9 +1,7 @@
-import type {
-    EnumBrowser,
-    EnumClient,
-    EnumDevice,
-    EnumPlatform
-} from "@/shared/infrastructure/api/generated/116.api";
+import type { Browser } from "@/platform/session/domain/enums/browser.enum";
+import type { Client } from "@/platform/session/domain/enums/client.enum";
+import type { Device } from "@/platform/session/domain/enums/device.enum";
+import type { Platform } from "@/platform/session/domain/enums/platform.enum";
 
 /**
  * Session entity representing an authenticated login session.
@@ -13,10 +11,10 @@ import type {
  * @property {string} id - Unique session identifier
  * @property {string | null} ipAddress - IP address where the login happened
  * @property {string | null} userAgent - Raw User-Agent string
- * @property {EnumBrowser} browser - Detected browser type
- * @property {EnumDevice} device - Detected device type
- * @property {EnumPlatform} platform - Detected OS / platform
- * @property {EnumClient} client - Client application type
+ * @property {Browser} browser - Detected browser type
+ * @property {Device} device - Detected device type
+ * @property {Platform} platform - Detected OS / platform
+ * @property {Client} client - Client application type
  * @property {string} expiresAt - ISO 8601 expiration date
  * @property {boolean} isActive - Whether the session is active
  * @property {boolean} isCurrent - Whether this is the requesting session
@@ -26,10 +24,10 @@ export interface ISession {
     id: string;
     ipAddress?: string | null;
     userAgent?: string | null;
-    browser: EnumBrowser;
-    device: EnumDevice;
-    platform: EnumPlatform;
-    client: EnumClient;
+    browser: Browser;
+    device: Device;
+    platform: Platform;
+    client: Client;
     expiresAt: string;
     isActive: boolean;
     isCurrent: boolean;
