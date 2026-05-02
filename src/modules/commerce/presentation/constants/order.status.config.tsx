@@ -1,4 +1,5 @@
-import { EnumOrderStatus, EnumPaymentStatus } from "@/shared/infrastructure/api/generated/116.api";
+import { OrderStatus } from "@/shared/domain/enums/order-status.enum";
+import { PaymentStatus } from "@/shared/domain/enums/payment-status.enum";
 import {
     IconCheckCircleOutlined,
     IconClockCircleOutlined,
@@ -11,14 +12,14 @@ import type { IStatusConfig } from "@/shared/presentation/ui/StatusTag";
  * Status configuration for order lifecycle states.
  */
 export const ORDER_STATUS_CONFIG: Record<string, IStatusConfig> = {
-    [EnumOrderStatus.Draft]: { label: "brouillon", color: "default", icon: <IconEditOutlined /> },
-    [EnumOrderStatus.PendingPayment]: {
+    [OrderStatus.Draft]: { label: "brouillon", color: "default", icon: <IconEditOutlined /> },
+    [OrderStatus.PendingPayment]: {
         label: "en attente",
         color: "warning",
         icon: <IconClockCircleOutlined />
     },
-    [EnumOrderStatus.Paid]: { label: "payé", color: "success", icon: <IconCheckCircleOutlined /> },
-    [EnumOrderStatus.Cancelled]: {
+    [OrderStatus.Paid]: { label: "payé", color: "success", icon: <IconCheckCircleOutlined /> },
+    [OrderStatus.Cancelled]: {
         label: "annulé",
         color: "error",
         icon: <IconCloseCircleOutlined />
@@ -29,17 +30,17 @@ export const ORDER_STATUS_CONFIG: Record<string, IStatusConfig> = {
  * Status configuration for payment verification states.
  */
 export const PAYMENT_STATUS_CONFIG: Record<string, IStatusConfig> = {
-    [EnumPaymentStatus.Pending]: {
+    [PaymentStatus.Pending]: {
         label: "en attente",
         color: "warning",
         icon: <IconClockCircleOutlined />
     },
-    [EnumPaymentStatus.Verified]: {
+    [PaymentStatus.Verified]: {
         label: "vérifié",
         color: "success",
         icon: <IconCheckCircleOutlined />
     },
-    [EnumPaymentStatus.Rejected]: {
+    [PaymentStatus.Rejected]: {
         label: "rejeté",
         color: "error",
         icon: <IconCloseCircleOutlined />
