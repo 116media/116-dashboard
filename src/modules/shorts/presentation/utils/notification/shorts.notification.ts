@@ -65,7 +65,7 @@ export const ShortsNotification = {
      */
     uploadThumbnailSuccess: {
         type: "success",
-        title: "Miniature téléversée",
-        description: "La miniature a été téléversée avec succès."
+        title: "Miniature uploadée",
+        description: "La miniature a été uploadée avec succès."
     } as INotificationConfig
 } as const;
