@@ -7,8 +7,8 @@ import type { IAddOrderItemCredentials } from "@/modules/commerce/presentation/m
 import { OrderItemsValidator } from "@/modules/commerce/presentation/utils/validators/commerce.orderitems.validator";
 import type { IContentTypeEntity } from "@/modules/lookup/domain/entities/IContentTypeEntity";
 import type { IPromotionLevelEntity } from "@/modules/lookup/domain/entities/IPromotionLevelEntity";
+import { CoreContentType } from "@/shared/domain/enums/core-content-type.enum";
 import type { Failure } from "@/shared/domain/failures/failure";
-import { EnumCoreContentType } from "@/shared/infrastructure/api/generated/116.api";
 import { useAppSelector } from "@/shared/presentation/store/store";
 import ErrorAlert from "@/shared/presentation/ui/ErrorAlert";
 import { IconFireFilled, IconHeartOutlined } from "@/shared/presentation/ui/Icons";
@@ -34,9 +34,9 @@ interface IOrderItemFormProps {
 }
 
 const CONTENT_KIND_OPTIONS = [
-    { value: EnumCoreContentType.Article, label: "Article" },
-    { value: EnumCoreContentType.Video, label: "Vidéo" },
-    { value: EnumCoreContentType.Short, label: "Short" }
+    { value: CoreContentType.Article, label: "Article" },
+    { value: CoreContentType.Video, label: "Vidéo" },
+    { value: CoreContentType.Short, label: "Short" }
 ];
 
 /**
@@ -64,7 +64,7 @@ const OrderItemForm: FC<IOrderItemFormProps> = ({ form, error, isBonusDefault, o
         ({ lookup: { getPromotionLevels } }) => getPromotionLevels
     );
 
-    const selectedContentKind: EnumCoreContentType | undefined = useWatch("contentKind", form);
+    const selectedContentKind: CoreContentType | undefined = useWatch("contentKind", form);
 
     const matchedContentTypeId = useMemo(() => {
         if (!selectedContentKind) return null;
