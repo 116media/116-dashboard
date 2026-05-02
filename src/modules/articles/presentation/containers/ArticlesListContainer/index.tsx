@@ -1,6 +1,7 @@
 import { Table } from "antd";
 import { type FC, useEffect } from "react";
 import type { IArticleEntity } from "@/modules/articles/domain/entities/IArticleEntity";
+import { ArticleImageType } from "@/modules/articles/domain/enums/article-image-type.enum";
 import ArticleDetailsForm from "@/modules/articles/presentation/components/forms/ArticleDetailsForm";
 import { articlesTableColumns } from "@/modules/articles/presentation/components/tables/ArticlesTable/columns";
 import ArticleCreateWizard from "@/modules/articles/presentation/components/ui/ArticleCreateWizard";
@@ -19,7 +20,6 @@ import { useAuthorization } from "@/modules/auth/presentation/hooks/UseAuthoriza
 import { getAllCategoriesAction } from "@/modules/catalog/presentation/store/getallcategories.action";
 import { getAllCustomersAction } from "@/modules/catalog/presentation/store/getallcustomers.action";
 import { getTagsAction } from "@/modules/lookup/presentation/store/gettags.action";
-import { EnumArticleImageType } from "@/shared/infrastructure/api/generated/116.api";
 import { useResizableColumns } from "@/shared/presentation/hooks/UseResizableColumns";
 import { useAppDispatch } from "@/shared/presentation/store/store";
 import CreateEditModal from "@/shared/presentation/ui/CreateEditModal";
@@ -151,7 +151,7 @@ const ArticlesListContainer: FC = () => {
                         const url = await uploadImage.onUpload(
                             entityId,
                             file,
-                            EnumArticleImageType.Cover
+                            ArticleImageType.Cover
                         );
                         return url ?? "";
                     }}
