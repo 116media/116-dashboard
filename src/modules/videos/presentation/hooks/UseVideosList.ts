@@ -2,9 +2,9 @@ import { useCallback, useEffect, useState } from "react";
 import type { IVideoSummaryEntity } from "@/modules/videos/domain/entities/IVideoSummaryEntity";
 import type { VideoStatusFilter } from "@/modules/videos/presentation/constants/videos.status";
 import { getVideosAction } from "@/modules/videos/presentation/store/getvideos.action";
+import type { ContentStatus } from "@/shared/domain/enums/content-status.enum";
 import type { Failure } from "@/shared/domain/failures/failure";
 import type { IPaginatedResult } from "@/shared/domain/types/pagination";
-import type { EnumContentStatus } from "@/shared/infrastructure/api/generated/116.api";
 import { useDebounce } from "@/shared/presentation/hooks/UseDebounce";
 import { useAppDispatch, useAppSelector } from "@/shared/presentation/store/store";
 
@@ -19,11 +19,11 @@ interface IUseVideosList {
     videos: IPaginatedResult<IVideoSummaryEntity>;
     statusFilter: VideoStatusFilter;
     searchValue: string;
+    reload: () => void;
     onSearch: (value: string) => void;
     onSearchChange: (value: string) => void;
     onStatusFilterChange: (value: VideoStatusFilter) => void;
     onPageChange: (page: number, pageSize: number) => void;
-    reload: () => void;
 }
 
 /**
@@ -53,8 +53,7 @@ export const useVideosList = (): IUseVideosList => {
     const [pageSize, setPageSize] = useState(10);
 
     const fetchVideos = useCallback(() => {
-        const status: EnumContentStatus | undefined =
-            statusFilter === "all" ? undefined : statusFilter;
+        const status: ContentStatus | undefined = statusFilter === "all" ? undefined : statusFilter;
 
         dispatch(
             getVideosAction({
