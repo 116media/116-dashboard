@@ -1,11 +1,13 @@
 import type { ITagEntity } from "@/modules/lookup/domain/entities/ITagEntity";
 import type { IVideoEntity } from "@/modules/videos/domain/entities/IVideoEntity";
 import type { IVideoSummaryEntity } from "@/modules/videos/domain/entities/IVideoSummaryEntity";
+import { ContentStatus } from "@/shared/domain/enums/content-status.enum";
 import type {
     TagDto,
     VideoDetailDto,
     VideoSummaryDto
 } from "@/shared/infrastructure/api/generated/116.api";
+import { mapContentStatus } from "@/shared/infrastructure/mappers/content-status.mapper";
 
 /**
  * Mapper for converting API DTOs to domain entities in the videos module.
@@ -52,7 +54,7 @@ export const VideosMapper = {
             thumbnailUrl: dto.thumbnailUrl,
             thumbnailStorageKey: dto.thumbnailStorageKey,
             authorId: dto.authorId,
-            status: dto.status,
+            status: mapContentStatus(dto.status),
             rejectionReason: dto.rejectionReason,
             youtubeVideoUrl: dto.youtubeVideoUrl,
             isFeatured: dto.isFeatured,
@@ -80,6 +82,8 @@ export const VideosMapper = {
      * @returns {IVideoSummaryEntity} Mapped video summary entity
      */
     videoSummaryFromDto(dto: VideoSummaryDto): IVideoSummaryEntity {
+        const contentStatus = mapContentStatus(dto.status);
+
         return {
             id: dto.id,
             categoryId: dto.categoryId,
@@ -88,7 +92,8 @@ export const VideosMapper = {
             slug: dto.slug,
             thumbnailUrl: dto.thumbnailUrl,
             authorId: dto.authorId,
-            status: dto.status,
+            status: contentStatus,
+            canDelete: [ContentStatus.Draft, ContentStatus.Rejected].includes(contentStatus),
             youtubeVideoUrl: dto.youtubeVideoUrl,
             isFeatured: dto.isFeatured,
             hasLyrics: dto.hasLyrics,
