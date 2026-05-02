@@ -1,13 +1,13 @@
-import type { EnumArticleImageType } from "@/shared/infrastructure/api/generated/116.api";
+import type { ArticleImageType } from "@/modules/articles/domain/enums/article-image-type.enum";
 
 /**
  * Form model for uploading an article image.
  *
  * @interface IUploadArticleImageCredentials
  * @property {File} file - Image file to upload
- * @property {EnumArticleImageType} imageType - Type of image (e.g. cover, inline)
+ * @property {ArticleImageType} imageType - Type of image (e.g. cover, inline)
  */
 export interface IUploadArticleImageCredentials {
     file: File;
-    imageType: EnumArticleImageType;
+    imageType: ArticleImageType;
 }
