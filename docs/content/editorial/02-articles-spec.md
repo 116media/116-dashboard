@@ -346,7 +346,7 @@ export const ArticlesRejectValidator = {
 | `rejectSuccess` | "Article rejeté" | "L'article a été rejeté." |
 | `archiveSuccess` | "Article archivé" | "L'article a été archivé avec succès." |
 | `deleteSuccess` | "Article supprimé" | "L'article a été supprimé définitivement." |
-| `uploadImageSuccess` | "Image téléversée" | "L'image a été téléversée avec succès." |
+| `uploadImageSuccess` | "Image uploadée" | "L'image a été uploadée avec succès." |
 | `updateSeoSuccess` | "SEO mis à jour" | "Les informations SEO ont été mises à jour." |
 | `updateTagsSuccess` | "Tags mis à jour" | "Les tags de l'article ont été mis à jour." |
 
