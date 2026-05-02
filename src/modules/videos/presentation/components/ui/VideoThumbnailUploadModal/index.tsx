@@ -11,14 +11,16 @@ import { IMAGE_PRESET } from "@/shared/presentation/ui/FileUploader/presets";
  * @property {boolean} open - Whether the modal is visible
  * @property {boolean} loading - Loading state for the upload button
  * @property {string | null} videoId - The video to upload the thumbnail for
- * @property {(id: string, file: File) => void} onUpload - Callback with video ID and file
+ * @property {string | null | undefined} currentThumbnailUrl - Existing thumbnail URL to prefill
+ * @property {(id: string, file: File) => Promise<void>} onUpload - Callback with video ID and file
  * @property {() => void} onCancel - Cancel/close handler
  */
 interface IVideoThumbnailUploadModalProps {
     open: boolean;
     loading: boolean;
     videoId: string | null;
-    onUpload: (id: string, file: File) => void;
+    currentThumbnailUrl?: string | null;
+    onUpload: (id: string, file: File) => Promise<boolean>;
     onCancel: () => void;
 }
 
@@ -36,20 +38,22 @@ const VideoThumbnailUploadModal: FC<IVideoThumbnailUploadModalProps> = ({
     open,
     loading,
     videoId,
+    currentThumbnailUrl,
     onUpload,
     onCancel
 }) => {
     const [file, setFile] = useState<File | null>(null);
 
-    const handleUpload = () => {
-        if (!videoId || !file) return;
-        onUpload(videoId, file);
-    };
-
     const handleCancel = useCallback(() => {
         setFile(null);
         onCancel();
     }, [onCancel]);
+
+    const handleUpload = async () => {
+        if (!videoId || !file) return;
+        const success = await onUpload(videoId, file);
+        if (success) handleCancel();
+    };
 
     return (
         <Modal
@@ -66,8 +70,8 @@ const VideoThumbnailUploadModal: FC<IVideoThumbnailUploadModalProps> = ({
                     </Button>
                     <Button
                         type="primary"
-                        loading={loading}
                         disabled={!file}
+                        loading={loading}
                         onClick={handleUpload}
                     >
                         Importer
@@ -77,8 +81,9 @@ const VideoThumbnailUploadModal: FC<IVideoThumbnailUploadModalProps> = ({
         >
             <FileUploader
                 mode="deferred"
-                preset={IMAGE_PRESET}
                 aspectRatio={16 / 9}
+                preset={IMAGE_PRESET}
+                value={currentThumbnailUrl}
                 onFileSelect={setFile}
                 onRemove={() => setFile(null)}
             />
