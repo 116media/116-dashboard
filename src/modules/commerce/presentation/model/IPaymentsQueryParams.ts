@@ -1,8 +1,6 @@
+import type { PaymentMethod } from "@/shared/domain/enums/payment-method.enum";
+import type { PaymentStatus } from "@/shared/domain/enums/payment-status.enum";
 import type { IPaginationParams } from "@/shared/domain/types/pagination";
-import type {
-    EnumPaymentMethod,
-    EnumPaymentStatus
-} from "@/shared/infrastructure/api/generated/116.api";
 
 /**
  * Query parameters for listing payments with pagination and optional filters.
@@ -10,10 +8,10 @@ import type {
  * @interface IPaymentsQueryParams
  * @extends {IPaginationParams}
  *
- * @property {EnumPaymentStatus} [status] - Optional payment status filter
- * @property {EnumPaymentMethod} [method] - Optional payment method filter
+ * @property {PaymentStatus} [status] - Optional payment status filter
+ * @property {PaymentMethod} [method] - Optional payment method filter
  */
 export interface IPaymentsQueryParams extends IPaginationParams {
-    status?: EnumPaymentStatus;
-    method?: EnumPaymentMethod;
+    status?: PaymentStatus;
+    method?: PaymentMethod;
 }
