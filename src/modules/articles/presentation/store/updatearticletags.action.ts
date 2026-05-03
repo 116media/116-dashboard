@@ -18,7 +18,7 @@ export const resetUpdateArticleTagsAction = () =>
  */
 export const updateArticleTagsAction = createAsyncThunk<
     IArticleActionResponse,
-    { id: string; data: { tagIds: string[] } },
+    { id: string; data: { tagNames: string[] } },
     { rejectValue: Failure }
 >(ActionType.UpdateArticleTags, async (params, { rejectWithValue }) => {
     const result = await container.cradle.updateArticleTagsUseCase.execute(params);
