@@ -14,6 +14,11 @@ import type { ContentStatus } from "@/shared/domain/enums/content-status.enum";
  * @property {string} authorId - UUID of the author (identity user)
  * @property {ContentStatus} status - Current editorial workflow status
  * @property {boolean} canDelete - Whether the video can be permanently deleted
+ * @property {boolean} canSubmit - Whether the video can be submitted for review
+ * @property {boolean} canApprove - Whether the video can be approved
+ * @property {boolean} canPublish - Whether the video can be published (requires YouTube URL)
+ * @property {boolean} canReject - Whether the video can be rejected
+ * @property {boolean} canArchive - Whether the video can be archived
  * @property {string | null} youtubeVideoUrl - YouTube video identifier
  * @property {boolean} isFeatured - Whether the video is featured
  * @property {boolean} hasLyrics - Whether the video has associated lyrics
@@ -33,6 +38,11 @@ export interface IVideoSummaryEntity {
     authorId: string;
     status: ContentStatus;
     canDelete: boolean;
+    canSubmit: boolean;
+    canApprove: boolean;
+    canPublish: boolean;
+    canReject: boolean;
+    canArchive: boolean;
     youtubeVideoUrl?: string | null;
     isFeatured: boolean;
     hasLyrics: boolean;
