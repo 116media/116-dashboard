@@ -38,17 +38,17 @@ export const ORDER_DROPDOWN_ITEMS: IOrderDropdownItem[] = [
     {
         key: "addItem",
         label: "Ajouter un produit",
-        hidden: (record) => record.status !== "Draft"
+        hidden: (record) => !record.canAddItem
     },
     {
         key: "submit",
         label: "Soumettre",
-        hidden: (record) => record.status !== "Draft"
+        hidden: (record) => !record.canSubmit
     },
     {
         key: "cancel",
         label: "Annuler",
         danger: true,
-        hidden: (record) => record.status === "Paid" || record.status === "Cancelled"
+        hidden: (record) => !record.canCancel
     }
 ];
