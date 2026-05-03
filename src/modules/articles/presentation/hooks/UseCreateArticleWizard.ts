@@ -30,8 +30,8 @@ interface IUseCreateArticleWizard {
     step1Form: FormInstance<ICreateArticleCredentials>;
     step2Form: FormInstance<IWizardStep2Credentials>;
     seoForm: FormInstance<IUpdateArticleSeoCredentials>;
-    tagIds: string[];
-    onTagsChange: (ids: string[]) => void;
+    tagNames: string[];
+    onTagsChange: (names: string[]) => void;
     onImageUpload: (file: File) => Promise<string>;
     onCoverUpload: (file: File) => Promise<string>;
     goNext: () => Promise<void>;
@@ -58,7 +58,7 @@ export const useCreateArticleWizard = (onSuccess: () => void): IUseCreateArticle
     const [article, setArticle] = useState<IArticleEntity | null>(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<Failure | null | undefined>(null);
-    const [tagIds, setTagIds] = useState<string[]>([]);
+    const [tagNames, setTagNames] = useState<string[]>([]);
     const [socialBoost, setSocialBoost] = useState(false);
 
     const [step1Form] = useForm<ICreateArticleCredentials>();
@@ -183,8 +183,8 @@ export const useCreateArticleWizard = (onSuccess: () => void): IUseCreateArticle
         setLoading(true);
         setError(null);
 
-        if (tagIds.length > 0) {
-            await dispatch(updateArticleTagsAction({ id: articleId, data: { tagIds } }));
+        if (tagNames.length > 0) {
+            await dispatch(updateArticleTagsAction({ id: articleId, data: { tagNames } }));
         }
 
         try {
@@ -241,7 +241,7 @@ export const useCreateArticleWizard = (onSuccess: () => void): IUseCreateArticle
         setArticle(null);
         setLoading(false);
         setError(null);
-        setTagIds([]);
+        setTagNames([]);
         setSocialBoost(false);
         step1Form.resetFields();
         step2Form.resetFields();
@@ -257,8 +257,8 @@ export const useCreateArticleWizard = (onSuccess: () => void): IUseCreateArticle
         step1Form,
         step2Form,
         seoForm,
-        tagIds,
-        onTagsChange: setTagIds,
+        tagNames,
+        onTagsChange: setTagNames,
         onImageUpload,
         onCoverUpload,
         goNext,
