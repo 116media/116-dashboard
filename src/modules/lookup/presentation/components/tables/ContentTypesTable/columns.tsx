@@ -7,6 +7,8 @@ import {
     type ContentTypeAction
 } from "@/modules/lookup/presentation/constants/lookup.content-types.dropdown";
 import { ENTITY_STATUS_CONFIG } from "@/shared/presentation/constants/entity.status.config";
+import { Colors } from "@/shared/presentation/constants/theme";
+import { IconStopOutlined } from "@/shared/presentation/ui/Icons";
 import StatusTag from "@/shared/presentation/ui/StatusTag";
 import type { ITableActionItem } from "@/shared/presentation/ui/TableActionDropdown";
 import TableActionDropdown from "@/shared/presentation/ui/TableActionDropdown";
@@ -52,7 +54,7 @@ export const contentTypesTableColumns = (
             date ? (
                 <Text type="secondary">{dayjs(date).format("DD/MM/YYYY hh:mm")}</Text>
             ) : (
-                <Text type="secondary">—</Text>
+                <IconStopOutlined style={{ color: Colors.Error, fontSize: 18 }} />
             )
     },
     {
