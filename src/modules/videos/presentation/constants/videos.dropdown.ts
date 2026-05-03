@@ -56,7 +56,11 @@ export const VIDEO_DROPDOWN_ITEMS: IVideoDropdownItem[] = [
         hidden: (_, isSuperAdmin) => !isSuperAdmin
     },
     { key: "shoot", label: "Planifier un tournage", hidden: (_, isSuperAdmin) => !isSuperAdmin },
-    { key: "youtube", label: "Associer YouTube", hidden: (_, __, isAdmin) => !isAdmin },
+    {
+        key: "youtube",
+        label: "Associer YouTube",
+        hidden: (r, _, isAdmin) => !isAdmin || !r.canAttachYoutubeUrl
+    },
     {
         key: "submit",
         label: "Soumettre",
