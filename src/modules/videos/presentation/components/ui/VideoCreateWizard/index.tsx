@@ -61,7 +61,7 @@ const VideoCreateWizard: FC<IVideoCreateWizardProps> = ({ open, onClose, onSucce
         <Flex key="step3" vertical gap={24}>
             <div>
                 <Title level={5}>Tags</Title>
-                <VideoTagsForm tagIds={wizard.tagIds} onTagsChange={wizard.onTagsChange} />
+                <VideoTagsForm tagNames={wizard.tagNames} onTagsChange={wizard.onTagsChange} />
             </div>
             <Divider />
             <div>
