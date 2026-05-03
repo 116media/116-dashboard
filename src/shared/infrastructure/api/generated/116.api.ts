@@ -2099,6 +2099,8 @@ export interface VideoSummaryDto {
   hasLyrics: boolean;
   /** @format date-time */
   publishedAt?: string | null;
+  /** @format date-time */
+  shootingScheduledAt?: string | null;
 }
 
 export interface VideoSummaryDtoPaginatedResult {
