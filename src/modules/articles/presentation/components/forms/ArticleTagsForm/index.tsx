@@ -1,56 +1,62 @@
-import { Select } from "antd";
+import { Form, Select } from "antd";
 import type { FC } from "react";
 import { useMemo } from "react";
 import type { ITagEntity } from "@/modules/lookup/domain/entities/ITagEntity";
 import { useAppSelector } from "@/shared/presentation/store/store";
 
+const { Item } = Form;
+
 /**
  * Props for the ArticleTagsForm component.
  *
  * @interface IArticleTagsFormProps
- * @property {string[]} tagIds - Currently selected tag identifiers
- * @property {(ids: string[]) => void} onTagsChange - Callback when the tag selection changes
+ * @property {string[]} tagNames - Currently selected tag display names
+ * @property {(names: string[]) => void} onTagsChange - Callback when the tag selection changes
  */
 interface IArticleTagsFormProps {
-    tagIds: string[];
-    onTagsChange: (ids: string[]) => void;
+    tagNames: string[];
+    onTagsChange: (names: string[]) => void;
 }
 
 /**
- * Tag selection form for associating tags with an article.
+ * Tag selection and creation form for associating tags with an article.
  *
  * @component
  *
  * @description
- * Renders a multi-select dropdown populated with tags from the
- * lookup store. Supports search filtering by tag name.
+ * Renders a tag input with autocomplete from existing tags.
+ * Existing tags are suggested as the user types. Typing a name
+ * that does not exist and pressing Enter creates it inline —
+ * the backend upserts by slug on submit.
  *
  * @param {IArticleTagsFormProps} props - Component props
- * @returns {JSX.Element} The rendered tag selection form
+ * @returns {JSX.Element} The rendered tag input
  */
-const ArticleTagsForm: FC<IArticleTagsFormProps> = ({ tagIds, onTagsChange }) => {
+const ArticleTagsForm: FC<IArticleTagsFormProps> = ({ tagNames, onTagsChange }) => {
     const { data: tags } = useAppSelector(({ lookup: { getTags } }) => getTags);
 
     const tagOptions = useMemo(
         () =>
             ((tags as ITagEntity[]) ?? []).map((tag) => ({
                 label: tag.name,
-                value: tag.id
+                value: tag.name
             })),
         [tags]
     );
 
     return (
-        <Select
-            mode="multiple"
-            size="large"
-            showSearch
-            options={tagOptions}
-            value={tagIds}
-            onChange={onTagsChange}
-            placeholder="Sélectionner des tags"
-            style={{ width: "100%" }}
-        />
+        <Form layout="vertical" size="large">
+            <Item label="Tags">
+                <Select
+                    mode="tags"
+                    size="large"
+                    value={tagNames}
+                    options={tagOptions}
+                    onChange={onTagsChange}
+                    placeholder="Sélectionner ou créer des tags"
+                />
+            </Item>
+        </Form>
     );
 };
 
