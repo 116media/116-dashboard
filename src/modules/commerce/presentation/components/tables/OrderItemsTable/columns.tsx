@@ -2,7 +2,11 @@ import { Space, Tag, Typography } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import type { IOrderItemEntity } from "@/modules/commerce/domain/entities/IOrderItemEntity";
 import { Colors } from "@/shared/presentation/constants/theme";
-import { IconCheckCircleFilled, IconCloseCircleFilled } from "@/shared/presentation/ui/Icons";
+import {
+    IconCheckCircleFilled,
+    IconCloseCircleFilled,
+    IconStopOutlined
+} from "@/shared/presentation/ui/Icons";
 import type { ITableActionItem } from "@/shared/presentation/ui/TableActionDropdown";
 import TableActionDropdown from "@/shared/presentation/ui/TableActionDropdown";
 
@@ -58,7 +62,7 @@ export const orderItemsTableColumns = (
                     )}
                 </Text>
             ) : (
-                <Text type="secondary">—</Text>
+                <IconStopOutlined style={{ color: Colors.Error, fontSize: 18 }} />
             )
     },
     {
