@@ -8,6 +8,9 @@ import type { OrderStatus } from "@/shared/domain/enums/order-status.enum";
  * @property {string} id - Unique identifier (UUID)
  * @property {string} customerName - Display name of the B2B customer
  * @property {OrderStatus} status - Current order status
+ * @property {boolean} canAddItem - Whether a product can be added to the order
+ * @property {boolean} canSubmit - Whether the order can be submitted for payment
+ * @property {boolean} canCancel - Whether the order can be cancelled
  * @property {number} totalAmountUsd - Total order amount in USD
  * @property {number} itemCount - Number of content items in the order
  * @property {string | null} createdAt - ISO creation timestamp
@@ -19,6 +22,9 @@ export interface IOrderSummaryEntity {
     id: string;
     customerName: string;
     status: OrderStatus;
+    canAddItem: boolean;
+    canSubmit: boolean;
+    canCancel: boolean;
     totalAmountUsd: number;
     itemCount: number;
     createdAt?: string | null;
