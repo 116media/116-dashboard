@@ -5,6 +5,8 @@ import {
     CUSTOMER_DROPDOWN_ITEMS,
     type CustomerAction
 } from "@/modules/catalog/presentation/constants/catalog.customers.dropdown";
+import { Colors } from "@/shared/presentation/constants/theme";
+import { IconStopOutlined } from "@/shared/presentation/ui/Icons";
 import type { ITableActionItem } from "@/shared/presentation/ui/TableActionDropdown";
 import TableActionDropdown from "@/shared/presentation/ui/TableActionDropdown";
 
@@ -47,14 +49,16 @@ export const customersTableColumns = (
         dataIndex: "phone",
         key: "phone",
         width: 150,
-        render: (phone: string | null) => phone ?? <Text type="secondary">—</Text>
+        render: (phone: string | null) =>
+            phone ?? <IconStopOutlined style={{ color: Colors.Error, fontSize: 18 }} />
     },
     {
         title: "Entreprise",
         dataIndex: "company",
         key: "company",
         width: 150,
-        render: (company: string | null) => company ?? <Text type="secondary">—</Text>
+        render: (company: string | null) =>
+            company ?? <IconStopOutlined style={{ color: Colors.Error, fontSize: 18 }} />
     },
     {
         title: "Actions",
