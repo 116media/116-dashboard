@@ -68,6 +68,14 @@ export const VideosMapper = {
             customerName: dto.customerName,
             orderItemId: dto.orderItemId,
             tags: dto.tags.map(VideosMapper.tagFromDto),
+            author: dto.author
+                ? {
+                      userName: dto.author.userName,
+                      email: dto.author.email ?? null,
+                      avatarUrl: dto.author.avatarUrl ?? null,
+                      role: dto.author.role ?? null
+                  }
+                : null,
             createdAt: dto.createdAt,
             updatedAt: dto.updatedAt,
             createdBy: dto.createdBy,
@@ -94,6 +102,13 @@ export const VideosMapper = {
             authorId: dto.authorId,
             status: contentStatus,
             canDelete: [ContentStatus.Draft, ContentStatus.Rejected].includes(contentStatus),
+            canSubmit: [ContentStatus.Draft, ContentStatus.Rejected].includes(contentStatus),
+            canApprove: contentStatus === ContentStatus.PendingReview,
+            canPublish: contentStatus === ContentStatus.Approved && !!dto.youtubeVideoUrl,
+            canReject: [ContentStatus.PendingReview, ContentStatus.Approved].includes(
+                contentStatus
+            ),
+            canArchive: [ContentStatus.Published, ContentStatus.Rejected].includes(contentStatus),
             youtubeVideoUrl: dto.youtubeVideoUrl,
             isFeatured: dto.isFeatured,
             hasLyrics: dto.hasLyrics,
