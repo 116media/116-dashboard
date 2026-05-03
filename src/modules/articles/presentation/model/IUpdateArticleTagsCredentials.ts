@@ -2,8 +2,10 @@
  * Form model for updating an article's tags.
  *
  * @interface IUpdateArticleTagsCredentials
- * @property {string[]} tagIds - List of tag identifiers to associate with the article
+ * @property {string[]} tagNames - List of tag display names to associate with the article.
+ * The backend upserts each name: existing tags are reused by slug lookup,
+ * new tags are auto-created with a unique slug.
  */
 export interface IUpdateArticleTagsCredentials {
-    tagIds: string[];
+    tagNames: string[];
 }
