@@ -4,6 +4,8 @@ import dayjs from "dayjs";
 import type { IPermissionEntity } from "@/modules/permissions/domain/entities/IPermission";
 import { PERMISSION_DROPDOWN_ITEMS } from "@/modules/permissions/presentation/constants/permissions.dropdown";
 import { ENTITY_STATUS_CONFIG } from "@/shared/presentation/constants/entity.status.config";
+import { Colors } from "@/shared/presentation/constants/theme";
+import { IconStopOutlined } from "@/shared/presentation/ui/Icons";
 import StatusTag from "@/shared/presentation/ui/StatusTag";
 import type { ITableActionItem } from "@/shared/presentation/ui/TableActionDropdown";
 import TableActionDropdown from "@/shared/presentation/ui/TableActionDropdown";
@@ -82,7 +84,7 @@ export const permissionsTableColumns = (
             date ? (
                 <Text type="secondary">{dayjs(date).format("DD/MM/YYYY hh:mm")}</Text>
             ) : (
-                <Text type="secondary">—</Text>
+                <IconStopOutlined style={{ color: Colors.Error, fontSize: 18 }} />
             )
     },
     {
