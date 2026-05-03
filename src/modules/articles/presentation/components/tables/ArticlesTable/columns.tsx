@@ -8,7 +8,11 @@ import {
 import type { ContentStatus } from "@/shared/domain/enums/content-status.enum";
 import { CONTENT_STATUS_CONFIG } from "@/shared/presentation/constants/content.status.config";
 import { Colors } from "@/shared/presentation/constants/theme";
-import { IconCheckCircleFilled, IconCloseCircleFilled } from "@/shared/presentation/ui/Icons";
+import {
+    IconCheckCircleFilled,
+    IconCloseCircleFilled,
+    IconStopOutlined
+} from "@/shared/presentation/ui/Icons";
 import StatusTag from "@/shared/presentation/ui/StatusTag";
 import type { ITableActionItem } from "@/shared/presentation/ui/TableActionDropdown";
 import TableActionDropdown from "@/shared/presentation/ui/TableActionDropdown";
@@ -81,18 +85,6 @@ export const articlesTableColumns = (
             )
     },
     {
-        title: "Publié le",
-        dataIndex: "publishedAt",
-        key: "publishedAt",
-        width: 160,
-        render: (date: string | null) =>
-            date ? (
-                <Text type="secondary">{dayjs(date).format("DD/MM/YYYY HH:mm")}</Text>
-            ) : (
-                <Text type="secondary">—</Text>
-            )
-    },
-    {
         title: "Modifié le",
         dataIndex: "updatedAt",
         key: "updatedAt",
@@ -101,7 +93,20 @@ export const articlesTableColumns = (
             date ? (
                 <Text type="secondary">{dayjs(date).format("DD/MM/YYYY HH:mm")}</Text>
             ) : (
-                <Text type="secondary">—</Text>
+                <IconStopOutlined style={{ color: Colors.Error, fontSize: 18 }} />
+            )
+    },
+    {
+        title: "Publié le",
+        dataIndex: "publishedAt",
+        key: "publishedAt",
+        width: 160,
+        fixed: "end",
+        render: (date: string | null) =>
+            date ? (
+                <Text type="secondary">{dayjs(date).format("DD/MM/YYYY HH:mm")}</Text>
+            ) : (
+                <IconStopOutlined style={{ color: Colors.Error, fontSize: 18 }} />
             )
     },
     {
