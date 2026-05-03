@@ -1,0 +1,60 @@
+@use "@/shared/presentation/styles/dimensions.scss" as dimensions;
+@use "@/shared/presentation/styles/colors.scss" as colors;
+
+.videoPreview {
+    &__player {
+        width: 100%;
+        overflow: hidden;
+        border-radius: dimensions.$border-radius;
+        margin-bottom: dimensions.$padding;
+    }
+
+    &__cover {
+        width: 100%;
+        max-height: 400px;
+        overflow: hidden;
+        border-radius: dimensions.$border-radius;
+        margin-bottom: dimensions.$padding;
+
+        [class~="ant-image"] {
+            width: 100%;
+            display: block;
+            border-radius: dimensions.$border-radius;
+            overflow: hidden;
+
+            img {
+                width: 100%;
+                max-height: 400px;
+                object-fit: cover;
+                border-radius: dimensions.$border-radius;
+            }
+
+            [class~="ant-image-mask"] {
+                border-radius: dimensions.$border-radius;
+            }
+        }
+    }
+
+    &__title {
+        margin-bottom: calc(dimensions.$padding / 4) !important;
+    }
+
+    &__byline {
+        margin-bottom: calc(dimensions.$padding / 2);
+    }
+
+    &__author {
+        margin: calc(dimensions.$padding / 2) 0;
+    }
+
+    &__description {
+        [class*="richTextEditor"] {
+            border: none;
+            background: transparent;
+        }
+    }
+
+    &__tags {
+        margin-top: dimensions.$padding;
+    }
+}
