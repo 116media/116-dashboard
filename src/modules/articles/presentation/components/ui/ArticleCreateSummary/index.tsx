@@ -66,8 +66,8 @@ const ArticleCreateSummary: FC<IArticleCreateSummaryProps> = ({ article }) => {
             {article.body && (
                 <div className={styles.articleSummary__body}>
                     <Text
-                        type="secondary"
                         strong
+                        type="secondary"
                         style={{ fontSize: 12, marginBottom: 8, display: "block" }}
                     >
                         Aperçu du contenu
