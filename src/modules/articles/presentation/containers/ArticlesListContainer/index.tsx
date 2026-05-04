@@ -1,6 +1,5 @@
 import { Table } from "antd";
 import { type FC, useEffect } from "react";
-import type { IArticleEntity } from "@/modules/articles/domain/entities/IArticleEntity";
 import { ArticleImageType } from "@/modules/articles/domain/enums/article-image-type.enum";
 import ArticleDetailsForm from "@/modules/articles/presentation/components/forms/ArticleDetailsForm";
 import { articlesTableColumns } from "@/modules/articles/presentation/components/tables/ArticlesTable/columns";
@@ -45,14 +44,8 @@ const ArticlesListContainer: FC = () => {
     const list = useArticlesList();
     const modals = useArticleModals(list.reload);
     const updateArticle = useUpdateArticle(modals.selectedEntity, list.reload);
-    const updateSeo = useUpdateArticleSeo(
-        modals.selectedEntity as IArticleEntity | null,
-        list.reload
-    );
-    const updateTags = useUpdateArticleTags(
-        modals.selectedEntity as IArticleEntity | null,
-        list.reload
-    );
+    const updateSeo = useUpdateArticleSeo(modals.selectedEntity, list.reload);
+    const updateTags = useUpdateArticleTags(modals.selectedEntity, list.reload);
     const uploadImage = useUploadArticleImage();
     const workflow = useArticleWorkflow(list.reload);
     const { isSuperAdmin, isAdminOrSuperAdmin } = useAuthorization();
