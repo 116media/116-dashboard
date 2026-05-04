@@ -47,6 +47,7 @@ export interface IArticleEntity {
     authorId: string;
     status: ContentStatus;
     rejectionReason?: string | null;
+    socialBoost: boolean;
     isFeatured: boolean;
     featuredUntil?: string | null;
     publishedAt?: string | null;
