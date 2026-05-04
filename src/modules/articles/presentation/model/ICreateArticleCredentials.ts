@@ -15,4 +15,6 @@ export interface ICreateArticleCredentials {
     customerId?: string;
     orderItemId?: string;
     socialBoost?: boolean;
+    isFeatured?: boolean;
+    featuredUntil?: string | null;
 }
