@@ -14,7 +14,7 @@ const { TextArea } = Input;
 
 interface IArticleBodyFormProps {
     form: FormInstance;
-    error: Failure | null | undefined;
+    error?: Failure | null | undefined;
     onSubmit: (values: Record<string, unknown>) => void;
     onImageUpload?: (file: File) => Promise<string>;
     onCoverUpload?: (file: File) => Promise<string>;
