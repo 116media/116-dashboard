@@ -2,7 +2,9 @@ import type { FormInstance } from "antd";
 import { Form } from "antd";
 import { useEffect, useState } from "react";
 import type { IArticleEntity } from "@/modules/articles/domain/entities/IArticleEntity";
+import type { IArticleSummaryEntity } from "@/modules/articles/domain/entities/IArticleSummaryEntity";
 import type { IUpdateArticleSeoCredentials } from "@/modules/articles/presentation/model/IUpdateArticleSeoCredentials";
+import { getArticleByIdAction } from "@/modules/articles/presentation/store/getarticlebyid.action";
 import {
     resetUpdateArticleSeoAction,
     updateArticleSeoAction
@@ -41,7 +43,7 @@ interface IUseUpdateArticleSeo {
  * @returns Form instance, loading/error state, success message, and submit handler
  */
 export const useUpdateArticleSeo = (
-    article: IArticleEntity | null,
+    article: IArticleSummaryEntity | null,
     onSuccess?: () => void
 ): IUseUpdateArticleSeo => {
     const dispatch = useAppDispatch();
@@ -53,13 +55,21 @@ export const useUpdateArticleSeo = (
     );
 
     useEffect(() => {
-        if (article) {
-            form.setFieldsValue({
-                metaTitle: article.metaTitle ?? "",
-                metaDescription: article.metaDescription ?? ""
-            });
-        }
-    }, [article, form]);
+        if (!article?.id) return;
+
+        const fetchDetail = async () => {
+            const result = await dispatch(getArticleByIdAction(article.id));
+            if (getArticleByIdAction.fulfilled.match(result)) {
+                const detail = result.payload as IArticleEntity;
+                form.setFieldsValue({
+                    metaTitle: detail.metaTitle ?? "",
+                    metaDescription: detail.metaDescription ?? ""
+                });
+            }
+        };
+
+        fetchDetail();
+    }, [article, dispatch, form]);
 
     const onSubmit = async (values: IUpdateArticleSeoCredentials): Promise<void> => {
         if (!article) return;
