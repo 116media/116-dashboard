@@ -1,5 +1,5 @@
-import { Button, Flex, Image, Typography } from "antd";
-import type { FC } from "react";
+import { Button, Flex, Image, Skeleton, Typography } from "antd";
+import { type FC, useEffect, useState } from "react";
 import { IconCloseCircleOutlined, IconFilePdfOutlined } from "@/shared/presentation/ui/Icons";
 import { isImageUrl } from "../utils";
 import styles from "./index.module.scss";
@@ -8,11 +8,11 @@ const { Text } = Typography;
 
 interface IFilePreviewProps {
     url: string;
-    fileName: string | null;
-    fileSize: string | null;
     label?: string;
     disabled?: boolean;
     onRemove: () => void;
+    fileName: string | null;
+    fileSize: string | null;
 }
 
 /**
@@ -23,18 +23,25 @@ interface IFilePreviewProps {
  * @description
  * Displays an image preview with lightbox for image files,
  * or a PDF/file icon with the file name for non-image files.
- * Includes file metadata and a remove button.
+ * Shows an animated skeleton placeholder while the image loads
+ * to avoid layout shift. Includes file metadata and a remove button.
  */
 const FilePreview: FC<IFilePreviewProps> = ({
     url,
+    label,
     fileName,
     fileSize,
-    label,
     disabled = false,
     onRemove
 }) => {
     const isImage = isImageUrl(url);
     const hasMeta = fileName || fileSize;
+    const [imageLoaded, setImageLoaded] = useState(false);
+
+    // biome-ignore lint/correctness/useExhaustiveDependencies: reset loading state when url changes
+    useEffect(() => {
+        setImageLoaded(false);
+    }, [url]);
 
     const removeButton = (
         <Button
@@ -75,7 +82,18 @@ const FilePreview: FC<IFilePreviewProps> = ({
             {!hasMeta && <Flex justify="flex-end">{removeButton}</Flex>}
 
             {isImage ? (
-                <Image src={url} alt={label ?? "Aperçu"} className={styles.filePreview__image} />
+                <>
+                    {!imageLoaded && (
+                        <Skeleton.Image active className={styles.filePreview__skeleton} />
+                    )}
+                    <Image
+                        src={url}
+                        alt={label ?? "Aperçu"}
+                        className={styles.filePreview__image}
+                        style={imageLoaded ? undefined : { display: "none" }}
+                        onLoad={() => setImageLoaded(true)}
+                    />
+                </>
             ) : (
                 <Flex justify="space-between" align="center">
                     <div className={styles.filePreview__file}>
