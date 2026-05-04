@@ -51,6 +51,7 @@ const DropZone: FC<IDropZoneProps> = ({
     const dragger = (
         <Dragger
             maxCount={1}
+            fileList={[]}
             disabled={disabled}
             accept={preset.accept}
             showUploadList={false}
@@ -79,8 +80,8 @@ const DropZone: FC<IDropZoneProps> = ({
             <Segmented
                 block
                 size="middle"
-                className={styles.dropZone__aspectRatio}
                 value={closestOption.value}
+                className={styles.dropZone__aspectRatio}
                 onChange={(val) => setSelectedAspect(val as number)}
                 options={ASPECT_OPTIONS.map((opt) => ({
                     label: opt.label,
@@ -88,8 +89,8 @@ const DropZone: FC<IDropZoneProps> = ({
                 }))}
             />
             <ImgCrop
-                quality={1}
                 showReset
+                quality={0.9}
                 rotationSlider
                 modalWidth={620}
                 modalOk="Confirmer"
