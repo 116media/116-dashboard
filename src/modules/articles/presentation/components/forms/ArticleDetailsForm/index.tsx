@@ -188,22 +188,41 @@ const ArticleDetailsForm: FC<IArticleDetailsFormProps> = ({
                 }}
             </Item>
 
-            <Item name="isFeatured" valuePropName="checked">
-                <SwitchField
-                    title="En vedette"
-                    icon={<IconStarFilled />}
-                    description="Afficher cet article en avant sur la page d'accueil."
-                />
-            </Item>
+            <Item noStyle shouldUpdate={(prev, curr) => prev.orderItemId !== curr.orderItemId}>
+                {({ getFieldValue }) => {
+                    const selectedOption = orderItems.options.find(
+                        (o) => o.value === getFieldValue("orderItemId")
+                    );
+                    const locked = selectedOption?.hasPromotion ?? false;
+                    return (
+                        <>
+                            <Item name="isFeatured" valuePropName="checked">
+                                <SwitchField
+                                    disabled={locked}
+                                    title="En vedette"
+                                    icon={<IconStarFilled />}
+                                    description="Afficher cet article en avant sur la page d'accueil."
+                                />
+                            </Item>
 
-            <Item noStyle shouldUpdate={(prev, curr) => prev.isFeatured !== curr.isFeatured}>
-                {({ getFieldValue }) =>
-                    getFieldValue("isFeatured") ? (
-                        <Item name="featuredUntil" label="En vedette jusqu'au">
-                            <DatePicker style={{ width: "100%" }} placeholder="Date d'expiration" />
-                        </Item>
-                    ) : null
-                }
+                            <Item
+                                noStyle
+                                shouldUpdate={(prev, curr) => prev.isFeatured !== curr.isFeatured}
+                            >
+                                {({ getFieldValue: getValue }) =>
+                                    getValue("isFeatured") ? (
+                                        <Item name="featuredUntil" label="En vedette jusqu'au">
+                                            <DatePicker
+                                                disabled={locked}
+                                                placeholder="Date d'expiration"
+                                            />
+                                        </Item>
+                                    ) : null
+                                }
+                            </Item>
+                        </>
+                    );
+                }}
             </Item>
         </Form>
     );
