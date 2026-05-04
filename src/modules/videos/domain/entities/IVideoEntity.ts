@@ -49,6 +49,7 @@ export interface IVideoEntity {
     status: ContentStatus;
     rejectionReason?: string | null;
     youtubeVideoUrl?: string | null;
+    socialBoost: boolean;
     isFeatured: boolean;
     featuredUntil?: string | null;
     hasLyrics: boolean;
