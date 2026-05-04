@@ -15,6 +15,7 @@ export interface IOrderItemOption {
     isVideoType: boolean;
     categoryName: string;
     socialBoost: boolean;
+    hasPromotion: boolean;
 }
 
 export interface IUsePaidOrderItems {
@@ -33,6 +34,7 @@ const formatItemOption = (item: IOrderItemEntity, order: IOrderDetailEntity): IO
     isVideoType: item.isVideoType,
     categoryName: item.categoryName,
     socialBoost: item.socialBoost,
+    hasPromotion: !!item.promotionLevelId,
     label: `${item.categoryName} · ${item.isArticleType ? "Article" : "Vidéo"}`
 });
 
