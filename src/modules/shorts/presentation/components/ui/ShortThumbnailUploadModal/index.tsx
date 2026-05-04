@@ -1,4 +1,4 @@
-import { Button, Flex, Modal } from "antd";
+import { Button, Flex, Form, Modal } from "antd";
 import type { FC } from "react";
 import { useCallback, useState } from "react";
 import FileUploader from "@/shared/presentation/ui/FileUploader";
@@ -75,13 +75,19 @@ const ShortThumbnailUploadModal: FC<IShortThumbnailUploadModalProps> = ({
                 </Flex>
             }
         >
-            <FileUploader
-                mode="deferred"
-                preset={IMAGE_PRESET}
-                aspectRatio={1}
-                onFileSelect={setFile}
-                onRemove={() => setFile(null)}
-            />
+            <Form layout="vertical" size="large">
+                <Form.Item label="Miniature">
+                    <div>
+                        <FileUploader
+                            mode="deferred"
+                            aspectRatio={1}
+                            preset={IMAGE_PRESET}
+                            onFileSelect={setFile}
+                            onRemove={() => setFile(null)}
+                        />
+                    </div>
+                </Form.Item>
+            </Form>
         </Modal>
     );
 };
