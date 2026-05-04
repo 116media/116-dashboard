@@ -1,0 +1,59 @@
+@use "@/shared/presentation/styles/colors.scss" as colors;
+@use "@/shared/presentation/styles/dimensions.scss" as dimensions;
+
+.proofPreview {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+
+    &__sectionLabel {
+        display: block;
+        font-size: 7pt;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        margin-bottom: calc(dimensions.$padding / 2);
+    }
+
+    &__imageWrapper {
+        position: relative;
+        flex: 1;
+        min-height: 0;
+        border-radius: dimensions.$border-radius;
+        overflow: hidden;
+
+        [class~="ant-image"],
+        [class~="ant-image"] img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: dimensions.$border-radius;
+        }
+
+        [class~="ant-image"] img {
+            cursor: pointer;
+            object-fit: cover;
+        }
+
+        [class~="ant-image-mask"] {
+            border-radius: dimensions.$border-radius;
+        }
+    }
+
+    &__pdf {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        justify-content: center;
+        overflow: hidden;
+        border-radius: dimensions.$border-radius;
+        border: 1px dashed colors.$border-light;
+        padding: dimensions.$padding;
+    }
+
+    &__pdfIcon {
+        font-size: 48px;
+        margin-bottom: calc(dimensions.$padding / 2);
+    }
+}

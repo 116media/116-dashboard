@@ -52,7 +52,7 @@ export const ordersTableColumns = (
         render: (amount: number) => <Text>${amount.toFixed(2)}</Text>
     },
     {
-        title: "Articles",
+        title: "Produits",
         dataIndex: "itemCount",
         key: "itemCount",
         width: 100,

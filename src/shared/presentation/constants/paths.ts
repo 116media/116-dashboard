@@ -58,7 +58,8 @@ export const LYRICS_PATH = "/lyrics";
 
 // Ventes (Commerce)
 export const ORDERS_PATH = "/orders";
-export const PAYMENTS_PATH = "/payments";
+export const ORDER_DETAIL_PATH = "/orders/detail";
+export const PAYMENTS_PATH = "/orders/payments";
 
 // Publicité (Ads)
 export const ADS_PATH = "/ads";

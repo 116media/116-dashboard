@@ -158,7 +158,7 @@ export interface ICatalogRepositoryPort {
      */
     updateCustomer(
         id: string,
-        data: { fullName: string; phone?: string; company?: string; notes?: string }
+        data: { fullName: string; email: string; phone?: string; company?: string; notes?: string }
     ): Promise<Result<ICustomerEntity>>;
 
     /**

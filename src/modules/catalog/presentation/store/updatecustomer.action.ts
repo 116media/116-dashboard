@@ -13,7 +13,10 @@ import { ActionType } from "./constants";
  */
 export const updateCustomerAction = createAsyncThunk<
     ICustomerEntity,
-    { id: string; data: { fullName: string; phone?: string; company?: string; notes?: string } },
+    {
+        id: string;
+        data: { fullName: string; email: string; phone?: string; company?: string; notes?: string };
+    },
     { rejectValue: Failure }
 >(ActionType.UpdateCustomer, async (params, { rejectWithValue }) => {
     const result = await container.cradle.updateCustomerUseCase.execute(params);

@@ -29,8 +29,8 @@ export const OrdersNotification = {
      */
     addItemSuccess: {
         type: "success",
-        title: "Article ajouté",
-        description: "L'article a été ajouté à la commande avec succès."
+        title: "Produit ajouté",
+        description: "Le produit a été ajouté à la commande avec succès."
     } as INotificationConfig,
 
     /**
@@ -67,5 +67,53 @@ export const OrdersNotification = {
         type: "success",
         title: "Commande annulée",
         description: "La commande a été annulée avec succès."
+    } as INotificationConfig,
+
+    /**
+     * Success notification for order editing.
+     *
+     * @description
+     * Displays when a draft order has been edited successfully.
+     */
+    editOrderSuccess: {
+        type: "success",
+        title: "Commande modifiée",
+        description: "La commande a été modifiée avec succès."
+    } as INotificationConfig,
+
+    /**
+     * Success notification for removing an item from an order.
+     *
+     * @description
+     * Displays when a content item has been removed from an order.
+     */
+    removeItemSuccess: {
+        type: "success",
+        title: "Produit supprimé",
+        description: "Le produit a été supprimé de la commande."
+    } as INotificationConfig,
+
+    /**
+     * Success notification for removing a tier from an item.
+     *
+     * @description
+     * Displays when a pricing tier has been removed from an order item.
+     */
+    removeTierSuccess: {
+        type: "success",
+        title: "Tranche supprimée",
+        description: "La tranche tarifaire a été supprimée."
+    } as INotificationConfig,
+
+    /**
+     * Success notification for editing an item.
+     *
+     * @description
+     * Displays when a content item has been edited successfully.
+     */
+    editItemSuccess: {
+        type: "success",
+        title: "Produit modifié",
+        description: "Le produit a été modifié avec succès."
     } as INotificationConfig
 } as const;

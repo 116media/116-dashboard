@@ -49,6 +49,7 @@ export const useUpdateCustomer = (
         if (customer) {
             form.setFieldsValue({
                 fullName: customer.fullName,
+                email: customer.email,
                 phone: customer.phone ?? undefined,
                 company: customer.company ?? undefined,
                 notes: customer.notes ?? undefined

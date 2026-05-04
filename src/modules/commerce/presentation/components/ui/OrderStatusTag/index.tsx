@@ -1,25 +1,53 @@
 import { Tag } from "antd";
-import type { FC } from "react";
+import type { FC, ReactNode } from "react";
 import { EnumOrderStatus, EnumPaymentStatus } from "@/shared/infrastructure/api/generated/116.api";
+import {
+    IconCheckCircleOutlined,
+    IconClockCircleOutlined,
+    IconCloseCircleOutlined,
+    IconEditOutlined
+} from "@/shared/presentation/ui/Icons";
+
+interface IStatusConfig {
+    label: string;
+    color: string;
+    icon: ReactNode;
+}
 
 /**
- * Status configuration for order lifecycle states.
+ * Merged status configuration for both order and payment lifecycle states.
  */
-const ORDER_STATUS_CONFIG: Record<EnumOrderStatus, { label: string; color: string }> = {
-    [EnumOrderStatus.Draft]: { label: "Brouillon", color: "default" },
-    [EnumOrderStatus.PendingPayment]: { label: "En attente", color: "warning" },
-    [EnumOrderStatus.Paid]: { label: "Payé", color: "success" },
-    [EnumOrderStatus.Cancelled]: { label: "Annulé", color: "error" }
+const STATUS_CONFIG: Record<string, IStatusConfig> = {
+    [EnumOrderStatus.Draft]: { label: "brouillon", color: "default", icon: <IconEditOutlined /> },
+    [EnumOrderStatus.PendingPayment]: {
+        label: "en attente",
+        color: "warning",
+        icon: <IconClockCircleOutlined />
+    },
+    [EnumOrderStatus.Paid]: { label: "payé", color: "success", icon: <IconCheckCircleOutlined /> },
+    [EnumOrderStatus.Cancelled]: {
+        label: "annulé",
+        color: "error",
+        icon: <IconCloseCircleOutlined />
+    },
+    [EnumPaymentStatus.Pending]: {
+        label: "en attente",
+        color: "warning",
+        icon: <IconClockCircleOutlined />
+    },
+    [EnumPaymentStatus.Verified]: {
+        label: "vérifié",
+        color: "success",
+        icon: <IconCheckCircleOutlined />
+    },
+    [EnumPaymentStatus.Rejected]: {
+        label: "rejeté",
+        color: "error",
+        icon: <IconCloseCircleOutlined />
+    }
 };
 
-/**
- * Status configuration for payment verification states.
- */
-const PAYMENT_STATUS_CONFIG: Record<EnumPaymentStatus, { label: string; color: string }> = {
-    [EnumPaymentStatus.Pending]: { label: "En attente", color: "warning" },
-    [EnumPaymentStatus.Verified]: { label: "Vérifié", color: "success" },
-    [EnumPaymentStatus.Rejected]: { label: "Rejeté", color: "error" }
-};
+const DEFAULT_CONFIG: IStatusConfig = { label: "inconnu", color: "default", icon: null };
 
 /**
  * Props for the OrderStatusTag component.
@@ -46,16 +74,10 @@ interface IOrderStatusTagProps {
  * @returns {JSX.Element} The status tag
  */
 const OrderStatusTag: FC<IOrderStatusTagProps> = ({ status }) => {
-    const config = (ORDER_STATUS_CONFIG as Record<string, { label: string; color: string }>)[
-        status
-    ] ??
-        (PAYMENT_STATUS_CONFIG as Record<string, { label: string; color: string }>)[status] ?? {
-            label: status,
-            color: "default"
-        };
+    const config = STATUS_CONFIG[status] ?? DEFAULT_CONFIG;
 
     return (
-        <Tag color={config.color} variant="outlined">
+        <Tag color={config.color} icon={config.icon} variant="outlined">
             {config.label}
         </Tag>
     );

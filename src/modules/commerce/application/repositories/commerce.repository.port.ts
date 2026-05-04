@@ -3,12 +3,14 @@ import type { IOrderDetailEntity } from "@/modules/commerce/domain/entities/IOrd
 import type { IOrderItemEntity } from "@/modules/commerce/domain/entities/IOrderItemEntity";
 import type { IOrderSummaryEntity } from "@/modules/commerce/domain/entities/IOrderSummaryEntity";
 import type { IPaymentEntity } from "@/modules/commerce/domain/entities/IPaymentEntity";
+import type { IPaymentSummaryEntity } from "@/modules/commerce/domain/entities/IPaymentSummaryEntity";
 import type { Result } from "@/shared/domain/results/result";
 import type { IPaginatedResult } from "@/shared/domain/types/pagination";
 import type {
     EnumCoreContentType,
     EnumOrderStatus,
-    EnumPaymentMethod
+    EnumPaymentMethod,
+    EnumPaymentStatus
 } from "@/shared/infrastructure/api/generated/116.api";
 
 /**
@@ -166,4 +168,73 @@ export interface ICommerceRepositoryPort {
         customerId: string,
         params: { pageIndex: number; pageSize: number }
     ): Promise<Result<IPaginatedResult<IOrderSummaryEntity>>>;
+
+    /**
+     * Fetches a paginated list of payment records with optional filters.
+     *
+     * @param params - Pagination, payment status, payment method, and search filters
+     * @returns Paginated list of payment summaries with order and customer info
+     */
+    listPayments(params: {
+        pageIndex: number;
+        pageSize: number;
+        status?: EnumPaymentStatus;
+        method?: EnumPaymentMethod;
+        search?: string;
+    }): Promise<Result<IPaginatedResult<IPaymentSummaryEntity>>>;
+
+    /**
+     * Edits a draft order's customer or package assignment.
+     *
+     * @param id - The order UUID
+     * @param data - Fields to update (customer and/or package)
+     * @returns The updated order summary
+     */
+    editOrder(
+        id: string,
+        data: { customerId?: string; packageId?: string | null }
+    ): Promise<Result<IOrderSummaryEntity>>;
+
+    /**
+     * Removes a content item from a draft order.
+     *
+     * @param orderId - The order UUID
+     * @param itemId - The order item UUID to remove
+     * @returns Success indicator
+     */
+    removeItem(orderId: string, itemId: string): Promise<Result<{ isSuccess: boolean }>>;
+
+    /**
+     * Removes a pricing tier snapshot from an order item.
+     *
+     * @param orderId - The order UUID
+     * @param itemId - The order item UUID
+     * @param tierId - The tier UUID to remove
+     * @returns Success indicator
+     */
+    removeItemTier(
+        orderId: string,
+        itemId: string,
+        tierId: string
+    ): Promise<Result<{ isSuccess: boolean }>>;
+
+    /**
+     * Edits a content item within a draft order.
+     *
+     * @param orderId - The order UUID
+     * @param itemId - The order item UUID to edit
+     * @param data - Fields to update on the item
+     * @returns The updated order item
+     */
+    editItem(
+        orderId: string,
+        itemId: string,
+        data: {
+            contentKind?: EnumCoreContentType;
+            categoryId?: string;
+            promotionLevelId?: string | null;
+            socialBoost?: boolean;
+            isBonus?: boolean;
+        }
+    ): Promise<Result<IOrderItemEntity>>;
 }

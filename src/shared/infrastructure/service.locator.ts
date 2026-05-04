@@ -36,12 +36,17 @@ import type { AddTierToItemUseCase } from "@/modules/commerce/application/usecas
 import type { AttachPaymentProofUseCase } from "@/modules/commerce/application/usecases/attachpaymentproof.usecase";
 import type { CancelOrderUseCase } from "@/modules/commerce/application/usecases/cancelorder.usecase";
 import type { CreateOrderUseCase } from "@/modules/commerce/application/usecases/createorder.usecase";
+import type { EditItemUseCase } from "@/modules/commerce/application/usecases/edititem.usecase";
+import type { EditOrderUseCase } from "@/modules/commerce/application/usecases/editorder.usecase";
 import type { GetCustomerOrdersUseCase } from "@/modules/commerce/application/usecases/getcustomerorders.usecase";
 import type { GetOrderByIdUseCase } from "@/modules/commerce/application/usecases/getorderbyid.usecase";
 import type { GetOrderPaymentUseCase } from "@/modules/commerce/application/usecases/getorderpayment.usecase";
 import type { ListOrdersUseCase } from "@/modules/commerce/application/usecases/listorders.usecase";
+import type { ListPaymentsUseCase } from "@/modules/commerce/application/usecases/listpayments.usecase";
 import type { ListPendingPaymentOrdersUseCase } from "@/modules/commerce/application/usecases/listpendingpaymentorders.usecase";
 import type { RejectPaymentUseCase } from "@/modules/commerce/application/usecases/rejectpayment.usecase";
+import type { RemoveItemUseCase } from "@/modules/commerce/application/usecases/removeitem.usecase";
+import type { RemoveItemTierUseCase } from "@/modules/commerce/application/usecases/removeitemtier.usecase";
 import type { SubmitOrderUseCase } from "@/modules/commerce/application/usecases/submitorder.usecase";
 import type { VerifyPaymentUseCase } from "@/modules/commerce/application/usecases/verifypayment.usecase";
 import { registerCommerceDependencies } from "@/modules/commerce/infrastructure/dependencies/commerce.dependencies";
@@ -240,6 +245,10 @@ export interface Cradle {
     addTierToItemUseCase: AddTierToItemUseCase;
     submitOrderUseCase: SubmitOrderUseCase;
     cancelOrderUseCase: CancelOrderUseCase;
+    editOrderUseCase: EditOrderUseCase;
+    removeItemUseCase: RemoveItemUseCase;
+    removeItemTierUseCase: RemoveItemTierUseCase;
+    editItemUseCase: EditItemUseCase;
 
     // Commerce use cases — Payment mutations
     attachPaymentProofUseCase: AttachPaymentProofUseCase;
@@ -252,6 +261,7 @@ export interface Cradle {
     getOrderPaymentUseCase: GetOrderPaymentUseCase;
     listPendingPaymentOrdersUseCase: ListPendingPaymentOrdersUseCase;
     getCustomerOrdersUseCase: GetCustomerOrdersUseCase;
+    listPaymentsUseCase: ListPaymentsUseCase;
 }
 
 /**

@@ -12,12 +12,17 @@ import { attachPaymentProofAction } from "./attachpaymentproof.action";
 import { cancelOrderAction } from "./cancelorder.action";
 import { SliceName } from "./constants";
 import { createOrderAction } from "./createorder.action";
+import { editItemAction } from "./edititem.action";
+import { editOrderAction } from "./editorder.action";
 import { getCustomerOrdersAction } from "./getcustomerorders.action";
 import { getOrderByIdAction } from "./getorderbyid.action";
 import { getOrderPaymentAction } from "./getorderpayment.action";
 import { listOrdersAction } from "./listorders.action";
+import { listPaymentsAction } from "./listpayments.action";
 import { listPendingPaymentOrdersAction } from "./listpendingpaymentorders.action";
 import { rejectPaymentAction } from "./rejectpayment.action";
+import { removeItemAction } from "./removeitem.action";
+import { removeItemTierAction } from "./removeitemtier.action";
 import { commerceInitialState } from "./state";
 import { submitOrderAction } from "./submitorder.action";
 import type { CommerceStateKey } from "./type";
@@ -27,7 +32,7 @@ import { verifyPaymentAction } from "./verifypayment.action";
  * Redux slice for the commerce module.
  *
  * @description
- * Manages state for 13 async operations using the shared
+ * Manages state for 17 async operations using the shared
  * ActionWrapper* reducer helpers. Includes `clear` (single reset)
  * and `purge` (selective reset) reducers.
  */
@@ -97,7 +102,27 @@ export const commerceSlice = createSlice({
             // get customer orders
             .addCase(getCustomerOrdersAction.pending, ActionWrapperPending)
             .addCase(getCustomerOrdersAction.fulfilled, ActionWrapperFulfilled)
-            .addCase(getCustomerOrdersAction.rejected, ActionWrapperRejected);
+            .addCase(getCustomerOrdersAction.rejected, ActionWrapperRejected)
+            // list payments
+            .addCase(listPaymentsAction.pending, ActionWrapperPending)
+            .addCase(listPaymentsAction.fulfilled, ActionWrapperFulfilled)
+            .addCase(listPaymentsAction.rejected, ActionWrapperRejected)
+            // edit order
+            .addCase(editOrderAction.pending, ActionWrapperPending)
+            .addCase(editOrderAction.fulfilled, ActionWrapperFulfilled)
+            .addCase(editOrderAction.rejected, ActionWrapperRejected)
+            // remove item
+            .addCase(removeItemAction.pending, ActionWrapperPending)
+            .addCase(removeItemAction.fulfilled, ActionWrapperFulfilled)
+            .addCase(removeItemAction.rejected, ActionWrapperRejected)
+            // remove item tier
+            .addCase(removeItemTierAction.pending, ActionWrapperPending)
+            .addCase(removeItemTierAction.fulfilled, ActionWrapperFulfilled)
+            .addCase(removeItemTierAction.rejected, ActionWrapperRejected)
+            // edit item
+            .addCase(editItemAction.pending, ActionWrapperPending)
+            .addCase(editItemAction.fulfilled, ActionWrapperFulfilled)
+            .addCase(editItemAction.rejected, ActionWrapperRejected);
     }
 });
 

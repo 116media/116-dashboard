@@ -2,7 +2,7 @@ import { useCallback, useState } from "react";
 import { useNavigate } from "react-router";
 import type { IOrderSummaryEntity } from "@/modules/commerce/domain/entities/IOrderSummaryEntity";
 import type { OrderAction } from "@/modules/commerce/presentation/constants/commerce.orders.dropdown";
-import { ORDERS_PATH } from "@/shared/presentation/constants/paths";
+import { ORDER_DETAIL_PATH } from "@/shared/presentation/constants/paths";
 
 /**
  * Return type for the order modals hook.
@@ -51,7 +51,7 @@ export const useOrderModals = (reload: () => void): IUseOrderModals => {
 
             switch (action) {
                 case "view":
-                    navigate(`${ORDERS_PATH}/${entity.id}`);
+                    navigate(`${ORDER_DETAIL_PATH}/${entity.id}`);
                     break;
                 case "addItem":
                     setAddItemOpen(true);

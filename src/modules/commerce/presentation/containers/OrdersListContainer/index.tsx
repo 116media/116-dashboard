@@ -134,8 +134,8 @@ const OrdersListContainer: FC = () => {
                     onClose={() => modals.setAddItemOpen(false)}
                     onSubmit={() => addItem.form.submit()}
                     title={{
-                        create: "Ajouter un article",
-                        edit: "Ajouter un article"
+                        create: "Ajouter un produit",
+                        edit: "Ajouter un produit"
                     }}
                     onSuccessClose={() => {
                         modals.setAddItemOpen(false);

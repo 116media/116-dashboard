@@ -2,9 +2,9 @@ import type { FormInstance } from "antd";
 import { Form, Select } from "antd";
 import type { FC } from "react";
 import { useMemo } from "react";
+import type { ICategoryEntity } from "@/modules/catalog/domain/entities/ICategoryEntity";
 import type { IAddItemTierCredentials } from "@/modules/commerce/presentation/model/IAddItemTierCredentials";
 import { OrderItemsValidator } from "@/modules/commerce/presentation/utils/validators/commerce.orderitems.validator";
-import type { IPricingTierEntity } from "@/modules/lookup/domain/entities/IPricingTierEntity";
 import type { Failure } from "@/shared/domain/failures/failure";
 import { useAppSelector } from "@/shared/presentation/store/store";
 import ErrorAlert from "@/shared/presentation/ui/ErrorAlert";
@@ -17,11 +17,13 @@ const { Item } = Form;
  * @interface IOrderTierFormProps
  * @property {FormInstance} form - Ant Design form instance for field control
  * @property {Failure | null | undefined} error - Backend error to display in the alert
+ * @property {string | null} categoryName - Category name of the item to filter available tiers
  * @property {(values: IAddItemTierCredentials) => void} onSubmit - Callback when the form is submitted
  */
 interface IOrderTierFormProps {
     form: FormInstance;
     error: Failure | null | undefined;
+    categoryName: string | null;
     onSubmit: (values: IAddItemTierCredentials) => void;
 }
 
@@ -31,24 +33,31 @@ interface IOrderTierFormProps {
  * @component
  *
  * @description
- * Renders a pricing tier select field. Tier options are loaded
- * from the lookup store.
+ * Renders a pricing tier select filtered by the item's category.
+ * Only shows tiers that are configured for the category, with
+ * their price in USD.
  *
  * @param {IOrderTierFormProps} props - Component props
  * @returns {JSX.Element} The rendered order tier form
  */
-const OrderTierForm: FC<IOrderTierFormProps> = ({ form, error, onSubmit }) => {
-    const { data: pricingTiers } = useAppSelector(
-        ({ lookup: { getPricingTiers } }) => getPricingTiers
+const OrderTierForm: FC<IOrderTierFormProps> = ({ form, error, categoryName, onSubmit }) => {
+    const { data: categories } = useAppSelector(
+        ({ catalog: { getAllCategories } }) => getAllCategories
     );
 
-    const pricingTierOptions = useMemo(
-        () =>
-            ((pricingTiers as IPricingTierEntity[]) ?? [])
-                .filter((pt) => pt.isActive)
-                .map((pt) => ({ label: pt.name, value: pt.id })),
-        [pricingTiers]
-    );
+    const pricingTierOptions = useMemo(() => {
+        if (!categoryName) return [];
+
+        const allCategories = (categories as { items: ICategoryEntity[] })?.items ?? [];
+        const category = allCategories.find((c) => c.name === categoryName);
+
+        if (!category) return [];
+
+        return category.pricing.map((p) => ({
+            label: `${p.tierName} — $${p.priceUsd.toFixed(2)}`,
+            value: p.tierId
+        }));
+    }, [categories, categoryName]);
 
     return (
         <Form
@@ -71,6 +80,11 @@ const OrderTierForm: FC<IOrderTierFormProps> = ({ form, error, onSubmit }) => {
                     optionFilterProp="label"
                     options={pricingTierOptions}
                     placeholder="Sélectionner une tranche"
+                    notFoundContent={
+                        categoryName
+                            ? "Aucune tranche configurée pour cette catégorie"
+                            : "Catégorie inconnue"
+                    }
                 />
             </Item>
         </Form>

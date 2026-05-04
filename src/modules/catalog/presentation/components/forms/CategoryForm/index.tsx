@@ -102,7 +102,7 @@ const CategoryForm: FC<ICategoryFormProps> = ({
             </Item>
 
             <Item name="name" label="Nom" rules={CategoriesValidator.name("Nom")}>
-                <Input maxLength={80} placeholder="Nom de la catégorie" />
+                <Input maxLength={60} placeholder="Nom de la catégorie" />
             </Item>
 
             <Item

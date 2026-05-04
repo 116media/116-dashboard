@@ -1,12 +1,13 @@
-import { Button, Descriptions, Space, Table, Typography } from "antd";
+import { Space, Table, Typography } from "antd";
 import type { FC } from "react";
 import type { IOrderDetailEntity } from "@/modules/commerce/domain/entities/IOrderDetailEntity";
+import type { IOrderItemEntity } from "@/modules/commerce/domain/entities/IOrderItemEntity";
 import type { IPaymentEntity } from "@/modules/commerce/domain/entities/IPaymentEntity";
 import { orderItemsTableColumns } from "@/modules/commerce/presentation/components/tables/OrderItemsTable/columns";
-import OrderStatusTag from "@/modules/commerce/presentation/components/ui/OrderStatusTag";
+import OrderHeaderCard from "@/modules/commerce/presentation/components/ui/OrderHeaderCard";
 import PaymentSection from "@/modules/commerce/presentation/components/ui/PaymentSection";
 
-const { Title, Text } = Typography;
+const { Title } = Typography;
 
 /**
  * Props for the OrderDetailView component.
@@ -31,6 +32,11 @@ interface IOrderDetailViewProps {
     onSubmitOrder: () => void;
     onCancelOrder: () => void;
     onAddItem: () => void;
+    onAddTier: (itemId: string, categoryName: string) => void;
+    onRemoveItem: (itemId: string) => void;
+    onRemoveTier: (itemId: string, tierId: string) => void;
+    onEditItem: (item: IOrderItemEntity) => void;
+    onEditOrder: () => void;
     onAttachProof: () => void;
     onVerifyPayment: () => void;
     onRejectPayment: () => void;
@@ -58,6 +64,11 @@ const OrderDetailView: FC<IOrderDetailViewProps> = ({
     onSubmitOrder,
     onCancelOrder,
     onAddItem,
+    onAddTier,
+    onRemoveItem,
+    onRemoveTier,
+    onEditItem,
+    onEditOrder,
     onAttachProof,
     onVerifyPayment,
     onRejectPayment,
@@ -69,64 +80,31 @@ const OrderDetailView: FC<IOrderDetailViewProps> = ({
     return (
         <div>
             <Space orientation="vertical" size="large" style={{ width: "100%" }}>
-                <div
-                    style={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                        alignItems: "center"
-                    }}
-                >
-                    <Space orientation="vertical" size="small">
-                        <Title level={4} style={{ margin: 0 }}>
-                            {order.customerName}
-                        </Title>
-                        <Space>
-                            <OrderStatusTag status={order.status} />
-                            <Text type="secondary">Total: ${order.totalAmountUsd.toFixed(2)}</Text>
-                        </Space>
-                    </Space>
-
-                    <Space>
-                        {isDraft && (
-                            <>
-                                <Button onClick={onAddItem}>Ajouter un article</Button>
-                                <Button
-                                    type="primary"
-                                    loading={actionsLoading}
-                                    onClick={onSubmitOrder}
-                                >
-                                    Soumettre
-                                </Button>
-                            </>
-                        )}
-                        {(isDraft || isPendingPayment) && (
-                            <Button danger loading={actionsLoading} onClick={onCancelOrder}>
-                                Annuler
-                            </Button>
-                        )}
-                    </Space>
-                </div>
-
-                <Descriptions column={2} size="small" bordered>
-                    <Descriptions.Item label="ID">
-                        <Text copyable>{order.id}</Text>
-                    </Descriptions.Item>
-                    <Descriptions.Item label="Créée le">
-                        {order.createdAt ? new Date(order.createdAt).toLocaleString("fr-FR") : "—"}
-                    </Descriptions.Item>
-                    <Descriptions.Item label="Mise à jour">
-                        {order.updatedAt ? new Date(order.updatedAt).toLocaleString("fr-FR") : "—"}
-                    </Descriptions.Item>
-                </Descriptions>
+                <OrderHeaderCard
+                    order={order}
+                    isDraft={isDraft}
+                    onAddItem={onAddItem}
+                    onEditOrder={onEditOrder}
+                    onSubmitOrder={onSubmitOrder}
+                    actionsLoading={actionsLoading}
+                    onCancelOrder={onCancelOrder}
+                    isPendingPayment={isPendingPayment}
+                />
 
                 <div>
-                    <Title level={5}>Articles ({order.items.length})</Title>
+                    <Title level={5}>Produits ({(order.items ?? []).length})</Title>
                     <Table
                         rowKey="id"
                         size="small"
                         pagination={false}
-                        columns={orderItemsTableColumns()}
-                        dataSource={order.items}
+                        columns={orderItemsTableColumns(
+                            onAddTier,
+                            onRemoveItem,
+                            onRemoveTier,
+                            onEditItem,
+                            isDraft
+                        )}
+                        dataSource={order.items ?? []}
                     />
                 </div>
 
@@ -134,6 +112,7 @@ const OrderDetailView: FC<IOrderDetailViewProps> = ({
                     payment={payment}
                     loading={loadingPayment}
                     isPendingPayment={isPendingPayment}
+                    customerName={order.customerName}
                     onAttachProof={onAttachProof}
                     onVerify={onVerifyPayment}
                     onReject={onRejectPayment}

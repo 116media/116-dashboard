@@ -5,7 +5,6 @@ import {
     IconCloseCircleOutlined,
     IconExclamationCircleOutlined
 } from "@/shared/presentation/ui/Icons";
-import styles from "./index.module.scss";
 
 type EntityStatus = "active" | "inactive" | "deleted";
 
@@ -32,7 +31,7 @@ const StatusTag: FC<IStatusTagProps> = ({ status }) => {
     const { label, color, icon: Icon } = STATUS_CONFIG[status];
 
     return (
-        <Tag color={color} variant="outlined" icon={<Icon />} className={styles.tag}>
+        <Tag color={color} variant="outlined" icon={<Icon />}>
             {label}
         </Tag>
     );

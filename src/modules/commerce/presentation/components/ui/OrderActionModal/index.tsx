@@ -23,8 +23,8 @@ interface IOrderActionModalProps {
     loading: boolean;
     onCancel: () => void;
     onConfirm: () => void;
-    order: IOrderSummaryEntity | null;
     action: OrderAction | null;
+    order: IOrderSummaryEntity | null;
     error: Failure | null | undefined;
 }
 

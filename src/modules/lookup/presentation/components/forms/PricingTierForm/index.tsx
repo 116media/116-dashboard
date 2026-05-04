@@ -70,7 +70,7 @@ const PricingTierForm: FC<IPricingTierFormProps> = ({
             <ErrorAlert error={error} showIcon closable banner={false} />
 
             <Item name="name" label="Nom" rules={PricingTiersValidator.name("Nom")}>
-                <Input maxLength={50} placeholder="Nom du niveau tarifaire" />
+                <Input maxLength={40} placeholder="Nom du niveau tarifaire" />
             </Item>
 
             <Item
@@ -80,7 +80,7 @@ const PricingTierForm: FC<IPricingTierFormProps> = ({
             >
                 <TextArea
                     showCount
-                    maxLength={300}
+                    maxLength={200}
                     placeholder="Description du niveau tarifaire"
                     autoSize={{ minRows: 3 }}
                 />
