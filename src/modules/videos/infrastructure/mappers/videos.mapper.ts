@@ -57,6 +57,7 @@ export const VideosMapper = {
             status: mapContentStatus(dto.status),
             rejectionReason: dto.rejectionReason,
             youtubeVideoUrl: dto.youtubeVideoUrl,
+            socialBoost: dto.socialBoost,
             isFeatured: dto.isFeatured,
             featuredUntil: dto.featuredUntil,
             hasLyrics: dto.hasLyrics,
