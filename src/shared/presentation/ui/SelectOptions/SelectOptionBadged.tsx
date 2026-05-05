@@ -1,5 +1,6 @@
 import { Flex, Typography } from "antd";
 import type { ReactNode } from "react";
+import styles from "./index.module.scss";
 
 const { Text } = Typography;
 
@@ -15,15 +16,15 @@ const SelectOptionBadged = (option: {
     label?: ReactNode;
     data: { code?: string; secondary?: string };
 }) => (
-    <Flex justify="space-between" align="center" gap={16}>
+    <Flex justify="space-between" align="center" gap={16} className={styles.selectOption__row}>
         <Flex gap={8} align="center">
-            <Text code style={{ fontSize: 11 }}>
+            <Text code className={styles.selectOption__code}>
                 {option.data.code}
             </Text>
             <span>{option.label}</span>
         </Flex>
         {option.data.secondary && (
-            <Text type="secondary" style={{ fontSize: 12 }}>
+            <Text type="secondary" className={styles.selectOption__secondary}>
                 {option.data.secondary}
             </Text>
         )}
