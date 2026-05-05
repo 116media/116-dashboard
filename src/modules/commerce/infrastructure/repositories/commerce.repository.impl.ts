@@ -22,7 +22,12 @@ import type { Result } from "@/shared/domain/results/result";
 import { err, ok } from "@/shared/domain/results/result";
 import type { IPaginatedResult } from "@/shared/domain/types/pagination";
 import { apiClient } from "@/shared/infrastructure/api/client";
-import type { EnumCoreContentType } from "@/shared/infrastructure/api/generated/116.api";
+import type {
+    EnumCoreContentType,
+    EnumOrderStatus,
+    EnumPaymentMethod,
+    EnumPaymentStatus
+} from "@/shared/infrastructure/api/generated/116.api";
 import { ProblemMapper } from "@/shared/infrastructure/mappers/problem.mapper";
 
 /**
@@ -134,12 +139,12 @@ export class CommerceRepositoryImpl implements ICommerceRepositoryPort {
     ): Promise<Result<IPaginatedResult<IOrderSummaryEntity>>> {
         try {
             const response = await apiClient.api.adminGetAllOrders({
-                status: params.status,
+                status: params.status as EnumOrderStatus | undefined,
                 pageSize: params.pageSize,
                 pageIndex: params.pageIndex,
                 customerId: params.customerId,
                 ...(params.search ? { search: params.search } : {})
-            } as Parameters<typeof apiClient.api.adminGetAllOrders>[0]);
+            });
             const paginated = response.data.orders;
             return ok({
                 items: paginated.items.map(CommerceMapper.orderSummaryFromDto),
@@ -215,14 +220,12 @@ export class CommerceRepositoryImpl implements ICommerceRepositoryPort {
         params: IPaymentsQueryParams
     ): Promise<Result<IPaginatedResult<IPaymentSummaryEntity>>> {
         try {
-            const response = await apiClient.instance.get("/api/v1/admin/payments", {
-                params: {
-                    pageIndex: params.pageIndex,
-                    pageSize: params.pageSize,
-                    ...(params.status ? { status: params.status } : {}),
-                    ...(params.method ? { method: params.method } : {}),
-                    ...(params.search ? { search: params.search } : {})
-                }
+            const response = await apiClient.api.adminGetAllPayments({
+                pageIndex: params.pageIndex,
+                pageSize: params.pageSize,
+                status: params.status as EnumPaymentStatus | undefined,
+                method: params.method as EnumPaymentMethod | undefined,
+                search: params.search || undefined
             });
             const paginated = response.data.payments;
             return ok({
@@ -238,7 +241,7 @@ export class CommerceRepositoryImpl implements ICommerceRepositoryPort {
 
     async editOrder(id: string, data: IEditOrderCredentials): Promise<Result<IOrderSummaryEntity>> {
         try {
-            const response = await apiClient.instance.patch(`/api/v1/admin/orders/${id}`, data);
+            const response = await apiClient.api.adminEditOrder(id, data);
             return ok(CommerceMapper.orderSummaryFromDto(response.data.order));
         } catch (error) {
             return err(ProblemMapper.toFailure(error));
@@ -247,9 +250,7 @@ export class CommerceRepositoryImpl implements ICommerceRepositoryPort {
 
     async removeItem(orderId: string, itemId: string): Promise<Result<ICommerceActionResponse>> {
         try {
-            const response = await apiClient.instance.delete(
-                `/api/v1/admin/orders/${orderId}/items/${itemId}`
-            );
+            const response = await apiClient.api.adminRemoveOrderItem(orderId, itemId);
             return ok({ isSuccess: response.data.isSuccess });
         } catch (error) {
             return err(ProblemMapper.toFailure(error));
@@ -262,9 +263,7 @@ export class CommerceRepositoryImpl implements ICommerceRepositoryPort {
         tierId: string
     ): Promise<Result<ICommerceActionResponse>> {
         try {
-            const response = await apiClient.instance.delete(
-                `/api/v1/admin/orders/${orderId}/items/${itemId}/tiers/${tierId}`
-            );
+            const response = await apiClient.api.adminRemoveItemTier(orderId, itemId, tierId);
             return ok({ isSuccess: response.data.isSuccess });
         } catch (error) {
             return err(ProblemMapper.toFailure(error));
@@ -277,10 +276,13 @@ export class CommerceRepositoryImpl implements ICommerceRepositoryPort {
         data: IEditItemCredentials
     ): Promise<Result<IOrderItemEntity>> {
         try {
-            const response = await apiClient.instance.patch(
-                `/api/v1/admin/orders/${orderId}/items/${itemId}`,
-                data
-            );
+            const response = await apiClient.api.adminEditOrderItem(orderId, itemId, {
+                contentKind: data.contentKind as EnumCoreContentType | undefined,
+                categoryId: data.categoryId,
+                promotionLevelId: data.promotionLevelId,
+                socialBoost: data.socialBoost,
+                isBonus: data.isBonus
+            });
             return ok(CommerceMapper.orderItemFromDto(response.data.item));
         } catch (error) {
             return err(ProblemMapper.toFailure(error));
