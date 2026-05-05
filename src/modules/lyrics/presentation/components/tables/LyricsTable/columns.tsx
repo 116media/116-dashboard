@@ -5,6 +5,8 @@ import {
     LYRICS_DROPDOWN_ITEMS,
     type LyricsAction
 } from "@/modules/lyrics/presentation/constants/lyrics.dropdown";
+import { getLanguageName } from "@/shared/infrastructure/constants/languages";
+import { ADMIN_PATH } from "@/shared/presentation/constants/paths";
 import { Colors } from "@/shared/presentation/constants/theme";
 import { IconStopOutlined } from "@/shared/presentation/ui/Icons";
 import type { ITableActionItem } from "@/shared/presentation/ui/TableActionDropdown";
@@ -18,8 +20,8 @@ export type { LyricsAction };
  * Generates Ant Design table column definitions for the lyrics table.
  *
  * @description
- * Builds columns for song title, artist name, language, linked content
- * (video or article), and an actions dropdown. The dropdown items are
+ * Builds columns for song title, artist name, language, author, linked
+ * content (video), and an actions dropdown. The dropdown items are
  * filtered based on the current user's role.
  *
  * @param onAction - Callback when a row action is triggered
@@ -58,9 +60,20 @@ export const lyricsTableColumns = (
         title: "Langue",
         dataIndex: "language",
         key: "language",
-        width: 100,
-        align: "center",
-        render: (lang: string) => <Text>{lang}</Text>
+        width: 140,
+        render: (lang: string) => <Text>{getLanguageName(lang)}</Text>
+    },
+    {
+        title: "Auteur",
+        dataIndex: "authorId",
+        key: "authorId",
+        width: 160,
+        ellipsis: true,
+        render: (_: string, record: ILyricsEntity) => (
+            <a href={`${ADMIN_PATH}/${record.authorId}`}>
+                {record.author?.userName ?? record.authorId.slice(0, 8)}
+            </a>
+        )
     },
     {
         title: "Lié à",
