@@ -34,10 +34,12 @@ const VideoCreateWizard: FC<IVideoCreateWizardProps> = ({ open, onClose, onSucce
     const orderItems = usePaidOrderItems("video");
 
     const [socialBoostLocked, setSocialBoostLocked] = useState(false);
+    const [featuredLocked, setFeaturedLocked] = useState(false);
 
     const handleClose = () => {
         wizard.reset();
         setSocialBoostLocked(false);
+        setFeaturedLocked(false);
         onClose();
     };
 
@@ -45,28 +47,30 @@ const VideoCreateWizard: FC<IVideoCreateWizardProps> = ({ open, onClose, onSucce
         <VideoInfoForm
             key="step1"
             form={wizard.step1Form}
-            error={wizard.error}
             orderItems={orderItems}
             onSubmit={() => wizard.goNext()}
             onOrderItemChange={(option) => {
                 setSocialBoostLocked(option !== undefined);
+                setFeaturedLocked(option?.hasPromotion ?? false);
                 wizard.step2Form.setFieldValue("socialBoost", option?.socialBoost ?? false);
+                wizard.step2Form.setFieldValue("isFeatured", option?.hasPromotion ?? false);
             }}
         />,
         <VideoContentForm
             key="step2"
             form={wizard.step2Form}
             socialBoostLocked={socialBoostLocked}
+            featuredLocked={featuredLocked}
         />,
-        <Flex key="step3" vertical gap={24}>
+        <Flex key="step3" vertical>
             <div>
                 <Title level={5}>Tags</Title>
                 <VideoTagsForm tagNames={wizard.tagNames} onTagsChange={wizard.onTagsChange} />
             </div>
-            <Divider />
+            <Divider size="small" />
             <div>
                 <Title level={5}>SEO</Title>
-                <VideoSeoForm form={wizard.seoForm} error={wizard.error} onSubmit={() => {}} />
+                <VideoSeoForm form={wizard.seoForm} onSubmit={() => {}} />
             </div>
         </Flex>,
         <VideoCreateSummary key="step4" video={wizard.video} />
