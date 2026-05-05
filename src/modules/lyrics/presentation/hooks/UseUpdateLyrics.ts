@@ -2,6 +2,7 @@ import type { FormInstance } from "antd";
 import { Form } from "antd";
 import { useEffect, useState } from "react";
 import type { ILyricsEntity } from "@/modules/lyrics/domain/entities/ILyricsEntity";
+import type { IUpdateLyricsCredentials } from "@/modules/lyrics/presentation/model/IUpdateLyricsCredentials";
 import {
     resetUpdateLyricsAction,
     updateLyricsAction
@@ -19,11 +20,11 @@ const { useForm } = Form;
  * @interface IUseUpdateLyrics
  */
 interface IUseUpdateLyrics {
-    form: FormInstance<{ lyricsText: string }>;
     loading: boolean;
-    error: Failure | null | undefined;
     success: string | null;
-    onSubmit: (values: { lyricsText: string }) => Promise<void>;
+    error: Failure | null | undefined;
+    form: FormInstance<IUpdateLyricsCredentials>;
+    onSubmit: (values: IUpdateLyricsCredentials) => Promise<void>;
     resetUpdate: () => void;
 }
 
@@ -32,7 +33,7 @@ interface IUseUpdateLyrics {
  *
  * @description
  * Manages form state, pre-population from the lyrics entity,
- * submission, and success feedback for updating lyrics text.
+ * submission, and success feedback for updating lyrics.
  *
  * @param lyricsEntity - The lyrics record to edit (used for pre-population and ID)
  * @param onSuccess - Optional callback invoked after successful update
@@ -43,7 +44,7 @@ export const useUpdateLyrics = (
     onSuccess?: () => void
 ): IUseUpdateLyrics => {
     const dispatch = useAppDispatch();
-    const [form] = useForm<{ lyricsText: string }>();
+    const [form] = useForm<IUpdateLyricsCredentials>();
     const [success, setSuccess] = useState<string | null>(null);
 
     const { loading, error } = useAppSelector(({ lyrics: { updateLyrics } }) => updateLyrics);
@@ -51,18 +52,22 @@ export const useUpdateLyrics = (
     useEffect(() => {
         if (lyricsEntity) {
             form.setFieldsValue({
-                lyricsText: lyricsEntity.lyricsText
+                language: lyricsEntity.language,
+                songTitle: lyricsEntity.songTitle,
+                artistName: lyricsEntity.artistName,
+                lyricsText: lyricsEntity.lyricsText,
+                videoId: lyricsEntity.videoId ?? undefined
             });
         }
     }, [lyricsEntity, form]);
 
-    const onSubmit = async (values: { lyricsText: string }): Promise<void> => {
+    const onSubmit = async (values: IUpdateLyricsCredentials): Promise<void> => {
         if (!lyricsEntity) return;
 
         const result = await dispatch(
             updateLyricsAction({
-                id: lyricsEntity.id,
-                data: values
+                data: values,
+                id: lyricsEntity.id
             })
         );
 
@@ -77,7 +82,6 @@ export const useUpdateLyrics = (
         setSuccess(null);
         form.resetFields();
         dispatch(resetUpdateLyricsAction());
-        form.resetFields();
     };
 
     return { form, loading, error, success, onSubmit, resetUpdate };
