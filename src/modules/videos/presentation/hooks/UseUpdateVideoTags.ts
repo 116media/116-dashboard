@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import type { IVideoEntity } from "@/modules/videos/domain/entities/IVideoEntity";
+import type { IVideoSummaryEntity } from "@/modules/videos/domain/entities/IVideoSummaryEntity";
+import { getVideoByIdAction } from "@/modules/videos/presentation/store/getvideobyid.action";
 import {
     resetUpdateVideoTagsAction,
     updateVideoTagsAction
@@ -38,7 +40,7 @@ interface IUseUpdateVideoTags {
  * @returns Tag IDs, change handler, loading/error state, success message, and submit handler
  */
 export const useUpdateVideoTags = (
-    video: IVideoEntity | null,
+    video: IVideoSummaryEntity | null,
     onSuccess?: () => void
 ): IUseUpdateVideoTags => {
     const dispatch = useAppDispatch();
@@ -48,10 +50,18 @@ export const useUpdateVideoTags = (
     const { loading, error } = useAppSelector(({ videos: { updateVideoTags } }) => updateVideoTags);
 
     useEffect(() => {
-        if (video) {
-            setTagNames(video.tags?.map((t) => t.name) ?? []);
-        }
-    }, [video]);
+        if (!video?.id) return;
+
+        const fetchDetail = async () => {
+            const result = await dispatch(getVideoByIdAction(video.id));
+            if (getVideoByIdAction.fulfilled.match(result)) {
+                const detail = result.payload as IVideoEntity;
+                setTagNames((detail.tags ?? []).map((t) => t.name));
+            }
+        };
+
+        fetchDetail();
+    }, [video, dispatch]);
 
     const onTagsChange = (names: string[]) => {
         setTagNames(names);
