@@ -55,6 +55,7 @@ const ShootScheduleModal: FC<IShootScheduleModalProps> = ({
 }) => {
     return (
         <CreateEditModal
+            width={450}
             open={open}
             loading={loading}
             formContext="EDIT"
