@@ -1,9 +1,11 @@
+import type { Dayjs } from "dayjs";
+
 /**
  * Form model for scheduling a video shoot.
  *
  * @interface IScheduleShootCredentials
- * @property {string} shootingScheduledAt - ISO date for the scheduled shoot (required)
+ * @property {Dayjs | string} shootingScheduledAt - Scheduled shoot date (Dayjs from form, string from API)
  */
 export interface IScheduleShootCredentials {
-    shootingScheduledAt: string;
+    shootingScheduledAt: Dayjs | string;
 }
