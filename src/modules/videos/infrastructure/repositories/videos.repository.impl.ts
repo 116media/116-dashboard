@@ -195,7 +195,10 @@ export class VideosRepositoryImpl implements IVideosRepositoryPort {
         data: IScheduleShootCredentials
     ): Promise<Result<IVideoEntity>> {
         try {
-            await apiClient.api.scheduleShoot(id, data);
+            const { shootingScheduledAt } = data;
+            await apiClient.api.scheduleShoot(id, {
+                shootingScheduledAt: dayjs(shootingScheduledAt).toISOString()
+            });
             const videoResponse = await apiClient.api.adminGetVideoById(id);
             return ok(VideosMapper.videoFromDto(videoResponse.data.video));
         } catch (error) {
