@@ -24,9 +24,10 @@ export const formatFileSize = (bytes: number): string => {
  */
 export const isImageUrl = (url: string): boolean => {
     const lower = url.toLowerCase();
-    return (
-        IMAGE_EXTENSIONS.some((ext) => lower.includes(ext)) ||
-        lower.startsWith("blob:") ||
-        (!lower.endsWith(".pdf") && !lower.includes("application/pdf"))
-    );
+    if (IMAGE_EXTENSIONS.some((ext) => lower.includes(ext))) return true;
+    if (lower.endsWith(".pdf") || lower.includes("application/pdf")) return false;
+    if (VIDEO_EXTENSIONS.some((ext) => lower.includes(ext))) return false;
+    return !lower.startsWith("blob:");
 };
+
+const VIDEO_EXTENSIONS = [".mp4", ".mov", ".webm", ".avi", ".mkv", ".3gp"];
