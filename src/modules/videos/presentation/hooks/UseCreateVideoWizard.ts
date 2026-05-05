@@ -22,6 +22,7 @@ interface IWizardStep2Credentials {
     description: string;
     socialBoost: boolean;
     isFeatured: boolean;
+    featuredUntil?: string | null;
 }
 
 interface IUseCreateVideoWizard {
@@ -118,7 +119,8 @@ export const useCreateVideoWizard = (onSuccess: () => void): IUseCreateVideoWiza
                     slug: video.slug,
                     description: values.description,
                     socialBoost: values.socialBoost ?? false,
-                    isFeatured: values.isFeatured ?? false
+                    isFeatured: values.isFeatured ?? false,
+                    featuredUntil: values.featuredUntil ?? null
                 }
             })
         );
