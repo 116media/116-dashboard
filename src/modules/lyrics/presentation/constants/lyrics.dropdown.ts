@@ -3,12 +3,12 @@ import type { ILyricsEntity } from "@/modules/lyrics/domain/entities/ILyricsEnti
 /**
  * Available action types for a lyrics record.
  */
-export type LyricsAction = "edit" | "seo";
+export type LyricsAction = "edit" | "seo" | "viewVideo" | "delete";
 
 interface ILyricsDropdownItem {
-    key: LyricsAction;
     label: string;
     danger?: boolean;
+    key: LyricsAction;
     hidden: (record: ILyricsEntity, isSuperAdmin: boolean, isAdminOrSuperAdmin: boolean) => boolean;
 }
 
@@ -22,8 +22,11 @@ interface ILyricsDropdownItem {
  *
  * @remarks
  * - "edit" and "seo" are restricted to Admin and SuperAdmin.
+ * - "viewVideo" is visible to all when a video is linked.
  */
 export const LYRICS_DROPDOWN_ITEMS: ILyricsDropdownItem[] = [
+    { key: "viewVideo", label: "Voir la vidéo", hidden: (r) => !r.videoId },
     { key: "edit", label: "Modifier", hidden: (_, __, isAdmin) => !isAdmin },
-    { key: "seo", label: "Modifier le SEO", hidden: (_, __, isAdmin) => !isAdmin }
+    { key: "seo", label: "Modifier le SEO", hidden: (_, __, isAdmin) => !isAdmin },
+    { key: "delete", label: "Supprimer", danger: true, hidden: (_, isSuperAdmin) => !isSuperAdmin }
 ];
