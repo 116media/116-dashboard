@@ -19,7 +19,7 @@ const { TextArea } = Input;
  */
 interface IVideoSeoFormProps {
     form: FormInstance<IUpdateVideoSeoCredentials>;
-    error: Failure | null | undefined;
+    error?: Failure | null | undefined;
     onSubmit: (values: IUpdateVideoSeoCredentials) => void;
 }
 
@@ -62,9 +62,9 @@ const VideoSeoForm: FC<IVideoSeoFormProps> = ({ form, error, onSubmit }) => {
                 rules={VideosSeoValidator.metaDescription("Description SEO")}
             >
                 <TextArea
-                    maxLength={160}
-                    showCount
                     rows={3}
+                    showCount
+                    maxLength={160}
                     placeholder="Description SEO de la vidéo"
                 />
             </Item>
