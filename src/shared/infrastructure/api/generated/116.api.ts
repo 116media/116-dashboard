@@ -436,6 +436,10 @@ export interface AdminDeleteArticleResponse {
   isSuccess: boolean;
 }
 
+export interface AdminDeleteLyricsResponse {
+  isSuccess: boolean;
+}
+
 export interface AdminDeleteShortVideoResponse {
   isSuccess: boolean;
 }
@@ -482,6 +486,10 @@ export interface AdminForgotPasswordRequest {
 export interface AdminForgotPasswordResponse {
   isSuccess: boolean;
   email: string;
+}
+
+export interface AdminGetActiveVideosResponse {
+  videos: VideoSummaryDto[];
 }
 
 export interface AdminGetAllArticlesResponse {
@@ -868,7 +876,12 @@ export interface AdminUpdateCustomerResponse {
 }
 
 export interface AdminUpdateLyricsRequest {
+  songTitle: string;
+  artistName: string;
   lyricsText: string;
+  language: string;
+  /** @format uuid */
+  videoId?: string | null;
 }
 
 export interface AdminUpdateLyricsResponse {
@@ -878,7 +891,6 @@ export interface AdminUpdateLyricsResponse {
 export interface AdminUpdateLyricsSeoRequest {
   metaTitle?: string | null;
   metaDescription?: string | null;
-  metaKeywords?: string | null;
   structuredData?: string | null;
 }
 
@@ -1361,7 +1373,6 @@ export interface LyricsDto {
   videoId?: string | null;
   metaTitle?: string | null;
   metaDescription?: string | null;
-  metaKeywords?: string | null;
   authorId: string;
   author?: AuthorDto | null;
 }
@@ -1675,6 +1686,10 @@ export interface PublicGetLyricsBySlugResponse {
   lyrics: LyricsDto;
 }
 
+export interface PublicGetLyricsByVideoIdResponse {
+  lyrics: LyricsDto;
+}
+
 export interface PublicGetOwnProfileResponse {
   user: UserResponseDto;
 }
@@ -1970,6 +1985,8 @@ export interface ShortVideoDto {
   slug: string;
   videoUrl: string;
   thumbnailUrl?: string | null;
+  /** @format uuid */
+  videoId?: string | null;
   hasFullVideo: boolean;
   isActive: boolean;
   /** @format int32 */
@@ -4581,6 +4598,46 @@ export class Api<
         body: data,
         secure: true,
         type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * @description Permanently deletes a lyrics page from the database.
+     * 
+     * If the lyrics page is linked to a video, the video's HasLyrics flag
+     * is cleared automatically before deletion.
+     * 
+     * This operation is <b>irreversible</b>.
+     * 
+     * **Authentication Requirements:**
+     * 
+     * - User must be authenticated with a valid access token
+     * - User must have SuperAdmin role
+     * 
+     * **Response Codes:**
+     * 
+     * - Returns 200 OK on success
+     * - Returns 401 Unauthorized if access token is invalid or expired
+     * - Returns 403 Forbidden if user lacks SuperAdmin role
+     * - Returns 404 Not Found if the lyrics record does not exist
+     *
+     * @tags admin::lyrics
+     * @name DeleteLyrics
+     * @summary Permanently delete a lyrics page
+     * @request DELETE:/api/v1/admin/lyrics/{id}
+     * @secure
+     * @response `200` `AdminDeleteLyricsResponse` OK
+     * @response `401` `ProblemDetails` Unauthorized
+     * @response `403` `ProblemDetails` Forbidden
+     * @response `404` `ProblemDetails` Not Found
+     * @response `429` `ProblemDetails` Too Many Requests
+     */
+    deleteLyrics: (id: string, params: RequestParams = {}) =>
+      this.request<AdminDeleteLyricsResponse, ProblemDetails>({
+        path: `/api/v1/admin/lyrics/${id}`,
+        method: "DELETE",
+        secure: true,
         format: "json",
         ...params,
       }),
@@ -9314,6 +9371,40 @@ export class Api<
       }),
 
     /**
+     * @description Retrieves all active videos (excludes Archived and Rejected).
+     * Returns an unpaginated list for use in dropdowns and selection fields.
+     * 
+     * **Authentication Requirements:**
+     * 
+     * - User must be authenticated with a valid access token
+     * - User must have Admin or SuperAdmin role
+     * 
+     * **Response Codes:**
+     * 
+     * - Returns 200 OK with the list of active videos on success
+     * - Returns 401 Unauthorized if access token is invalid or expired
+     * - Returns 403 Forbidden if user lacks Admin role
+     *
+     * @tags admin::videos
+     * @name AdminGetActiveVideos
+     * @summary List all active videos (excludes Archived and Rejected)
+     * @request GET:/api/v1/admin/videos/active
+     * @secure
+     * @response `200` `AdminGetActiveVideosResponse` OK
+     * @response `401` `ProblemDetails` Unauthorized
+     * @response `403` `ProblemDetails` Forbidden
+     * @response `429` `ProblemDetails` Too Many Requests
+     */
+    adminGetActiveVideos: (params: RequestParams = {}) =>
+      this.request<AdminGetActiveVideosResponse, ProblemDetails>({
+        path: `/api/v1/admin/videos/active`,
+        method: "GET",
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
      * @description Uploads or replaces the video's thumbnail image.
      * 
      * If the video already has a thumbnail (from a previous upload or from the
@@ -11091,6 +11182,39 @@ export class Api<
         body: data,
         secure: true,
         type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * @description Retrieves the lyrics page associated with a given video ID.
+     * 
+     * Returns the full lyrics details if a lyrics page is linked to the video.
+     * 
+     * **Authentication Requirements:**
+     * 
+     * - No authentication required (public endpoint)
+     * 
+     * **Response Codes:**
+     * 
+     * - Returns 200 OK with lyrics details on success
+     * - Returns 404 Not Found if no lyrics are linked to the given video
+     * - Returns 429 Too Many Requests if rate limit is exceeded
+     *
+     * @tags public::lyrics
+     * @name GetLyricsByVideoId
+     * @summary Get lyrics linked to a video
+     * @request GET:/api/v1/public/lyrics/videos/{videoId}
+     * @secure
+     * @response `200` `PublicGetLyricsByVideoIdResponse` OK
+     * @response `404` `ProblemDetails` Not Found
+     * @response `429` `ProblemDetails` Too Many Requests
+     */
+    getLyricsByVideoId: (videoId: string, params: RequestParams = {}) =>
+      this.request<PublicGetLyricsByVideoIdResponse, ProblemDetails>({
+        path: `/api/v1/public/lyrics/videos/${videoId}`,
+        method: "GET",
+        secure: true,
         format: "json",
         ...params,
       }),
