@@ -6,6 +6,7 @@ import { DeactivateShortUseCase } from "@/modules/shorts/application/usecases/de
 import { DeleteShortUseCase } from "@/modules/shorts/application/usecases/deleteshort.usecase";
 import { GetAllShortsUseCase } from "@/modules/shorts/application/usecases/getallshorts.usecase";
 import { GetShortByIdUseCase } from "@/modules/shorts/application/usecases/getshortbyid.usecase";
+import { UpdateShortUseCase } from "@/modules/shorts/application/usecases/updateshort.usecase";
 import { UploadShortThumbnailUseCase } from "@/modules/shorts/application/usecases/uploadshortthumbnail.usecase";
 import { ShortsRepositoryImpl } from "@/modules/shorts/infrastructure/repositories/shorts.repository.impl";
 
@@ -29,6 +30,7 @@ export function registerShortsDependencies(container: AwilixContainer): void {
 
         // Commands — CRUD
         createShortUseCase: asClass(CreateShortUseCase).transient(),
+        updateShortUseCase: asClass(UpdateShortUseCase).transient(),
         deleteShortUseCase: asClass(DeleteShortUseCase).transient(),
 
         // Commands — Status
