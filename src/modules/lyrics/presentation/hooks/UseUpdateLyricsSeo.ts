@@ -20,10 +20,10 @@ const { useForm } = Form;
  * @interface IUseUpdateLyricsSeo
  */
 interface IUseUpdateLyricsSeo {
-    form: FormInstance<IUpdateLyricsSeoCredentials>;
     loading: boolean;
-    error: Failure | null | undefined;
     success: string | null;
+    error: Failure | null | undefined;
+    form: FormInstance<IUpdateLyricsSeoCredentials>;
     onSubmit: (values: IUpdateLyricsSeoCredentials) => Promise<void>;
     resetSeo: () => void;
 }
@@ -32,8 +32,8 @@ interface IUseUpdateLyricsSeo {
  * Custom hook for the lyrics SEO metadata form logic.
  *
  * @description
- * Manages form state, pre-population of metaTitle, metaDescription,
- * and metaKeywords from the lyrics entity, submission, and success
+ * Manages form state, pre-population of metaTitle and metaDescription
+ * from the lyrics entity, submission, and success
  * feedback for updating lyrics SEO metadata.
  *
  * @param lyricsEntity - The lyrics record whose SEO to edit (used for pre-population and ID)
@@ -54,8 +54,7 @@ export const useUpdateLyricsSeo = (
         if (lyricsEntity) {
             form.setFieldsValue({
                 metaTitle: lyricsEntity.metaTitle ?? "",
-                metaDescription: lyricsEntity.metaDescription ?? "",
-                metaKeywords: lyricsEntity.metaKeywords ?? ""
+                metaDescription: lyricsEntity.metaDescription ?? ""
             });
         }
     }, [lyricsEntity, form]);
@@ -65,8 +64,8 @@ export const useUpdateLyricsSeo = (
 
         const result = await dispatch(
             updateLyricsSeoAction({
-                id: lyricsEntity.id,
-                data: values
+                data: values,
+                id: lyricsEntity.id
             })
         );
 
