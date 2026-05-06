@@ -1,3 +1,4 @@
+import type { ILyricsActionResponse } from "@/modules/lyrics/domain/entities/ILyricsActionResponse";
 import type { ILyricsEntity } from "@/modules/lyrics/domain/entities/ILyricsEntity";
 import type { ICreateLyricsCredentials } from "@/modules/lyrics/presentation/model/ICreateLyricsCredentials";
 import type { ILyricsQueryParams } from "@/modules/lyrics/presentation/model/ILyricsQueryParams";
@@ -32,10 +33,10 @@ export interface ILyricsRepositoryPort {
     createLyrics(data: ICreateLyricsCredentials): Promise<Result<ILyricsEntity>>;
 
     /**
-     * Updates an existing lyrics record's text content.
+     * Updates an existing lyrics record.
      *
      * @param id - The lyrics UUID
-     * @param data - Updated lyrics text
+     * @param data - Updated lyrics fields
      * @returns The updated lyrics entity
      */
     updateLyrics(id: string, data: IUpdateLyricsCredentials): Promise<Result<ILyricsEntity>>;
@@ -48,4 +49,12 @@ export interface ILyricsRepositoryPort {
      * @returns The updated lyrics entity
      */
     updateLyricsSeo(id: string, data: IUpdateLyricsSeoCredentials): Promise<Result<ILyricsEntity>>;
+
+    /**
+     * Permanently deletes a lyrics record.
+     *
+     * @param id - The lyrics UUID
+     * @returns Action response with success indicator
+     */
+    deleteLyrics(id: string): Promise<Result<ILyricsActionResponse>>;
 }
