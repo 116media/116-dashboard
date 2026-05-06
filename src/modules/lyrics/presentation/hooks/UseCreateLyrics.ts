@@ -19,10 +19,10 @@ const { useForm } = Form;
  * @interface IUseCreateLyrics
  */
 interface IUseCreateLyrics {
-    form: FormInstance<ICreateLyricsCredentials>;
     loading: boolean;
-    error: Failure | null | undefined;
     success: string | null;
+    error: Failure | null | undefined;
+    form: FormInstance<ICreateLyricsCredentials>;
     onSubmit: (values: ICreateLyricsCredentials) => Promise<void>;
     resetCreate: () => void;
 }
