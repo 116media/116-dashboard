@@ -27,12 +27,22 @@ export const ShortsMapper = {
             slug: dto.slug,
             videoUrl: dto.videoUrl,
             thumbnailUrl: dto.thumbnailUrl,
+            videoId: dto.videoId ?? null,
             hasFullVideo: dto.hasFullVideo,
             isActive: dto.isActive,
             viewCount: dto.viewCount,
             likeCount: dto.likeCount,
             shareCount: dto.shareCount,
             bookmarkCount: dto.bookmarkCount,
+            authorId: dto.authorId,
+            author: dto.author
+                ? {
+                      userName: dto.author.userName,
+                      email: dto.author.email ?? null,
+                      avatarUrl: dto.author.avatarUrl ?? null,
+                      role: dto.author.role ?? null
+                  }
+                : null,
             createdAt: dto.createdAt,
             updatedAt: dto.updatedAt,
             createdBy: dto.createdBy,
