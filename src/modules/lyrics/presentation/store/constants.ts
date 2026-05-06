@@ -5,7 +5,8 @@ export const ActionType = {
     GetLyrics: "Lyrics/getLyrics",
     CreateLyrics: "Lyrics/createLyrics",
     UpdateLyrics: "Lyrics/updateLyrics",
-    UpdateLyricsSeo: "Lyrics/updateLyricsSeo"
+    UpdateLyricsSeo: "Lyrics/updateLyricsSeo",
+    DeleteLyrics: "Lyrics/deleteLyrics"
 } as const;
 
 /**
