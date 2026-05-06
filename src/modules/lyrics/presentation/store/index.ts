@@ -8,6 +8,7 @@ import {
 } from "@/shared/presentation/store/action.wrapper";
 import { SliceName } from "./constants";
 import { createLyricsAction } from "./createlyrics.action";
+import { deleteLyricsAction } from "./deletelyrics.action";
 import { getLyricsAction } from "./getalllyrics.action";
 import { lyricsInitialState } from "./state";
 import type { LyricsStateKey } from "./type";
@@ -52,7 +53,11 @@ export const lyricsSlice = createSlice({
             // update lyrics seo
             .addCase(updateLyricsSeoAction.pending, ActionWrapperPending)
             .addCase(updateLyricsSeoAction.fulfilled, ActionWrapperFulfilled)
-            .addCase(updateLyricsSeoAction.rejected, ActionWrapperRejected);
+            .addCase(updateLyricsSeoAction.rejected, ActionWrapperRejected)
+            // delete lyrics
+            .addCase(deleteLyricsAction.pending, ActionWrapperPending)
+            .addCase(deleteLyricsAction.fulfilled, ActionWrapperFulfilled)
+            .addCase(deleteLyricsAction.rejected, ActionWrapperRejected);
     }
 });
 
