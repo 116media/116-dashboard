@@ -3,13 +3,17 @@ import type { IShortVideoEntity } from "@/modules/shorts/domain/entities/IShortV
 /**
  * Available action types for a short video record.
  */
-export type ShortAction = "activate" | "deactivate" | "thumbnail" | "delete";
+export type ShortAction = "edit" | "viewVideo" | "activate" | "deactivate" | "thumbnail" | "delete";
 
 interface IShortDropdownItem {
-    key: ShortAction;
     label: string;
+    key: ShortAction;
     danger?: boolean;
-    hidden: (record: IShortVideoEntity, isSuperAdmin: boolean) => boolean;
+    hidden: (
+        record: IShortVideoEntity,
+        isSuperAdmin: boolean,
+        isAdminOrSuperAdmin: boolean
+    ) => boolean;
 }
 
 /**
@@ -21,11 +25,12 @@ interface IShortDropdownItem {
  * render time in the columns definition.
  *
  * @remarks
- * - "activate" is hidden when the short is already active.
- * - "deactivate" is hidden when the short is already inactive.
- * - "thumbnail" and "delete" are restricted to SuperAdmin only.
+ * - "edit" and "thumbnail" are available to Admin and SuperAdmin.
+ * - "activate", "deactivate", and "delete" are restricted to SuperAdmin only.
  */
 export const SHORT_DROPDOWN_ITEMS: IShortDropdownItem[] = [
+    { key: "edit", label: "Modifier", hidden: (_, __, isAdmin) => !isAdmin },
+    { key: "viewVideo", label: "Voir la vidéo", hidden: (r) => !r.videoId },
     {
         key: "activate",
         label: "Activer",
@@ -39,7 +44,7 @@ export const SHORT_DROPDOWN_ITEMS: IShortDropdownItem[] = [
     {
         key: "thumbnail",
         label: "Importer une miniature",
-        hidden: (_, isSuperAdmin) => !isSuperAdmin
+        hidden: (_, __, isAdmin) => !isAdmin
     },
     {
         key: "delete",
