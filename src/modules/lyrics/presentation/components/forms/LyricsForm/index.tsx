@@ -24,8 +24,8 @@ const { Item } = Form;
  * @property {(values: ICreateLyricsCredentials) => void} onSubmit - Callback when the form is submitted
  */
 interface ILyricsFormProps {
-    form: FormInstance<ICreateLyricsCredentials>;
     error: Failure | null | undefined;
+    form: FormInstance<ICreateLyricsCredentials>;
     onSubmit: (values: ICreateLyricsCredentials) => void;
 }
 
@@ -45,8 +45,8 @@ const LyricsForm: FC<ILyricsFormProps> = ({ form, error, onSubmit }) => {
     const videoOptions = useMemo(
         () =>
             ((videos as IPaginatedResult<IVideoSummaryEntity>)?.items ?? []).map((v) => ({
-                label: v.title,
                 value: v.id,
+                label: v.title,
                 secondary: v.categoryName
             })),
         [videos]
@@ -57,8 +57,8 @@ const LyricsForm: FC<ILyricsFormProps> = ({ form, error, onSubmit }) => {
             form={form}
             size="large"
             layout="vertical"
-            onFinish={onSubmit}
             name="lyrics_form"
+            onFinish={onSubmit}
             validateTrigger={["onSubmit", "onBlur"]}
         >
             <ErrorAlert error={error} showIcon closable banner={false} />
@@ -80,8 +80,8 @@ const LyricsForm: FC<ILyricsFormProps> = ({ form, error, onSubmit }) => {
             </Item>
 
             <Item
-                name="lyricsText"
                 label="Paroles"
+                name="lyricsText"
                 rules={LyricsContentValidator.lyricsText("Paroles")}
             >
                 <RichTextEditor mode="simple" minHeight={200} placeholder="Texte des paroles" />
