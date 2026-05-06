@@ -15,6 +15,7 @@ import { getShortsAction } from "./getallshorts.action";
 import { getShortByIdAction } from "./getshortbyid.action";
 import { shortsInitialState } from "./state";
 import type { ShortsStateKey } from "./type";
+import { updateShortAction } from "./updateshort.action";
 import { uploadShortThumbnailAction } from "./uploadshortthumbnail.action";
 
 /**
@@ -52,6 +53,10 @@ export const shortsSlice = createSlice({
             .addCase(createShortAction.pending, ActionWrapperPending)
             .addCase(createShortAction.fulfilled, ActionWrapperFulfilled)
             .addCase(createShortAction.rejected, ActionWrapperRejected)
+            // update short
+            .addCase(updateShortAction.pending, ActionWrapperPending)
+            .addCase(updateShortAction.fulfilled, ActionWrapperFulfilled)
+            .addCase(updateShortAction.rejected, ActionWrapperRejected)
             // activate short
             .addCase(activateShortAction.pending, ActionWrapperPending)
             .addCase(activateShortAction.fulfilled, ActionWrapperFulfilled)
