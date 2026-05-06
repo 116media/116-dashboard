@@ -5,6 +5,7 @@ export const ActionType = {
     GetShorts: "Shorts/getShorts",
     GetShortById: "Shorts/getShortById",
     CreateShort: "Shorts/createShort",
+    UpdateShort: "Shorts/updateShort",
     ActivateShort: "Shorts/activateShort",
     DeactivateShort: "Shorts/deactivateShort",
     DeleteShort: "Shorts/deleteShort",
