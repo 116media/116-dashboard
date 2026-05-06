@@ -11,6 +11,7 @@ import type { IVideosState } from "./type";
  */
 export const videosInitialState: IVideosState = {
     getVideos: createInitialState(),
+    getActiveVideos: createInitialState(),
     getVideoById: createInitialState(),
     createVideo: createInitialState(),
     updateVideo: createInitialState(),
