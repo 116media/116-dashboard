@@ -6,11 +6,18 @@ import {
     type ShortAction
 } from "@/modules/shorts/presentation/constants/shorts.dropdown";
 import { ENTITY_STATUS_CONFIG } from "@/shared/presentation/constants/entity.status.config";
+import { ADMIN_PATH } from "@/shared/presentation/constants/paths";
+import { Colors } from "@/shared/presentation/constants/theme";
+import {
+    IconCheckCircleFilled,
+    IconStopOutlined,
+    IconYoutubeFilled
+} from "@/shared/presentation/ui/Icons";
 import StatusTag from "@/shared/presentation/ui/StatusTag";
 import type { ITableActionItem } from "@/shared/presentation/ui/TableActionDropdown";
 import TableActionDropdown from "@/shared/presentation/ui/TableActionDropdown";
 
-const { Text } = Typography;
+const { Text, Link } = Typography;
 
 export type { ShortAction };
 
@@ -18,17 +25,18 @@ export type { ShortAction };
  * Generates Ant Design table column definitions for the shorts table.
  *
  * @description
- * Builds columns for title, slug, active status tag, view count,
- * like count, and an actions dropdown. The dropdown items are
- * filtered based on short video status and the current user's role.
+ * Builds columns for title, video URL, has full video, active status,
+ * author, view count, like count, and an actions dropdown.
  *
  * @param onAction - Callback when a row action is triggered
  * @param isSuperAdmin - Whether the current user is a SuperAdmin
+ * @param isAdminOrSuperAdmin - Whether the current user is Admin or SuperAdmin
  * @returns Column configuration for the Ant Design Table
  */
 export const shortsTableColumns = (
     onAction: (action: ShortAction, record: IShortVideoEntity) => void,
-    isSuperAdmin: boolean
+    isSuperAdmin: boolean,
+    isAdminOrSuperAdmin: boolean
 ): ColumnsType<IShortVideoEntity> => [
     {
         title: "Titre",
@@ -44,12 +52,32 @@ export const shortsTableColumns = (
         )
     },
     {
-        title: "Slug",
-        dataIndex: "slug",
-        key: "slug",
-        width: 200,
-        ellipsis: true,
-        render: (slug: string) => <Text type="secondary">{slug}</Text>
+        title: "Vidéo",
+        dataIndex: "videoUrl",
+        key: "videoUrl",
+        width: 90,
+        align: "center",
+        render: (videoUrl: string | null) =>
+            videoUrl ? (
+                <Link href={videoUrl} target="_blank" rel="noopener noreferrer">
+                    <IconYoutubeFilled style={{ color: Colors.Error, fontSize: 18 }} />
+                </Link>
+            ) : (
+                <IconStopOutlined style={{ color: Colors.Error, fontSize: 18 }} />
+            )
+    },
+    {
+        title: "Vidéo liée",
+        dataIndex: "hasFullVideo",
+        key: "hasFullVideo",
+        width: 110,
+        align: "center",
+        render: (hasFullVideo: boolean) =>
+            hasFullVideo ? (
+                <IconCheckCircleFilled style={{ color: Colors.Success, fontSize: 18 }} />
+            ) : (
+                <IconStopOutlined style={{ color: Colors.Error, fontSize: 18 }} />
+            )
     },
     {
         title: "Actif",
@@ -62,10 +90,22 @@ export const shortsTableColumns = (
         )
     },
     {
+        title: "Auteur",
+        dataIndex: "authorId",
+        key: "authorId",
+        width: 160,
+        ellipsis: true,
+        render: (_: string, record: IShortVideoEntity) => (
+            <a href={`${ADMIN_PATH}/${record.authorId}`}>
+                {record.author?.userName ?? record.authorId.slice(0, 8)}
+            </a>
+        )
+    },
+    {
         title: "Vues",
         dataIndex: "viewCount",
         key: "viewCount",
-        width: 100,
+        width: 80,
         align: "center",
         sorter: (a, b) => a.viewCount - b.viewCount,
         render: (count: number) => <Text>{count}</Text>
@@ -74,7 +114,7 @@ export const shortsTableColumns = (
         title: "Likes",
         dataIndex: "likeCount",
         key: "likeCount",
-        width: 100,
+        width: 80,
         align: "center",
         sorter: (a, b) => a.likeCount - b.likeCount,
         render: (count: number) => <Text>{count}</Text>
@@ -90,7 +130,7 @@ export const shortsTableColumns = (
                 key: item.key,
                 label: item.label,
                 danger: item.danger,
-                hidden: item.hidden(record, isSuperAdmin),
+                hidden: item.hidden(record, isSuperAdmin, isAdminOrSuperAdmin),
                 onClick: () => onAction(item.key, record)
             }));
 
