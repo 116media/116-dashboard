@@ -1,3 +1,4 @@
+import type { ILyricsActionResponse } from "@/modules/lyrics/domain/entities/ILyricsActionResponse";
 import type { ILyricsEntity } from "@/modules/lyrics/domain/entities/ILyricsEntity";
 import type { IPaginatedResult } from "@/shared/domain/types/pagination";
 import type { IBasicInitialState } from "@/shared/presentation/store/action.wrapper";
@@ -14,6 +15,7 @@ export type ILyricsState = {
     createLyrics: IBasicInitialState<ILyricsEntity>;
     updateLyrics: IBasicInitialState<ILyricsEntity>;
     updateLyricsSeo: IBasicInitialState<ILyricsEntity>;
+    deleteLyrics: IBasicInitialState<ILyricsActionResponse>;
 };
 
 export type LyricsStateKey = keyof ILyricsState;
