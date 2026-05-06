@@ -88,6 +88,7 @@ import type { UpdateTagUseCase } from "@/modules/lookup/application/usecases/upd
 import { registerLookupDependencies } from "@/modules/lookup/infrastructure/dependencies/lookup.dependencies";
 import type { ILyricsRepositoryPort } from "@/modules/lyrics/application/repositories/lyrics.repository.port";
 import type { CreateLyricsUseCase } from "@/modules/lyrics/application/usecases/createlyrics.usecase";
+import type { DeleteLyricsUseCase } from "@/modules/lyrics/application/usecases/deletelyrics.usecase";
 import type { GetAllLyricsUseCase } from "@/modules/lyrics/application/usecases/getalllyrics.usecase";
 import type { UpdateLyricsUseCase } from "@/modules/lyrics/application/usecases/updatelyrics.usecase";
 import type { UpdateLyricsSeoUseCase } from "@/modules/lyrics/application/usecases/updatelyricsseo.usecase";
@@ -124,6 +125,7 @@ import type { DeactivateShortUseCase } from "@/modules/shorts/application/usecas
 import type { DeleteShortUseCase } from "@/modules/shorts/application/usecases/deleteshort.usecase";
 import type { GetAllShortsUseCase } from "@/modules/shorts/application/usecases/getallshorts.usecase";
 import type { GetShortByIdUseCase } from "@/modules/shorts/application/usecases/getshortbyid.usecase";
+import type { UpdateShortUseCase } from "@/modules/shorts/application/usecases/updateshort.usecase";
 import type { UploadShortThumbnailUseCase } from "@/modules/shorts/application/usecases/uploadshortthumbnail.usecase";
 import { registerShortsDependencies } from "@/modules/shorts/infrastructure/dependencies/shorts.dependencies";
 import type { IVideosRepositoryPort } from "@/modules/videos/application/repositories/videos.repository.port";
@@ -132,6 +134,7 @@ import type { ArchiveVideoUseCase } from "@/modules/videos/application/usecases/
 import type { AttachYoutubeVideoUrlUseCase } from "@/modules/videos/application/usecases/attachyoutubeid.usecase";
 import type { CreateVideoUseCase } from "@/modules/videos/application/usecases/createvideo.usecase";
 import type { DeleteVideoUseCase } from "@/modules/videos/application/usecases/deletevideo.usecase";
+import type { GetActiveVideosUseCase } from "@/modules/videos/application/usecases/getactivevideos.usecase";
 import type { GetAllVideosUseCase } from "@/modules/videos/application/usecases/getallvideos.usecase";
 import type { GetVideoByIdUseCase } from "@/modules/videos/application/usecases/getvideobyid.usecase";
 import type { PublishVideoUseCase } from "@/modules/videos/application/usecases/publishvideo.usecase";
@@ -333,6 +336,7 @@ export interface Cradle {
 
     // Videos use cases
     getAllVideosUseCase: GetAllVideosUseCase;
+    getActiveVideosUseCase: GetActiveVideosUseCase;
     getVideoByIdUseCase: GetVideoByIdUseCase;
     createVideoUseCase: CreateVideoUseCase;
     updateVideoUseCase: UpdateVideoUseCase;
@@ -355,6 +359,7 @@ export interface Cradle {
     getAllShortsUseCase: GetAllShortsUseCase;
     getShortByIdUseCase: GetShortByIdUseCase;
     createShortUseCase: CreateShortUseCase;
+    updateShortUseCase: UpdateShortUseCase;
     activateShortUseCase: ActivateShortUseCase;
     deactivateShortUseCase: DeactivateShortUseCase;
     deleteShortUseCase: DeleteShortUseCase;
@@ -368,6 +373,7 @@ export interface Cradle {
     createLyricsUseCase: CreateLyricsUseCase;
     updateLyricsUseCase: UpdateLyricsUseCase;
     updateLyricsSeoUseCase: UpdateLyricsSeoUseCase;
+    deleteLyricsUseCase: DeleteLyricsUseCase;
 }
 
 /**
