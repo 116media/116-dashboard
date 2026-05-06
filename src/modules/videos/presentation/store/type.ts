@@ -13,6 +13,7 @@ import type { IBasicInitialState } from "@/shared/presentation/store/action.wrap
  */
 export type IVideosState = {
     getVideos: IBasicInitialState<IPaginatedResult<IVideoSummaryEntity>>;
+    getActiveVideos: IBasicInitialState<IVideoSummaryEntity[]>;
     getVideoById: IBasicInitialState<IVideoEntity>;
     createVideo: IBasicInitialState<IVideoEntity>;
     updateVideo: IBasicInitialState<IVideoEntity>;
