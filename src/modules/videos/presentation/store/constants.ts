@@ -3,6 +3,7 @@
  */
 export const ActionType = {
     GetVideos: "Videos/getVideos",
+    GetActiveVideos: "Videos/getActiveVideos",
     GetVideoById: "Videos/getVideoById",
     CreateVideo: "Videos/createVideo",
     UpdateVideo: "Videos/updateVideo",
