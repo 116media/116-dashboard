@@ -1,9 +1,9 @@
+import type { IActionResponse } from "@/shared/domain/types/action.response";
+
 /**
  * Response from permission action endpoints (hard delete).
  *
  * @interface IPermissionActionResponse
- * @property {boolean} isSuccess - Whether the operation succeeded
+ * @extends {IActionResponse}
  */
-export interface IPermissionActionResponse {
-    isSuccess: boolean;
-}
+export interface IPermissionActionResponse extends IActionResponse {}

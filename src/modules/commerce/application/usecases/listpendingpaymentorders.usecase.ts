@@ -1,18 +1,16 @@
 import type { ICommerceRepositoryPort } from "@/modules/commerce/application/repositories/commerce.repository.port";
 import type { IOrderSummaryEntity } from "@/modules/commerce/domain/entities/IOrderSummaryEntity";
+import type { IPaginationQueryParams } from "@/modules/commerce/presentation/model/IPaginationQueryParams";
 import type { IResultUseCase } from "@/shared/application/usecases/IUseCase";
 import type { Result } from "@/shared/domain/results/result";
 import type { IPaginatedResult } from "@/shared/domain/types/pagination";
 
 /**
  * @interface IListPendingPaymentOrdersUseCase
- * @extends {IResultUseCase<{ pageIndex: number; pageSize: number }, IPaginatedResult<IOrderSummaryEntity>>}
+ * @extends {IResultUseCase<IPaginationQueryParams, IPaginatedResult<IOrderSummaryEntity>>}
  */
 interface IListPendingPaymentOrdersUseCase
-    extends IResultUseCase<
-        { pageIndex: number; pageSize: number },
-        IPaginatedResult<IOrderSummaryEntity>
-    > {}
+    extends IResultUseCase<IPaginationQueryParams, IPaginatedResult<IOrderSummaryEntity>> {}
 
 /**
  * Use case for listing orders awaiting payment.
@@ -36,13 +34,12 @@ export class ListPendingPaymentOrdersUseCase implements IListPendingPaymentOrder
     /**
      * Executes the list pending payment orders use case.
      *
-     * @param {object} params - Pagination parameters
+     * @param {IPaginationQueryParams} params - Pagination parameters
      * @returns {Promise<Result<IPaginatedResult<IOrderSummaryEntity>>>} `ok(IPaginatedResult<IOrderSummaryEntity>)` on success, `err(Failure)` on failure
      */
-    async execute(params: {
-        pageIndex: number;
-        pageSize: number;
-    }): Promise<Result<IPaginatedResult<IOrderSummaryEntity>>> {
+    async execute(
+        params: IPaginationQueryParams
+    ): Promise<Result<IPaginatedResult<IOrderSummaryEntity>>> {
         return this.commerceRepository.listPendingPaymentOrders(params);
     }
 }

@@ -1,13 +1,15 @@
 import type { ILookupRepositoryPort } from "@/modules/lookup/application/repositories/lookup.repository.port";
 import type { IContentTypeEntity } from "@/modules/lookup/domain/entities/IContentTypeEntity";
+import type { ICreateContentTypeCredentials } from "@/modules/lookup/presentation/model/ICreateContentTypeCredentials";
 import type { IResultUseCase } from "@/shared/application/usecases/IUseCase";
 import type { Result } from "@/shared/domain/results/result";
 
 /**
  * @interface ICreateContentTypeUseCase
- * @extends {IResultUseCase<{ name: string }, IContentTypeEntity>}
+ * @extends {IResultUseCase<ICreateContentTypeCredentials, IContentTypeEntity>}
  */
-interface ICreateContentTypeUseCase extends IResultUseCase<{ name: string }, IContentTypeEntity> {}
+interface ICreateContentTypeUseCase
+    extends IResultUseCase<ICreateContentTypeCredentials, IContentTypeEntity> {}
 
 /**
  * Use case for creating a new content type.
@@ -31,7 +33,7 @@ export class CreateContentTypeUseCase implements ICreateContentTypeUseCase {
      * @param {{ name: string }} data - Content type name
      * @returns {Promise<Result<IContentTypeEntity>>} `ok(IContentTypeEntity)` on success, `err(Failure)` on failure
      */
-    async execute(data: { name: string }): Promise<Result<IContentTypeEntity>> {
+    async execute(data: ICreateContentTypeCredentials): Promise<Result<IContentTypeEntity>> {
         return this.lookupRepository.createContentType(data);
     }
 }

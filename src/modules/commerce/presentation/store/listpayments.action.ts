@@ -1,11 +1,8 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import type { IPaymentSummaryEntity } from "@/modules/commerce/domain/entities/IPaymentSummaryEntity";
+import type { IPaymentsQueryParams } from "@/modules/commerce/presentation/model/IPaymentsQueryParams";
 import type { Failure } from "@/shared/domain/failures/failure";
 import type { IPaginatedResult } from "@/shared/domain/types/pagination";
-import type {
-    EnumPaymentMethod,
-    EnumPaymentStatus
-} from "@/shared/infrastructure/api/generated/116.api";
 import container from "@/shared/infrastructure/service.locator";
 import { ActionType } from "./constants";
 
@@ -19,13 +16,7 @@ import { ActionType } from "./constants";
  */
 export const listPaymentsAction = createAsyncThunk<
     IPaginatedResult<IPaymentSummaryEntity>,
-    {
-        pageIndex: number;
-        pageSize: number;
-        status?: EnumPaymentStatus;
-        method?: EnumPaymentMethod;
-        search?: string;
-    },
+    IPaymentsQueryParams,
     { rejectValue: Failure }
 >(ActionType.ListPayments, async (params, { rejectWithValue }) => {
     const result = await container.cradle.listPaymentsUseCase.execute(params);

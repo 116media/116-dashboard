@@ -1,5 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import type { IItemTierEntity } from "@/modules/commerce/domain/entities/IItemTierEntity";
+import type { IAddItemTierCredentials } from "@/modules/commerce/presentation/model/IAddItemTierCredentials";
 import type { Failure } from "@/shared/domain/failures/failure";
 import container from "@/shared/infrastructure/service.locator";
 import { ActionType } from "./constants";
@@ -14,7 +15,7 @@ import { ActionType } from "./constants";
  */
 export const addTierToItemAction = createAsyncThunk<
     IItemTierEntity,
-    { orderId: string; itemId: string; pricingTierId: string },
+    { orderId: string; itemId: string; data: IAddItemTierCredentials },
     { rejectValue: Failure }
 >(ActionType.AddTierToItem, async (params, { rejectWithValue }) => {
     const result = await container.cradle.addTierToItemUseCase.execute(params);

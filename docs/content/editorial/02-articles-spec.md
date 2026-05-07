@@ -233,12 +233,66 @@ type IArticlesState = {
 | File | Fields |
 | --- | --- |
 | `IArticlesQueryParams.ts` | `page: number; limit: number; status?: EContentStatus; search?: string` |
-| `ICreateArticleCredentials.ts` | `categoryId: string; title: string; headline: string; body: string; coverImageUrl: string` |
+| `ICreateArticleCredentials.ts` | `categoryId: string; title: string; slug: string; customerId?: string; orderItemId?: string` |
 | `IUpdateArticleCredentials.ts` | `categoryId: string; title: string; headline: string; body: string` |
 | `IRejectArticleCredentials.ts` | `rejectionReason: string` |
 | `IUploadArticleImageCredentials.ts` | `file: File; type: EArticleImageType` |
 | `IUpdateArticleSeoCredentials.ts` | `metaTitle: string; metaDescription: string` |
 | `IUpdateArticleTagsCredentials.ts` | `tagIds: string[]` |
+
+---
+
+## Multi-Step Creation Wizard
+
+Article creation uses a **stepper wizard** (Ant Design `Steps`) because the backend requires multiple sequential API calls. The `POST /admin/articles` endpoint only creates a shell draft — content, images, tags, and SEO are filled via subsequent endpoints.
+
+### Steps
+
+| Step | Title | Fields | API Calls |
+| --- | --- | --- | --- |
+| 1 | Informations | Catégorie, titre, slug, client (opt), commande (opt) | `POST /admin/articles` → returns `articleId` |
+| 2 | Contenu | Accroche (max 500), contenu (rich text), image de couverture | `PUT /admin/articles/{id}` + `POST /admin/articles/{id}/images` |
+| 3 | Tags & SEO | Sélection de tags, titre SEO (max 70), description SEO (max 160) | `PUT /admin/articles/{id}/tags` + `PATCH /admin/articles/{id}/seo` |
+| 4 | Résumé | Aperçu en lecture seule de toutes les informations | `PATCH /admin/articles/{id}/submit` (bouton Soumettre) |
+
+### Flow
+
+1. **Step 1** creates the draft via `POST`. The returned `articleId` is stored in wizard state and used by all subsequent steps.
+2. **Step 2** fills content via `PUT` and uploads the cover image via `POST /images` (multipart, `imageType: Cover`). Body images are also uploaded here with `imageType: Body`.
+3. **Step 3** assigns tags via `PUT /tags` and sets SEO via `PATCH /seo`. Both are optional — the user can skip.
+4. **Step 4** shows a read-only summary. The "Soumettre" button dispatches `submitArticleAction` which transitions Draft → PendingPayment (paid) or Draft → PendingReview (free).
+
+### B2B Fields
+
+`customerId` and `orderItemId` are paired — both must be present or both absent. When set, the article is linked to a B2B customer order. The submit step routes to `PendingPayment` instead of `PendingReview`.
+
+### Hook: `UseCreateArticleWizard`
+
+Manages the entire wizard lifecycle:
+
+- `currentStep: number` — active step index (0–3)
+- `articleId: string | null` — set after step 1 completes
+- `step1Form: FormInstance<ICreateArticleCredentials>` — step 1 form
+- `step2Form: FormInstance<IUpdateArticleCredentials>` — step 2 form
+- `seoForm: FormInstance<IUpdateArticleSeoCredentials>` — step 3 SEO form
+- `tagIds: string[]` — step 3 tag selection
+- `loading: boolean` — current step submission loading
+- `error: Failure | null` — current step error
+- `onNext()` — validates current step, dispatches API call, advances
+- `onPrev()` — goes back one step
+- `onSubmit()` — final submission (step 4)
+- `resetWizard()` — resets all state
+
+### Components
+
+| Component | Purpose |
+| --- | --- |
+| `ArticleCreateWizard` | Orchestrates the `Steps` component and renders the active step form |
+| `ArticleCreateStep1Form` | Category, title, slug, customer/order item fields |
+| `ArticleContentForm` | Headline, body (rich text editor), cover image upload (reused for edit) |
+| `ArticleSeoForm` | Meta title, meta description (reused for edit) |
+| `ArticleTagsForm` | Tag multi-select (reused for edit) |
+| `ArticleCreateSummary` | Read-only preview of all entered data with submit button |
 
 ---
 
@@ -372,12 +426,10 @@ Filter options for the status filter select:
 - `reject` action requires a `rejectionReason` string
 - Exposes: `loading`, `error`, `onSubmit`, `onApprove`, `onPublish`, `onReject`, `onArchive`, `onDelete`
 
-### `UseCreateArticle.ts`
+### `UseCreateArticleWizard.ts`
 
-- `useForm<ICreateArticleCredentials>()`
-- Rich text `body` managed via controlled state (not standard form field)
-- `onSubmit` → dispatch `createArticleAction` → set success
-- Exposes: `form`, `body`, `onBodyChange`, `loading`, `error`, `success`, `onSubmit`, `resetCreate`
+- Manages multi-step wizard state (see "Multi-Step Creation Wizard" section above)
+- Exposes: `currentStep`, `articleId`, `step1Form`, `step2Form`, `seoForm`, `tagIds`, `onTagsChange`, `loading`, `error`, `onNext`, `onPrev`, `onSubmit`, `resetWizard`
 
 ### `UseUpdateArticle.ts`
 
@@ -414,18 +466,37 @@ Filter options for the status filter select:
 
 **Path:** `src/modules/articles/presentation/components/`
 
-### `forms/ArticleContentForm/index.tsx`
+### `forms/ArticleCreateStep1Form/index.tsx`
 
-Main content form (create and update):
+Step 1 of the creation wizard — draft shell:
 
 | Field | Label | Component | Validation |
 | --- | --- | --- | --- |
 | `categoryId` | Catégorie | `CategorySelect` (shared) | required |
 | `title` | Titre | `Input` | required, max 200 |
+| `slug` | Slug | `Input` | required, max 250 |
+| `customerId` | Client | `CustomerSelect` (shared) | optional, paired with `orderItemId` |
+| `orderItemId` | Commande | `OrderItemSelect` | optional, paired with `customerId` |
+
+### `forms/ArticleContentForm/index.tsx`
+
+Step 2 of the creation wizard and edit form — content fields:
+
+| Field | Label | Component | Validation |
+| --- | --- | --- | --- |
 | `headline` | Accroche | `TextArea` | required, max 500 |
 | `body` | Contenu | `RichTextEditor` | required (non-empty HTML) |
+| `coverImage` | Image de couverture | `ImageUpload` | optional |
 
 The `body` field uses a rich text editor component (e.g., Tiptap or Quill wrapper). It is controlled separately from the Ant Design form instance.
+
+### `ui/ArticleCreateWizard/index.tsx`
+
+Orchestrates the multi-step creation flow using Ant Design `Steps`. Renders the active step form and navigation buttons (Précédent / Suivant / Soumettre). See "Multi-Step Creation Wizard" section for details.
+
+### `ui/ArticleCreateSummary/index.tsx`
+
+Read-only preview of all entered data (step 4). Displays category, title, slug, headline, body preview, tags, SEO fields. Includes the final "Soumettre" button.
 
 ### `forms/ArticleSeoForm/index.tsx`
 
@@ -490,7 +561,7 @@ Modal with file upload input and `EArticleImageType` selector. Calls `onUpload` 
 PageHeader (title="Articles", subtitle="Gérer les articles", icon, onCreate)
 TableToolbar (statusFilter, search input)
 Table (dataSource=items, columns, server-side pagination)
-CreateEditModal (create) — ArticleContentForm
+ArticleCreateWizard (modal/drawer) — multi-step creation flow
 CreateEditModal (edit) — ArticleContentForm
 ArticleWorkflowModal — conditional per workflow action
 ArticleSeoModal
@@ -568,7 +639,7 @@ Each page has a matching `index.module.scss`.
 - [ ] Create `UseArticlesList.ts` with JSDoc
 - [ ] Create `UseArticleDetail.ts` with JSDoc
 - [ ] Create `UseArticleWorkflow.ts` with JSDoc
-- [ ] Create `UseCreateArticle.ts` with JSDoc
+- [ ] Create `UseCreateArticleWizard.ts` with JSDoc
 - [ ] Create `UseUpdateArticle.ts` with JSDoc
 - [ ] Create `UseUpdateArticleSeo.ts` with JSDoc
 - [ ] Create `UseUpdateArticleTags.ts` with JSDoc
@@ -576,6 +647,9 @@ Each page has a matching `index.module.scss`.
 - [ ] Create `UseRejectArticle.ts` with JSDoc
 
 ### Components
+- [ ] Create `ArticleCreateWizard` with JSDoc
+- [ ] Create `ArticleCreateStep1Form` with JSDoc
+- [ ] Create `ArticleCreateSummary` with JSDoc
 - [ ] Create `ArticleContentForm` with JSDoc
 - [ ] Create `ArticleSeoForm` with JSDoc
 - [ ] Create `ArticleTagsForm` with JSDoc

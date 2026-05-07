@@ -1,12 +1,13 @@
 import type { ICommerceRepositoryPort } from "@/modules/commerce/application/repositories/commerce.repository.port";
+import type { ICommerceActionResponse } from "@/modules/commerce/domain/entities/ICommerceActionResponse";
 import type { IResultUseCase } from "@/shared/application/usecases/IUseCase";
 import type { Result } from "@/shared/domain/results/result";
 
 /**
  * @interface ICancelOrderUseCase
- * @extends {IResultUseCase<string, { isSuccess: boolean }>}
+ * @extends {IResultUseCase<string, ICommerceActionResponse>}
  */
-interface ICancelOrderUseCase extends IResultUseCase<string, { isSuccess: boolean }> {}
+interface ICancelOrderUseCase extends IResultUseCase<string, ICommerceActionResponse> {}
 
 /**
  * Use case for cancelling an order.
@@ -31,9 +32,9 @@ export class CancelOrderUseCase implements ICancelOrderUseCase {
      * Executes the cancel order use case.
      *
      * @param {string} id - The order ID to cancel
-     * @returns {Promise<Result<{ isSuccess: boolean }>>} `ok({ isSuccess: boolean })` on success, `err(Failure)` on failure
+     * @returns {Promise<Result<ICommerceActionResponse>>} `ok(ICommerceActionResponse)` on success, `err(Failure)` on failure
      */
-    async execute(id: string): Promise<Result<{ isSuccess: boolean }>> {
+    async execute(id: string): Promise<Result<ICommerceActionResponse>> {
         return this.commerceRepository.cancelOrder(id);
     }
 }

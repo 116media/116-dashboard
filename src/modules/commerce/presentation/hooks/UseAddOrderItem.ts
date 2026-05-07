@@ -49,7 +49,7 @@ export const useAddOrderItem = (
     const onSubmit = async (values: IAddOrderItemCredentials): Promise<void> => {
         if (!orderId) return;
 
-        const result = await dispatch(addItemToOrderAction({ orderId, ...values }));
+        const result = await dispatch(addItemToOrderAction({ orderId, data: values }));
 
         if (addItemToOrderAction.fulfilled.match(result)) {
             setSuccess(OrdersNotification.addItemSuccess.description);

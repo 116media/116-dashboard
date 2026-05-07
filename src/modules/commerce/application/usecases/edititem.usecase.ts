@@ -1,24 +1,16 @@
 import type { ICommerceRepositoryPort } from "@/modules/commerce/application/repositories/commerce.repository.port";
 import type { IOrderItemEntity } from "@/modules/commerce/domain/entities/IOrderItemEntity";
+import type { IEditItemCredentials } from "@/modules/commerce/presentation/model/IEditItemCredentials";
 import type { IResultUseCase } from "@/shared/application/usecases/IUseCase";
 import type { Result } from "@/shared/domain/results/result";
-import type { EnumCoreContentType } from "@/shared/infrastructure/api/generated/116.api";
 
 /**
  * @interface IEditItemUseCase
- * @extends {IResultUseCase<{ orderId: string; itemId: string; contentKind?: EnumCoreContentType; categoryId?: string; promotionLevelId?: string | null; socialBoost?: boolean; isBonus?: boolean }, IOrderItemEntity>}
+ * @extends {IResultUseCase<{ orderId: string; itemId: string; data: IEditItemCredentials }, IOrderItemEntity>}
  */
 interface IEditItemUseCase
     extends IResultUseCase<
-        {
-            orderId: string;
-            itemId: string;
-            contentKind?: EnumCoreContentType;
-            categoryId?: string;
-            promotionLevelId?: string | null;
-            socialBoost?: boolean;
-            isBonus?: boolean;
-        },
+        { orderId: string; itemId: string; data: IEditItemCredentials },
         IOrderItemEntity
     > {}
 
@@ -44,24 +36,10 @@ export class EditItemUseCase implements IEditItemUseCase {
     /**
      * Executes the edit item use case.
      *
-     * @param {object} params - Item edit parameters including orderId, itemId, and fields to update
+     * @param {object} request - Item edit parameters including orderId, itemId, and fields to update
      * @returns {Promise<Result<IOrderItemEntity>>} `ok(IOrderItemEntity)` on success, `err(Failure)` on failure
      */
-    async execute(params: {
-        orderId: string;
-        itemId: string;
-        contentKind?: EnumCoreContentType;
-        categoryId?: string;
-        promotionLevelId?: string | null;
-        socialBoost?: boolean;
-        isBonus?: boolean;
-    }): Promise<Result<IOrderItemEntity>> {
-        return this.commerceRepository.editItem(params.orderId, params.itemId, {
-            contentKind: params.contentKind,
-            categoryId: params.categoryId,
-            promotionLevelId: params.promotionLevelId,
-            socialBoost: params.socialBoost,
-            isBonus: params.isBonus
-        });
+    async execute(request: { orderId: string; itemId: string; data: IEditItemCredentials }): Promise<Result<IOrderItemEntity>> {
+        return this.commerceRepository.editItem(request.orderId, request.itemId, request.data);
     }
 }

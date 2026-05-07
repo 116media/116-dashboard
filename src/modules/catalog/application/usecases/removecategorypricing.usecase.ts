@@ -1,13 +1,14 @@
 import type { ICatalogRepositoryPort } from "@/modules/catalog/application/repositories/catalog.repository.port";
+import type { ICatalogActionResponse } from "@/modules/catalog/domain/entities/ICatalogActionResponse";
 import type { IResultUseCase } from "@/shared/application/usecases/IUseCase";
 import type { Result } from "@/shared/domain/results/result";
 
 /**
  * @interface IRemoveCategoryPricingUseCase
- * @extends {IResultUseCase<{ categoryId: string; pricingId: string }, { isSuccess: boolean }>}
+ * @extends {IResultUseCase<{ categoryId: string; pricingId: string }, ICatalogActionResponse>}
  */
 interface IRemoveCategoryPricingUseCase
-    extends IResultUseCase<{ categoryId: string; pricingId: string }, { isSuccess: boolean }> {}
+    extends IResultUseCase<{ categoryId: string; pricingId: string }, ICatalogActionResponse> {}
 
 /**
  * Use case for removing a pricing tier from a category.
@@ -30,13 +31,10 @@ export class RemoveCategoryPricingUseCase implements IRemoveCategoryPricingUseCa
     /**
      * Executes the remove category pricing use case.
      *
-     * @param {object} params - The category ID and pricing ID to remove
-     * @returns {Promise<Result<{ isSuccess: boolean }>>} `ok({ isSuccess: boolean })` on success, `err(Failure)` on failure
+     * @param {object} request - The category ID and pricing ID to remove
+     * @returns {Promise<Result<ICatalogActionResponse>>} `ok(ICatalogActionResponse)` on success, `err(Failure)` on failure
      */
-    async execute(params: {
-        categoryId: string;
-        pricingId: string;
-    }): Promise<Result<{ isSuccess: boolean }>> {
-        return this.catalogRepository.removeCategoryPricing(params.categoryId, params.pricingId);
+    async execute(request: { categoryId: string; pricingId: string }): Promise<Result<ICatalogActionResponse>> {
+        return this.catalogRepository.removeCategoryPricing(request.categoryId, request.pricingId);
     }
 }

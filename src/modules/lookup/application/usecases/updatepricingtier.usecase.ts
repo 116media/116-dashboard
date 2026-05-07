@@ -1,15 +1,16 @@
 import type { ILookupRepositoryPort } from "@/modules/lookup/application/repositories/lookup.repository.port";
 import type { IPricingTierEntity } from "@/modules/lookup/domain/entities/IPricingTierEntity";
+import type { IUpdatePricingTierCredentials } from "@/modules/lookup/presentation/model/IUpdatePricingTierCredentials";
 import type { IResultUseCase } from "@/shared/application/usecases/IUseCase";
 import type { Result } from "@/shared/domain/results/result";
 
 /**
  * @interface IUpdatePricingTierUseCase
- * @extends {IResultUseCase<{ id: string; data: { name: string; description: string } }, IPricingTierEntity>}
+ * @extends {IResultUseCase<{ id: string; data: IUpdatePricingTierCredentials }, IPricingTierEntity>}
  */
 interface IUpdatePricingTierUseCase
     extends IResultUseCase<
-        { id: string; data: { name: string; description: string } },
+        { id: string; data: IUpdatePricingTierCredentials },
         IPricingTierEntity
     > {}
 
@@ -37,7 +38,7 @@ export class UpdatePricingTierUseCase implements IUpdatePricingTierUseCase {
      */
     async execute(input: {
         id: string;
-        data: { name: string; description: string };
+        data: IUpdatePricingTierCredentials;
     }): Promise<Result<IPricingTierEntity>> {
         return this.lookupRepository.updatePricingTier(input.id, input.data);
     }

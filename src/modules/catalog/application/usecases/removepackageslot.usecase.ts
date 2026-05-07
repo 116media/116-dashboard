@@ -1,13 +1,14 @@
 import type { ICatalogRepositoryPort } from "@/modules/catalog/application/repositories/catalog.repository.port";
+import type { ICatalogActionResponse } from "@/modules/catalog/domain/entities/ICatalogActionResponse";
 import type { IResultUseCase } from "@/shared/application/usecases/IUseCase";
 import type { Result } from "@/shared/domain/results/result";
 
 /**
  * @interface IRemovePackageSlotUseCase
- * @extends {IResultUseCase<{ packageId: string; slotId: string }, { isSuccess: boolean }>}
+ * @extends {IResultUseCase<{ packageId: string; slotId: string }, ICatalogActionResponse>}
  */
 interface IRemovePackageSlotUseCase
-    extends IResultUseCase<{ packageId: string; slotId: string }, { isSuccess: boolean }> {}
+    extends IResultUseCase<{ packageId: string; slotId: string }, ICatalogActionResponse> {}
 
 /**
  * Use case for removing a slot from a package.
@@ -30,13 +31,10 @@ export class RemovePackageSlotUseCase implements IRemovePackageSlotUseCase {
     /**
      * Executes the remove package slot use case.
      *
-     * @param {object} params - The package ID and slot ID to remove
-     * @returns {Promise<Result<{ isSuccess: boolean }>>} `ok({ isSuccess: boolean })` on success, `err(Failure)` on failure
+     * @param {object} request - The package ID and slot ID to remove
+     * @returns {Promise<Result<ICatalogActionResponse>>} `ok(ICatalogActionResponse)` on success, `err(Failure)` on failure
      */
-    async execute(params: {
-        packageId: string;
-        slotId: string;
-    }): Promise<Result<{ isSuccess: boolean }>> {
-        return this.catalogRepository.removePackageSlot(params.packageId, params.slotId);
+    async execute(request: { packageId: string; slotId: string }): Promise<Result<ICatalogActionResponse>> {
+        return this.catalogRepository.removePackageSlot(request.packageId, request.slotId);
     }
 }

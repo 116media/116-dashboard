@@ -1,15 +1,16 @@
 import type { ICatalogRepositoryPort } from "@/modules/catalog/application/repositories/catalog.repository.port";
 import type { IPackageSlotEntity } from "@/modules/catalog/domain/entities/IPackageSlotEntity";
+import type { IAddPackageSlotCredentials } from "@/modules/catalog/presentation/model/IAddPackageSlotCredentials";
 import type { IResultUseCase } from "@/shared/application/usecases/IUseCase";
 import type { Result } from "@/shared/domain/results/result";
 
 /**
  * @interface IAddPackageSlotUseCase
- * @extends {IResultUseCase<{ packageId: string; data: { categoryId: string; isRequired: boolean; quantity: number } }, IPackageSlotEntity>}
+ * @extends {IResultUseCase<{ packageId: string; data: IAddPackageSlotCredentials }, IPackageSlotEntity>}
  */
 interface IAddPackageSlotUseCase
     extends IResultUseCase<
-        { packageId: string; data: { categoryId: string; isRequired: boolean; quantity: number } },
+        { packageId: string; data: IAddPackageSlotCredentials },
         IPackageSlotEntity
     > {}
 
@@ -34,13 +35,10 @@ export class AddPackageSlotUseCase implements IAddPackageSlotUseCase {
     /**
      * Executes the add package slot use case.
      *
-     * @param {object} params - The package ID and slot data
+     * @param {object} request - The package ID and slot data
      * @returns {Promise<Result<IPackageSlotEntity>>} `ok(IPackageSlotEntity)` on success, `err(Failure)` on failure
      */
-    async execute(params: {
-        packageId: string;
-        data: { categoryId: string; isRequired: boolean; quantity: number };
-    }): Promise<Result<IPackageSlotEntity>> {
-        return this.catalogRepository.addPackageSlot(params.packageId, params.data);
+    async execute(request: { packageId: string; data: IAddPackageSlotCredentials }): Promise<Result<IPackageSlotEntity>> {
+        return this.catalogRepository.addPackageSlot(request.packageId, request.data);
     }
 }

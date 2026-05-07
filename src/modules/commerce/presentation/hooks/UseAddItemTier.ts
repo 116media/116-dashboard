@@ -55,7 +55,7 @@ export const useAddItemTier = (
             addTierToItemAction({
                 orderId,
                 itemId,
-                pricingTierId: values.pricingTierId
+                data: values
             })
         );
 

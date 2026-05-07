@@ -1,4 +1,19 @@
 import { createContainer, InjectionMode } from "awilix";
+import type { IArticlesRepositoryPort } from "@/modules/articles/application/repositories/articles.repository.port";
+import type { ApproveArticleUseCase } from "@/modules/articles/application/usecases/approvearticle.usecase";
+import type { ArchiveArticleUseCase } from "@/modules/articles/application/usecases/archivearticle.usecase";
+import type { CreateArticleUseCase } from "@/modules/articles/application/usecases/createarticle.usecase";
+import type { DeleteArticleUseCase } from "@/modules/articles/application/usecases/deletearticle.usecase";
+import type { GetAllArticlesUseCase } from "@/modules/articles/application/usecases/getallarticles.usecase";
+import type { GetArticleByIdUseCase } from "@/modules/articles/application/usecases/getarticlebyid.usecase";
+import type { PublishArticleUseCase } from "@/modules/articles/application/usecases/publisharticle.usecase";
+import type { RejectArticleUseCase } from "@/modules/articles/application/usecases/rejectarticle.usecase";
+import type { SubmitArticleUseCase } from "@/modules/articles/application/usecases/submitarticle.usecase";
+import type { UpdateArticleUseCase } from "@/modules/articles/application/usecases/updatearticle.usecase";
+import type { UpdateArticleSeoUseCase } from "@/modules/articles/application/usecases/updatearticleseo.usecase";
+import type { UpdateArticleTagsUseCase } from "@/modules/articles/application/usecases/updatearticletags.usecase";
+import type { UploadArticleImageUseCase } from "@/modules/articles/application/usecases/uploadarticleimage.usecase";
+import { registerArticlesDependencies } from "@/modules/articles/infrastructure/dependencies/articles.dependencies";
 import type { IAuthRepositoryPort } from "@/modules/auth/application/repositories/auth.repository.port";
 import type { ForgotPasswordUseCase } from "@/modules/auth/application/usecases/forgotpassword.usecase";
 import type { LoginUseCase } from "@/modules/auth/application/usecases/login.usecase";
@@ -71,6 +86,12 @@ import type { UpdatePricingTierUseCase } from "@/modules/lookup/application/usec
 import type { UpdatePromotionLevelUseCase } from "@/modules/lookup/application/usecases/updatepromotionlevel.usecase";
 import type { UpdateTagUseCase } from "@/modules/lookup/application/usecases/updatetag.usecase";
 import { registerLookupDependencies } from "@/modules/lookup/infrastructure/dependencies/lookup.dependencies";
+import type { ILyricsRepositoryPort } from "@/modules/lyrics/application/repositories/lyrics.repository.port";
+import type { CreateLyricsUseCase } from "@/modules/lyrics/application/usecases/createlyrics.usecase";
+import type { GetAllLyricsUseCase } from "@/modules/lyrics/application/usecases/getalllyrics.usecase";
+import type { UpdateLyricsUseCase } from "@/modules/lyrics/application/usecases/updatelyrics.usecase";
+import type { UpdateLyricsSeoUseCase } from "@/modules/lyrics/application/usecases/updatelyricsseo.usecase";
+import { registerLyricsDependencies } from "@/modules/lyrics/infrastructure/dependencies/lyrics.dependencies";
 import type { IPermissionsRepositoryPort } from "@/modules/permissions/application/repositories/permissions.repository.port";
 import type { ActivatePermissionUseCase } from "@/modules/permissions/application/usecases/activatepermission.usecase";
 import type { CreatePermissionUseCase } from "@/modules/permissions/application/usecases/createpermission.usecase";
@@ -96,6 +117,32 @@ import type { RestoreRoleUseCase } from "@/modules/roles/application/usecases/re
 import type { SoftDeleteRoleUseCase } from "@/modules/roles/application/usecases/softdeleterole.usecase";
 import type { UpdateRoleUseCase } from "@/modules/roles/application/usecases/updaterole.usecase";
 import { registerRolesDependencies } from "@/modules/roles/infrastructure/dependencies/roles.dependencies";
+import type { IShortsRepositoryPort } from "@/modules/shorts/application/repositories/shorts.repository.port";
+import type { ActivateShortUseCase } from "@/modules/shorts/application/usecases/activateshort.usecase";
+import type { CreateShortUseCase } from "@/modules/shorts/application/usecases/createshort.usecase";
+import type { DeactivateShortUseCase } from "@/modules/shorts/application/usecases/deactivateshort.usecase";
+import type { DeleteShortUseCase } from "@/modules/shorts/application/usecases/deleteshort.usecase";
+import type { GetAllShortsUseCase } from "@/modules/shorts/application/usecases/getallshorts.usecase";
+import type { GetShortByIdUseCase } from "@/modules/shorts/application/usecases/getshortbyid.usecase";
+import type { UploadShortThumbnailUseCase } from "@/modules/shorts/application/usecases/uploadshortthumbnail.usecase";
+import { registerShortsDependencies } from "@/modules/shorts/infrastructure/dependencies/shorts.dependencies";
+import type { IVideosRepositoryPort } from "@/modules/videos/application/repositories/videos.repository.port";
+import type { ApproveVideoUseCase } from "@/modules/videos/application/usecases/approvevideo.usecase";
+import type { ArchiveVideoUseCase } from "@/modules/videos/application/usecases/archivevideo.usecase";
+import type { AttachYoutubeIdUseCase } from "@/modules/videos/application/usecases/attachyoutubeid.usecase";
+import type { CreateVideoUseCase } from "@/modules/videos/application/usecases/createvideo.usecase";
+import type { DeleteVideoUseCase } from "@/modules/videos/application/usecases/deletevideo.usecase";
+import type { GetAllVideosUseCase } from "@/modules/videos/application/usecases/getallvideos.usecase";
+import type { GetVideoByIdUseCase } from "@/modules/videos/application/usecases/getvideobyid.usecase";
+import type { PublishVideoUseCase } from "@/modules/videos/application/usecases/publishvideo.usecase";
+import type { RejectVideoUseCase } from "@/modules/videos/application/usecases/rejectvideo.usecase";
+import type { ScheduleShootUseCase } from "@/modules/videos/application/usecases/scheduleshoot.usecase";
+import type { SubmitVideoUseCase } from "@/modules/videos/application/usecases/submitvideo.usecase";
+import type { UpdateVideoUseCase } from "@/modules/videos/application/usecases/updatevideo.usecase";
+import type { UpdateVideoSeoUseCase } from "@/modules/videos/application/usecases/updatevideoseo.usecase";
+import type { UpdateVideoTagsUseCase } from "@/modules/videos/application/usecases/updatevideotags.usecase";
+import type { UploadVideoThumbnailUseCase } from "@/modules/videos/application/usecases/uploadvideothumbnail.usecase";
+import { registerVideosDependencies } from "@/modules/videos/infrastructure/dependencies/videos.dependencies";
 import type { IDeviceStorageDataSource } from "@/platform/session/application/data-sources/device.storage.datasource.port";
 import type { IDeviceRepositoryPort } from "@/platform/session/application/repositories/device.repository.port";
 import type { SessionRepositoryPort } from "@/platform/session/application/repositories/session.repository.port";
@@ -262,6 +309,65 @@ export interface Cradle {
     listPendingPaymentOrdersUseCase: ListPendingPaymentOrdersUseCase;
     getCustomerOrdersUseCase: GetCustomerOrdersUseCase;
     listPaymentsUseCase: ListPaymentsUseCase;
+
+    // Articles repository
+    articlesRepository: IArticlesRepositoryPort;
+
+    // Articles use cases
+    getAllArticlesUseCase: GetAllArticlesUseCase;
+    getArticleByIdUseCase: GetArticleByIdUseCase;
+    createArticleUseCase: CreateArticleUseCase;
+    updateArticleUseCase: UpdateArticleUseCase;
+    submitArticleUseCase: SubmitArticleUseCase;
+    approveArticleUseCase: ApproveArticleUseCase;
+    publishArticleUseCase: PublishArticleUseCase;
+    rejectArticleUseCase: RejectArticleUseCase;
+    archiveArticleUseCase: ArchiveArticleUseCase;
+    deleteArticleUseCase: DeleteArticleUseCase;
+    uploadArticleImageUseCase: UploadArticleImageUseCase;
+    updateArticleSeoUseCase: UpdateArticleSeoUseCase;
+    updateArticleTagsUseCase: UpdateArticleTagsUseCase;
+
+    // Videos repository
+    videosRepository: IVideosRepositoryPort;
+
+    // Videos use cases
+    getAllVideosUseCase: GetAllVideosUseCase;
+    getVideoByIdUseCase: GetVideoByIdUseCase;
+    createVideoUseCase: CreateVideoUseCase;
+    updateVideoUseCase: UpdateVideoUseCase;
+    submitVideoUseCase: SubmitVideoUseCase;
+    approveVideoUseCase: ApproveVideoUseCase;
+    publishVideoUseCase: PublishVideoUseCase;
+    rejectVideoUseCase: RejectVideoUseCase;
+    archiveVideoUseCase: ArchiveVideoUseCase;
+    deleteVideoUseCase: DeleteVideoUseCase;
+    uploadVideoThumbnailUseCase: UploadVideoThumbnailUseCase;
+    attachYoutubeIdUseCase: AttachYoutubeIdUseCase;
+    updateVideoSeoUseCase: UpdateVideoSeoUseCase;
+    updateVideoTagsUseCase: UpdateVideoTagsUseCase;
+    scheduleShootUseCase: ScheduleShootUseCase;
+
+    // Shorts repository
+    shortsRepository: IShortsRepositoryPort;
+
+    // Shorts use cases
+    getAllShortsUseCase: GetAllShortsUseCase;
+    getShortByIdUseCase: GetShortByIdUseCase;
+    createShortUseCase: CreateShortUseCase;
+    activateShortUseCase: ActivateShortUseCase;
+    deactivateShortUseCase: DeactivateShortUseCase;
+    deleteShortUseCase: DeleteShortUseCase;
+    uploadShortThumbnailUseCase: UploadShortThumbnailUseCase;
+
+    // Lyrics repository
+    lyricsRepository: ILyricsRepositoryPort;
+
+    // Lyrics use cases
+    getAllLyricsUseCase: GetAllLyricsUseCase;
+    createLyricsUseCase: CreateLyricsUseCase;
+    updateLyricsUseCase: UpdateLyricsUseCase;
+    updateLyricsSeoUseCase: UpdateLyricsSeoUseCase;
 }
 
 /**
@@ -285,5 +391,9 @@ registerPermissionsDependencies(container);
 registerLookupDependencies(container);
 registerCatalogDependencies(container);
 registerCommerceDependencies(container);
+registerArticlesDependencies(container);
+registerVideosDependencies(container);
+registerShortsDependencies(container);
+registerLyricsDependencies(container);
 
 export default container;

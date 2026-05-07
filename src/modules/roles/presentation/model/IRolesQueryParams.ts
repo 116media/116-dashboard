@@ -1,17 +1,15 @@
+import type { IPaginationParams } from "@/shared/domain/types/pagination";
+
 /**
  * Query parameters for the paginated roles list.
  *
  * @interface IRolesQueryParams
- * @property {number} pageIndex - Zero-based page index
- * @property {number} pageSize - Items per page
- * @property {string} [search] - Full-text search on name and description
+ * @extends {IPaginationParams}
+ *
  * @property {boolean} [isActive] - Filter by active status
  * @property {boolean} [isDeleted] - Filter by deleted status
  */
-export interface IRolesQueryParams {
-    pageIndex: number;
-    pageSize: number;
-    search?: string;
+export interface IRolesQueryParams extends IPaginationParams {
     isActive?: boolean;
     isDeleted?: boolean;
 }

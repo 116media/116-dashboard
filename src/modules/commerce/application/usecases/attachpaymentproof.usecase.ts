@@ -1,19 +1,15 @@
 import type { ICommerceRepositoryPort } from "@/modules/commerce/application/repositories/commerce.repository.port";
+import type { IAttachPaymentProofData } from "@/modules/commerce/presentation/model/IAttachPaymentProofData";
 import type { IResultUseCase } from "@/shared/application/usecases/IUseCase";
 import type { Result } from "@/shared/domain/results/result";
-import type { EnumPaymentMethod } from "@/shared/infrastructure/api/generated/116.api";
 
 /**
  * @interface IAttachPaymentProofUseCase
- * @extends {IResultUseCase<{ orderId: string; file: File; paymentMethod: EnumPaymentMethod }, { id: string; fileName: string; storageUrl: string }>}
+ * @extends {IResultUseCase<{ orderId: string; data: IAttachPaymentProofData }, { id: string; fileName: string; storageUrl: string }>}
  */
 interface IAttachPaymentProofUseCase
     extends IResultUseCase<
-        {
-            orderId: string;
-            file: File;
-            paymentMethod: EnumPaymentMethod;
-        },
+        { orderId: string; data: IAttachPaymentProofData },
         { id: string; fileName: string; storageUrl: string }
     > {}
 
@@ -40,17 +36,10 @@ export class AttachPaymentProofUseCase implements IAttachPaymentProofUseCase {
     /**
      * Executes the attach payment proof use case.
      *
-     * @param {object} params - Payment proof parameters including orderId, file, and paymentMethod
+     * @param {object} request - Payment proof parameters including orderId, file, and paymentMethod
      * @returns {Promise<Result<{ id: string; fileName: string; storageUrl: string }>>} `ok({ id, fileName, storageUrl })` on success, `err(Failure)` on failure
      */
-    async execute(params: {
-        orderId: string;
-        file: File;
-        paymentMethod: EnumPaymentMethod;
-    }): Promise<Result<{ id: string; fileName: string; storageUrl: string }>> {
-        return this.commerceRepository.attachPaymentProof(params.orderId, {
-            file: params.file,
-            paymentMethod: params.paymentMethod
-        });
+    async execute(request: { orderId: string; data: IAttachPaymentProofData }): Promise<Result<{ id: string; fileName: string; storageUrl: string }>> {
+        return this.commerceRepository.attachPaymentProof(request.orderId, request.data);
     }
 }

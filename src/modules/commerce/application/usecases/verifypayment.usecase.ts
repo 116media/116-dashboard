@@ -1,13 +1,18 @@
 import type { ICommerceRepositoryPort } from "@/modules/commerce/application/repositories/commerce.repository.port";
+import type { ICommerceActionResponse } from "@/modules/commerce/domain/entities/ICommerceActionResponse";
+import type { IVerifyPaymentCredentials } from "@/modules/commerce/presentation/model/IVerifyPaymentCredentials";
 import type { IResultUseCase } from "@/shared/application/usecases/IUseCase";
 import type { Result } from "@/shared/domain/results/result";
 
 /**
  * @interface IVerifyPaymentUseCase
- * @extends {IResultUseCase<{ orderId: string; receiptUrl: string }, { isSuccess: boolean }>}
+ * @extends {IResultUseCase<{ orderId: string; data: IVerifyPaymentCredentials }, ICommerceActionResponse>}
  */
 interface IVerifyPaymentUseCase
-    extends IResultUseCase<{ orderId: string; receiptUrl: string }, { isSuccess: boolean }> {}
+    extends IResultUseCase<
+        { orderId: string; data: IVerifyPaymentCredentials },
+        ICommerceActionResponse
+    > {}
 
 /**
  * Use case for verifying an order payment.
@@ -31,15 +36,10 @@ export class VerifyPaymentUseCase implements IVerifyPaymentUseCase {
     /**
      * Executes the verify payment use case.
      *
-     * @param {object} params - Verification parameters including orderId and receiptUrl
-     * @returns {Promise<Result<{ isSuccess: boolean }>>} `ok({ isSuccess: boolean })` on success, `err(Failure)` on failure
+     * @param {object} request - Verification parameters including orderId and receiptUrl
+     * @returns {Promise<Result<ICommerceActionResponse>>} `ok(ICommerceActionResponse)` on success, `err(Failure)` on failure
      */
-    async execute(params: {
-        orderId: string;
-        receiptUrl: string;
-    }): Promise<Result<{ isSuccess: boolean }>> {
-        return this.commerceRepository.verifyPayment(params.orderId, {
-            receiptUrl: params.receiptUrl
-        });
+    async execute(request: { orderId: string; data: IVerifyPaymentCredentials }): Promise<Result<ICommerceActionResponse>> {
+        return this.commerceRepository.verifyPayment(request.orderId, request.data);
     }
 }

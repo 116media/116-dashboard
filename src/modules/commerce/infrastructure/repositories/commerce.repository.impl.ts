@@ -1,4 +1,5 @@
 import type { ICommerceRepositoryPort } from "@/modules/commerce/application/repositories/commerce.repository.port";
+import type { ICommerceActionResponse } from "@/modules/commerce/domain/entities/ICommerceActionResponse";
 import type { IItemTierEntity } from "@/modules/commerce/domain/entities/IItemTierEntity";
 import type { IOrderDetailEntity } from "@/modules/commerce/domain/entities/IOrderDetailEntity";
 import type { IOrderItemEntity } from "@/modules/commerce/domain/entities/IOrderItemEntity";
@@ -6,26 +7,28 @@ import type { IOrderSummaryEntity } from "@/modules/commerce/domain/entities/IOr
 import type { IPaymentEntity } from "@/modules/commerce/domain/entities/IPaymentEntity";
 import type { IPaymentSummaryEntity } from "@/modules/commerce/domain/entities/IPaymentSummaryEntity";
 import { CommerceMapper } from "@/modules/commerce/infrastructure/mappers/commerce.mapper";
+import type { IAddItemTierCredentials } from "@/modules/commerce/presentation/model/IAddItemTierCredentials";
+import type { IAddOrderItemCredentials } from "@/modules/commerce/presentation/model/IAddOrderItemCredentials";
+import type { IAttachPaymentProofData } from "@/modules/commerce/presentation/model/IAttachPaymentProofData";
+import type { ICreateOrderCredentials } from "@/modules/commerce/presentation/model/ICreateOrderCredentials";
+import type { IEditItemCredentials } from "@/modules/commerce/presentation/model/IEditItemCredentials";
+import type { IEditOrderCredentials } from "@/modules/commerce/presentation/model/IEditOrderCredentials";
+import type { IOrdersQueryParams } from "@/modules/commerce/presentation/model/IOrdersQueryParams";
+import type { IPaginationQueryParams } from "@/modules/commerce/presentation/model/IPaginationQueryParams";
+import type { IPaymentsQueryParams } from "@/modules/commerce/presentation/model/IPaymentsQueryParams";
+import type { IRejectPaymentCredentials } from "@/modules/commerce/presentation/model/IRejectPaymentCredentials";
+import type { IVerifyPaymentCredentials } from "@/modules/commerce/presentation/model/IVerifyPaymentCredentials";
 import type { Result } from "@/shared/domain/results/result";
 import { err, ok } from "@/shared/domain/results/result";
 import type { IPaginatedResult } from "@/shared/domain/types/pagination";
 import { apiClient } from "@/shared/infrastructure/api/client";
-import type {
-    EnumCoreContentType,
-    EnumOrderStatus,
-    EnumPaymentMethod,
-    EnumPaymentStatus
-} from "@/shared/infrastructure/api/generated/116.api";
 import { ProblemMapper } from "@/shared/infrastructure/mappers/problem.mapper";
 
 /**
  * Commerce repository implementation using REST API.
  */
 export class CommerceRepositoryImpl implements ICommerceRepositoryPort {
-    async createOrder(data: {
-        customerId: string;
-        packageId?: string | null;
-    }): Promise<Result<IOrderSummaryEntity>> {
+    async createOrder(data: ICreateOrderCredentials): Promise<Result<IOrderSummaryEntity>> {
         try {
             const response = await apiClient.api.adminCreateOrder(data);
             return ok(CommerceMapper.orderSummaryFromDto(response.data.order));
@@ -36,13 +39,7 @@ export class CommerceRepositoryImpl implements ICommerceRepositoryPort {
 
     async addItemToOrder(
         orderId: string,
-        data: {
-            contentKind: EnumCoreContentType;
-            categoryId: string;
-            promotionLevelId?: string | null;
-            socialBoost: boolean;
-            isBonus: boolean;
-        }
+        data: IAddOrderItemCredentials
     ): Promise<Result<IOrderItemEntity>> {
         try {
             const response = await apiClient.api.adminAddOrderItem(orderId, data);
@@ -55,7 +52,7 @@ export class CommerceRepositoryImpl implements ICommerceRepositoryPort {
     async addTierToItem(
         orderId: string,
         itemId: string,
-        data: { pricingTierId: string }
+        data: IAddItemTierCredentials
     ): Promise<Result<IItemTierEntity>> {
         try {
             const response = await apiClient.api.adminAddItemTier(orderId, itemId, data);
@@ -65,7 +62,7 @@ export class CommerceRepositoryImpl implements ICommerceRepositoryPort {
         }
     }
 
-    async submitOrder(id: string): Promise<Result<{ isSuccess: boolean }>> {
+    async submitOrder(id: string): Promise<Result<ICommerceActionResponse>> {
         try {
             const response = await apiClient.api.adminSubmitOrder(id);
             return ok({ isSuccess: response.data.isSuccess });
@@ -74,7 +71,7 @@ export class CommerceRepositoryImpl implements ICommerceRepositoryPort {
         }
     }
 
-    async cancelOrder(id: string): Promise<Result<{ isSuccess: boolean }>> {
+    async cancelOrder(id: string): Promise<Result<ICommerceActionResponse>> {
         try {
             const response = await apiClient.api.adminCancelOrder(id);
             return ok({ isSuccess: response.data.isSuccess });
@@ -85,7 +82,7 @@ export class CommerceRepositoryImpl implements ICommerceRepositoryPort {
 
     async attachPaymentProof(
         orderId: string,
-        data: { file: File; paymentMethod: EnumPaymentMethod }
+        data: IAttachPaymentProofData
     ): Promise<Result<{ id: string; fileName: string; storageUrl: string }>> {
         try {
             const response = await apiClient.api.adminAttachPaymentProof(
@@ -106,8 +103,8 @@ export class CommerceRepositoryImpl implements ICommerceRepositoryPort {
 
     async verifyPayment(
         orderId: string,
-        data: { receiptUrl: string }
-    ): Promise<Result<{ isSuccess: boolean }>> {
+        data: IVerifyPaymentCredentials
+    ): Promise<Result<ICommerceActionResponse>> {
         try {
             const response = await apiClient.api.adminVerifyPayment(orderId, data);
             return ok({ isSuccess: response.data.isSuccess });
@@ -118,8 +115,8 @@ export class CommerceRepositoryImpl implements ICommerceRepositoryPort {
 
     async rejectPayment(
         orderId: string,
-        data: { notes?: string | null }
-    ): Promise<Result<{ isSuccess: boolean }>> {
+        data: IRejectPaymentCredentials
+    ): Promise<Result<ICommerceActionResponse>> {
         try {
             const response = await apiClient.api.adminRejectPayment(orderId, data);
             return ok({ isSuccess: response.data.isSuccess });
@@ -128,13 +125,9 @@ export class CommerceRepositoryImpl implements ICommerceRepositoryPort {
         }
     }
 
-    async listOrders(params: {
-        pageIndex: number;
-        pageSize: number;
-        status?: EnumOrderStatus;
-        customerId?: string;
-        search?: string;
-    }): Promise<Result<IPaginatedResult<IOrderSummaryEntity>>> {
+    async listOrders(
+        params: IOrdersQueryParams
+    ): Promise<Result<IPaginatedResult<IOrderSummaryEntity>>> {
         try {
             const response = await apiClient.api.adminGetAllOrders({
                 pageIndex: params.pageIndex,
@@ -173,10 +166,9 @@ export class CommerceRepositoryImpl implements ICommerceRepositoryPort {
         }
     }
 
-    async listPendingPaymentOrders(params: {
-        pageIndex: number;
-        pageSize: number;
-    }): Promise<Result<IPaginatedResult<IOrderSummaryEntity>>> {
+    async listPendingPaymentOrders(
+        params: IPaginationQueryParams
+    ): Promise<Result<IPaginatedResult<IOrderSummaryEntity>>> {
         try {
             const response = await apiClient.api.adminGetPendingPaymentOrders({
                 pageIndex: params.pageIndex,
@@ -196,7 +188,7 @@ export class CommerceRepositoryImpl implements ICommerceRepositoryPort {
 
     async getCustomerOrders(
         customerId: string,
-        params: { pageIndex: number; pageSize: number }
+        params: IPaginationQueryParams
     ): Promise<Result<IPaginatedResult<IOrderSummaryEntity>>> {
         try {
             const response = await apiClient.api.adminGetCustomerOrders(customerId, {
@@ -215,13 +207,9 @@ export class CommerceRepositoryImpl implements ICommerceRepositoryPort {
         }
     }
 
-    async listPayments(params: {
-        pageIndex: number;
-        pageSize: number;
-        status?: EnumPaymentStatus;
-        method?: EnumPaymentMethod;
-        search?: string;
-    }): Promise<Result<IPaginatedResult<IPaymentSummaryEntity>>> {
+    async listPayments(
+        params: IPaymentsQueryParams
+    ): Promise<Result<IPaginatedResult<IPaymentSummaryEntity>>> {
         try {
             const response = await apiClient.instance.get("/api/v1/admin/payments", {
                 params: {
@@ -244,10 +232,7 @@ export class CommerceRepositoryImpl implements ICommerceRepositoryPort {
         }
     }
 
-    async editOrder(
-        id: string,
-        data: { customerId?: string; packageId?: string | null }
-    ): Promise<Result<IOrderSummaryEntity>> {
+    async editOrder(id: string, data: IEditOrderCredentials): Promise<Result<IOrderSummaryEntity>> {
         try {
             const response = await apiClient.instance.patch(`/api/v1/admin/orders/${id}`, data);
             return ok(CommerceMapper.orderSummaryFromDto(response.data.order));
@@ -256,7 +241,7 @@ export class CommerceRepositoryImpl implements ICommerceRepositoryPort {
         }
     }
 
-    async removeItem(orderId: string, itemId: string): Promise<Result<{ isSuccess: boolean }>> {
+    async removeItem(orderId: string, itemId: string): Promise<Result<ICommerceActionResponse>> {
         try {
             const response = await apiClient.instance.delete(
                 `/api/v1/admin/orders/${orderId}/items/${itemId}`
@@ -271,7 +256,7 @@ export class CommerceRepositoryImpl implements ICommerceRepositoryPort {
         orderId: string,
         itemId: string,
         tierId: string
-    ): Promise<Result<{ isSuccess: boolean }>> {
+    ): Promise<Result<ICommerceActionResponse>> {
         try {
             const response = await apiClient.instance.delete(
                 `/api/v1/admin/orders/${orderId}/items/${itemId}/tiers/${tierId}`
@@ -285,13 +270,7 @@ export class CommerceRepositoryImpl implements ICommerceRepositoryPort {
     async editItem(
         orderId: string,
         itemId: string,
-        data: {
-            contentKind?: EnumCoreContentType;
-            categoryId?: string;
-            promotionLevelId?: string | null;
-            socialBoost?: boolean;
-            isBonus?: boolean;
-        }
+        data: IEditItemCredentials
     ): Promise<Result<IOrderItemEntity>> {
         try {
             const response = await apiClient.instance.patch(

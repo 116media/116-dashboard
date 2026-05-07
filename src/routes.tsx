@@ -9,6 +9,7 @@ import {
     CATALOG_PATH,
     FORGOT_PASSWORD_PATH,
     LOGIN_PATH,
+    LYRICS_PATH,
     NOT_FOUND_PATH,
     ORDER_DETAIL_PATH,
     ORDERS_PATH,
@@ -17,6 +18,7 @@ import {
     REFERENCES_PATH,
     ROLES_PATH,
     SETTING_PATH,
+    SHORTS_PATH,
     USER_PATH,
     VIDEO_PATH
 } from "@/shared/presentation/constants/paths";
@@ -46,6 +48,8 @@ const LookupPage = lazy(() => import("@/modules/lookup/presentation/pages/Lookup
 const CatalogPage = lazy(() => import("@/modules/catalog/presentation/pages/CatalogPage"));
 const CommercePage = lazy(() => import("@/modules/commerce/presentation/pages/CommercePage"));
 const OrderDetailPage = lazy(() => import("@/modules/commerce/presentation/pages/OrderDetailPage"));
+const ShortsPage = lazy(() => import("@/modules/shorts/presentation/pages/ShortsPage"));
+const LyricsPage = lazy(() => import("@/modules/lyrics/presentation/pages/LyricsPage"));
 
 const guestRoutes: RouteObject[] = [
     {
@@ -157,6 +161,22 @@ const protectedRoutes: RouteObject[] = [
                             { path: `${ORDER_DETAIL_PATH}/:id`, element: <OrderDetailPage /> },
                             { path: `${ORDERS_PATH}/:tab?`, element: <CommercePage /> }
                         ]
+                    },
+                    {
+                        element: (
+                            <PermissionRoute
+                                permissions={[{ resource: "shorts", action: "read" }]}
+                            />
+                        ),
+                        children: [{ path: SHORTS_PATH, element: <ShortsPage /> }]
+                    },
+                    {
+                        element: (
+                            <PermissionRoute
+                                permissions={[{ resource: "lyrics", action: "read" }]}
+                            />
+                        ),
+                        children: [{ path: LYRICS_PATH, element: <LyricsPage /> }]
                     }
                 ]
             }

@@ -1,23 +1,15 @@
 import type { ICatalogRepositoryPort } from "@/modules/catalog/application/repositories/catalog.repository.port";
 import type { ICategoryEntity } from "@/modules/catalog/domain/entities/ICategoryEntity";
+import type { ICreateCategoryCredentials } from "@/modules/catalog/presentation/model/ICreateCategoryCredentials";
 import type { IResultUseCase } from "@/shared/application/usecases/IUseCase";
 import type { Result } from "@/shared/domain/results/result";
 
 /**
  * @interface ICreateCategoryUseCase
- * @extends {IResultUseCase<{ contentTypeId: string; name: string; slug: string; description: string; isFree: boolean }, ICategoryEntity>}
+ * @extends {IResultUseCase<ICreateCategoryCredentials, ICategoryEntity>}
  */
 interface ICreateCategoryUseCase
-    extends IResultUseCase<
-        {
-            contentTypeId: string;
-            name: string;
-            slug: string;
-            description: string;
-            isFree: boolean;
-        },
-        ICategoryEntity
-    > {}
+    extends IResultUseCase<ICreateCategoryCredentials, ICategoryEntity> {}
 
 /**
  * Use case for creating a new category.
@@ -43,13 +35,7 @@ export class CreateCategoryUseCase implements ICreateCategoryUseCase {
      * @param {object} params - Category creation parameters
      * @returns {Promise<Result<ICategoryEntity>>} `ok(ICategoryEntity)` on success, `err(Failure)` on failure
      */
-    async execute(params: {
-        contentTypeId: string;
-        name: string;
-        slug: string;
-        description: string;
-        isFree: boolean;
-    }): Promise<Result<ICategoryEntity>> {
+    async execute(params: ICreateCategoryCredentials): Promise<Result<ICategoryEntity>> {
         return this.catalogRepository.createCategory(params.contentTypeId, {
             name: params.name,
             slug: params.slug,

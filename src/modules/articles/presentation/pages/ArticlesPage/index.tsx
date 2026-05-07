@@ -1,22 +1,22 @@
-import { Typography } from "antd";
 import type { FC } from "react";
+import ArticlesListContainer from "@/modules/articles/presentation/containers/ArticlesListContainer";
 import { APP_NAME } from "@/shared/infrastructure/constants/common";
-
-const { Title } = Typography;
 
 /**
  * Articles management page.
  *
  * @component
+ *
+ * @description
+ * Renders the articles list container with page title.
+ *
  * @returns The articles page
  */
-const ArticlesPage: FC = () => {
-    return (
-        <>
-            <title>{`Articles | ${APP_NAME}`}</title>
-            <Title level={3}>Articles</Title>
-        </>
-    );
-};
+const ArticlesPage: FC = () => (
+    <>
+        <title>{`Articles | ${APP_NAME}`}</title>
+        <ArticlesListContainer />
+    </>
+);
 
 export default ArticlesPage;

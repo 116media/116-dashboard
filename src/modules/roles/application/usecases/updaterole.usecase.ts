@@ -28,13 +28,10 @@ export class UpdateRoleUseCase implements IUpdateRoleUseCase {
     }
 
     /**
-     * @param {{ id: string; data: IUpdateRoleCredentials }} params - Role ID and fields to update
+     * @param {{ id: string; data: IUpdateRoleCredentials }} request - Role ID and fields to update
      * @returns {Promise<Result<IRoleEntity>>} `ok(IRoleEntity)` on success, `err(Failure)` on failure
      */
-    async execute(params: {
-        id: string;
-        data: IUpdateRoleCredentials;
-    }): Promise<Result<IRoleEntity>> {
-        return this.rolesRepository.update(params.id, params.data);
+    async execute(request: { id: string; data: IUpdateRoleCredentials }): Promise<Result<IRoleEntity>> {
+        return this.rolesRepository.update(request.id, request.data);
     }
 }

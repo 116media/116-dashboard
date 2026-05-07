@@ -1,15 +1,16 @@
 import type { ICatalogRepositoryPort } from "@/modules/catalog/application/repositories/catalog.repository.port";
 import type { ICategoryPricingEntity } from "@/modules/catalog/domain/entities/ICategoryPricingEntity";
+import type { IAddCategoryPricingCredentials } from "@/modules/catalog/presentation/model/IAddCategoryPricingCredentials";
 import type { IResultUseCase } from "@/shared/application/usecases/IUseCase";
 import type { Result } from "@/shared/domain/results/result";
 
 /**
  * @interface IAddCategoryPricingUseCase
- * @extends {IResultUseCase<{ categoryId: string; data: { pricingTierId: string; priceUsd: number } }, ICategoryPricingEntity>}
+ * @extends {IResultUseCase<{ categoryId: string; data: IAddCategoryPricingCredentials }, ICategoryPricingEntity>}
  */
 interface IAddCategoryPricingUseCase
     extends IResultUseCase<
-        { categoryId: string; data: { pricingTierId: string; priceUsd: number } },
+        { categoryId: string; data: IAddCategoryPricingCredentials },
         ICategoryPricingEntity
     > {}
 
@@ -34,13 +35,10 @@ export class AddCategoryPricingUseCase implements IAddCategoryPricingUseCase {
     /**
      * Executes the add category pricing use case.
      *
-     * @param {object} params - The category ID and pricing data
+     * @param {object} request - The category ID and pricing data
      * @returns {Promise<Result<ICategoryPricingEntity>>} `ok(ICategoryPricingEntity)` on success, `err(Failure)` on failure
      */
-    async execute(params: {
-        categoryId: string;
-        data: { pricingTierId: string; priceUsd: number };
-    }): Promise<Result<ICategoryPricingEntity>> {
-        return this.catalogRepository.addCategoryPricing(params.categoryId, params.data);
+    async execute(request: { categoryId: string; data: IAddCategoryPricingCredentials }): Promise<Result<ICategoryPricingEntity>> {
+        return this.catalogRepository.addCategoryPricing(request.categoryId, request.data);
     }
 }

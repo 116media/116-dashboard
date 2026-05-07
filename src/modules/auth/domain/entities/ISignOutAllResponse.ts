@@ -1,13 +1,13 @@
+import type { IActionResponse } from "@/shared/domain/types/action.response";
+
 /**
  * Sign out all response entity returned after signing out from all devices.
  *
  * @interface ISignOutAllResponse
+ * @extends {IActionResponse}
  *
  * @description
  * Domain entity representing the response from a sign out all request.
- *
- * @property {boolean} isSuccess - Whether the sign out from all devices was successful
+ * Extends IActionResponse for the shared `isSuccess` field.
  */
-export interface ISignOutAllResponse {
-    isSuccess: boolean;
-}
+export interface ISignOutAllResponse extends IActionResponse {}

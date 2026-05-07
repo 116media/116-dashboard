@@ -1,17 +1,15 @@
 import type { ICatalogRepositoryPort } from "@/modules/catalog/application/repositories/catalog.repository.port";
 import type { ICustomerEntity } from "@/modules/catalog/domain/entities/ICustomerEntity";
+import type { ICreateCustomerCredentials } from "@/modules/catalog/presentation/model/ICreateCustomerCredentials";
 import type { IResultUseCase } from "@/shared/application/usecases/IUseCase";
 import type { Result } from "@/shared/domain/results/result";
 
 /**
  * @interface ICreateCustomerUseCase
- * @extends {IResultUseCase<{ fullName: string; email: string; phone?: string; company?: string; notes?: string }, ICustomerEntity>}
+ * @extends {IResultUseCase<ICreateCustomerCredentials, ICustomerEntity>}
  */
 interface ICreateCustomerUseCase
-    extends IResultUseCase<
-        { fullName: string; email: string; phone?: string; company?: string; notes?: string },
-        ICustomerEntity
-    > {}
+    extends IResultUseCase<ICreateCustomerCredentials, ICustomerEntity> {}
 
 /**
  * Use case for creating a new customer.
@@ -37,13 +35,7 @@ export class CreateCustomerUseCase implements ICreateCustomerUseCase {
      * @param {object} data - Customer creation data
      * @returns {Promise<Result<ICustomerEntity>>} `ok(ICustomerEntity)` on success, `err(Failure)` on failure
      */
-    async execute(data: {
-        fullName: string;
-        email: string;
-        phone?: string;
-        company?: string;
-        notes?: string;
-    }): Promise<Result<ICustomerEntity>> {
+    async execute(data: ICreateCustomerCredentials): Promise<Result<ICustomerEntity>> {
         return this.catalogRepository.createCustomer(data);
     }
 }

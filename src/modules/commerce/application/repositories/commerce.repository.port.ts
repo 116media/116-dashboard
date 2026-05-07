@@ -1,17 +1,23 @@
+import type { ICommerceActionResponse } from "@/modules/commerce/domain/entities/ICommerceActionResponse";
 import type { IItemTierEntity } from "@/modules/commerce/domain/entities/IItemTierEntity";
 import type { IOrderDetailEntity } from "@/modules/commerce/domain/entities/IOrderDetailEntity";
 import type { IOrderItemEntity } from "@/modules/commerce/domain/entities/IOrderItemEntity";
 import type { IOrderSummaryEntity } from "@/modules/commerce/domain/entities/IOrderSummaryEntity";
 import type { IPaymentEntity } from "@/modules/commerce/domain/entities/IPaymentEntity";
 import type { IPaymentSummaryEntity } from "@/modules/commerce/domain/entities/IPaymentSummaryEntity";
+import type { IAddItemTierCredentials } from "@/modules/commerce/presentation/model/IAddItemTierCredentials";
+import type { IAddOrderItemCredentials } from "@/modules/commerce/presentation/model/IAddOrderItemCredentials";
+import type { IAttachPaymentProofData } from "@/modules/commerce/presentation/model/IAttachPaymentProofData";
+import type { ICreateOrderCredentials } from "@/modules/commerce/presentation/model/ICreateOrderCredentials";
+import type { IEditItemCredentials } from "@/modules/commerce/presentation/model/IEditItemCredentials";
+import type { IEditOrderCredentials } from "@/modules/commerce/presentation/model/IEditOrderCredentials";
+import type { IOrdersQueryParams } from "@/modules/commerce/presentation/model/IOrdersQueryParams";
+import type { IPaginationQueryParams } from "@/modules/commerce/presentation/model/IPaginationQueryParams";
+import type { IPaymentsQueryParams } from "@/modules/commerce/presentation/model/IPaymentsQueryParams";
+import type { IRejectPaymentCredentials } from "@/modules/commerce/presentation/model/IRejectPaymentCredentials";
+import type { IVerifyPaymentCredentials } from "@/modules/commerce/presentation/model/IVerifyPaymentCredentials";
 import type { Result } from "@/shared/domain/results/result";
 import type { IPaginatedResult } from "@/shared/domain/types/pagination";
-import type {
-    EnumCoreContentType,
-    EnumOrderStatus,
-    EnumPaymentMethod,
-    EnumPaymentStatus
-} from "@/shared/infrastructure/api/generated/116.api";
 
 /**
  * Repository port for commerce operations (orders and payments).
@@ -27,10 +33,7 @@ export interface ICommerceRepositoryPort {
      * @param data - Customer ID and optional package ID
      * @returns The created order summary
      */
-    createOrder(data: {
-        customerId: string;
-        packageId?: string | null;
-    }): Promise<Result<IOrderSummaryEntity>>;
+    createOrder(data: ICreateOrderCredentials): Promise<Result<IOrderSummaryEntity>>;
 
     /**
      * Adds a commissioned content item to a draft order.
@@ -41,13 +44,7 @@ export interface ICommerceRepositoryPort {
      */
     addItemToOrder(
         orderId: string,
-        data: {
-            contentKind: EnumCoreContentType;
-            categoryId: string;
-            promotionLevelId?: string | null;
-            socialBoost: boolean;
-            isBonus: boolean;
-        }
+        data: IAddOrderItemCredentials
     ): Promise<Result<IOrderItemEntity>>;
 
     /**
@@ -61,7 +58,7 @@ export interface ICommerceRepositoryPort {
     addTierToItem(
         orderId: string,
         itemId: string,
-        data: { pricingTierId: string }
+        data: IAddItemTierCredentials
     ): Promise<Result<IItemTierEntity>>;
 
     /**
@@ -70,7 +67,7 @@ export interface ICommerceRepositoryPort {
      * @param id - The order UUID
      * @returns Success indicator
      */
-    submitOrder(id: string): Promise<Result<{ isSuccess: boolean }>>;
+    submitOrder(id: string): Promise<Result<ICommerceActionResponse>>;
 
     /**
      * Cancels a draft or pending-payment order.
@@ -78,7 +75,7 @@ export interface ICommerceRepositoryPort {
      * @param id - The order UUID
      * @returns Success indicator
      */
-    cancelOrder(id: string): Promise<Result<{ isSuccess: boolean }>>;
+    cancelOrder(id: string): Promise<Result<ICommerceActionResponse>>;
 
     /**
      * Uploads a payment proof file and attaches it to the order's payment record.
@@ -89,7 +86,7 @@ export interface ICommerceRepositoryPort {
      */
     attachPaymentProof(
         orderId: string,
-        data: { file: File; paymentMethod: EnumPaymentMethod }
+        data: IAttachPaymentProofData
     ): Promise<Result<{ id: string; fileName: string; storageUrl: string }>>;
 
     /**
@@ -101,8 +98,8 @@ export interface ICommerceRepositoryPort {
      */
     verifyPayment(
         orderId: string,
-        data: { receiptUrl: string }
-    ): Promise<Result<{ isSuccess: boolean }>>;
+        data: IVerifyPaymentCredentials
+    ): Promise<Result<ICommerceActionResponse>>;
 
     /**
      * Rejects an order payment with optional notes.
@@ -113,8 +110,8 @@ export interface ICommerceRepositoryPort {
      */
     rejectPayment(
         orderId: string,
-        data: { notes?: string | null }
-    ): Promise<Result<{ isSuccess: boolean }>>;
+        data: IRejectPaymentCredentials
+    ): Promise<Result<ICommerceActionResponse>>;
 
     /**
      * Fetches a paginated list of orders with optional status and customer filters.
@@ -122,13 +119,7 @@ export interface ICommerceRepositoryPort {
      * @param params - Pagination and filter parameters
      * @returns Paginated list of order summaries
      */
-    listOrders(params: {
-        pageIndex: number;
-        pageSize: number;
-        status?: EnumOrderStatus;
-        customerId?: string;
-        search?: string;
-    }): Promise<Result<IPaginatedResult<IOrderSummaryEntity>>>;
+    listOrders(params: IOrdersQueryParams): Promise<Result<IPaginatedResult<IOrderSummaryEntity>>>;
 
     /**
      * Fetches the full detail of a single order including items and payment.
@@ -152,10 +143,9 @@ export interface ICommerceRepositoryPort {
      * @param params - Pagination parameters
      * @returns Paginated list of pending-payment order summaries
      */
-    listPendingPaymentOrders(params: {
-        pageIndex: number;
-        pageSize: number;
-    }): Promise<Result<IPaginatedResult<IOrderSummaryEntity>>>;
+    listPendingPaymentOrders(
+        params: IPaginationQueryParams
+    ): Promise<Result<IPaginatedResult<IOrderSummaryEntity>>>;
 
     /**
      * Fetches a paginated list of orders for a specific customer.
@@ -166,7 +156,7 @@ export interface ICommerceRepositoryPort {
      */
     getCustomerOrders(
         customerId: string,
-        params: { pageIndex: number; pageSize: number }
+        params: IPaginationQueryParams
     ): Promise<Result<IPaginatedResult<IOrderSummaryEntity>>>;
 
     /**
@@ -175,13 +165,9 @@ export interface ICommerceRepositoryPort {
      * @param params - Pagination, payment status, payment method, and search filters
      * @returns Paginated list of payment summaries with order and customer info
      */
-    listPayments(params: {
-        pageIndex: number;
-        pageSize: number;
-        status?: EnumPaymentStatus;
-        method?: EnumPaymentMethod;
-        search?: string;
-    }): Promise<Result<IPaginatedResult<IPaymentSummaryEntity>>>;
+    listPayments(
+        params: IPaymentsQueryParams
+    ): Promise<Result<IPaginatedResult<IPaymentSummaryEntity>>>;
 
     /**
      * Edits a draft order's customer or package assignment.
@@ -190,10 +176,7 @@ export interface ICommerceRepositoryPort {
      * @param data - Fields to update (customer and/or package)
      * @returns The updated order summary
      */
-    editOrder(
-        id: string,
-        data: { customerId?: string; packageId?: string | null }
-    ): Promise<Result<IOrderSummaryEntity>>;
+    editOrder(id: string, data: IEditOrderCredentials): Promise<Result<IOrderSummaryEntity>>;
 
     /**
      * Removes a content item from a draft order.
@@ -202,7 +185,7 @@ export interface ICommerceRepositoryPort {
      * @param itemId - The order item UUID to remove
      * @returns Success indicator
      */
-    removeItem(orderId: string, itemId: string): Promise<Result<{ isSuccess: boolean }>>;
+    removeItem(orderId: string, itemId: string): Promise<Result<ICommerceActionResponse>>;
 
     /**
      * Removes a pricing tier snapshot from an order item.
@@ -216,7 +199,7 @@ export interface ICommerceRepositoryPort {
         orderId: string,
         itemId: string,
         tierId: string
-    ): Promise<Result<{ isSuccess: boolean }>>;
+    ): Promise<Result<ICommerceActionResponse>>;
 
     /**
      * Edits a content item within a draft order.
@@ -229,12 +212,6 @@ export interface ICommerceRepositoryPort {
     editItem(
         orderId: string,
         itemId: string,
-        data: {
-            contentKind?: EnumCoreContentType;
-            categoryId?: string;
-            promotionLevelId?: string | null;
-            socialBoost?: boolean;
-            isBonus?: boolean;
-        }
+        data: IEditItemCredentials
     ): Promise<Result<IOrderItemEntity>>;
 }

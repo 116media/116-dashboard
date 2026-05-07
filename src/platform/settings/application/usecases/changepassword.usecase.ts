@@ -1,14 +1,15 @@
 import type { ISettingsRepositoryPort } from "@/platform/settings/application/repositories/settings.repository.port";
 import type { IChangePasswordResponse } from "@/platform/settings/domain/entities/IChangePasswordResponse";
+import type { IChangePasswordData } from "@/platform/settings/presentation/model/IChangePasswordData";
 import type { IResultUseCase } from "@/shared/application/usecases/IUseCase";
 import type { Result } from "@/shared/domain/results/result";
 
 /**
  * @interface IChangePasswordUseCase
- * @extends {IResultUseCase<{ oldPassword: string; newPassword: string }, IChangePasswordResponse>}
+ * @extends {IResultUseCase<IChangePasswordData, IChangePasswordResponse>}
  */
 interface IChangePasswordUseCase
-    extends IResultUseCase<{ oldPassword: string; newPassword: string }, IChangePasswordResponse> {}
+    extends IResultUseCase<IChangePasswordData, IChangePasswordResponse> {}
 
 /**
  * Use case for changing the user's password.
@@ -36,10 +37,7 @@ export class ChangePasswordUseCase implements IChangePasswordUseCase {
      * @param {{ oldPassword: string; newPassword: string }} data - Current and new password
      * @returns {Promise<Result<IChangePasswordResponse>>} `ok(IChangePasswordResponse)` on success, `err(Failure)` on failure
      */
-    async execute(data: {
-        oldPassword: string;
-        newPassword: string;
-    }): Promise<Result<IChangePasswordResponse>> {
+    async execute(data: IChangePasswordData): Promise<Result<IChangePasswordResponse>> {
         return this.settingsRepository.changePassword(data);
     }
 }

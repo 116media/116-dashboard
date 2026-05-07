@@ -1,15 +1,16 @@
 import type { ILookupRepositoryPort } from "@/modules/lookup/application/repositories/lookup.repository.port";
 import type { IPromotionLevelEntity } from "@/modules/lookup/domain/entities/IPromotionLevelEntity";
+import type { IUpdatePromotionLevelCredentials } from "@/modules/lookup/presentation/model/IUpdatePromotionLevelCredentials";
 import type { IResultUseCase } from "@/shared/application/usecases/IUseCase";
 import type { Result } from "@/shared/domain/results/result";
 
 /**
  * @interface IUpdatePromotionLevelUseCase
- * @extends {IResultUseCase<{ id: string; data: { name: string; durationDays: number; priceUsd: number } }, IPromotionLevelEntity>}
+ * @extends {IResultUseCase<{ id: string; data: IUpdatePromotionLevelCredentials }, IPromotionLevelEntity>}
  */
 interface IUpdatePromotionLevelUseCase
     extends IResultUseCase<
-        { id: string; data: { name: string; durationDays: number; priceUsd: number } },
+        { id: string; data: IUpdatePromotionLevelCredentials },
         IPromotionLevelEntity
     > {}
 
@@ -37,7 +38,7 @@ export class UpdatePromotionLevelUseCase implements IUpdatePromotionLevelUseCase
      */
     async execute(input: {
         id: string;
-        data: { name: string; durationDays: number; priceUsd: number };
+        data: IUpdatePromotionLevelCredentials;
     }): Promise<Result<IPromotionLevelEntity>> {
         return this.lookupRepository.updatePromotionLevel(input.id, input.data);
     }

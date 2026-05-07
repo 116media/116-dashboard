@@ -1,26 +1,15 @@
 import type { ICatalogRepositoryPort } from "@/modules/catalog/application/repositories/catalog.repository.port";
 import type { ICustomerEntity } from "@/modules/catalog/domain/entities/ICustomerEntity";
+import type { IUpdateCustomerCredentials } from "@/modules/catalog/presentation/model/IUpdateCustomerCredentials";
 import type { IResultUseCase } from "@/shared/application/usecases/IUseCase";
 import type { Result } from "@/shared/domain/results/result";
 
 /**
  * @interface IUpdateCustomerUseCase
- * @extends {IResultUseCase<{ id: string; data: { fullName: string; email: string; phone?: string; company?: string; notes?: string } }, ICustomerEntity>}
+ * @extends {IResultUseCase<{ id: string; data: IUpdateCustomerCredentials }, ICustomerEntity>}
  */
 interface IUpdateCustomerUseCase
-    extends IResultUseCase<
-        {
-            id: string;
-            data: {
-                fullName: string;
-                email: string;
-                phone?: string;
-                company?: string;
-                notes?: string;
-            };
-        },
-        ICustomerEntity
-    > {}
+    extends IResultUseCase<{ id: string; data: IUpdateCustomerCredentials }, ICustomerEntity> {}
 
 /**
  * Use case for updating an existing customer.
@@ -43,13 +32,10 @@ export class UpdateCustomerUseCase implements IUpdateCustomerUseCase {
     /**
      * Executes the update customer use case.
      *
-     * @param {object} params - The customer ID and updated data
+     * @param {object} request - The customer ID and updated data
      * @returns {Promise<Result<ICustomerEntity>>} `ok(ICustomerEntity)` on success, `err(Failure)` on failure
      */
-    async execute(params: {
-        id: string;
-        data: { fullName: string; email: string; phone?: string; company?: string; notes?: string };
-    }): Promise<Result<ICustomerEntity>> {
-        return this.catalogRepository.updateCustomer(params.id, params.data);
+    async execute(request: { id: string; data: IUpdateCustomerCredentials }): Promise<Result<ICustomerEntity>> {
+        return this.catalogRepository.updateCustomer(request.id, request.data);
     }
 }

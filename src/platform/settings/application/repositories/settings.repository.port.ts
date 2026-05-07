@@ -1,6 +1,7 @@
 import type { IUser } from "@/modules/auth/domain/entities/IUser";
 import type { IChangePasswordResponse } from "@/platform/settings/domain/entities/IChangePasswordResponse";
 import type { IRoleWithPermissions } from "@/platform/settings/domain/entities/IRoleWithPermissions";
+import type { IChangePasswordData } from "@/platform/settings/presentation/model/IChangePasswordData";
 import type { IUpdateAccountCredentials } from "@/platform/settings/presentation/model/IUpdateAccountCredentials";
 import type { Result } from "@/shared/domain/results/result";
 
@@ -34,10 +35,7 @@ export interface ISettingsRepositoryPort {
      * @param data - Current and new password
      * @returns `ok(IChangePasswordResponse)` on success, `err(Failure)` on failure
      */
-    changePassword(data: {
-        oldPassword: string;
-        newPassword: string;
-    }): Promise<Result<IChangePasswordResponse>>;
+    changePassword(data: IChangePasswordData): Promise<Result<IChangePasswordResponse>>;
 
     /**
      * Fetches the roles and permissions assigned to the current user.
