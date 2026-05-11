@@ -13,7 +13,6 @@ export type ArticleAction =
     | "publish"
     | "reject"
     | "archive"
-    | "upload"
     | "delete";
 
 interface IArticleDropdownItem {
@@ -45,7 +44,6 @@ export const ARTICLE_DROPDOWN_ITEMS: IArticleDropdownItem[] = [
     { key: "edit", label: "Modifier", hidden: (_, __, isAdmin) => !isAdmin },
     { key: "seo", label: "Modifier le SEO", hidden: (_, __, isAdmin) => !isAdmin },
     { key: "tags", label: "Modifier les tags", hidden: (_, __, isAdmin) => !isAdmin },
-    { key: "upload", label: "Téléverser une image", hidden: (_, isSuperAdmin) => !isSuperAdmin },
     {
         key: "submit",
         label: "Soumettre",

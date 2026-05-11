@@ -2,23 +2,22 @@ import type { FormInstance } from "antd";
 import { Form } from "antd";
 import { useEffect, useState } from "react";
 import type { IArticleEntity } from "@/modules/articles/domain/entities/IArticleEntity";
+import type { IArticleSummaryEntity } from "@/modules/articles/domain/entities/IArticleSummaryEntity";
 import type { IUpdateArticleCredentials } from "@/modules/articles/presentation/model/IUpdateArticleCredentials";
+import { getArticleByIdAction } from "@/modules/articles/presentation/store/getarticlebyid.action";
 import { updateArticleAction } from "@/modules/articles/presentation/store/updatearticle.action";
 import { ArticlesNotification } from "@/modules/articles/presentation/utils/notification/articles.notification";
 import type { Failure } from "@/shared/domain/failures/failure";
 import { useAppDispatch, useAppSelector } from "@/shared/presentation/store/store";
 import { showNotification } from "@/shared/presentation/utils/notification/notification.utils";
+import { generateSlug } from "@/shared/presentation/utils/slug/slug.utils";
 
 const { useForm } = Form;
 
-/**
- * Return type for the update article hook.
- *
- * @interface IUseUpdateArticle
- */
 interface IUseUpdateArticle {
     form: FormInstance<IUpdateArticleCredentials>;
     loading: boolean;
+    detailLoading: boolean;
     error: Failure | null | undefined;
     success: string | null;
     onSubmit: (values: IUpdateArticleCredentials) => Promise<void>;
@@ -29,42 +28,48 @@ interface IUseUpdateArticle {
  * Custom hook for the edit article form logic.
  *
  * @description
- * Manages form state, pre-population from initial values,
- * submission, and success feedback for updating an article.
- *
- * @param article - The article to edit (used for pre-population and ID)
- * @param onSuccess - Optional callback invoked after successful update
- * @returns Form instance, loading/error state, success message, and submit handler
+ * Fetches the full article detail (including body) when the
+ * selected article changes, then pre-populates the form.
+ * The list only provides summary data without body content.
  */
 export const useUpdateArticle = (
-    article: IArticleEntity | null,
+    article: IArticleSummaryEntity | null,
     onSuccess?: () => void
 ): IUseUpdateArticle => {
     const dispatch = useAppDispatch();
     const [form] = useForm<IUpdateArticleCredentials>();
     const [success, setSuccess] = useState<string | null>(null);
+    const [detailLoading, setDetailLoading] = useState(false);
 
     const { loading, error } = useAppSelector(({ articles: { updateArticle } }) => updateArticle);
 
     useEffect(() => {
-        if (article) {
-            form.setFieldsValue({
-                categoryId: article.categoryId,
-                title: article.title,
-                slug: article.slug,
-                headline: article.headline,
-                body: article.body,
-                coverImageUrl: article.coverImageUrl,
-                customerId: undefined,
-                orderItemId: undefined,
-                socialBoost: false,
-                isFeatured: article.isFeatured,
-                featuredUntil: article.featuredUntil,
-                metaTitle: article.metaTitle,
-                metaDescription: article.metaDescription
-            });
-        }
-    }, [article, form]);
+        if (!article?.id) return;
+
+        const fetchDetail = async () => {
+            setDetailLoading(true);
+            const result = await dispatch(getArticleByIdAction(article.id));
+
+            if (getArticleByIdAction.fulfilled.match(result)) {
+                const detail = result.payload as IArticleEntity;
+                form.setFieldsValue({
+                    categoryId: detail.categoryId,
+                    title: detail.title,
+                    headline: detail.headline,
+                    body: detail.body,
+                    coverImageUrl: detail.coverImageUrl,
+                    socialBoost: false,
+                    isFeatured: detail.isFeatured,
+                    featuredUntil: detail.featuredUntil,
+                    metaTitle: detail.metaTitle,
+                    metaDescription: detail.metaDescription
+                });
+            }
+            setDetailLoading(false);
+        };
+
+        fetchDetail();
+    }, [article, dispatch, form]);
 
     const onSubmit = async (values: IUpdateArticleCredentials): Promise<void> => {
         if (!article) return;
@@ -72,7 +77,10 @@ export const useUpdateArticle = (
         const result = await dispatch(
             updateArticleAction({
                 id: article.id,
-                data: values
+                data: {
+                    ...values,
+                    slug: generateSlug(values.title, { unique: true })
+                }
             })
         );
 
@@ -88,5 +96,5 @@ export const useUpdateArticle = (
         form.resetFields();
     };
 
-    return { form, loading, error, success, onSubmit, resetUpdate };
+    return { form, loading, detailLoading, error, success, onSubmit, resetUpdate };
 };

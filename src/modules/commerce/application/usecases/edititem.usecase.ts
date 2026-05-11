@@ -39,7 +39,11 @@ export class EditItemUseCase implements IEditItemUseCase {
      * @param {object} request - Item edit parameters including orderId, itemId, and fields to update
      * @returns {Promise<Result<IOrderItemEntity>>} `ok(IOrderItemEntity)` on success, `err(Failure)` on failure
      */
-    async execute(request: { orderId: string; itemId: string; data: IEditItemCredentials }): Promise<Result<IOrderItemEntity>> {
+    async execute(request: {
+        orderId: string;
+        itemId: string;
+        data: IEditItemCredentials;
+    }): Promise<Result<IOrderItemEntity>> {
         return this.commerceRepository.editItem(request.orderId, request.itemId, request.data);
     }
 }

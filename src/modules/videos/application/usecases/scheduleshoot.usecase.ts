@@ -35,7 +35,10 @@ export class ScheduleShootUseCase implements IScheduleShootUseCase {
      * @param {object} request - The video ID and scheduled shooting timestamp
      * @returns {Promise<Result<IVideoEntity>>} `ok(IVideoEntity)` on success, `err(Failure)` on failure
      */
-    async execute(request: { id: string; data: IScheduleShootCredentials }): Promise<Result<IVideoEntity>> {
+    async execute(request: {
+        id: string;
+        data: IScheduleShootCredentials;
+    }): Promise<Result<IVideoEntity>> {
         return this.videosRepository.scheduleShoot(request.id, request.data);
     }
 }

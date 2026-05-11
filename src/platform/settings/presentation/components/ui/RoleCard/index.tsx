@@ -2,6 +2,7 @@ import { Col, Collapse, Flex, Row, Tag, Typography } from "antd";
 import type { FC } from "react";
 import type { IPermission } from "@/modules/auth/domain/entities/IPermission";
 import type { IRoleWithPermissions } from "@/platform/settings/domain/entities/IRoleWithPermissions";
+import { ENTITY_STATUS_CONFIG } from "@/shared/presentation/constants/entity.status.config";
 import { IconCaretRightOutlined, IconSafetyOutlined } from "@/shared/presentation/ui/Icons";
 import StatusTag from "@/shared/presentation/ui/StatusTag";
 import { TextTransform } from "@/shared/presentation/utils/text-transform/text-transform.utils";
@@ -59,7 +60,10 @@ const RoleCard: FC<IRoleCardProps> = ({ role, defaultOpen = false }) => {
                     {role.description}
                 </Text>
             </div>
-            <StatusTag status={role.isActive ? "active" : "inactive"} />
+            <StatusTag
+                status={role.isActive ? "active" : "inactive"}
+                config={ENTITY_STATUS_CONFIG}
+            />
         </Flex>
     );
 

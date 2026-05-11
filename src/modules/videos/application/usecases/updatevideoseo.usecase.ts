@@ -35,7 +35,10 @@ export class UpdateVideoSeoUseCase implements IUpdateVideoSeoUseCase {
      * @param {object} request - The video ID and SEO metadata
      * @returns {Promise<Result<IVideoEntity>>} `ok(IVideoEntity)` on success, `err(Failure)` on failure
      */
-    async execute(request: { id: string; data: IUpdateVideoSeoCredentials }): Promise<Result<IVideoEntity>> {
+    async execute(request: {
+        id: string;
+        data: IUpdateVideoSeoCredentials;
+    }): Promise<Result<IVideoEntity>> {
         return this.videosRepository.updateVideoSeo(request.id, request.data);
     }
 }

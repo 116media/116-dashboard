@@ -62,16 +62,16 @@ const LyricsSeoForm: FC<ILyricsSeoFormProps> = ({ form, error, onSubmit }) => {
                 rules={LyricsSeoValidator.metaDescription("Description SEO")}
             >
                 <TextArea
-                    maxLength={160}
-                    showCount
                     rows={3}
+                    showCount
+                    maxLength={160}
                     placeholder="Description SEO des paroles"
                 />
             </Item>
 
             <Item
                 name="metaKeywords"
-                label="Mots-clés SEO (optionnel)"
+                label="Mots-clés SEO "
                 rules={LyricsSeoValidator.metaKeywords("Mots-clés SEO")}
             >
                 <Input maxLength={250} showCount placeholder="mot1, mot2, mot3" />

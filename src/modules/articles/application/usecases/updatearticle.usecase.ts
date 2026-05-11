@@ -35,7 +35,10 @@ export class UpdateArticleUseCase implements IUpdateArticleUseCase {
      * @param {object} request - The article ID and updated data
      * @returns {Promise<Result<IArticleEntity>>} `ok(IArticleEntity)` on success, `err(Failure)` on failure
      */
-    async execute(request: { id: string; data: IUpdateArticleCredentials }): Promise<Result<IArticleEntity>> {
+    async execute(request: {
+        id: string;
+        data: IUpdateArticleCredentials;
+    }): Promise<Result<IArticleEntity>> {
         return this.articlesRepository.updateArticle(request.id, request.data);
     }
 }

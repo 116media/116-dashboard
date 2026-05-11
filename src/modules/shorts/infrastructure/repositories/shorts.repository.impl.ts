@@ -19,9 +19,6 @@ import { ProblemMapper } from "@/shared/infrastructure/mappers/problem.mapper";
  * generated API client and mapping responses through ShortsMapper.
  */
 export class ShortsRepositoryImpl implements IShortsRepositoryPort {
-    /**
-     * @inheritdoc
-     */
     async getAllShorts(
         params: IShortsQueryParams
     ): Promise<Result<IPaginatedResult<IShortVideoEntity>>> {
@@ -29,7 +26,8 @@ export class ShortsRepositoryImpl implements IShortsRepositoryPort {
             const response = await apiClient.api.adminGetAllShorts({
                 pageIndex: params.pageIndex,
                 pageSize: params.pageSize,
-                search: params.search
+                search: params.search,
+                isActive: params.isActive
             });
             const paginated = response.data.shortVideos;
             return ok({
@@ -43,9 +41,6 @@ export class ShortsRepositoryImpl implements IShortsRepositoryPort {
         }
     }
 
-    /**
-     * @inheritdoc
-     */
     async getShortById(id: string): Promise<Result<IShortVideoEntity>> {
         try {
             const response = await apiClient.api.adminGetShortById(id);
@@ -55,9 +50,6 @@ export class ShortsRepositoryImpl implements IShortsRepositoryPort {
         }
     }
 
-    /**
-     * @inheritdoc
-     */
     async createShort(data: ICreateShortCredentials): Promise<Result<IShortVideoEntity>> {
         try {
             const response = await apiClient.api.createShortVideo(
@@ -70,9 +62,6 @@ export class ShortsRepositoryImpl implements IShortsRepositoryPort {
         }
     }
 
-    /**
-     * @inheritdoc
-     */
     async activateShort(id: string): Promise<Result<IShortActionResponse>> {
         try {
             await apiClient.api.activateShortVideo(id);
@@ -82,9 +71,6 @@ export class ShortsRepositoryImpl implements IShortsRepositoryPort {
         }
     }
 
-    /**
-     * @inheritdoc
-     */
     async deactivateShort(id: string): Promise<Result<IShortActionResponse>> {
         try {
             await apiClient.api.deactivateShortVideo(id);
@@ -94,9 +80,6 @@ export class ShortsRepositoryImpl implements IShortsRepositoryPort {
         }
     }
 
-    /**
-     * @inheritdoc
-     */
     async deleteShort(id: string): Promise<Result<IShortActionResponse>> {
         try {
             await apiClient.api.deleteShortVideo(id);
@@ -106,16 +89,14 @@ export class ShortsRepositoryImpl implements IShortsRepositoryPort {
         }
     }
 
-    /**
-     * @inheritdoc
-     */
     async uploadShortThumbnail(
         id: string,
         data: IUploadShortThumbnailCredentials
-    ): Promise<Result<IShortActionResponse>> {
+    ): Promise<Result<IShortVideoEntity>> {
         try {
             await apiClient.api.uploadShortVideoThumbnail(id, { file: data.file });
-            return ok({ isSuccess: true });
+            const refreshed = await apiClient.api.adminGetShortById(id);
+            return ok(ShortsMapper.shortFromDto(refreshed.data.shortVideo));
         } catch (error) {
             return err(ProblemMapper.toFailure(error));
         }

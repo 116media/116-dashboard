@@ -39,7 +39,10 @@ export class AttachPaymentProofUseCase implements IAttachPaymentProofUseCase {
      * @param {object} request - Payment proof parameters including orderId, file, and paymentMethod
      * @returns {Promise<Result<{ id: string; fileName: string; storageUrl: string }>>} `ok({ id, fileName, storageUrl })` on success, `err(Failure)` on failure
      */
-    async execute(request: { orderId: string; data: IAttachPaymentProofData }): Promise<Result<{ id: string; fileName: string; storageUrl: string }>> {
+    async execute(request: {
+        orderId: string;
+        data: IAttachPaymentProofData;
+    }): Promise<Result<{ id: string; fileName: string; storageUrl: string }>> {
         return this.commerceRepository.attachPaymentProof(request.orderId, request.data);
     }
 }

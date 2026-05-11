@@ -18,8 +18,8 @@ const { TextArea } = Input;
  * @property {(values: IRejectVideoCredentials) => void} onSubmit - Callback when the form is submitted
  */
 interface IVideoRejectFormProps {
-    form: FormInstance<IRejectVideoCredentials>;
     error: Failure | null | undefined;
+    form: FormInstance<IRejectVideoCredentials>;
     onSubmit: (values: IRejectVideoCredentials) => void;
 }
 
@@ -54,9 +54,9 @@ const VideoRejectForm: FC<IVideoRejectFormProps> = ({ form, error, onSubmit }) =
                 rules={VideosRejectValidator.rejectionReason("Raison du rejet")}
             >
                 <TextArea
-                    maxLength={500}
-                    showCount
                     rows={4}
+                    showCount
+                    maxLength={500}
                     placeholder="Indiquez la raison du rejet"
                 />
             </Item>

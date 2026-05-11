@@ -47,7 +47,7 @@ function TableStatusFilter<T extends string = string>({
             loading={loading}
             disabled={loading}
             onChange={onChange}
-            style={{ width: 140 }}
+            popupMatchSelectWidth={false}
             prefix={<Button type="text" size="small" icon={<IconFilterOutlined />} />}
             options={options.map((opt) => ({
                 value: opt.value,

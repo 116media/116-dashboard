@@ -5,6 +5,7 @@ import {
     CATEGORY_DROPDOWN_ITEMS,
     type CategoryAction
 } from "@/modules/catalog/presentation/constants/catalog.categories.dropdown";
+import { ENTITY_STATUS_CONFIG } from "@/shared/presentation/constants/entity.status.config";
 import { Colors } from "@/shared/presentation/constants/theme";
 import { IconCheckCircleFilled, IconCloseCircleFilled } from "@/shared/presentation/ui/Icons";
 import StatusTag from "@/shared/presentation/ui/StatusTag";
@@ -78,7 +79,10 @@ export const categoriesTableColumns = (
         fixed: "end",
         align: "center",
         render: (_: boolean, record: ICategoryEntity) => (
-            <StatusTag status={record.isActive ? "active" : "inactive"} />
+            <StatusTag
+                status={record.isActive ? "active" : "inactive"}
+                config={ENTITY_STATUS_CONFIG}
+            />
         )
     },
     {

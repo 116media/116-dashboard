@@ -1,5 +1,5 @@
 import type { FormInstance } from "antd";
-import { Form, Input, Select, Switch } from "antd";
+import { Form, Input, Select } from "antd";
 import type { FC } from "react";
 import { useMemo } from "react";
 import type { ICategoryEntity } from "@/modules/catalog/domain/entities/ICategoryEntity";
@@ -8,19 +8,21 @@ import { VideosContentValidator } from "@/modules/videos/presentation/utils/vali
 import type { Failure } from "@/shared/domain/failures/failure";
 import { useAppSelector } from "@/shared/presentation/store/store";
 import ErrorAlert from "@/shared/presentation/ui/ErrorAlert";
+import { IconFireFilled, IconStarFilled } from "@/shared/presentation/ui/Icons";
+import SwitchField from "@/shared/presentation/ui/SwitchField";
 
 const { Item } = Form;
 const { TextArea } = Input;
 
 /**
- * Props for the VideoContentForm component.
+ * Props for the VideoDetailsForm component.
  *
- * @interface IVideoContentFormProps
+ * @interface IVideoDetailsFormProps
  * @property {FormInstance<IUpdateVideoCredentials>} form - Ant Design form instance for field control
  * @property {Failure | null | undefined} error - Backend error to display in the alert
  * @property {(values: IUpdateVideoCredentials) => void} onSubmit - Callback when the form is submitted
  */
-interface IVideoContentFormProps {
+interface IVideoDetailsFormProps {
     form: FormInstance<IUpdateVideoCredentials>;
     error: Failure | null | undefined;
     onSubmit: (values: IUpdateVideoCredentials) => void;
@@ -36,10 +38,10 @@ interface IVideoContentFormProps {
  * and featured toggle fields. Category options are loaded
  * from the catalog store.
  *
- * @param {IVideoContentFormProps} props - Component props
+ * @param {IVideoDetailsFormProps} props - Component props
  * @returns {JSX.Element} The rendered video content form
  */
-const VideoContentForm: FC<IVideoContentFormProps> = ({ form, error, onSubmit }) => {
+const VideoDetailsForm: FC<IVideoDetailsFormProps> = ({ form, error, onSubmit }) => {
     const { data: categories } = useAppSelector(
         ({ catalog: { getAllCategories } }) => getAllCategories
     );
@@ -73,7 +75,6 @@ const VideoContentForm: FC<IVideoContentFormProps> = ({ form, error, onSubmit })
             >
                 <Select
                     showSearch
-                    optionFilterProp="label"
                     options={categoryOptions}
                     placeholder="Sélectionner une catégorie"
                 />
@@ -83,32 +84,36 @@ const VideoContentForm: FC<IVideoContentFormProps> = ({ form, error, onSubmit })
                 <Input maxLength={200} placeholder="Titre de la vidéo" />
             </Item>
 
-            <Item name="slug" label="Slug" rules={VideosContentValidator.slug("Slug")}>
-                <Input maxLength={250} placeholder="slug-de-la-video" />
-            </Item>
-
             <Item
                 name="description"
                 label="Description"
                 rules={VideosContentValidator.description("Description")}
             >
                 <TextArea
-                    maxLength={2000}
-                    showCount
                     rows={4}
+                    showCount
+                    maxLength={2000}
                     placeholder="Description de la vidéo"
                 />
             </Item>
 
-            <Item name="socialBoost" label="Boost social" valuePropName="checked">
-                <Switch />
+            <Item name="socialBoost" valuePropName="checked">
+                <SwitchField
+                    title="Boost social"
+                    icon={<IconFireFilled />}
+                    description="Promouvoir cette vidéo sur les réseaux sociaux."
+                />
             </Item>
 
-            <Item name="isFeatured" label="En vedette" valuePropName="checked">
-                <Switch />
+            <Item name="isFeatured" valuePropName="checked">
+                <SwitchField
+                    title="En vedette"
+                    icon={<IconStarFilled />}
+                    description="Afficher cette vidéo en avant sur la page d'accueil."
+                />
             </Item>
         </Form>
     );
 };
 
-export default VideoContentForm;
+export default VideoDetailsForm;

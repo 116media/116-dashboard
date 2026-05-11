@@ -1,5 +1,5 @@
-import type { EnumOrderStatus } from "@/shared/infrastructure/api/generated/116.api";
 import type { IPaginationParams } from "@/shared/domain/types/pagination";
+import type { EnumOrderStatus } from "@/shared/infrastructure/api/generated/116.api";
 
 /**
  * Query parameters for listing orders with pagination and optional filters.

@@ -38,7 +38,10 @@ export class UpdateArticleTagsUseCase implements IUpdateArticleTagsUseCase {
      * @param {object} request - The article ID and tag IDs to assign
      * @returns {Promise<Result<IArticleActionResponse>>} `ok(ITagEntity[])` on success, `err(Failure)` on failure
      */
-    async execute(request: { id: string; data: IUpdateArticleTagsCredentials }): Promise<Result<IArticleActionResponse>> {
+    async execute(request: {
+        id: string;
+        data: IUpdateArticleTagsCredentials;
+    }): Promise<Result<IArticleActionResponse>> {
         return this.articlesRepository.updateArticleTags(request.id, request.data);
     }
 }

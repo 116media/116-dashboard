@@ -1,5 +1,5 @@
 import type { FormInstance } from "antd";
-import { Checkbox, Form, Input, Select } from "antd";
+import { Form, Input, Select } from "antd";
 import type { FC } from "react";
 import { useEffect, useMemo } from "react";
 import type { ICategoryEntity } from "@/modules/catalog/domain/entities/ICategoryEntity";
@@ -10,11 +10,13 @@ import type { Failure } from "@/shared/domain/failures/failure";
 import type { FormContext } from "@/shared/domain/types/pagination";
 import { useAppSelector } from "@/shared/presentation/store/store";
 import ErrorAlert from "@/shared/presentation/ui/ErrorAlert";
+import { IconDollarOutlined } from "@/shared/presentation/ui/Icons";
+import SwitchField from "@/shared/presentation/ui/SwitchField";
 
 const { Item } = Form;
 const { TextArea } = Input;
 
-/**
+/**s
  * Props for the CategoryForm component.
  *
  * @interface ICategoryFormProps
@@ -69,10 +71,10 @@ const CategoryForm: FC<ICategoryFormProps> = ({
     useEffect(() => {
         if (formContext === "EDIT" && initialValues) {
             form.setFieldsValue({
-                contentTypeId: initialValues.contentTypeId,
                 name: initialValues.name,
+                isFree: initialValues.isFree,
                 description: initialValues.description,
-                isFree: initialValues.isFree
+                contentTypeId: initialValues.contentTypeId
             });
         }
     }, [formContext, initialValues, form]);
@@ -113,13 +115,17 @@ const CategoryForm: FC<ICategoryFormProps> = ({
                 <TextArea
                     showCount
                     maxLength={300}
-                    placeholder="Description de la catégorie"
                     autoSize={{ minRows: 3 }}
+                    placeholder="Description de la catégorie"
                 />
             </Item>
 
             <Item name="isFree" valuePropName="checked">
-                <Checkbox>Contenu gratuit</Checkbox>
+                <SwitchField
+                    title="Contenu gratuit"
+                    icon={<IconDollarOutlined />}
+                    description="Le contenu de cette catégorie est accessible sans paiement."
+                />
             </Item>
         </Form>
     );

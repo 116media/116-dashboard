@@ -25,9 +25,6 @@ import { ProblemMapper } from "@/shared/infrastructure/mappers/problem.mapper";
  * generated API client and mapping responses through ArticlesMapper.
  */
 export class ArticlesRepositoryImpl implements IArticlesRepositoryPort {
-    /**
-     * @inheritdoc
-     */
     async getAllArticles(
         params: IArticlesQueryParams
     ): Promise<Result<IPaginatedResult<IArticleSummaryEntity>>> {
@@ -51,9 +48,6 @@ export class ArticlesRepositoryImpl implements IArticlesRepositoryPort {
         }
     }
 
-    /**
-     * @inheritdoc
-     */
     async getArticleById(id: string): Promise<Result<IArticleEntity>> {
         try {
             const response = await apiClient.api.adminGetArticleById(id);
@@ -63,9 +57,6 @@ export class ArticlesRepositoryImpl implements IArticlesRepositoryPort {
         }
     }
 
-    /**
-     * @inheritdoc
-     */
     async createArticle(data: ICreateArticleCredentials): Promise<Result<IArticleEntity>> {
         try {
             const response = await apiClient.api.createArticle(data);
@@ -75,9 +66,6 @@ export class ArticlesRepositoryImpl implements IArticlesRepositoryPort {
         }
     }
 
-    /**
-     * @inheritdoc
-     */
     async updateArticle(
         id: string,
         data: IUpdateArticleCredentials
@@ -90,9 +78,6 @@ export class ArticlesRepositoryImpl implements IArticlesRepositoryPort {
         }
     }
 
-    /**
-     * @inheritdoc
-     */
     async submitArticle(id: string): Promise<Result<IArticleActionResponse>> {
         try {
             const response = await apiClient.api.submitArticle(id);
@@ -102,9 +87,6 @@ export class ArticlesRepositoryImpl implements IArticlesRepositoryPort {
         }
     }
 
-    /**
-     * @inheritdoc
-     */
     async approveArticle(id: string): Promise<Result<IArticleActionResponse>> {
         try {
             const response = await apiClient.api.approveArticle(id);
@@ -114,9 +96,6 @@ export class ArticlesRepositoryImpl implements IArticlesRepositoryPort {
         }
     }
 
-    /**
-     * @inheritdoc
-     */
     async publishArticle(id: string): Promise<Result<IArticleActionResponse>> {
         try {
             const response = await apiClient.api.publishArticle(id);
@@ -126,9 +105,6 @@ export class ArticlesRepositoryImpl implements IArticlesRepositoryPort {
         }
     }
 
-    /**
-     * @inheritdoc
-     */
     async rejectArticle(
         id: string,
         data: IRejectArticleCredentials
@@ -143,9 +119,6 @@ export class ArticlesRepositoryImpl implements IArticlesRepositoryPort {
         }
     }
 
-    /**
-     * @inheritdoc
-     */
     async archiveArticle(id: string): Promise<Result<IArticleActionResponse>> {
         try {
             const response = await apiClient.api.archiveArticle(id);
@@ -155,9 +128,6 @@ export class ArticlesRepositoryImpl implements IArticlesRepositoryPort {
         }
     }
 
-    /**
-     * @inheritdoc
-     */
     async deleteArticle(id: string): Promise<Result<IArticleActionResponse>> {
         try {
             const response = await apiClient.api.deleteArticle(id);
@@ -167,9 +137,6 @@ export class ArticlesRepositoryImpl implements IArticlesRepositoryPort {
         }
     }
 
-    /**
-     * @inheritdoc
-     */
     async uploadArticleImage(
         id: string,
         data: IUploadArticleImageCredentials
@@ -186,9 +153,6 @@ export class ArticlesRepositoryImpl implements IArticlesRepositoryPort {
         }
     }
 
-    /**
-     * @inheritdoc
-     */
     async updateArticleSeo(
         id: string,
         data: IUpdateArticleSeoCredentials
@@ -201,9 +165,6 @@ export class ArticlesRepositoryImpl implements IArticlesRepositoryPort {
         }
     }
 
-    /**
-     * @inheritdoc
-     */
     async updateArticleTags(
         id: string,
         data: IUpdateArticleTagsCredentials

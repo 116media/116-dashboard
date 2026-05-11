@@ -18,7 +18,7 @@ Full spec for the articles module — 13 admin endpoints with a 7-step editorial
 | PATCH | `/api/v1/admin/articles/{id}/reject` | SuperAdminOnly | Rejeter (avec raison) |
 | PATCH | `/api/v1/admin/articles/{id}/archive` | SuperAdminOnly | Archiver |
 | DELETE | `/api/v1/admin/articles/{id}` | SuperAdminOnly | Supprimer définitivement |
-| POST | `/api/v1/admin/articles/{id}/images` | SuperAdminOnly | Téléverser une image |
+| POST | `/api/v1/admin/articles/{id}/images` | SuperAdminOnly | Importer une image |
 | PATCH | `/api/v1/admin/articles/{id}/seo` | AdminOrSuperAdmin | Mettre à jour le SEO |
 | PUT | `/api/v1/admin/articles/{id}/tags` | AdminOrSuperAdmin | Remplacer les tags |
 | GET | `/api/v1/admin/articles` | AdminOrSuperAdmin | Lister tous les articles |
@@ -251,7 +251,7 @@ Article creation uses a **stepper wizard** (Ant Design `Steps`) because the back
 | Step | Title | Fields | API Calls |
 | --- | --- | --- | --- |
 | 1 | Informations | Catégorie, titre, slug, client (opt), commande (opt) | `POST /admin/articles` → returns `articleId` |
-| 2 | Contenu | Accroche (max 500), contenu (rich text), image de couverture | `PUT /admin/articles/{id}` + `POST /admin/articles/{id}/images` |
+| 2 | Contenu | Sommaire (max 500), contenu (rich text), image de couverture | `PUT /admin/articles/{id}` + `POST /admin/articles/{id}/images` |
 | 3 | Tags & SEO | Sélection de tags, titre SEO (max 70), description SEO (max 160) | `PUT /admin/articles/{id}/tags` + `PATCH /admin/articles/{id}/seo` |
 | 4 | Résumé | Aperçu en lecture seule de toutes les informations | `PATCH /admin/articles/{id}/submit` (bouton Soumettre) |
 
@@ -370,7 +370,7 @@ Workflow actions shown in the row action dropdown. Visibility depends on `status
 | `publish` | "Publier" | `!isSuperAdmin \|\| status !== Approved` |
 | `reject` | "Rejeter" | `!isSuperAdmin \|\| status not in [PendingReview, Approved]` |
 | `archive` | "Archiver" | `!isSuperAdmin \|\| status not in [Published, Rejected]` |
-| `upload` | "Téléverser une image" | `!isSuperAdmin` |
+| `upload` | "Importer une image" | `!isSuperAdmin` |
 | `delete` | "Supprimer" | `!isSuperAdmin` |
 
 ### `articles.workflow.config.ts`
@@ -484,7 +484,7 @@ Step 2 of the creation wizard and edit form — content fields:
 
 | Field | Label | Component | Validation |
 | --- | --- | --- | --- |
-| `headline` | Accroche | `TextArea` | required, max 500 |
+| `headline` | Sommaire | `TextArea` | required, max 500 |
 | `body` | Contenu | `RichTextEditor` | required (non-empty HTML) |
 | `coverImage` | Image de couverture | `ImageUpload` | optional |
 

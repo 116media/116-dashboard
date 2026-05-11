@@ -76,19 +76,13 @@ const OrderForm: FC<IOrderFormProps> = ({ form, error, onSubmit }) => {
             <ErrorAlert error={error} showIcon closable banner={false} />
 
             <Item name="customerId" label="Client" rules={OrdersValidator.customerId("Client")}>
-                <Select
-                    showSearch
-                    optionFilterProp="label"
-                    options={customerOptions}
-                    placeholder="Sélectionner un client"
-                />
+                <Select showSearch options={customerOptions} placeholder="Sélectionner un client" />
             </Item>
 
-            <Item name="packageId" label="Package (optionnel)">
+            <Item name="packageId" label="Package">
                 <Select
                     showSearch
                     allowClear
-                    optionFilterProp="label"
                     options={packageOptions}
                     placeholder="Sélectionner un package"
                 />

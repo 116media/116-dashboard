@@ -35,7 +35,10 @@ export class UploadVideoThumbnailUseCase implements IUploadVideoThumbnailUseCase
      * @param {object} request - The video ID and thumbnail file data
      * @returns {Promise<Result<IVideoEntity>>} `ok(IVideoEntity)` on success, `err(Failure)` on failure
      */
-    async execute(request: { id: string; data: IUploadVideoThumbnailCredentials }): Promise<Result<IVideoEntity>> {
+    async execute(request: {
+        id: string;
+        data: IUploadVideoThumbnailCredentials;
+    }): Promise<Result<IVideoEntity>> {
         return this.videosRepository.uploadVideoThumbnail(request.id, request.data);
     }
 }

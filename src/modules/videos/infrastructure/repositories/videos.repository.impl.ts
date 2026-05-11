@@ -26,9 +26,6 @@ import { ProblemMapper } from "@/shared/infrastructure/mappers/problem.mapper";
  * generated API client and mapping responses through VideosMapper.
  */
 export class VideosRepositoryImpl implements IVideosRepositoryPort {
-    /**
-     * @inheritdoc
-     */
     async getAllVideos(
         params: IVideosQueryParams
     ): Promise<Result<IPaginatedResult<IVideoSummaryEntity>>> {
@@ -52,9 +49,6 @@ export class VideosRepositoryImpl implements IVideosRepositoryPort {
         }
     }
 
-    /**
-     * @inheritdoc
-     */
     async getVideoById(id: string): Promise<Result<IVideoEntity>> {
         try {
             const response = await apiClient.api.adminGetVideoById(id);
@@ -64,9 +58,6 @@ export class VideosRepositoryImpl implements IVideosRepositoryPort {
         }
     }
 
-    /**
-     * @inheritdoc
-     */
     async createVideo(data: ICreateVideoCredentials): Promise<Result<IVideoEntity>> {
         try {
             const response = await apiClient.api.createVideo(data);
@@ -76,9 +67,6 @@ export class VideosRepositoryImpl implements IVideosRepositoryPort {
         }
     }
 
-    /**
-     * @inheritdoc
-     */
     async updateVideo(id: string, data: IUpdateVideoCredentials): Promise<Result<IVideoEntity>> {
         try {
             const response = await apiClient.api.updateVideo(id, data);
@@ -88,9 +76,6 @@ export class VideosRepositoryImpl implements IVideosRepositoryPort {
         }
     }
 
-    /**
-     * @inheritdoc
-     */
     async submitVideo(id: string): Promise<Result<IVideoActionResponse>> {
         try {
             const response = await apiClient.api.submitVideo(id);
@@ -100,9 +85,6 @@ export class VideosRepositoryImpl implements IVideosRepositoryPort {
         }
     }
 
-    /**
-     * @inheritdoc
-     */
     async approveVideo(id: string): Promise<Result<IVideoActionResponse>> {
         try {
             const response = await apiClient.api.approveVideo(id);
@@ -112,9 +94,6 @@ export class VideosRepositoryImpl implements IVideosRepositoryPort {
         }
     }
 
-    /**
-     * @inheritdoc
-     */
     async publishVideo(id: string): Promise<Result<IVideoActionResponse>> {
         try {
             const response = await apiClient.api.publishVideo(id);
@@ -124,9 +103,6 @@ export class VideosRepositoryImpl implements IVideosRepositoryPort {
         }
     }
 
-    /**
-     * @inheritdoc
-     */
     async rejectVideo(
         id: string,
         data: IRejectVideoCredentials
@@ -139,9 +115,6 @@ export class VideosRepositoryImpl implements IVideosRepositoryPort {
         }
     }
 
-    /**
-     * @inheritdoc
-     */
     async archiveVideo(id: string): Promise<Result<IVideoActionResponse>> {
         try {
             const response = await apiClient.api.archiveVideo(id);
@@ -151,9 +124,6 @@ export class VideosRepositoryImpl implements IVideosRepositoryPort {
         }
     }
 
-    /**
-     * @inheritdoc
-     */
     async deleteVideo(id: string): Promise<Result<IVideoActionResponse>> {
         try {
             const response = await apiClient.api.deleteVideo(id);
@@ -163,9 +133,6 @@ export class VideosRepositoryImpl implements IVideosRepositoryPort {
         }
     }
 
-    /**
-     * @inheritdoc
-     */
     async uploadVideoThumbnail(
         id: string,
         data: IUploadVideoThumbnailCredentials
@@ -179,9 +146,6 @@ export class VideosRepositoryImpl implements IVideosRepositoryPort {
         }
     }
 
-    /**
-     * @inheritdoc
-     */
     async attachYoutubeId(
         id: string,
         data: IAttachYoutubeIdCredentials
@@ -194,9 +158,6 @@ export class VideosRepositoryImpl implements IVideosRepositoryPort {
         }
     }
 
-    /**
-     * @inheritdoc
-     */
     async updateVideoSeo(
         id: string,
         data: IUpdateVideoSeoCredentials
@@ -209,9 +170,6 @@ export class VideosRepositoryImpl implements IVideosRepositoryPort {
         }
     }
 
-    /**
-     * @inheritdoc
-     */
     async updateVideoTags(
         id: string,
         data: IUpdateVideoTagsCredentials
@@ -224,9 +182,6 @@ export class VideosRepositoryImpl implements IVideosRepositoryPort {
         }
     }
 
-    /**
-     * @inheritdoc
-     */
     async scheduleShoot(
         id: string,
         data: IScheduleShootCredentials

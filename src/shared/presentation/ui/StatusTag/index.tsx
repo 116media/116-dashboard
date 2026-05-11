@@ -1,37 +1,43 @@
 import { Tag } from "antd";
-import type { FC } from "react";
-import {
-    IconCheckCircleOutlined,
-    IconCloseCircleOutlined,
-    IconExclamationCircleOutlined
-} from "@/shared/presentation/ui/Icons";
+import type { FC, ReactNode } from "react";
 
-type EntityStatus = "active" | "inactive" | "deleted";
+/**
+ * Configuration for a single status value.
+ *
+ * @interface IStatusConfig
+ * @property {string} label - French display label
+ * @property {string} color - Ant Design Tag color
+ * @property {ReactNode} icon - Icon element to display
+ */
+export interface IStatusConfig {
+    label: string;
+    color: string;
+    icon: ReactNode;
+}
 
-const STATUS_CONFIG: Record<EntityStatus, { label: string; color: string; icon: FC }> = {
-    active: { label: "actif", color: "success", icon: IconCheckCircleOutlined },
-    inactive: { label: "inactif", color: "warning", icon: IconExclamationCircleOutlined },
-    deleted: { label: "supprimé", color: "error", icon: IconCloseCircleOutlined }
-};
+const DEFAULT_CONFIG: IStatusConfig = { label: "inconnu", color: "default", icon: null };
 
 interface IStatusTagProps {
-    status: EntityStatus;
+    status: string;
+    config: Record<string, IStatusConfig>;
 }
 
 /**
- * Consistent status tag for active/inactive/deleted entities.
+ * Generic status tag driven by an external configuration map.
  *
  * @component
  *
  * @description
- * Renders a colored outlined Tag with an icon and French label.
- * Used across roles, permissions, and settings for uniform status display.
+ * Renders a colored outlined Tag with an icon and label based on
+ * the provided config. Each module defines its own config map
+ * (entity status, editorial workflow, order lifecycle, etc.)
+ * and passes it alongside the status value.
  */
-const StatusTag: FC<IStatusTagProps> = ({ status }) => {
-    const { label, color, icon: Icon } = STATUS_CONFIG[status];
+const StatusTag: FC<IStatusTagProps> = ({ status, config }) => {
+    const { label, color, icon } = config[status] ?? DEFAULT_CONFIG;
 
     return (
-        <Tag color={color} variant="outlined" icon={<Icon />}>
+        <Tag color={color} variant="outlined" icon={icon}>
             {label}
         </Tag>
     );

@@ -14,7 +14,7 @@ Full spec for the shorts module — 7 admin endpoints with a simple activate/dea
 | PATCH | `/api/v1/admin/shorts/{id}/activate` | SuperAdminOnly | Activer |
 | PATCH | `/api/v1/admin/shorts/{id}/deactivate` | SuperAdminOnly | Désactiver |
 | DELETE | `/api/v1/admin/shorts/{id}` | SuperAdminOnly | Supprimer définitivement |
-| POST | `/api/v1/admin/shorts/{id}/thumbnail` | AdminOrSuperAdmin | Téléverser la vignette |
+| POST | `/api/v1/admin/shorts/{id}/thumbnail` | AdminOrSuperAdmin | Importer la vignette |
 | GET | `/api/v1/admin/shorts` | AdminOrSuperAdmin | Lister tous les shorts |
 | GET | `/api/v1/admin/shorts/{id}` | AdminOrSuperAdmin | Obtenir par identifiant |
 

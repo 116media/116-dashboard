@@ -37,7 +37,10 @@ export class AssignPermissionUseCase implements IAssignPermissionUseCase {
      * @param {{ roleId: string; permissionId: string }} request - Role and permission UUIDs
      * @returns {Promise<Result<IRoleWithPermissions>>} `ok(IRoleWithPermissions)` on success, `err(Failure)` on failure
      */
-    async execute(request: { roleId: string; permissionId: string }): Promise<Result<IRoleWithPermissions>> {
+    async execute(request: {
+        roleId: string;
+        permissionId: string;
+    }): Promise<Result<IRoleWithPermissions>> {
         return this.rolesRepository.assignPermission(request.roleId, request.permissionId);
     }
 }

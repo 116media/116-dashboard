@@ -1,0 +1,24 @@
+@use "@/shared/presentation/styles/dimensions.scss" as dimensions;
+@use "@/shared/presentation/styles/colors.scss" as colors;
+
+.switchField {
+    padding: calc(dimensions.$padding / 4) calc(dimensions.$padding / 2);
+    border: 1px solid colors.$border-table;
+    border-radius: dimensions.$border-radius;
+    
+    &__icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 2.5rem;
+        height: 2.5rem;
+        flex-shrink: 0;
+        font-size: 12pt;
+        background: colors.$border-light;
+        border-radius: dimensions.$border-radius;
+    }
+
+    &__description {
+        font-size: 9pt;
+    }
+}

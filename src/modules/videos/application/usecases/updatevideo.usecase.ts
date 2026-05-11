@@ -35,7 +35,10 @@ export class UpdateVideoUseCase implements IUpdateVideoUseCase {
      * @param {object} request - The video ID and updated data
      * @returns {Promise<Result<IVideoEntity>>} `ok(IVideoEntity)` on success, `err(Failure)` on failure
      */
-    async execute(request: { id: string; data: IUpdateVideoCredentials }): Promise<Result<IVideoEntity>> {
+    async execute(request: {
+        id: string;
+        data: IUpdateVideoCredentials;
+    }): Promise<Result<IVideoEntity>> {
         return this.videosRepository.updateVideo(request.id, request.data);
     }
 }

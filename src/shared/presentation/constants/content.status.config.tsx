@@ -1,5 +1,3 @@
-import { Tag } from "antd";
-import type { FC, ReactNode } from "react";
 import { EnumContentStatus } from "@/shared/infrastructure/api/generated/116.api";
 import {
     IconCheckCircleOutlined,
@@ -8,17 +6,17 @@ import {
     IconExclamationCircleOutlined,
     IconSaveOutlined
 } from "@/shared/presentation/ui/Icons";
-
-interface IStatusConfig {
-    label: string;
-    color: string;
-    icon: ReactNode;
-}
+import type { IStatusConfig } from "@/shared/presentation/ui/StatusTag";
 
 /**
  * Status configuration for content editorial workflow states.
+ *
+ * @description
+ * Used by articles and videos modules for the 7-step editorial
+ * workflow: Draft → PendingPayment → PendingReview → Approved
+ * → Published / Rejected / Archived.
  */
-const STATUS_CONFIG: Record<string, IStatusConfig> = {
+export const CONTENT_STATUS_CONFIG: Record<string, IStatusConfig> = {
     [EnumContentStatus.Draft]: { label: "brouillon", color: "default", icon: <IconEditOutlined /> },
     [EnumContentStatus.PendingPayment]: {
         label: "paiement en cours",
@@ -51,40 +49,3 @@ const STATUS_CONFIG: Record<string, IStatusConfig> = {
         icon: <IconSaveOutlined />
     }
 };
-
-const DEFAULT_CONFIG: IStatusConfig = { label: "inconnu", color: "default", icon: null };
-
-/**
- * Props for the ContentStatusTag component.
- *
- * @interface IContentStatusTagProps
- *
- * @property {EnumContentStatus} status - The content status value to display
- */
-interface IContentStatusTagProps {
-    status: EnumContentStatus;
-}
-
-/**
- * Status tag for content editorial workflow states.
- *
- * @component
- *
- * @description
- * Renders a colored Tag with a French label and icon matching the
- * editorial content status. Used by articles and videos modules.
- *
- * @param {IContentStatusTagProps} props - Component props
- * @returns {JSX.Element} The content status tag
- */
-const ContentStatusTag: FC<IContentStatusTagProps> = ({ status }) => {
-    const config = STATUS_CONFIG[status] ?? DEFAULT_CONFIG;
-
-    return (
-        <Tag color={config.color} icon={config.icon} variant="outlined">
-            {config.label}
-        </Tag>
-    );
-};
-
-export default ContentStatusTag;

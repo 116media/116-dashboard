@@ -17,8 +17,8 @@ export const ShortsNotification = {
      */
     createSuccess: {
         type: "success",
-        title: "Court-m\u00e9trage cr\u00e9\u00e9",
-        description: "Le court-m\u00e9trage a \u00e9t\u00e9 cr\u00e9\u00e9 avec succ\u00e8s."
+        title: "Réel créé",
+        description: "Le réel a été créé avec succès."
     } as INotificationConfig,
 
     /**
@@ -29,8 +29,8 @@ export const ShortsNotification = {
      */
     activateSuccess: {
         type: "success",
-        title: "Court-m\u00e9trage activ\u00e9",
-        description: "Le court-m\u00e9trage a \u00e9t\u00e9 activ\u00e9 avec succ\u00e8s."
+        title: "Réel activé",
+        description: "Le réel a été activé avec succès."
     } as INotificationConfig,
 
     /**
@@ -41,8 +41,8 @@ export const ShortsNotification = {
      */
     deactivateSuccess: {
         type: "success",
-        title: "Court-m\u00e9trage d\u00e9sactiv\u00e9",
-        description: "Le court-m\u00e9trage a \u00e9t\u00e9 d\u00e9sactiv\u00e9 avec succ\u00e8s."
+        title: "Réel désactivé",
+        description: "Le réel a été désactivé avec succès."
     } as INotificationConfig,
 
     /**
@@ -53,8 +53,8 @@ export const ShortsNotification = {
      */
     deleteSuccess: {
         type: "success",
-        title: "Court-m\u00e9trage supprim\u00e9",
-        description: "Le court-m\u00e9trage a \u00e9t\u00e9 supprim\u00e9 d\u00e9finitivement."
+        title: "Réel supprimé",
+        description: "Le réel a été supprimé définitivement."
     } as INotificationConfig,
 
     /**
@@ -65,7 +65,7 @@ export const ShortsNotification = {
      */
     uploadThumbnailSuccess: {
         type: "success",
-        title: "Miniature t\u00e9l\u00e9vers\u00e9e",
-        description: "La miniature a \u00e9t\u00e9 t\u00e9l\u00e9vers\u00e9e avec succ\u00e8s."
+        title: "Miniature téléversée",
+        description: "La miniature a été téléversée avec succès."
     } as INotificationConfig
 } as const;

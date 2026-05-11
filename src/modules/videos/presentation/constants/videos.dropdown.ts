@@ -51,7 +51,7 @@ export const VIDEO_DROPDOWN_ITEMS: IVideoDropdownItem[] = [
     { key: "tags", label: "Modifier les tags", hidden: (_, __, isAdmin) => !isAdmin },
     {
         key: "thumbnail",
-        label: "Téléverser une vignette",
+        label: "Importer une miniature",
         hidden: (_, isSuperAdmin) => !isSuperAdmin
     },
     { key: "shoot", label: "Planifier un tournage", hidden: (_, isSuperAdmin) => !isSuperAdmin },
@@ -69,7 +69,8 @@ export const VIDEO_DROPDOWN_ITEMS: IVideoDropdownItem[] = [
     {
         key: "publish",
         label: "Publier",
-        hidden: (r, isSuperAdmin) => !isSuperAdmin || r.status !== EnumContentStatus.Approved
+        hidden: (r, isSuperAdmin) =>
+            !isSuperAdmin || r.status !== EnumContentStatus.Approved || !r.youtubeVideoId
     },
     {
         key: "reject",

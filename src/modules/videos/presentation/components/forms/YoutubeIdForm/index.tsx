@@ -18,8 +18,8 @@ const { Paragraph } = Typography;
  * @property {(values: IAttachYoutubeIdCredentials) => void} onSubmit - Callback when the form is submitted
  */
 interface IYoutubeIdFormProps {
-    form: FormInstance<IAttachYoutubeIdCredentials>;
     error: Failure | null | undefined;
+    form: FormInstance<IAttachYoutubeIdCredentials>;
     onSubmit: (values: IAttachYoutubeIdCredentials) => void;
 }
 

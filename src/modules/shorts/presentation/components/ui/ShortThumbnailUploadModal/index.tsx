@@ -1,7 +1,8 @@
-import { Button, Flex, Modal, Upload } from "antd";
+import { Button, Flex, Modal } from "antd";
 import type { FC } from "react";
-import { useState } from "react";
-import { IconInboxOutlined } from "@/shared/presentation/ui/Icons";
+import { useCallback, useState } from "react";
+import FileUploader from "@/shared/presentation/ui/FileUploader";
+import { IMAGE_PRESET } from "@/shared/presentation/ui/FileUploader/presets";
 
 /**
  * Props for the ShortThumbnailUploadModal component.
@@ -27,13 +28,9 @@ interface IShortThumbnailUploadModalProps {
  * @component
  *
  * @description
- * Renders a file input for selecting a thumbnail image.
- * The user picks a file and clicks upload. The file is passed
- * to the parent via the `onUpload` callback without being
- * automatically uploaded by Ant Design's Upload.
- *
- * @param {IShortThumbnailUploadModalProps} props - Component props
- * @returns {JSX.Element} The thumbnail upload modal
+ * Renders the shared FileUploader in deferred mode for selecting
+ * a thumbnail image with optional cropping. The user picks and
+ * crops a file, then clicks upload to submit.
  */
 const ShortThumbnailUploadModal: FC<IShortThumbnailUploadModalProps> = ({
     open,
@@ -49,10 +46,10 @@ const ShortThumbnailUploadModal: FC<IShortThumbnailUploadModalProps> = ({
         onUpload(shortId, file);
     };
 
-    const handleCancel = () => {
+    const handleCancel = useCallback(() => {
         setFile(null);
         onCancel();
-    };
+    }, [onCancel]);
 
     return (
         <Modal
@@ -61,7 +58,7 @@ const ShortThumbnailUploadModal: FC<IShortThumbnailUploadModalProps> = ({
             width={490}
             destroyOnHidden
             onCancel={handleCancel}
-            title="T\u00e9l\u00e9verser une miniature"
+            title="Importer une miniature"
             footer={
                 <Flex gap={8} justify="space-between" flex={1}>
                     <Button onClick={handleCancel} danger>
@@ -73,24 +70,18 @@ const ShortThumbnailUploadModal: FC<IShortThumbnailUploadModalProps> = ({
                         disabled={!file}
                         onClick={handleUpload}
                     >
-                        T\u00e9l\u00e9verser
+                        Importer
                     </Button>
                 </Flex>
             }
         >
-            <Flex vertical gap={16}>
-                <Upload
-                    maxCount={1}
-                    accept="image/*"
-                    beforeUpload={(f) => {
-                        setFile(f as unknown as File);
-                        return false;
-                    }}
-                    onRemove={() => setFile(null)}
-                >
-                    <Button icon={<IconInboxOutlined />}>S\u00e9lectionner un fichier</Button>
-                </Upload>
-            </Flex>
+            <FileUploader
+                mode="deferred"
+                preset={IMAGE_PRESET}
+                aspectRatio={1}
+                onFileSelect={setFile}
+                onRemove={() => setFile(null)}
+            />
         </Modal>
     );
 };

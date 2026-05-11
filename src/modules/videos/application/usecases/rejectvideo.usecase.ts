@@ -35,7 +35,10 @@ export class RejectVideoUseCase implements IRejectVideoUseCase {
      * @param {object} request - The video ID and rejection reason
      * @returns {Promise<Result<IVideoActionResponse>>} `ok(void)` on success, `err(Failure)` on failure
      */
-    async execute(request: { id: string; data: IRejectVideoCredentials }): Promise<Result<IVideoActionResponse>> {
+    async execute(request: {
+        id: string;
+        data: IRejectVideoCredentials;
+    }): Promise<Result<IVideoActionResponse>> {
         return this.videosRepository.rejectVideo(request.id, request.data);
     }
 }

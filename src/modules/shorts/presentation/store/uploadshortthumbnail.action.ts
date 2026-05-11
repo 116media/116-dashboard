@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import type { IShortActionResponse } from "@/modules/shorts/domain/entities/IShortActionResponse";
+import type { IShortVideoEntity } from "@/modules/shorts/domain/entities/IShortVideoEntity";
 import type { Failure } from "@/shared/domain/failures/failure";
 import container from "@/shared/infrastructure/service.locator";
 import { ActionType } from "./constants";
@@ -13,7 +13,7 @@ import { ActionType } from "./constants";
  * On failure, stores the backend `Failure` in `shorts.uploadShortThumbnail.error`.
  */
 export const uploadShortThumbnailAction = createAsyncThunk<
-    IShortActionResponse,
+    IShortVideoEntity,
     { id: string; data: { file: File } },
     { rejectValue: Failure }
 >(ActionType.UploadShortThumbnail, async (params, { rejectWithValue }) => {

@@ -1,6 +1,7 @@
 import type { FC } from "react";
 import ShortsListContainer from "@/modules/shorts/presentation/containers/ShortsListContainer";
 import { APP_NAME } from "@/shared/infrastructure/constants/common";
+import styles from "./index.module.scss";
 
 /**
  * Shorts management page.
@@ -13,10 +14,10 @@ import { APP_NAME } from "@/shared/infrastructure/constants/common";
  * @returns The shorts page
  */
 const ShortsPage: FC = () => (
-    <>
-        <title>{`Courts-m\u00e9trages | ${APP_NAME}`}</title>
+    <div className={styles.page}>
+        <title>{`Réels | ${APP_NAME}`}</title>
         <ShortsListContainer />
-    </>
+    </div>
 );
 
 export default ShortsPage;

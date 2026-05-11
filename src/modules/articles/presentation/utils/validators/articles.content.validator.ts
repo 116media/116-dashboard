@@ -65,7 +65,7 @@ export const ArticlesContentValidator = {
      */
     headline: (label: string): Rule[] => [
         ValidatorUtils.required(label),
-        ValidatorUtils.max(label, 500)
+        ValidatorUtils.minmax(label, { min: 100, max: 500 })
     ],
 
     /**

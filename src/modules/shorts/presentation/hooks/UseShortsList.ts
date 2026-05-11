@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import type { IShortVideoEntity } from "@/modules/shorts/domain/entities/IShortVideoEntity";
 import type { ShortStatusFilter } from "@/modules/shorts/presentation/constants/shorts.status";
 import { getShortsAction } from "@/modules/shorts/presentation/store/getallshorts.action";
@@ -14,16 +14,22 @@ import { useAppDispatch, useAppSelector } from "@/shared/presentation/store/stor
  */
 interface IUseShortsList {
     loading: boolean;
+    searchValue: string;
+    statusFilter: ShortStatusFilter;
     error: Failure | null | undefined;
     shorts: IPaginatedResult<IShortVideoEntity>;
-    statusFilter: ShortStatusFilter;
-    searchValue: string;
+    reload: () => void;
     onSearch: (value: string) => void;
     onSearchChange: (value: string) => void;
     onStatusFilterChange: (value: ShortStatusFilter) => void;
     onPageChange: (page: number, pageSize: number) => void;
-    reload: () => void;
 }
+
+const resolveActiveFilter = (filter: ShortStatusFilter): boolean | undefined => {
+    if (filter === "active") return true;
+    if (filter === "inactive") return false;
+    return undefined;
+};
 
 /**
  * Custom hook for managing the shorts paginated list.
@@ -55,25 +61,17 @@ export const useShortsList = (): IUseShortsList => {
     const fetchShorts = useCallback(() => {
         dispatch(
             getShortsAction({
-                pageIndex,
                 pageSize,
-                search: debouncedSearch || undefined
+                pageIndex,
+                search: debouncedSearch || undefined,
+                isActive: resolveActiveFilter(statusFilter)
             })
         );
-    }, [dispatch, pageIndex, pageSize, debouncedSearch]);
+    }, [dispatch, pageIndex, pageSize, debouncedSearch, statusFilter]);
 
     useEffect(() => {
         fetchShorts();
     }, [fetchShorts]);
-
-    const filteredShorts = useMemo(() => {
-        const data = shorts as IPaginatedResult<IShortVideoEntity>;
-        if (!data || statusFilter === "all") return data;
-
-        const isActive = statusFilter === "active";
-        const filtered = data.items.filter((item) => item.isActive === isActive);
-        return { ...data, items: filtered, count: filtered.length };
-    }, [shorts, statusFilter]);
 
     const onSearch = (value: string) => {
         setSearchValue(value);
@@ -97,7 +95,7 @@ export const useShortsList = (): IUseShortsList => {
     return {
         loading,
         error,
-        shorts: filteredShorts as IPaginatedResult<IShortVideoEntity>,
+        shorts: shorts as IPaginatedResult<IShortVideoEntity>,
         statusFilter,
         searchValue,
         onSearch,

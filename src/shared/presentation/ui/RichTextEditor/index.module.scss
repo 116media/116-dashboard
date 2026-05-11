@@ -1,0 +1,110 @@
+@use "@/shared/presentation/styles/dimensions.scss" as dimensions;
+@use "@/shared/presentation/styles/colors.scss" as colors;
+
+.richTextEditor {
+    border: 1px solid colors.$border-light;
+    border-radius: dimensions.$border-radius;
+    overflow: hidden;
+    background: colors.$white;
+
+    &__toolbar {
+        padding: calc(dimensions.$padding / 3);
+        border-bottom: 1px solid colors.$border-light;
+        background: colors.$bg-hover;
+    }
+
+    &__content {
+        padding: calc(dimensions.$padding / 2) calc(dimensions.$padding * 0.75);
+        overflow-y: auto;
+
+        :global(.tiptap) {
+            outline: none;
+            font-size: 14px;
+            line-height: 1.7;
+
+            > * + * {
+                margin-top: 0.5em;
+            }
+
+            h1 {
+                font-size: 1.6em;
+                font-weight: 700;
+            }
+
+            h2 {
+                font-size: 1.3em;
+                font-weight: 600;
+            }
+
+            h3 {
+                font-size: 1.1em;
+                font-weight: 600;
+            }
+
+            p {
+                margin: 0;
+            }
+
+            blockquote {
+                border-left: 3px solid colors.$border-light;
+                padding-left: dimensions.$padding;
+                color: colors.$description;
+                margin: 0.5em 0;
+            }
+
+            code {
+                background: colors.$bg-hover;
+                border-radius: 4px;
+                padding: 2px 4px;
+                font-size: 0.9em;
+            }
+
+            img {
+                max-width: 100%;
+                height: auto;
+                border-radius: dimensions.$border-radius;
+                margin: 0.5em 0;
+            }
+
+            div[data-youtube-video] {
+                max-width: 100%;
+                margin: 0.5em 0;
+
+                iframe {
+                    max-width: 100%;
+                    height: auto;
+                    aspect-ratio: 16 / 9;
+                    border-radius: dimensions.$border-radius;
+                }
+            }
+
+            ul,
+            ol {
+                padding-left: dimensions.$padding;
+            }
+
+            a {
+                color: colors.$link;
+                text-decoration: underline;
+            }
+
+            hr {
+                border: none;
+                border-top: 1px solid colors.$border-light;
+                margin: 1em 0;
+            }
+        }
+
+        :global(.tiptap.ProseMirror-focused) {
+            outline: none;
+        }
+
+        :global(.tiptap p.is-editor-empty:first-child::before) {
+            color: colors.$text-muted;
+            content: attr(data-placeholder);
+            float: left;
+            height: 0;
+            pointer-events: none;
+        }
+    }
+}

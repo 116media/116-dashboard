@@ -48,7 +48,7 @@ export const useUpdateArticleTags = (
 
     useEffect(() => {
         if (article) {
-            setTagIds(article.tags.map((t) => t.id));
+            setTagIds((article.tags ?? []).map((t) => t.id));
         }
     }, [article]);
 

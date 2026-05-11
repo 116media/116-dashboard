@@ -36,7 +36,10 @@ export class AddItemToOrderUseCase implements IAddItemToOrderUseCase {
      * @param {object} request - Item details including orderId and order item data
      * @returns {Promise<Result<IOrderItemEntity>>} `ok(IOrderItemEntity)` on success, `err(Failure)` on failure
      */
-    async execute(request: { orderId: string; data: IAddOrderItemCredentials }): Promise<Result<IOrderItemEntity>> {
+    async execute(request: {
+        orderId: string;
+        data: IAddOrderItemCredentials;
+    }): Promise<Result<IOrderItemEntity>> {
         return this.commerceRepository.addItemToOrder(request.orderId, request.data);
     }
 }

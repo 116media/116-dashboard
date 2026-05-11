@@ -1,0 +1,12 @@
+@use "@/shared/presentation/styles/dimensions.scss" as dimensions;
+
+.articleWizard {
+    &__steps {
+        padding-bottom: dimensions.$padding;
+    }
+
+    &__content {
+        min-height: 300px;
+        padding-top: calc(dimensions.$padding / 2);
+    }
+}

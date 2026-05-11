@@ -1,5 +1,5 @@
 import type { FormInstance } from "antd";
-import { Checkbox, Form, InputNumber, Select } from "antd";
+import { Form, InputNumber, Select } from "antd";
 import { type FC, useMemo } from "react";
 import type { ICategoryEntity } from "@/modules/catalog/domain/entities/ICategoryEntity";
 import type { IAddPackageSlotCredentials } from "@/modules/catalog/presentation/model/IAddPackageSlotCredentials";
@@ -7,6 +7,8 @@ import { PackagesValidator } from "@/modules/catalog/presentation/utils/validato
 import type { Failure } from "@/shared/domain/failures/failure";
 import { useAppSelector } from "@/shared/presentation/store/store";
 import ErrorAlert from "@/shared/presentation/ui/ErrorAlert";
+import { IconExclamationCircleOutlined } from "@/shared/presentation/ui/Icons";
+import SwitchField from "@/shared/presentation/ui/SwitchField";
 
 const { Item } = Form;
 
@@ -73,7 +75,11 @@ const PackageSlotForm: FC<IPackageSlotFormProps> = ({ form, error, onSubmit }) =
             </Item>
 
             <Item name="isRequired" valuePropName="checked">
-                <Checkbox>Obligatoire</Checkbox>
+                <SwitchField
+                    title="Obligatoire"
+                    icon={<IconExclamationCircleOutlined />}
+                    description="Ce créneau doit être rempli dans le package."
+                />
             </Item>
 
             <Item name="quantity" label="Quantité" rules={PackagesValidator.quantity("Quantité")}>

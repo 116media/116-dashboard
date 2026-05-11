@@ -40,7 +40,10 @@ export class GetCustomerOrdersUseCase implements IGetCustomerOrdersUseCase {
      * @param {object} request - Parameters including customerId and pagination data
      * @returns {Promise<Result<IPaginatedResult<IOrderSummaryEntity>>>} `ok(IPaginatedResult<IOrderSummaryEntity>)` on success, `err(Failure)` on failure
      */
-    async execute(request: { customerId: string; data: IPaginationQueryParams }): Promise<Result<IPaginatedResult<IOrderSummaryEntity>>> {
+    async execute(request: {
+        customerId: string;
+        data: IPaginationQueryParams;
+    }): Promise<Result<IPaginatedResult<IOrderSummaryEntity>>> {
         return this.commerceRepository.getCustomerOrders(request.customerId, request.data);
     }
 }

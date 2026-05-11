@@ -35,7 +35,10 @@ export class UpdateCustomerUseCase implements IUpdateCustomerUseCase {
      * @param {object} request - The customer ID and updated data
      * @returns {Promise<Result<ICustomerEntity>>} `ok(ICustomerEntity)` on success, `err(Failure)` on failure
      */
-    async execute(request: { id: string; data: IUpdateCustomerCredentials }): Promise<Result<ICustomerEntity>> {
+    async execute(request: {
+        id: string;
+        data: IUpdateCustomerCredentials;
+    }): Promise<Result<ICustomerEntity>> {
         return this.catalogRepository.updateCustomer(request.id, request.data);
     }
 }

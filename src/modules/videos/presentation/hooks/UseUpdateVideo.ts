@@ -8,6 +8,7 @@ import { VideosNotification } from "@/modules/videos/presentation/utils/notifica
 import type { Failure } from "@/shared/domain/failures/failure";
 import { useAppDispatch, useAppSelector } from "@/shared/presentation/store/store";
 import { showNotification } from "@/shared/presentation/utils/notification/notification.utils";
+import { generateSlug } from "@/shared/presentation/utils/slug/slug.utils";
 
 const { useForm } = Form;
 
@@ -51,7 +52,6 @@ export const useUpdateVideo = (
             form.setFieldsValue({
                 categoryId: video.categoryId,
                 title: video.title,
-                slug: video.slug,
                 description: video.description,
                 customerId: undefined,
                 orderItemId: undefined,
@@ -70,7 +70,10 @@ export const useUpdateVideo = (
         const result = await dispatch(
             updateVideoAction({
                 id: video.id,
-                data: values
+                data: {
+                    ...values,
+                    slug: generateSlug(values.title, { unique: true })
+                }
             })
         );
 

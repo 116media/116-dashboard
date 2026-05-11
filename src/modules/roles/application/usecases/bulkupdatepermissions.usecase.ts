@@ -36,7 +36,10 @@ export class BulkUpdatePermissionsUseCase implements IBulkUpdatePermissionsUseCa
      * @param {{ roleId: string; permissionIds: string[] }} request - Role UUID and desired permission UUIDs
      * @returns {Promise<Result<IRoleWithPermissions>>} `ok(IRoleWithPermissions)` on success, `err(Failure)` on failure
      */
-    async execute(request: { roleId: string; permissionIds: string[] }): Promise<Result<IRoleWithPermissions>> {
+    async execute(request: {
+        roleId: string;
+        permissionIds: string[];
+    }): Promise<Result<IRoleWithPermissions>> {
         return this.rolesRepository.bulkUpdatePermissions(request.roleId, request.permissionIds);
     }
 }

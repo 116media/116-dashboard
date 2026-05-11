@@ -6,6 +6,7 @@ import {
     PRICING_TIER_DROPDOWN_ITEMS,
     type PricingTierAction
 } from "@/modules/lookup/presentation/constants/lookup.pricing-tiers.dropdown";
+import { ENTITY_STATUS_CONFIG } from "@/shared/presentation/constants/entity.status.config";
 import StatusTag from "@/shared/presentation/ui/StatusTag";
 import type { ITableActionItem } from "@/shared/presentation/ui/TableActionDropdown";
 import TableActionDropdown from "@/shared/presentation/ui/TableActionDropdown";
@@ -72,7 +73,10 @@ export const pricingTiersTableColumns = (
             return order(a) - order(b);
         },
         render: (_: boolean, record: IPricingTierEntity) => (
-            <StatusTag status={record.isActive ? "active" : "inactive"} />
+            <StatusTag
+                status={record.isActive ? "active" : "inactive"}
+                config={ENTITY_STATUS_CONFIG}
+            />
         )
     },
     {

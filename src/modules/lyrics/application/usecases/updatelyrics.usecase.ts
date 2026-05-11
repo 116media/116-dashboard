@@ -35,7 +35,10 @@ export class UpdateLyricsUseCase implements IUpdateLyricsUseCase {
      * @param {object} request - The lyrics ID and updated data
      * @returns {Promise<Result<ILyricsEntity>>} `ok(ILyricsEntity)` on success, `err(Failure)` on failure
      */
-    async execute(request: { id: string; data: IUpdateLyricsCredentials }): Promise<Result<ILyricsEntity>> {
+    async execute(request: {
+        id: string;
+        data: IUpdateLyricsCredentials;
+    }): Promise<Result<ILyricsEntity>> {
         return this.lyricsRepository.updateLyrics(request.id, request.data);
     }
 }

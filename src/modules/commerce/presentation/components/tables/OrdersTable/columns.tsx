@@ -1,12 +1,13 @@
 import { Typography } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import type { IOrderSummaryEntity } from "@/modules/commerce/domain/entities/IOrderSummaryEntity";
-import OrderStatusTag from "@/modules/commerce/presentation/components/ui/OrderStatusTag";
 import {
     ORDER_DROPDOWN_ITEMS,
     type OrderAction
 } from "@/modules/commerce/presentation/constants/commerce.orders.dropdown";
+import { ORDER_STATUS_CONFIG } from "@/modules/commerce/presentation/constants/order.status.config";
 import type { EnumOrderStatus } from "@/shared/infrastructure/api/generated/116.api";
+import StatusTag from "@/shared/presentation/ui/StatusTag";
 import type { ITableActionItem } from "@/shared/presentation/ui/TableActionDropdown";
 import TableActionDropdown from "@/shared/presentation/ui/TableActionDropdown";
 import { dayjs } from "@/shared/presentation/utils/dayjs/dayjs.utils";
@@ -76,7 +77,9 @@ export const ordersTableColumns = (
         key: "status",
         width: 160,
         align: "center",
-        render: (status: EnumOrderStatus) => <OrderStatusTag status={status} />
+        render: (status: EnumOrderStatus) => (
+            <StatusTag status={status} config={ORDER_STATUS_CONFIG} />
+        )
     },
     {
         title: "Actions",
