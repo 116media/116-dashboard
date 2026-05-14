@@ -1,4 +1,4 @@
-import { Typography } from "antd";
+import { Tag, Typography } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import type { ICategoryEntity } from "@/modules/catalog/domain/entities/ICategoryEntity";
 import {
@@ -7,7 +7,11 @@ import {
 } from "@/modules/catalog/presentation/constants/catalog.categories.dropdown";
 import { ENTITY_STATUS_CONFIG } from "@/shared/presentation/constants/entity.status.config";
 import { Colors } from "@/shared/presentation/constants/theme";
-import { IconCheckCircleFilled, IconCloseCircleFilled } from "@/shared/presentation/ui/Icons";
+import {
+    IconCheckCircleFilled,
+    IconCloseCircleFilled,
+    IconStopOutlined
+} from "@/shared/presentation/ui/Icons";
 import StatusTag from "@/shared/presentation/ui/StatusTag";
 import type { ITableActionItem } from "@/shared/presentation/ui/TableActionDropdown";
 import TableActionDropdown from "@/shared/presentation/ui/TableActionDropdown";
@@ -57,6 +61,19 @@ export const categoriesTableColumns = (
         width: 300,
         ellipsis: true,
         render: (description: string | null) => <Text type="secondary">{description ?? "—"}</Text>
+    },
+    {
+        title: "Gossip",
+        dataIndex: "isGossip",
+        key: "isGossip",
+        width: 110,
+        align: "center",
+        render: (isGossip: boolean) =>
+            isGossip ? (
+                <Tag color="purple">Gossip</Tag>
+            ) : (
+                <IconStopOutlined style={{ color: Colors.Error, fontSize: 18 }} />
+            )
     },
     {
         title: "Gratuit",
