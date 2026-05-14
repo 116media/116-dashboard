@@ -18,7 +18,7 @@ export const resetCreatePromotionLevelAction = () =>
  */
 export const createPromotionLevelAction = createAsyncThunk<
     IPromotionLevelEntity,
-    { name: string; durationDays: number; priceUsd: number },
+    { name: string; durationDays: number; priceUsd: number; spotPriority?: number | null },
     { rejectValue: Failure }
 >(ActionType.CreatePromotionLevel, async (data, { rejectWithValue }) => {
     const result = await container.cradle.createPromotionLevelUseCase.execute(data);
