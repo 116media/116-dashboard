@@ -37,7 +37,7 @@ VENTES (depends on Catalogue + Références; stamps Édition)
   Commandes → need Clients + Packages
   Articles de commande → need Catégories + Promotions + Niveaux tarifaires
   Paiements → need Commandes
-  Vérification → stamps Articles/Vidéos (SocialBoost, IsFeatured)
+  Vérification → stamps Articles/Vidéos (SocialBoost, IsPromoted)
 ```
 
 ---
