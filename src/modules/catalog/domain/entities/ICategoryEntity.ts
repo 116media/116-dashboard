@@ -16,6 +16,7 @@ import type { ICategoryPricingEntity } from "@/modules/catalog/domain/entities/I
  * @property {string} slug - URL-safe slug
  * @property {boolean} isFree - Whether content in this category is free
  * @property {boolean} isActive - Whether the category is currently active
+ * @property {boolean} isGossip - Whether this is the gossip fallback source for the homepage feed
  * @property {ICategoryPricingEntity[]} pricing - Configured pricing tiers
  */
 export interface ICategoryEntity {
@@ -31,5 +32,6 @@ export interface ICategoryEntity {
     description: string;
     isFree: boolean;
     isActive: boolean;
+    isGossip: boolean;
     pricing: ICategoryPricingEntity[];
 }
