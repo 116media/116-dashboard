@@ -21,8 +21,6 @@ const { useForm } = Form;
 interface IWizardStep2Credentials {
     description: string;
     socialBoost: boolean;
-    isFeatured: boolean;
-    featuredUntil?: string | null;
 }
 
 interface IUseCreateVideoWizard {
@@ -118,9 +116,7 @@ export const useCreateVideoWizard = (onSuccess: () => void): IUseCreateVideoWiza
                     title: video.title,
                     slug: video.slug,
                     description: values.description,
-                    socialBoost: values.socialBoost ?? false,
-                    isFeatured: values.isFeatured ?? false,
-                    featuredUntil: values.featuredUntil ?? null
+                    socialBoost: values.socialBoost ?? false
                 }
             })
         );
