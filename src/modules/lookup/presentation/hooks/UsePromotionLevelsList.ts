@@ -56,9 +56,19 @@ export const usePromotionLevelsList = (): IUsePromotionLevelsList => {
 
     const items = useMemo(() => {
         const list = (allItems as IPromotionLevelEntity[]) ?? [];
-        if (statusFilter === "active") return list.filter((item) => item.isActive);
-        if (statusFilter === "inactive") return list.filter((item) => !item.isActive);
-        return list;
+        const filtered =
+            statusFilter === "active"
+                ? list.filter((item) => item.isActive)
+                : statusFilter === "inactive"
+                  ? list.filter((item) => !item.isActive)
+                  : list;
+
+        // Group by spot priority: 1, 2, 3 first, then null (no spot)
+        return [...filtered].sort((a, b) => {
+            const aSpot = a.spotPriority ?? 4;
+            const bSpot = b.spotPriority ?? 4;
+            return aSpot - bSpot;
+        });
     }, [allItems, statusFilter]);
 
     const onStatusFilterChange = (value: PromotionLevelStatusFilter) => {
