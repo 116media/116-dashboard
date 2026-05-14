@@ -80,11 +80,7 @@ export class VideosRepositoryImpl implements IVideosRepositoryPort {
 
     async updateVideo(id: string, data: IUpdateVideoCredentials): Promise<Result<IVideoEntity>> {
         try {
-            const { featuredUntil, ...rest } = data;
-            const response = await apiClient.api.updateVideo(id, {
-                ...rest,
-                featuredUntil: featuredUntil ? dayjs(featuredUntil).toISOString() : null
-            });
+            const response = await apiClient.api.updateVideo(id, data);
             return ok(VideosMapper.videoFromDto(response.data.video));
         } catch (error) {
             return err(ProblemMapper.toFailure(error));
