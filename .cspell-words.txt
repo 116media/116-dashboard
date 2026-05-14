@@ -15,6 +15,7 @@ activateshort
 Activer
 activé
 activée
+actualités
 actuel
 actuellement
 addcategorypricing
@@ -93,6 +94,7 @@ basa
 Basculer
 Bientôt
 Bienvenue
+Binôme
 Bislama
 bizaad
 Bokmål
@@ -139,6 +141,7 @@ Configurez
 configuré
 configurée
 Confirmer
+confirmées
 Conflit
 connecté
 connectés
@@ -228,6 +231,7 @@ désactivée
 désélectionner
 Détail
 détails
+Détermine
 développement
 edititem
 editorder
@@ -341,6 +345,7 @@ Gĩkũyũ
 harddelete
 harddeletepermission
 harddeleterole
+haut
 Hier
 Hiri
 Historique
@@ -348,6 +353,7 @@ hotlinking
 hoverable
 hqdefault
 hrvatski
+héros
 identifiant
 Ikinyarwanda
 immédiatement
@@ -361,6 +367,7 @@ inconnue
 Indicatif
 Indiquez
 Informations
+inférieur
 instgrm
 Insérer
 Interlingue
@@ -400,6 +407,7 @@ l'adresse
 L'appareil
 L'identifiant
 l'étape
+Laisser
 latine
 latviešu
 latéral
@@ -489,6 +497,7 @@ oublié
 Owambo
 Paiement
 Paiements
+paire
 panneau
 papiers
 Paramètres
@@ -514,6 +523,7 @@ Produits
 Profil
 projet
 Promouvoir
+Promu
 Précédent
 préférences
 prévu
@@ -572,6 +582,7 @@ reçu
 Rica
 română
 rumantsch
+rumeurs
 Runa
 Rundi
 réactivé
@@ -627,6 +638,7 @@ Soumettre
 soumis
 soumise
 soumission
+spécifique
 Statut
 Strikethrough
 Stringly
@@ -714,6 +726,7 @@ upserts
 usecase
 usecases
 utilisateurs
+utilisé
 Uyghur
 Uyƣurqə
 Vakaviti
