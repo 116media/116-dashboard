@@ -50,8 +50,8 @@ interface IArticleEntity {
     authorId: string;
     status: EContentStatus;
     rejectionReason?: string | null;
-    isFeatured: boolean;
-    featuredUntil?: string | null;
+    isPromoted: boolean;
+    promotedUntil?: string | null;
     publishedAt?: string | null;
     metaTitle?: string | null;
     metaDescription?: string | null;
@@ -80,7 +80,7 @@ interface IArticleSummaryEntity {
     coverImageUrl: string;
     authorId: string;
     status: EContentStatus;
-    isFeatured: boolean;
+    isPromoted: boolean;
     publishedAt?: string | null;
     createdAt?: string | null;
     updatedAt?: string | null;
@@ -131,8 +131,8 @@ interface IVideoEntity {
     status: EContentStatus;
     rejectionReason?: string | null;
     youtubeVideoUrl?: string | null;
-    isFeatured: boolean;
-    featuredUntil?: string | null;
+    isPromoted: boolean;
+    promotedUntil?: string | null;
     hasLyrics: boolean;
     shootingScheduledAt?: string | null;
     publishedAt?: string | null;
@@ -161,7 +161,7 @@ interface IVideoSummaryEntity {
     authorId: string;
     status: EContentStatus;
     youtubeVideoUrl?: string | null;
-    isFeatured: boolean;
+    isPromoted: boolean;
     hasLyrics: boolean;
     publishedAt?: string | null;
     createdAt?: string | null;
