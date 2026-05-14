@@ -66,7 +66,8 @@ export const useUpdateCategory = (
                 data: {
                     name: values.name,
                     slug: generateSlug(values.name),
-                    description: values.description
+                    description: values.description,
+                    isGossip: values.isGossip ?? false
                 }
             })
         );
