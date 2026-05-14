@@ -1,5 +1,5 @@
 import type { FormInstance } from "antd";
-import { DatePicker, Form, Input, Select } from "antd";
+import { Form, Input, Select } from "antd";
 import type { FC } from "react";
 import { useMemo } from "react";
 import type { ICategoryEntity } from "@/modules/catalog/domain/entities/ICategoryEntity";
@@ -10,7 +10,7 @@ import { VideosContentValidator } from "@/modules/videos/presentation/utils/vali
 import type { Failure } from "@/shared/domain/failures/failure";
 import { useAppSelector } from "@/shared/presentation/store/store";
 import ErrorAlert from "@/shared/presentation/ui/ErrorAlert";
-import { IconFireFilled, IconStarFilled } from "@/shared/presentation/ui/Icons";
+import { IconFireFilled } from "@/shared/presentation/ui/Icons";
 import RichTextEditor from "@/shared/presentation/ui/RichTextEditor";
 import { SelectOptionBadged, SelectOptionDetail } from "@/shared/presentation/ui/SelectOptions";
 import SwitchField from "@/shared/presentation/ui/SwitchField";
@@ -157,43 +157,6 @@ const VideoDetailsForm: FC<IVideoDetailsFormProps> = ({ form, error, orderItems,
                                 description="Promouvoir cette vidéo sur les réseaux sociaux."
                             />
                         </Item>
-                    );
-                }}
-            </Item>
-
-            <Item noStyle shouldUpdate={(prev, curr) => prev.orderItemId !== curr.orderItemId}>
-                {({ getFieldValue }) => {
-                    const selectedOption = orderItems.options.find(
-                        (o) => o.value === getFieldValue("orderItemId")
-                    );
-                    const locked = selectedOption?.hasPromotion ?? false;
-                    return (
-                        <>
-                            <Item name="isFeatured" valuePropName="checked">
-                                <SwitchField
-                                    disabled={locked}
-                                    title="En vedette"
-                                    icon={<IconStarFilled />}
-                                    description="Afficher cette vidéo en avant sur la page d'accueil."
-                                />
-                            </Item>
-
-                            <Item
-                                noStyle
-                                shouldUpdate={(prev, curr) => prev.isFeatured !== curr.isFeatured}
-                            >
-                                {({ getFieldValue: getValue }) =>
-                                    getValue("isFeatured") ? (
-                                        <Item name="featuredUntil" label="En vedette jusqu'au">
-                                            <DatePicker
-                                                disabled={locked}
-                                                placeholder="Date d'expiration"
-                                            />
-                                        </Item>
-                                    ) : null
-                                }
-                            </Item>
-                        </>
                     );
                 }}
             </Item>
