@@ -28,8 +28,6 @@ export const updateVideoAction = createAsyncThunk<
             customerId?: string | null;
             orderItemId?: string | null;
             socialBoost: boolean;
-            isFeatured: boolean;
-            featuredUntil?: string | null;
             metaTitle?: string | null;
             metaDescription?: string | null;
         };
