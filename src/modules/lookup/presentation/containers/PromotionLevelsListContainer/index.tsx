@@ -96,9 +96,9 @@ const PromotionLevelsListContainer: FC = () => {
                     }}
                 >
                     <PromotionLevelForm
+                        formContext="CREATE"
                         form={createPromotionLevel.form}
                         error={createPromotionLevel.error}
-                        formContext="CREATE"
                         onSubmit={createPromotionLevel.onSubmit}
                     />
                 </CreateEditModal>
