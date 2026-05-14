@@ -13,6 +13,7 @@
  * @property {number} durationDays - Duration of the promotion in days
  * @property {number} priceUsd - Price in USD for this promotion level
  * @property {boolean} isActive - Whether the promotion level is currently active
+ * @property {number | null} spotPriority - Homepage grid spot (1, 2, or 3). Null means no specific spot.
  */
 export interface IPromotionLevelEntity {
     id: string;
@@ -20,4 +21,5 @@ export interface IPromotionLevelEntity {
     durationDays: number;
     priceUsd: number;
     isActive: boolean;
+    spotPriority: number | null;
 }
