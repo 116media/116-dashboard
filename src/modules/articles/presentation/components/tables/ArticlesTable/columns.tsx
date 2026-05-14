@@ -72,13 +72,13 @@ export const articlesTableColumns = (
         )
     },
     {
-        title: "En vedette",
-        dataIndex: "isFeatured",
-        key: "isFeatured",
+        title: "Promu",
+        dataIndex: "isPromoted",
+        key: "isPromoted",
         width: 110,
         align: "center",
-        render: (isFeatured: boolean) =>
-            isFeatured ? (
+        render: (isPromoted: boolean) =>
+            isPromoted ? (
                 <IconCheckCircleFilled style={{ color: Colors.Success, fontSize: 18 }} />
             ) : (
                 <IconCloseCircleFilled style={{ color: Colors.Error, fontSize: 18 }} />
