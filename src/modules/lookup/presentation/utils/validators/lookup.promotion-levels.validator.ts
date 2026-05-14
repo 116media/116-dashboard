@@ -47,5 +47,25 @@ export const PromotionLevelsValidator = {
      * @remarks
      * - Required field
      */
-    priceUsd: (label: string): Rule[] => [ValidatorUtils.required(label)]
+    priceUsd: (label: string): Rule[] => [ValidatorUtils.required(label)],
+
+    /**
+     * Validates the optional spot priority field.
+     *
+     * @param {string} label - Display name for error messages
+     * @returns {Rule[]} Array of validation rules
+     *
+     * @remarks
+     * - Optional field — null/undefined is valid
+     * - When provided, must be 1, 2, or 3
+     */
+    spotPriority: (label: string): Rule[] => [
+        {
+            validator(_rule, value) {
+                if (value === undefined || value === null) return Promise.resolve();
+                if ([1, 2, 3].includes(Number(value))) return Promise.resolve();
+                return Promise.reject(`${label} doit être 1, 2 ou 3.`);
+            }
+        }
+    ]
 } as const;
