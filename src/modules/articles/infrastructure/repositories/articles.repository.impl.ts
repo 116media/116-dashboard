@@ -1,4 +1,3 @@
-import dayjs from "dayjs";
 import type { IArticlesRepositoryPort } from "@/modules/articles/application/repositories/articles.repository.port";
 import type { IArticleActionResponse } from "@/modules/articles/domain/entities/IArticleActionResponse";
 import type { IArticleEntity } from "@/modules/articles/domain/entities/IArticleEntity";
@@ -73,11 +72,7 @@ export class ArticlesRepositoryImpl implements IArticlesRepositoryPort {
         data: IUpdateArticleCredentials
     ): Promise<Result<IArticleEntity>> {
         try {
-            const { featuredUntil, ...rest } = data;
-            const response = await apiClient.api.updateArticle(id, {
-                ...rest,
-                featuredUntil: featuredUntil ? dayjs(featuredUntil).toISOString() : null
-            });
+            const response = await apiClient.api.updateArticle(id, data);
             return ok(ArticlesMapper.articleFromDto(response.data.article));
         } catch (error) {
             return err(ProblemMapper.toFailure(error));
