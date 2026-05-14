@@ -17,7 +17,14 @@ export const resetCreateCategoryAction = () =>
  */
 export const createCategoryAction = createAsyncThunk<
     ICategoryEntity,
-    { contentTypeId: string; name: string; slug: string; description: string; isFree: boolean },
+    {
+        contentTypeId: string;
+        name: string;
+        slug: string;
+        description: string;
+        isFree: boolean;
+        isGossip: boolean;
+    },
     { rejectValue: Failure }
 >(ActionType.CreateCategory, async (data, { rejectWithValue }) => {
     const result = await container.cradle.createCategoryUseCase.execute(data);
