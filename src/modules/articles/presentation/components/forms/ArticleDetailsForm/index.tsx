@@ -1,5 +1,5 @@
 import type { FormInstance } from "antd";
-import { Form, Input, Select } from "antd";
+import { Form, Input, Select, Tag } from "antd";
 import type { FC } from "react";
 import { useCallback, useMemo } from "react";
 import type { IUpdateArticleCredentials } from "@/modules/articles/presentation/model/IUpdateArticleCredentials";
@@ -36,8 +36,7 @@ interface IArticleDetailsFormProps {
  *
  * @description
  * Renders all editable article fields: category, title, headline,
- * body (rich text), cover image, social boost, featured toggle
- * with expiry date, and optional B2B customer/order fields.
+ * body (rich text), cover image, social boost, and optional B2B customer/order fields.
  * Used exclusively in the article edit modal.
  */
 const ArticleDetailsForm: FC<IArticleDetailsFormProps> = ({
@@ -176,14 +175,21 @@ const ArticleDetailsForm: FC<IArticleDetailsFormProps> = ({
                     );
                     const locked = selectedOption !== undefined;
                     return (
-                        <Item name="socialBoost" valuePropName="checked">
-                            <SwitchField
-                                disabled={locked}
-                                title="Boost social"
-                                icon={<IconFireFilled />}
-                                description="Promouvoir cet article sur les réseaux sociaux."
-                            />
-                        </Item>
+                        <>
+                            {selectedOption?.isBonus && (
+                                <Item>
+                                    <Tag color="purple">Commande bonus</Tag>
+                                </Item>
+                            )}
+                            <Item name="socialBoost" valuePropName="checked">
+                                <SwitchField
+                                    disabled={locked}
+                                    title="Boost social"
+                                    icon={<IconFireFilled />}
+                                    description="Promouvoir cet article sur les réseaux sociaux."
+                                />
+                            </Item>
+                        </>
                     );
                 }}
             </Item>
