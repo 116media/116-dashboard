@@ -21,6 +21,7 @@ import { scheduleShootAction } from "./scheduleshoot.action";
 import { videosInitialState } from "./state";
 import { submitVideoAction } from "./submitvideo.action";
 import type { VideosStateKey } from "./type";
+import { unpromoteVideoAction } from "./unpromotevideo.action";
 import { updateVideoAction } from "./updatevideo.action";
 import { updateVideoSeoAction } from "./updatevideoseo.action";
 import { updateVideoTagsAction } from "./updatevideotags.action";
@@ -111,7 +112,11 @@ export const videosSlice = createSlice({
             // schedule shoot
             .addCase(scheduleShootAction.pending, ActionWrapperPending)
             .addCase(scheduleShootAction.fulfilled, ActionWrapperFulfilled)
-            .addCase(scheduleShootAction.rejected, ActionWrapperRejected);
+            .addCase(scheduleShootAction.rejected, ActionWrapperRejected)
+            // unpromote video
+            .addCase(unpromoteVideoAction.pending, ActionWrapperPending)
+            .addCase(unpromoteVideoAction.fulfilled, ActionWrapperFulfilled)
+            .addCase(unpromoteVideoAction.rejected, ActionWrapperRejected);
     }
 });
 
