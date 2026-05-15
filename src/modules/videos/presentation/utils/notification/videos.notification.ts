@@ -163,5 +163,17 @@ export const VideosNotification = {
         type: "success",
         title: "Tournage planifié",
         description: "Le tournage a été planifié avec succès."
+    } as INotificationConfig,
+
+    /**
+     * Success notification for video unpromote.
+     *
+     * @description
+     * Displays when a video's promotion has been force-removed.
+     */
+    unpromoteSuccess: {
+        type: "success",
+        title: "Promotion retirée",
+        description: "La promotion de la vidéo a été retirée."
     } as INotificationConfig
 } as const;
