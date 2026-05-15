@@ -1,5 +1,5 @@
 import type { FormInstance } from "antd";
-import { Form, Input, Select } from "antd";
+import { Form, Input, Select, Tag } from "antd";
 import type { FC } from "react";
 import { useMemo } from "react";
 import type { ICategoryEntity } from "@/modules/catalog/domain/entities/ICategoryEntity";
@@ -38,9 +38,8 @@ interface IVideoDetailsFormProps {
  * @component
  *
  * @description
- * Renders category, title, slug, description, social boost,
- * and featured toggle fields. Category options are loaded
- * from the catalog store.
+ * Renders category, title, slug, description, and social boost fields.
+ * Category options are loaded from the catalog store.
  *
  * @param {IVideoDetailsFormProps} props - Component props
  * @returns {JSX.Element} The rendered video content form
@@ -149,14 +148,21 @@ const VideoDetailsForm: FC<IVideoDetailsFormProps> = ({ form, error, orderItems,
                     );
                     const locked = selectedOption !== undefined;
                     return (
-                        <Item name="socialBoost" valuePropName="checked">
-                            <SwitchField
-                                disabled={locked}
-                                title="Boost social"
-                                icon={<IconFireFilled />}
-                                description="Promouvoir cette vidéo sur les réseaux sociaux."
-                            />
-                        </Item>
+                        <>
+                            {selectedOption?.isBonus && (
+                                <Item>
+                                    <Tag color="purple">Commande bonus</Tag>
+                                </Item>
+                            )}
+                            <Item name="socialBoost" valuePropName="checked">
+                                <SwitchField
+                                    disabled={locked}
+                                    title="Boost social"
+                                    icon={<IconFireFilled />}
+                                    description="Promouvoir cette vidéo sur les réseaux sociaux."
+                                />
+                            </Item>
+                        </>
                     );
                 }}
             </Item>
