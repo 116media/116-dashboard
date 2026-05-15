@@ -47,6 +47,12 @@ export const VIDEO_ACTION_CONFIG: Partial<Record<VideoAction, ActionConfig>> = {
         confirmLabel: "Archiver",
         danger: false
     },
+    unpromote: {
+        title: "Retirer la promotion",
+        description: "La promotion active sera supprimée. Indiquez la raison pour l'audit.",
+        confirmLabel: "Retirer",
+        danger: true
+    },
     delete: {
         title: "Supprimer la vidéo",
         description: "La vidéo sera supprimée définitivement. Cette action est irréversible.",
