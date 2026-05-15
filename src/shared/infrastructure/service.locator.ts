@@ -9,6 +9,7 @@ import type { GetArticleByIdUseCase } from "@/modules/articles/application/useca
 import type { PublishArticleUseCase } from "@/modules/articles/application/usecases/publisharticle.usecase";
 import type { RejectArticleUseCase } from "@/modules/articles/application/usecases/rejectarticle.usecase";
 import type { SubmitArticleUseCase } from "@/modules/articles/application/usecases/submitarticle.usecase";
+import type { UnpromoteArticleUseCase } from "@/modules/articles/application/usecases/unpromotearticle.usecase";
 import type { UpdateArticleUseCase } from "@/modules/articles/application/usecases/updatearticle.usecase";
 import type { UpdateArticleSeoUseCase } from "@/modules/articles/application/usecases/updatearticleseo.usecase";
 import type { UpdateArticleTagsUseCase } from "@/modules/articles/application/usecases/updatearticletags.usecase";
@@ -141,6 +142,7 @@ import type { PublishVideoUseCase } from "@/modules/videos/application/usecases/
 import type { RejectVideoUseCase } from "@/modules/videos/application/usecases/rejectvideo.usecase";
 import type { ScheduleShootUseCase } from "@/modules/videos/application/usecases/scheduleshoot.usecase";
 import type { SubmitVideoUseCase } from "@/modules/videos/application/usecases/submitvideo.usecase";
+import type { UnpromoteVideoUseCase } from "@/modules/videos/application/usecases/unpromotevideo.usecase";
 import type { UpdateVideoUseCase } from "@/modules/videos/application/usecases/updatevideo.usecase";
 import type { UpdateVideoSeoUseCase } from "@/modules/videos/application/usecases/updatevideoseo.usecase";
 import type { UpdateVideoTagsUseCase } from "@/modules/videos/application/usecases/updatevideotags.usecase";
@@ -330,6 +332,7 @@ export interface Cradle {
     uploadArticleImageUseCase: UploadArticleImageUseCase;
     updateArticleSeoUseCase: UpdateArticleSeoUseCase;
     updateArticleTagsUseCase: UpdateArticleTagsUseCase;
+    unpromoteArticleUseCase: UnpromoteArticleUseCase;
 
     // Videos repository
     videosRepository: IVideosRepositoryPort;
@@ -351,6 +354,7 @@ export interface Cradle {
     updateVideoSeoUseCase: UpdateVideoSeoUseCase;
     updateVideoTagsUseCase: UpdateVideoTagsUseCase;
     scheduleShootUseCase: ScheduleShootUseCase;
+    unpromoteVideoUseCase: UnpromoteVideoUseCase;
 
     // Shorts repository
     shortsRepository: IShortsRepositoryPort;
