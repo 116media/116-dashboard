@@ -19,7 +19,7 @@ interface IVideoMetaSidebarProps {
  * Four sections stacked vertically:
  * 1. Informations — status, category, author, YouTube URL, shoot date, dates
  * 2. SEO — meta title, meta description
- * 3. Options — featured and has lyrics toggles (read-only)
+ * 3. Options — lyrics toggle and promotion status (read-only)
  * 4. Miniature — video thumbnail preview
  */
 const VideoMetaSidebar: FC<IVideoMetaSidebarProps> = ({ video }) => (
