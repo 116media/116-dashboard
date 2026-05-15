@@ -7,6 +7,7 @@ import { ArticlesMapper } from "@/modules/articles/infrastructure/mappers/articl
 import type { IArticlesQueryParams } from "@/modules/articles/presentation/model/IArticlesQueryParams";
 import type { ICreateArticleCredentials } from "@/modules/articles/presentation/model/ICreateArticleCredentials";
 import type { IRejectArticleCredentials } from "@/modules/articles/presentation/model/IRejectArticleCredentials";
+import type { IUnpromoteArticleCredentials } from "@/modules/articles/presentation/model/IUnpromoteArticleCredentials";
 import type { IUpdateArticleCredentials } from "@/modules/articles/presentation/model/IUpdateArticleCredentials";
 import type { IUpdateArticleSeoCredentials } from "@/modules/articles/presentation/model/IUpdateArticleSeoCredentials";
 import type { IUpdateArticleTagsCredentials } from "@/modules/articles/presentation/model/IUpdateArticleTagsCredentials";
@@ -173,6 +174,18 @@ export class ArticlesRepositoryImpl implements IArticlesRepositoryPort {
         try {
             const response = await apiClient.api.updateArticleTags(id, data);
             return ok({ isSuccess: response.data.isSuccess });
+        } catch (error) {
+            return err(ProblemMapper.toFailure(error));
+        }
+    }
+
+    async unpromoteArticle(
+        slug: string,
+        data: IUnpromoteArticleCredentials
+    ): Promise<Result<IArticleActionResponse>> {
+        try {
+            await apiClient.api.forceUnpromoteArticle(slug, { reason: data.reason });
+            return ok({ isSuccess: true });
         } catch (error) {
             return err(ProblemMapper.toFailure(error));
         }
