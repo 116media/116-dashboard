@@ -17,6 +17,7 @@ export type VideoAction =
     | "publish"
     | "reject"
     | "archive"
+    | "unpromote"
     | "delete";
 
 interface IVideoDropdownItem {
@@ -92,6 +93,12 @@ export const VIDEO_DROPDOWN_ITEMS: IVideoDropdownItem[] = [
         key: "archive",
         label: "Archiver",
         hidden: (r, isSuperAdmin) => !isSuperAdmin || !r.canArchive
+    },
+    {
+        key: "unpromote",
+        label: "Retirer la promotion",
+        danger: true,
+        hidden: (r, isSuperAdmin) => !isSuperAdmin || !r.isPromoted
     },
     {
         danger: true,
