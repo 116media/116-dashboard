@@ -22,5 +22,6 @@ export const articlesInitialState: IArticlesState = {
     deleteArticle: createInitialState(),
     uploadArticleImage: createInitialState(),
     updateArticleSeo: createInitialState(),
-    updateArticleTags: createInitialState()
+    updateArticleTags: createInitialState(),
+    unpromoteArticle: createInitialState()
 };
