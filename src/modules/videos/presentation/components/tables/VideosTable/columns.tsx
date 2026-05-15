@@ -28,7 +28,7 @@ export type { VideoAction };
  *
  * @description
  * Builds columns for title, category, YouTube link icon, status tag,
- * featured flag, lyrics flag, published date, and an actions dropdown.
+ * promoted flag, lyrics flag, published date, and an actions dropdown.
  * The dropdown items are filtered based on video status and the current
  * user's role.
  *
