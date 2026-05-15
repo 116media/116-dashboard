@@ -14,7 +14,8 @@ export const ActionType = {
     DeleteArticle: "Articles/deleteArticle",
     UploadArticleImage: "Articles/uploadArticleImage",
     UpdateArticleSeo: "Articles/updateArticleSeo",
-    UpdateArticleTags: "Articles/updateArticleTags"
+    UpdateArticleTags: "Articles/updateArticleTags",
+    UnpromoteArticle: "Articles/unpromoteArticle"
 } as const;
 
 /**
