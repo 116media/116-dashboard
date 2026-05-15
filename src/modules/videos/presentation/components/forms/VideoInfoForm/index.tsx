@@ -1,5 +1,5 @@
 import type { FormInstance } from "antd";
-import { Form, Input, Select } from "antd";
+import { Form, Input, Select, Tag } from "antd";
 import type { FC } from "react";
 import { useMemo } from "react";
 import type { ICategoryEntity } from "@/modules/catalog/domain/entities/ICategoryEntity";
@@ -141,6 +141,19 @@ const VideoInfoForm: FC<IVideoInfoFormProps> = ({
                         onOrderItemChange?.(option);
                     }}
                 />
+            </Item>
+
+            <Item noStyle shouldUpdate={(prev, curr) => prev.orderItemId !== curr.orderItemId}>
+                {({ getFieldValue }) => {
+                    const selectedOption = orderItems.options.find(
+                        (o) => o.value === getFieldValue("orderItemId")
+                    );
+                    return selectedOption?.isBonus ? (
+                        <Item>
+                            <Tag color="purple">Commande bonus</Tag>
+                        </Item>
+                    ) : null;
+                }}
             </Item>
         </Form>
     );
