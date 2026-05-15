@@ -21,7 +21,7 @@ interface ISwitchFieldProps {
  * @description
  * Renders a row with an icon, title, and description on the left
  * and a Switch toggle on the right. Used for boolean form fields
- * like social boost, featured, etc.
+ * like social boost, gossip, etc.
  */
 const SwitchField: FC<ISwitchFieldProps> = ({
     icon,
