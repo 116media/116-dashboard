@@ -175,6 +175,14 @@ const ArticlesListContainer: FC = () => {
                     });
                     if (success) modals.setActionOpen(false);
                 }}
+                onUnpromoteSubmit={async (values) => {
+                    if (!modals.selectedEntity) return;
+                    const success = await workflow.onUnpromote({
+                        slug: modals.selectedEntity.slug,
+                        data: values
+                    });
+                    if (success) modals.setActionOpen(false);
+                }}
                 onCancel={() => modals.setActionOpen(false)}
             />
 
