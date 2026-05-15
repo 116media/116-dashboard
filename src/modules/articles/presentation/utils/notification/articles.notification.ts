@@ -139,5 +139,17 @@ export const ArticlesNotification = {
         type: "success",
         title: "Tags mis à jour",
         description: "Les tags de l'article ont été mis à jour."
+    } as INotificationConfig,
+
+    /**
+     * Success notification for article unpromote.
+     *
+     * @description
+     * Displays when an article's promotion has been force-removed.
+     */
+    unpromoteSuccess: {
+        type: "success",
+        title: "Promotion retirée",
+        description: "La promotion de l'article a été retirée."
     } as INotificationConfig
 } as const;
