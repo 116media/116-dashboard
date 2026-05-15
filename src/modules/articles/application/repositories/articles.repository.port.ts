@@ -5,6 +5,7 @@ import type { IArticleSummaryEntity } from "@/modules/articles/domain/entities/I
 import type { IArticlesQueryParams } from "@/modules/articles/presentation/model/IArticlesQueryParams";
 import type { ICreateArticleCredentials } from "@/modules/articles/presentation/model/ICreateArticleCredentials";
 import type { IRejectArticleCredentials } from "@/modules/articles/presentation/model/IRejectArticleCredentials";
+import type { IUnpromoteArticleCredentials } from "@/modules/articles/presentation/model/IUnpromoteArticleCredentials";
 import type { IUpdateArticleCredentials } from "@/modules/articles/presentation/model/IUpdateArticleCredentials";
 import type { IUpdateArticleSeoCredentials } from "@/modules/articles/presentation/model/IUpdateArticleSeoCredentials";
 import type { IUpdateArticleTagsCredentials } from "@/modules/articles/presentation/model/IUpdateArticleTagsCredentials";
@@ -142,5 +143,17 @@ export interface IArticlesRepositoryPort {
     updateArticleTags(
         id: string,
         data: IUpdateArticleTagsCredentials
+    ): Promise<Result<IArticleActionResponse>>;
+
+    /**
+     * Force-unpromotes a promoted article (SuperAdmin only).
+     *
+     * @param slug - The article slug
+     * @param data - Justification reason for removing the promotion
+     * @returns Action response with success indicator
+     */
+    unpromoteArticle(
+        slug: string,
+        data: IUnpromoteArticleCredentials
     ): Promise<Result<IArticleActionResponse>>;
 }
