@@ -26,7 +26,7 @@ export type { ArticleAction };
  * Generates Ant Design table column definitions for the articles table.
  *
  * @description
- * Builds columns for title, category, status tag, featured flag,
+ * Builds columns for title, category, status tag, promoted flag,
  * published date, updated date, and an actions dropdown. The dropdown
  * items are filtered based on article status and the current user's role.
  *
