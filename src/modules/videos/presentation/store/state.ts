@@ -25,5 +25,6 @@ export const videosInitialState: IVideosState = {
     attachYoutubeId: createInitialState(),
     updateVideoSeo: createInitialState(),
     updateVideoTags: createInitialState(),
-    scheduleShoot: createInitialState()
+    scheduleShoot: createInitialState(),
+    unpromoteVideo: createInitialState()
 };
