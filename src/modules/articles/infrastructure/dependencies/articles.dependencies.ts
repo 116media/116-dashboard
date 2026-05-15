@@ -9,6 +9,7 @@ import { GetArticleByIdUseCase } from "@/modules/articles/application/usecases/g
 import { PublishArticleUseCase } from "@/modules/articles/application/usecases/publisharticle.usecase";
 import { RejectArticleUseCase } from "@/modules/articles/application/usecases/rejectarticle.usecase";
 import { SubmitArticleUseCase } from "@/modules/articles/application/usecases/submitarticle.usecase";
+import { UnpromoteArticleUseCase } from "@/modules/articles/application/usecases/unpromotearticle.usecase";
 import { UpdateArticleUseCase } from "@/modules/articles/application/usecases/updatearticle.usecase";
 import { UpdateArticleSeoUseCase } from "@/modules/articles/application/usecases/updatearticleseo.usecase";
 import { UpdateArticleTagsUseCase } from "@/modules/articles/application/usecases/updatearticletags.usecase";
@@ -48,6 +49,9 @@ export function registerArticlesDependencies(container: AwilixContainer): void {
         // Commands — Media & Metadata
         uploadArticleImageUseCase: asClass(UploadArticleImageUseCase).transient(),
         updateArticleSeoUseCase: asClass(UpdateArticleSeoUseCase).transient(),
-        updateArticleTagsUseCase: asClass(UpdateArticleTagsUseCase).transient()
+        updateArticleTagsUseCase: asClass(UpdateArticleTagsUseCase).transient(),
+
+        // Commands — Promotion
+        unpromoteArticleUseCase: asClass(UnpromoteArticleUseCase).transient()
     });
 }
