@@ -156,17 +156,25 @@ const VideosListContainer: FC = () => {
                 action={modals.currentAction}
                 video={modals.selectedEntity}
                 loading={workflow.loading}
+                error={workflow.error}
                 onConfirm={() =>
                     modals.handleActionConfirm({
                         submit: workflow.onSubmit,
                         approve: workflow.onApprove,
                         publish: workflow.onPublish,
-                        reject: (id: string) =>
-                            workflow.onReject({ id, data: { rejectionReason: "" } }),
+                        reject: async () => {},
                         archive: workflow.onArchive,
                         delete: workflow.onDelete
                     })
                 }
+                onRejectSubmit={async (values) => {
+                    if (!modals.selectedEntity) return;
+                    const success = await workflow.onReject({
+                        id: modals.selectedEntity.id,
+                        data: values
+                    });
+                    if (success) modals.setActionOpen(false);
+                }}
                 onCancel={() => modals.setActionOpen(false)}
             />
 

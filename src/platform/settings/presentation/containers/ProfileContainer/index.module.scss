@@ -1,5 +1,6 @@
 @use "@/shared/presentation/styles/colors" as colors;
 @use "@/shared/presentation/styles/dimensions" as dimensions;
+@use "@/shared/presentation/styles/mixins" as mixins;
 
 .profileContainer {
     &__avatarSection {
@@ -46,6 +47,10 @@
         display: grid;
         grid-template-columns: 1fr 1fr;
         gap: calc(dimensions.$padding / 1.5);
+
+        @include mixins.mediaMaxLG {
+            grid-template-columns: 1fr;
+        }
     }
 
     &__loading {
@@ -68,6 +73,10 @@
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: calc(dimensions.$padding / 1.5);
+
+            @include mixins.mediaMaxLG {
+                grid-template-columns: 1fr;
+            }
 
             [class~="ant-skeleton-paragraph"]{
                 margin-top: calc(dimensions.$padding / 4) !important;

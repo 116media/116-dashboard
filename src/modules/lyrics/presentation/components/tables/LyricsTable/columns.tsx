@@ -66,7 +66,6 @@ export const lyricsTableColumns = (
         width: 160,
         render: (_: unknown, record: ILyricsEntity) => {
             if (record.videoId) return <Text type="secondary">Video</Text>;
-            if (record.articleId) return <Text type="secondary">Article</Text>;
             return <Text type="secondary">—</Text>;
         }
     },

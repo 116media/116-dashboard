@@ -50,7 +50,6 @@ const ArticleCreateWizard: FC<IArticleCreateWizardProps> = ({ open, onClose, onS
         <ArticleBodyForm
             key="step2"
             error={wizard.error}
-            showAllFields={false}
             form={wizard.step2Form}
             onSubmit={() => wizard.goNext()}
             onImageUpload={wizard.onImageUpload}
@@ -79,7 +78,7 @@ const ArticleCreateWizard: FC<IArticleCreateWizardProps> = ({ open, onClose, onS
             onCancel={handleClose}
             title="Créer un article"
             footer={
-                <Flex justify="space-between">
+                <Flex justify="space-between" flex={1}>
                     <Button onClick={handleClose} danger>
                         Annuler
                     </Button>
@@ -89,6 +88,7 @@ const ArticleCreateWizard: FC<IArticleCreateWizardProps> = ({ open, onClose, onS
                                 Précédent
                             </Button>
                         )}
+
                         {wizard.currentStep < 3 ? (
                             <Button type="primary" loading={wizard.loading} onClick={wizard.goNext}>
                                 Suivant
@@ -107,6 +107,7 @@ const ArticleCreateWizard: FC<IArticleCreateWizardProps> = ({ open, onClose, onS
             }
         >
             <Steps
+                titlePlacement="vertical"
                 current={wizard.currentStep}
                 className={styles.articleWizard__steps}
                 items={STEP_TITLES.map((title) => ({ title }))}

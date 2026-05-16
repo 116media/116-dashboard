@@ -119,14 +119,14 @@ export const ValidatorUtils = {
                 return Promise.resolve();
             }
 
+            const regexDialCode = /^\+\d{1,4}$/;
+            if (!phoneDialCode || !regexDialCode.test(phoneDialCode)) {
+                return Promise.reject("Veuillez d'abord sélectionner un indicatif téléphonique");
+            }
+
             const regexPhone = /^[1-9][0-9]{1,12}$/;
             if (!regexPhone.test(value)) {
                 return Promise.reject(`${phoneDialCode}${value} a un format invalide`);
-            }
-
-            const regexDialCode = /^\+\d{1,4}$/;
-            if (!phoneDialCode || !regexDialCode.test(phoneDialCode)) {
-                return Promise.reject("Indicatif téléphonique est invalide");
             }
 
             const fullPhoneNumber = `${phoneDialCode}${value}`;

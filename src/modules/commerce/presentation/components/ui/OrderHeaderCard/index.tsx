@@ -2,7 +2,7 @@ import { Button, Card, Flex, Space, Typography } from "antd";
 import type { FC } from "react";
 import type { IOrderDetailEntity } from "@/modules/commerce/domain/entities/IOrderDetailEntity";
 import { ORDER_STATUS_CONFIG } from "@/modules/commerce/presentation/constants/order.status.config";
-import SettingsField from "@/platform/settings/presentation/components/ui/SettingsField";
+import DetailField from "@/shared/presentation/ui/DetailField";
 import {
     IconCalendarOutlined,
     IconClockCircleOutlined,
@@ -94,25 +94,25 @@ const OrderHeaderCard: FC<IOrderHeaderCardProps> = ({
         </Text>
 
         <div className={styles.orderHeader__grid}>
-            <SettingsField
+            <DetailField
                 label="Total"
-                value={`$${(order.totalAmountUsd ?? 0).toFixed(2)}`}
                 icon={<IconDollarOutlined />}
+                value={`$${(order.totalAmountUsd ?? 0).toFixed(2)}`}
             />
-            <SettingsField label="ID" value={order.id} icon={<IconTagOutlined />} />
-            <SettingsField
+            <DetailField label="ID" value={order.id} icon={<IconTagOutlined />} />
+            <DetailField
                 label="Créée le"
+                icon={<IconClockCircleOutlined />}
                 value={
                     order.createdAt ? dayjs(order.createdAt).format("DD/MM/YYYY HH:mm") : undefined
                 }
-                icon={<IconClockCircleOutlined />}
             />
-            <SettingsField
+            <DetailField
                 label="Mise à jour"
+                icon={<IconCalendarOutlined />}
                 value={
                     order.updatedAt ? dayjs(order.updatedAt).format("DD/MM/YYYY HH:mm") : undefined
                 }
-                icon={<IconCalendarOutlined />}
             />
         </div>
     </Card>

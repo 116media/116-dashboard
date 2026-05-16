@@ -28,7 +28,6 @@ export const LyricsMapper = {
             lyricsText: dto.lyricsText,
             language: dto.language,
             videoId: dto.videoId,
-            articleId: dto.articleId,
             metaTitle: dto.metaTitle,
             metaDescription: dto.metaDescription,
             metaKeywords: dto.metaKeywords,

@@ -1,6 +1,8 @@
 import { useCallback, useState } from "react";
+import { useNavigate } from "react-router";
 import type { IArticleSummaryEntity } from "@/modules/articles/domain/entities/IArticleSummaryEntity";
 import type { ArticleAction } from "@/modules/articles/presentation/constants/articles.dropdown";
+import { ARTICLE_DETAIL_PATH } from "@/shared/presentation/constants/paths";
 
 /**
  * Return type for the article modals hook.
@@ -48,25 +50,33 @@ export const useArticleModals = (reload: () => void): IUseArticleModals => {
     const [currentAction, setCurrentAction] = useState<ArticleAction | null>(null);
     const [selectedEntity, setSelectedEntity] = useState<IArticleSummaryEntity | null>(null);
 
-    const handleAction = useCallback((action: ArticleAction, entity: IArticleSummaryEntity) => {
-        setSelectedEntity(entity);
+    const navigate = useNavigate();
 
-        switch (action) {
-            case "edit":
-                setEditOpen(true);
-                break;
-            case "seo":
-                setSeoOpen(true);
-                break;
-            case "tags":
-                setTagsOpen(true);
-                break;
-            default:
-                setCurrentAction(action);
-                setActionOpen(true);
-                break;
-        }
-    }, []);
+    const handleAction = useCallback(
+        (action: ArticleAction, entity: IArticleSummaryEntity) => {
+            setSelectedEntity(entity);
+
+            switch (action) {
+                case "view":
+                    navigate(`${ARTICLE_DETAIL_PATH}/${entity.id}`);
+                    break;
+                case "edit":
+                    setEditOpen(true);
+                    break;
+                case "seo":
+                    setSeoOpen(true);
+                    break;
+                case "tags":
+                    setTagsOpen(true);
+                    break;
+                default:
+                    setCurrentAction(action);
+                    setActionOpen(true);
+                    break;
+            }
+        },
+        [navigate]
+    );
 
     const handleActionConfirm = useCallback(
         async (actionMap: Record<string, (id: string) => Promise<void>>) => {

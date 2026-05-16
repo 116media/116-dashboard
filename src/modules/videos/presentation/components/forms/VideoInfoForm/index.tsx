@@ -1,5 +1,5 @@
 import type { FormInstance } from "antd";
-import { Flex, Form, Input, Select, Typography } from "antd";
+import { Form, Input, Select } from "antd";
 import type { FC } from "react";
 import { useMemo } from "react";
 import type { ICategoryEntity } from "@/modules/catalog/domain/entities/ICategoryEntity";
@@ -10,9 +10,10 @@ import { VideosContentValidator } from "@/modules/videos/presentation/utils/vali
 import type { Failure } from "@/shared/domain/failures/failure";
 import { useAppSelector } from "@/shared/presentation/store/store";
 import ErrorAlert from "@/shared/presentation/ui/ErrorAlert";
+import RichTextEditor from "@/shared/presentation/ui/RichTextEditor";
+import { SelectOptionBadged, SelectOptionDetail } from "@/shared/presentation/ui/SelectOptions";
 
 const { Item } = Form;
-const { TextArea } = Input;
 
 /**
  * Props for the VideoInfoForm component.
@@ -66,7 +67,7 @@ const VideoInfoForm: FC<IVideoInfoFormProps> = ({ form, error, onSubmit }) => {
             ((customers as { items: ICustomerEntity[] })?.items ?? []).map((c) => ({
                 label: c.fullName,
                 value: c.id,
-                company: c.company
+                secondary: c.company ?? undefined
             })),
         [customers]
     );
@@ -103,10 +104,9 @@ const VideoInfoForm: FC<IVideoInfoFormProps> = ({ form, error, onSubmit }) => {
                 label="Description"
                 rules={VideosContentValidator.description("Description")}
             >
-                <TextArea
-                    maxLength={2000}
-                    showCount
-                    rows={4}
+                <RichTextEditor
+                    mode="simple"
+                    minHeight={150}
                     placeholder="Description de la vidéo"
                 />
             </Item>
@@ -121,16 +121,7 @@ const VideoInfoForm: FC<IVideoInfoFormProps> = ({ form, error, onSubmit }) => {
                         form.setFieldValue("orderItemId", undefined);
                         orderItems.fetchByCustomer(value || undefined);
                     }}
-                    optionRender={(option) => (
-                        <Flex justify="space-between" align="center">
-                            <span>{option.label}</span>
-                            {option.data.company && (
-                                <Typography.Text type="secondary" style={{ fontSize: 12 }}>
-                                    {option.data.company}
-                                </Typography.Text>
-                            )}
-                        </Flex>
-                    )}
+                    optionRender={SelectOptionDetail}
                 />
             </Item>
 
@@ -143,21 +134,7 @@ const VideoInfoForm: FC<IVideoInfoFormProps> = ({ form, error, onSubmit }) => {
                     options={orderItems.options}
                     placeholder="Sélectionner une commande"
                     popupMatchSelectWidth={false}
-                    optionRender={(option) => (
-                        <Flex justify="space-between" align="center" gap={16}>
-                            <Flex gap={8} align="center">
-                                <Typography.Text code style={{ fontSize: 11 }}>
-                                    {option.data.shortId}
-                                </Typography.Text>
-                                <span>{option.label}</span>
-                            </Flex>
-                            {option.data.customerName && (
-                                <Typography.Text type="secondary" style={{ fontSize: 12 }}>
-                                    {option.data.customerName}
-                                </Typography.Text>
-                            )}
-                        </Flex>
-                    )}
+                    optionRender={SelectOptionBadged}
                 />
             </Item>
         </Form>

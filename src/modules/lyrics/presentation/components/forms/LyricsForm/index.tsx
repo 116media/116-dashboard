@@ -1,13 +1,19 @@
 import type { FormInstance } from "antd";
-import { Form, Input } from "antd";
+import { Form, Input, Select } from "antd";
 import type { FC } from "react";
+import { useMemo } from "react";
 import type { ICreateLyricsCredentials } from "@/modules/lyrics/presentation/model/ICreateLyricsCredentials";
 import { LyricsContentValidator } from "@/modules/lyrics/presentation/utils/validators/lyrics.content.validator";
+import type { IVideoSummaryEntity } from "@/modules/videos/domain/entities/IVideoSummaryEntity";
 import type { Failure } from "@/shared/domain/failures/failure";
+import type { IPaginatedResult } from "@/shared/domain/types/pagination";
+import { useAppSelector } from "@/shared/presentation/store/store";
 import ErrorAlert from "@/shared/presentation/ui/ErrorAlert";
+import LanguageSelect from "@/shared/presentation/ui/LanguageSelect";
+import RichTextEditor from "@/shared/presentation/ui/RichTextEditor";
+import { SelectOptionDetail } from "@/shared/presentation/ui/SelectOptions";
 
 const { Item } = Form;
-const { TextArea } = Input;
 
 /**
  * Props for the LyricsForm component.
@@ -29,14 +35,23 @@ interface ILyricsFormProps {
  * @component
  *
  * @description
- * Renders song title, artist name, lyrics text (TextArea), language,
- * and optional video ID / article ID fields. Validation rules enforce
+ * Renders song title, artist name, lyrics rich text editor, language
+ * picker, and optional video selector. Validation rules enforce
  * maximum lengths matching backend constraints.
- *
- * @param {ILyricsFormProps} props - Component props
- * @returns {JSX.Element} The rendered lyrics form
  */
 const LyricsForm: FC<ILyricsFormProps> = ({ form, error, onSubmit }) => {
+    const { data: videos } = useAppSelector(({ videos: { getVideos } }) => getVideos);
+
+    const videoOptions = useMemo(
+        () =>
+            ((videos as IPaginatedResult<IVideoSummaryEntity>)?.items ?? []).map((v) => ({
+                label: v.title,
+                value: v.id,
+                secondary: v.categoryName
+            })),
+        [videos]
+    );
+
     return (
         <Form
             form={form}
@@ -69,19 +84,21 @@ const LyricsForm: FC<ILyricsFormProps> = ({ form, error, onSubmit }) => {
                 label="Paroles"
                 rules={LyricsContentValidator.lyricsText("Paroles")}
             >
-                <TextArea rows={8} placeholder="Texte des paroles" />
+                <RichTextEditor mode="simple" minHeight={200} placeholder="Texte des paroles" />
             </Item>
 
             <Item name="language" label="Langue" rules={LyricsContentValidator.language("Langue")}>
-                <Input maxLength={10} placeholder="fr, en, sw, ..." />
+                <LanguageSelect />
             </Item>
 
-            <Item name="videoId" label="ID Video">
-                <Input placeholder="UUID de la video" />
-            </Item>
-
-            <Item name="articleId" label="ID Article">
-                <Input placeholder="UUID de l'article" />
+            <Item name="videoId" label="Vidéo associée">
+                <Select
+                    showSearch
+                    allowClear
+                    options={videoOptions}
+                    placeholder="Rechercher une vidéo"
+                    optionRender={SelectOptionDetail}
+                />
             </Item>
         </Form>
     );

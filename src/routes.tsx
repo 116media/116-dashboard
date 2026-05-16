@@ -5,6 +5,7 @@ import {
     ADMIN_PATH,
     ADS_BANNER_PATH,
     ADS_POPUP_PATH,
+    ARTICLE_DETAIL_PATH,
     ARTICLE_PATH,
     CATALOG_PATH,
     FORGOT_PASSWORD_PATH,
@@ -36,6 +37,9 @@ const OverviewPage = lazy(() => import("@/modules/overview/presentation/pages/Ov
 const SettingsPage = lazy(() => import("@/platform/settings/presentation/pages/SettingsPage"));
 const VideosPage = lazy(() => import("@/modules/videos/presentation/pages/VideosPage"));
 const ArticlesPage = lazy(() => import("@/modules/articles/presentation/pages/ArticlesPage"));
+const ArticleDetailPage = lazy(
+    () => import("@/modules/articles/presentation/pages/ArticleDetailPage")
+);
 const AdsBannerPage = lazy(() => import("@/modules/ads/presentation/pages/AdsBannerPage"));
 const AdsPopupPage = lazy(() => import("@/modules/ads/presentation/pages/AdsPopupPage"));
 const AdminsPage = lazy(() => import("@/modules/users/presentation/pages/AdminsPage"));
@@ -89,7 +93,13 @@ const protectedRoutes: RouteObject[] = [
                                 permissions={[{ resource: "articles", action: "read" }]}
                             />
                         ),
-                        children: [{ path: ARTICLE_PATH, element: <ArticlesPage /> }]
+                        children: [
+                            {
+                                path: `${ARTICLE_DETAIL_PATH}/:id`,
+                                element: <ArticleDetailPage />
+                            },
+                            { path: ARTICLE_PATH, element: <ArticlesPage /> }
+                        ]
                     },
                     {
                         element: (

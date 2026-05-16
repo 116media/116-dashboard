@@ -4,10 +4,9 @@
  * @interface ICreateLyricsCredentials
  * @property {string} songTitle - Title of the song (required)
  * @property {string} artistName - Name of the artist (required)
- * @property {string} lyricsText - Full lyrics text content (required)
- * @property {string} language - Language code (required)
+ * @property {string} lyricsText - Rich text HTML content of the lyrics (required)
+ * @property {string} language - ISO 639-1 language code (required)
  * @property {string} [videoId] - Optional linked video UUID
- * @property {string} [articleId] - Optional linked article UUID
  */
 export interface ICreateLyricsCredentials {
     songTitle: string;
@@ -15,5 +14,4 @@ export interface ICreateLyricsCredentials {
     lyricsText: string;
     language: string;
     videoId?: string;
-    articleId?: string;
 }

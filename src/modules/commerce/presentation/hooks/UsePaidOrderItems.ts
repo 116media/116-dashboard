@@ -9,9 +9,9 @@ import { useAppDispatch } from "@/shared/presentation/store/store";
 export interface IOrderItemOption {
     value: string;
     label: string;
-    shortId: string;
+    code: string;
+    secondary: string;
     contentKind: string;
-    customerName: string;
     categoryName: string;
 }
 
@@ -23,10 +23,10 @@ interface IUsePaidOrderItems {
 
 const formatItemOption = (item: IOrderItemEntity, order: IOrderDetailEntity): IOrderItemOption => ({
     value: item.id,
-    shortId: item.id.slice(0, 8),
+    code: item.id.slice(0, 8),
+    secondary: order.customerName,
     contentKind: item.contentKind,
     categoryName: item.categoryName,
-    customerName: order.customerName,
     label: `${item.categoryName} · ${item.contentKind}`
 });
 

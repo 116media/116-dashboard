@@ -1,5 +1,6 @@
-import { Form, Input, Table } from "antd";
+import { Form, Table } from "antd";
 import type { FC } from "react";
+import { useEffect } from "react";
 import { useAuthorization } from "@/modules/auth/presentation/hooks/UseAuthorization";
 import LyricsForm from "@/modules/lyrics/presentation/components/forms/LyricsForm";
 import { lyricsTableColumns } from "@/modules/lyrics/presentation/components/tables/LyricsTable/columns";
@@ -10,16 +11,18 @@ import { useLyricsModals } from "@/modules/lyrics/presentation/hooks/UseLyricsMo
 import { useUpdateLyrics } from "@/modules/lyrics/presentation/hooks/UseUpdateLyrics";
 import { useUpdateLyricsSeo } from "@/modules/lyrics/presentation/hooks/UseUpdateLyricsSeo";
 import { LyricsContentValidator } from "@/modules/lyrics/presentation/utils/validators/lyrics.content.validator";
+import { getVideosAction } from "@/modules/videos/presentation/store/getvideos.action";
 import { useResizableColumns } from "@/shared/presentation/hooks/UseResizableColumns";
+import { useAppDispatch } from "@/shared/presentation/store/store";
 import CreateEditModal from "@/shared/presentation/ui/CreateEditModal";
 import ErrorAlert from "@/shared/presentation/ui/ErrorAlert";
 import { IconFileTextOutlined } from "@/shared/presentation/ui/Icons";
 import PageHeader from "@/shared/presentation/ui/PageHeader";
 import ResizableTitle from "@/shared/presentation/ui/ResizableTable";
+import RichTextEditor from "@/shared/presentation/ui/RichTextEditor";
 import TableToolbar from "@/shared/presentation/ui/TableToolbar";
 
 const { Item } = Form;
-const { TextArea } = Input;
 
 /**
  * Container for the lyrics list page.
@@ -31,12 +34,17 @@ const { TextArea } = Input;
  * Uses server-side pagination and search filtering.
  */
 const LyricsListContainer: FC = () => {
+    const dispatch = useAppDispatch();
     const list = useLyricsList();
     const modals = useLyricsModals(list.reload);
     const createLyrics = useCreateLyrics(list.reload);
     const updateLyrics = useUpdateLyrics(modals.selectedEntity, list.reload);
     const updateSeo = useUpdateLyricsSeo(modals.selectedEntity, list.reload);
     const { isSuperAdmin, isAdminOrSuperAdmin } = useAuthorization();
+
+    useEffect(() => {
+        dispatch(getVideosAction({ pageIndex: 0, pageSize: 200 }));
+    }, [dispatch]);
 
     const { columns: tableColumns } = useResizableColumns(
         lyricsTableColumns(modals.handleAction, isSuperAdmin, isAdminOrSuperAdmin)
@@ -141,7 +149,11 @@ const LyricsListContainer: FC = () => {
                             label="Paroles"
                             rules={LyricsContentValidator.lyricsText("Paroles")}
                         >
-                            <TextArea rows={8} placeholder="Texte des paroles" />
+                            <RichTextEditor
+                                mode="simple"
+                                minHeight={200}
+                                placeholder="Texte des paroles"
+                            />
                         </Item>
                     </Form>
                 </CreateEditModal>

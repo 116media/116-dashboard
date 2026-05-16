@@ -1,0 +1,95 @@
+@use "@/shared/presentation/styles/dimensions.scss" as dimensions;
+@use "@/shared/presentation/styles/colors.scss" as colors;
+
+@import url("https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700;900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;700&display=swap");
+
+.articlePreview {
+    &__cover {
+        width: 100%;
+        max-height: 400px;
+        overflow: hidden;
+        border-radius: dimensions.$border-radius;
+        margin-bottom: dimensions.$padding;
+
+        [class~="ant-image"] {
+            width: 100%;
+            display: block;
+            border-radius: dimensions.$border-radius;
+            overflow: hidden;
+
+            img {
+                width: 100%;
+                max-height: 400px;
+                object-fit: cover;
+                border-radius: dimensions.$border-radius;
+            }
+
+            [class~="ant-image-mask"] {
+                border-radius: dimensions.$border-radius;
+            }
+        }
+    }
+
+    &__title {
+        font-family: "Playfair Display", Georgia, serif;
+        margin-bottom: calc(dimensions.$padding / 4) !important;
+    }
+
+    &__author {
+        margin: calc(dimensions.$padding / 2) 0;
+    }
+
+    &__headline {
+        font-family: "Playfair Display", Georgia, serif;
+        font-style: italic;
+        color: colors.$description;
+        font-size: 15px;
+        line-height: 1.8;
+        padding-left: dimensions.$padding;
+        border-left: 3px solid colors.$border-light;
+        margin-bottom: dimensions.$padding !important;
+    }
+
+    &__body {
+        font-family: "Merriweather", Georgia, serif;
+        font-size: 13pt;
+        line-height: 2.2;
+
+        [class*="richTextEditor"] {
+            border: none;
+            background: transparent;
+        }
+
+        img {
+            width: 100%;
+            object-fit: cover;
+            border-radius: dimensions.$border-radius;
+        }
+
+        // YouTube iframes keep full width; social embed iframes are
+        // constrained by the embed card's own max-width.
+        div[data-youtube-video] iframe {
+            width: 100% !important;
+            height: 380px !important;
+            border-radius: dimensions.$border-radius;
+        }
+    }
+
+    &__byline {
+        margin-bottom: calc(dimensions.$padding / 2);
+    }
+
+    &__divider {
+        margin: dimensions.$padding 0;
+    }
+
+    &__tags {
+        margin-top: dimensions.$padding;
+    }
+
+    &__readTime {
+        color: colors.$text-muted;
+        font-size: 12px;
+    }
+}

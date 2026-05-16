@@ -5,15 +5,15 @@ import styles from "./index.module.scss";
 const { Text } = Typography;
 
 /**
- * Props for the SettingsField component.
+ * Props for the DetailField component.
  *
- * @interface ISettingsFieldProps
+ * @interface IDetailFieldProps
  * @property {string} label - Field label displayed above the value
  * @property {string | null} [value] - Field value to display
  * @property {string} [fallback] - Fallback text when value is empty (defaults to "Non renseigné")
  * @property {ReactNode} [icon] - Icon displayed on the left side
  */
-interface ISettingsFieldProps {
+interface IDetailFieldProps {
     label: string;
     value?: string | null;
     fallback?: string;
@@ -21,25 +21,21 @@ interface ISettingsFieldProps {
 }
 
 /**
- * Read-only label/value field for displaying profile information.
+ * Read-only label/value pair with an optional leading icon.
  *
  * @component
  *
  * @description
- * Renders a row with an optional icon, label/value pair, and a
- * chevron indicator. Includes a hover effect for visual feedback.
+ * Shared display component for metadata across the application:
+ * profile info, article sidebars, order details, payment grids, etc.
+ * Shows a muted label above the value, with a fallback when empty.
  */
-const SettingsField: FC<ISettingsFieldProps> = ({
-    label,
-    value,
-    fallback = "Non renseigné",
-    icon
-}) => {
+const DetailField: FC<IDetailFieldProps> = ({ label, value, fallback = "Non renseigné", icon }) => {
     return (
-        <Flex align="center" gap={12} className={styles.settingsField}>
-            {icon && <div className={styles.settingsField__icon}>{icon}</div>}
+        <Flex align="center" gap={12} className={styles.detailField}>
+            {icon && <div className={styles.detailField__icon}>{icon}</div>}
             <Flex orientation="vertical" flex={1} justify="space-evenly">
-                <Text type="secondary" className={styles.settingsField__label}>
+                <Text type="secondary" className={styles.detailField__label}>
                     {label}
                 </Text>
                 <Text type={value ? undefined : "secondary"}>{value || fallback}</Text>
@@ -48,4 +44,4 @@ const SettingsField: FC<ISettingsFieldProps> = ({
     );
 };
 
-export default SettingsField;
+export default DetailField;

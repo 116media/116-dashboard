@@ -14,13 +14,13 @@
     }
 
     &__content {
-        padding: calc(dimensions.$padding / 2) calc(dimensions.$padding * 0.75);
         overflow-y: auto;
 
         :global(.tiptap) {
             outline: none;
             font-size: 14px;
             line-height: 1.7;
+            padding: 6px 12px;
 
             > * + * {
                 margin-top: 0.5em;
@@ -92,6 +92,112 @@
                 border: none;
                 border-top: 1px solid colors.$border-light;
                 margin: 1em 0;
+            }
+
+            // ── Social embed cards ──
+            :global(.socialEmbed) {
+                --social-facebook: #{colors.$facebook};
+                --social-instagram: #{colors.$instagram};
+                --social-twitter: #{colors.$twitter};
+                --social-tiktok: #{colors.$black};
+                --social-fallback: #{colors.$description};
+
+                margin: dimensions.$padding auto;
+                max-width: 500px;
+
+                &[data-platform="tiktok"] {
+                    max-width: 325px !important;
+                }
+
+                &[data-platform="twitter"] {
+                    max-width: 550px !important;
+                }
+
+                &[data-platform="instagram"] {
+                    max-width: 480px !important;
+                }
+            }
+
+            :global(.socialEmbed__legend) {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding: calc(dimensions.$padding / 4) calc(dimensions.$padding / 2);
+                background: colors.$bg-hover;
+                border: 1px solid colors.$border-light;
+                border-radius: dimensions.$border-radius;
+                color: var(--social-brand);
+            }
+
+            :global(.socialEmbed__label) {
+                display: flex;
+                align-items: center;
+                gap: calc(dimensions.$padding / 3);
+            }
+
+            :global(.socialEmbed__icon) {
+                display: flex;
+                align-items: center;
+                width: 18px;
+                height: 18px;
+                color: var(--social-brand);
+            }
+
+            :global(.socialEmbed__name) {
+                font-weight: 600;
+                font-size: 13px;
+                color: var(--social-brand);
+                letter-spacing: 0.2px;
+            }
+
+            :global(.socialEmbed__delete) {
+                background: transparent;
+                color: colors.$text-muted;
+                border: none;
+                border-radius: calc(dimensions.$border-radius / 2);
+                width: 22px;
+                height: 22px;
+                cursor: pointer;
+                font-size: 14px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                line-height: 1;
+                opacity: 0.6;
+                transition: opacity 0.15s;
+
+                &:hover {
+                    opacity: 1;
+                    color: colors.$error;
+                }
+            }
+
+            :global(.socialEmbed__body) {
+                background: transparent;
+                margin-top: calc(dimensions.$padding / 3);
+                border-radius: dimensions.$border-radius;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+                overflow: hidden;
+            }
+
+            :global(.socialEmbed__iframe) {
+                width: 100%;
+                border: none;
+                display: block;
+                min-height: 350px;
+                border-radius: dimensions.$border-radius;
+            }
+
+            :global([data-platform="facebook"] .socialEmbed__iframe) {
+                min-height: 400px;
+            }
+
+            :global([data-platform="instagram"] .socialEmbed__iframe) {
+                min-height: 500px;
+            }
+
+            :global([data-platform="tiktok"] .socialEmbed__iframe) {
+                min-height: 720px;
             }
         }
 

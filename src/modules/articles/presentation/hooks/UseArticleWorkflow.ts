@@ -22,7 +22,7 @@ interface IUseArticleWorkflow {
     onSubmit: (id: string) => Promise<void>;
     onApprove: (id: string) => Promise<void>;
     onPublish: (id: string) => Promise<void>;
-    onReject: (params: { id: string; data: IRejectArticleCredentials }) => Promise<void>;
+    onReject: (params: { id: string; data: IRejectArticleCredentials }) => Promise<boolean>;
     onArchive: (id: string) => Promise<void>;
     onDelete: (id: string) => Promise<void>;
 }
@@ -96,19 +96,27 @@ export const useArticleWorkflow = (reload: () => void): IUseArticleWorkflow => {
         return dispatchAction(publishArticleAction, id, ArticlesNotification.publishSuccess);
     };
 
-    const onReject = async (params: { id: string; data: IRejectArticleCredentials }) => {
+    const onReject = async (params: {
+        id: string;
+        data: IRejectArticleCredentials;
+    }): Promise<boolean> => {
         const result = await dispatch(rejectArticleAction(params));
 
         if (rejectArticleAction.fulfilled.match(result)) {
             showNotification(ArticlesNotification.rejectSuccess);
             reload();
-        } else if (rejectArticleAction.rejected.match(result) && result.payload) {
+            return true;
+        }
+
+        if (rejectArticleAction.rejected.match(result) && result.payload) {
             showNotification({
                 type: "error",
                 title: result.payload.title,
                 description: result.payload.detail
             });
         }
+
+        return false;
     };
 
     const onArchive = (id: string) => {

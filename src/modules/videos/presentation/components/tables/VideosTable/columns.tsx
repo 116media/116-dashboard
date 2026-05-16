@@ -141,8 +141,8 @@ export const videosTableColumns = (
                 key: item.key,
                 label: item.label,
                 danger: item.danger,
-                hidden: item.hidden(record, isSuperAdmin, isAdminOrSuperAdmin),
-                onClick: () => onAction(item.key, record)
+                onClick: () => onAction(item.key, record),
+                hidden: item.hidden(record, isSuperAdmin, isAdminOrSuperAdmin)
             }));
 
             return <TableActionDropdown items={items} />;

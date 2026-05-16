@@ -124,7 +124,7 @@ const CategoryForm: FC<ICategoryFormProps> = ({
                 <SwitchField
                     title="Contenu gratuit"
                     icon={<IconDollarOutlined />}
-                    description="Le contenu de cette catégorie est accessible sans paiement."
+                    description="Le contenu est accessible sans paiement."
                 />
             </Item>
         </Form>

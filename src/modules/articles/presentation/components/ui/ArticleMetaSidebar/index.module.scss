@@ -1,0 +1,43 @@
+@use "@/shared/presentation/styles/dimensions.scss" as dimensions;
+@use "@/shared/presentation/styles/colors.scss" as colors;
+
+.metaSidebar {
+    &__section {
+        padding: calc(dimensions.$padding / 2);
+        border: 1px solid colors.$border-light;
+        border-radius: dimensions.$border-radius;
+    }
+
+    &__header {
+        margin-bottom: calc(dimensions.$padding / 2);
+    }
+
+    &__label {
+        display: block;
+        font-size: 7pt;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        margin-bottom: calc(dimensions.$padding / 2);
+    }
+
+    &__empty {
+        color: colors.$text-muted;
+        font-style: italic;
+    }
+
+    &__alert {
+        margin-top: calc(dimensions.$padding / 2);
+    }
+
+    &__imageGrid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: calc(dimensions.$padding / 4);
+    }
+
+    &__image {
+        width: 100%;
+        border-radius: calc(dimensions.$border-radius / 2);
+        object-fit: cover;
+    }
+}
