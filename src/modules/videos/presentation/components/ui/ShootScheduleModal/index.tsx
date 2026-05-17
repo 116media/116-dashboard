@@ -27,6 +27,7 @@ interface IShootScheduleModalProps {
     onSubmit: (values: IScheduleShootCredentials) => void;
     onCancel: () => void;
     onSuccessClose: () => void;
+    onReset?: () => void;
 }
 
 /**
@@ -49,7 +50,8 @@ const ShootScheduleModal: FC<IShootScheduleModalProps> = ({
     form,
     onSubmit,
     onCancel,
-    onSuccessClose
+    onSuccessClose,
+    onReset
 }) => {
     return (
         <CreateEditModal
@@ -59,8 +61,12 @@ const ShootScheduleModal: FC<IShootScheduleModalProps> = ({
             success={success}
             onClose={onCancel}
             onSubmit={() => form.submit()}
-            title={{ create: "Planifier un tournage", edit: "Planifier un tournage" }}
             onSuccessClose={onSuccessClose}
+            afterClose={() => {
+                form.resetFields();
+                onReset?.();
+            }}
+            title={{ create: "Planifier un tournage", edit: "Planifier un tournage" }}
         >
             <ShootScheduleForm form={form} error={error} onSubmit={onSubmit} />
         </CreateEditModal>

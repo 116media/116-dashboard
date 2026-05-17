@@ -3,7 +3,10 @@ import { Form } from "antd";
 import { useEffect, useState } from "react";
 import type { IVideoEntity } from "@/modules/videos/domain/entities/IVideoEntity";
 import type { IUpdateVideoCredentials } from "@/modules/videos/presentation/model/IUpdateVideoCredentials";
-import { updateVideoAction } from "@/modules/videos/presentation/store/updatevideo.action";
+import {
+    resetUpdateVideoAction,
+    updateVideoAction
+} from "@/modules/videos/presentation/store/updatevideo.action";
 import { VideosNotification } from "@/modules/videos/presentation/utils/notification/videos.notification";
 import type { Failure } from "@/shared/domain/failures/failure";
 import { useAppDispatch, useAppSelector } from "@/shared/presentation/store/store";
@@ -86,6 +89,8 @@ export const useUpdateVideo = (
 
     const resetUpdate = () => {
         setSuccess(null);
+        form.resetFields();
+        dispatch(resetUpdateVideoAction());
         form.resetFields();
     };
 

@@ -2,7 +2,10 @@ import type { FormInstance } from "antd";
 import { Form } from "antd";
 import { useState } from "react";
 import type { ICreateShortCredentials } from "@/modules/shorts/presentation/model/ICreateShortCredentials";
-import { createShortAction } from "@/modules/shorts/presentation/store/createshort.action";
+import {
+    createShortAction,
+    resetCreateShortAction
+} from "@/modules/shorts/presentation/store/createshort.action";
 import { ShortsNotification } from "@/modules/shorts/presentation/utils/notification/shorts.notification";
 import type { Failure } from "@/shared/domain/failures/failure";
 import { useAppDispatch, useAppSelector } from "@/shared/presentation/store/store";
@@ -69,6 +72,8 @@ export const useCreateShort = (onSuccess?: () => void): IUseCreateShort => {
 
     const resetCreate = () => {
         setSuccess(null);
+        form.resetFields();
+        dispatch(resetCreateShortAction());
         setVideoFile(null);
     };
 

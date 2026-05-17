@@ -2,7 +2,10 @@ import type { FormInstance } from "antd";
 import { Form } from "antd";
 import { useState } from "react";
 import type { ICreateRoleCredentials } from "@/modules/roles/presentation/model/ICreateRoleCredentials";
-import { createRoleAction } from "@/modules/roles/presentation/store/create.action";
+import {
+    createRoleAction,
+    resetCreateRoleAction
+} from "@/modules/roles/presentation/store/create.action";
 import { RolesNotification } from "@/modules/roles/presentation/utils/notification/roles.notification";
 import type { Failure } from "@/shared/domain/failures/failure";
 import { useAppDispatch, useAppSelector } from "@/shared/presentation/store/store";
@@ -54,6 +57,8 @@ export const useCreateRole = (onSuccess?: () => void): IUseCreateRole => {
 
     const resetCreate = () => {
         setSuccess(null);
+        form.resetFields();
+        dispatch(resetCreateRoleAction());
     };
 
     return { form, loading, error, success, onSubmit, resetCreate };

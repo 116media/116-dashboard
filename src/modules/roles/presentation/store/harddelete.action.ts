@@ -1,8 +1,12 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import type { IRoleActionResponse } from "@/modules/roles/domain/entities/IRoleActionResponse";
+import { rolesSlice } from "@/modules/roles/presentation/store";
 import type { Failure } from "@/shared/domain/failures/failure";
 import container from "@/shared/infrastructure/service.locator";
 import { ActionType } from "./constants";
+
+export const resetHardDeleteRoleAction = () =>
+    rolesSlice.actions.clear({ context: ActionType.HardDeleteRole });
 
 /**
  * Async thunk to permanently delete a role (irreversible).

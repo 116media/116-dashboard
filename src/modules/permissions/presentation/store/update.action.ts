@@ -1,9 +1,13 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import type { IPermissionEntity } from "@/modules/permissions/domain/entities/IPermission";
 import type { IUpdatePermissionCredentials } from "@/modules/permissions/presentation/model/IUpdatePermissionCredentials";
+import { permissionsSlice } from "@/modules/permissions/presentation/store";
 import type { Failure } from "@/shared/domain/failures/failure";
 import container from "@/shared/infrastructure/service.locator";
 import { ActionType } from "./constants";
+
+export const resetUpdatePermissionAction = () =>
+    permissionsSlice.actions.clear({ context: ActionType.UpdatePermission });
 
 /**
  * Async thunk to update an existing permission.

@@ -3,7 +3,10 @@ import { Form } from "antd";
 import { useEffect, useState } from "react";
 import type { IRoleEntity } from "@/modules/roles/domain/entities/IRole";
 import type { IUpdateRoleCredentials } from "@/modules/roles/presentation/model/IUpdateRoleCredentials";
-import { updateRoleAction } from "@/modules/roles/presentation/store/update.action";
+import {
+    resetUpdateRoleAction,
+    updateRoleAction
+} from "@/modules/roles/presentation/store/update.action";
 import { RolesNotification } from "@/modules/roles/presentation/utils/notification/roles.notification";
 import type { Failure } from "@/shared/domain/failures/failure";
 import { useAppDispatch, useAppSelector } from "@/shared/presentation/store/store";
@@ -65,6 +68,8 @@ export const useUpdateRole = (role: IRoleEntity | null, onSuccess?: () => void):
 
     const resetUpdate = () => {
         setSuccess(null);
+        form.resetFields();
+        dispatch(resetUpdateRoleAction());
         form.resetFields();
     };
 

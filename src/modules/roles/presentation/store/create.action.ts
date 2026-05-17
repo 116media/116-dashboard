@@ -1,9 +1,13 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import type { IRoleEntity } from "@/modules/roles/domain/entities/IRole";
 import type { ICreateRoleCredentials } from "@/modules/roles/presentation/model/ICreateRoleCredentials";
+import { rolesSlice } from "@/modules/roles/presentation/store";
 import type { Failure } from "@/shared/domain/failures/failure";
 import container from "@/shared/infrastructure/service.locator";
 import { ActionType } from "./constants";
+
+export const resetCreateRoleAction = () =>
+    rolesSlice.actions.clear({ context: ActionType.CreateRole });
 
 /**
  * Async thunk to create a new role.

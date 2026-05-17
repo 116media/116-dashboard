@@ -1,8 +1,12 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import type { IVideoEntity } from "@/modules/videos/domain/entities/IVideoEntity";
+import { videosSlice } from "@/modules/videos/presentation/store";
 import type { Failure } from "@/shared/domain/failures/failure";
 import container from "@/shared/infrastructure/service.locator";
 import { ActionType } from "./constants";
+
+export const resetGetVideoByIdAction = () =>
+    videosSlice.actions.clear({ context: ActionType.GetVideoById });
 
 /**
  * Async thunk to fetch a single video by ID.

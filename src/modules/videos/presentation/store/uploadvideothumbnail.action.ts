@@ -1,8 +1,12 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import type { IVideoEntity } from "@/modules/videos/domain/entities/IVideoEntity";
+import { videosSlice } from "@/modules/videos/presentation/store";
 import type { Failure } from "@/shared/domain/failures/failure";
 import container from "@/shared/infrastructure/service.locator";
 import { ActionType } from "./constants";
+
+export const resetUploadVideoThumbnailAction = () =>
+    videosSlice.actions.clear({ context: ActionType.UploadVideoThumbnail });
 
 /**
  * Async thunk to upload a thumbnail for a video.

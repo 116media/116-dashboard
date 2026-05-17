@@ -1,10 +1,14 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import type { IShortVideoEntity } from "@/modules/shorts/domain/entities/IShortVideoEntity";
 import type { IShortsQueryParams } from "@/modules/shorts/presentation/model/IShortsQueryParams";
+import { shortsSlice } from "@/modules/shorts/presentation/store";
 import type { Failure } from "@/shared/domain/failures/failure";
 import type { IPaginatedResult } from "@/shared/domain/types/pagination";
 import container from "@/shared/infrastructure/service.locator";
 import { ActionType } from "./constants";
+
+export const resetGetAllShortsAction = () =>
+    shortsSlice.actions.clear({ context: ActionType.GetShorts });
 
 /**
  * Async thunk to fetch a paginated list of short videos.

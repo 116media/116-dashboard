@@ -110,8 +110,9 @@ const ShortsListContainer: FC = () => {
                     formContext="CREATE"
                     loading={createShort.loading}
                     success={createShort.success}
-                    onClose={() => modals.setCreateOpen(false)}
                     onSubmit={() => createShort.form.submit()}
+                    onClose={() => modals.setCreateOpen(false)}
+                    afterClose={() => createShort.resetCreate()}
                     title={{
                         create: "Créer un réel",
                         edit: "Modifier le réel"

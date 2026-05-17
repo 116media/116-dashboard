@@ -1,8 +1,12 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import type { IShortActionResponse } from "@/modules/shorts/domain/entities/IShortActionResponse";
+import { shortsSlice } from "@/modules/shorts/presentation/store";
 import type { Failure } from "@/shared/domain/failures/failure";
 import container from "@/shared/infrastructure/service.locator";
 import { ActionType } from "./constants";
+
+export const resetActivateShortAction = () =>
+    shortsSlice.actions.clear({ context: ActionType.ActivateShort });
 
 /**
  * Async thunk to activate a short video.
