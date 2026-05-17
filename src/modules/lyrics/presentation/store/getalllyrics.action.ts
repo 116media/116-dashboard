@@ -1,9 +1,13 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import type { ILyricsEntity } from "@/modules/lyrics/domain/entities/ILyricsEntity";
+import { lyricsSlice } from "@/modules/lyrics/presentation/store";
 import type { Failure } from "@/shared/domain/failures/failure";
 import type { IPaginatedResult } from "@/shared/domain/types/pagination";
 import container from "@/shared/infrastructure/service.locator";
 import { ActionType } from "./constants";
+
+export const resetGetAllLyricsAction = () =>
+    lyricsSlice.actions.clear({ context: ActionType.GetLyrics });
 
 /**
  * Async thunk to fetch a paginated list of lyrics.

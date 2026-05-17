@@ -78,12 +78,13 @@ const ContentTypesListContainer: FC = () => {
             {modals.createOpen && (
                 <CreateEditModal
                     width={420}
-                    open={modals.createOpen}
                     formContext="CREATE"
+                    open={modals.createOpen}
                     loading={createContentType.loading}
                     success={createContentType.success}
                     onClose={() => modals.setCreateOpen(false)}
                     onSubmit={() => createContentType.form.submit()}
+                    afterClose={() => createContentType.resetCreate()}
                     title={{
                         create: "Créer un type de contenu",
                         edit: "Modifier le type de contenu"
@@ -106,8 +107,8 @@ const ContentTypesListContainer: FC = () => {
             {modals.editOpen && (
                 <CreateEditModal
                     width={420}
-                    open={modals.editOpen}
                     formContext="EDIT"
+                    open={modals.editOpen}
                     loading={updateContentType.loading}
                     success={updateContentType.success}
                     onClose={() => {
@@ -115,6 +116,7 @@ const ContentTypesListContainer: FC = () => {
                         updateContentType.resetUpdate();
                     }}
                     onSubmit={() => updateContentType.form.submit()}
+                    afterClose={() => updateContentType.resetUpdate()}
                     title={{
                         create: "Créer un type de contenu",
                         edit: "Modifier le type de contenu"

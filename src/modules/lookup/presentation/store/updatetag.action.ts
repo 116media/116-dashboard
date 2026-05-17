@@ -1,8 +1,12 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import type { ITagEntity } from "@/modules/lookup/domain/entities/ITagEntity";
+import { lookupSlice } from "@/modules/lookup/presentation/store";
 import type { Failure } from "@/shared/domain/failures/failure";
 import container from "@/shared/infrastructure/service.locator";
 import { ActionType } from "./constants";
+
+export const resetUpdateTagAction = () =>
+    lookupSlice.actions.clear({ context: ActionType.UpdateTag });
 
 /**
  * Async thunk to update an existing tag.

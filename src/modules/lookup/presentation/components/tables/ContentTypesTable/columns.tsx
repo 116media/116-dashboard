@@ -60,7 +60,6 @@ export const contentTypesTableColumns = (
         dataIndex: "isActive",
         key: "status",
         width: 100,
-        align: "center",
         fixed: "end",
         sorter: (a, b) => {
             const order = (r: IContentTypeEntity) => (r.isActive ? 0 : 1);

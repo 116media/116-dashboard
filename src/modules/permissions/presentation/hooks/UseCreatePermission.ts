@@ -2,7 +2,10 @@ import type { FormInstance } from "antd";
 import { Form } from "antd";
 import { useState } from "react";
 import type { ICreatePermissionCredentials } from "@/modules/permissions/presentation/model/ICreatePermissionCredentials";
-import { createPermissionAction } from "@/modules/permissions/presentation/store/create.action";
+import {
+    createPermissionAction,
+    resetCreatePermissionAction
+} from "@/modules/permissions/presentation/store/create.action";
 import { PermissionsNotification } from "@/modules/permissions/presentation/utils/notification/permissions.notification";
 import type { Failure } from "@/shared/domain/failures/failure";
 import { useAppDispatch, useAppSelector } from "@/shared/presentation/store/store";
@@ -54,6 +57,8 @@ export const useCreatePermission = (onSuccess?: () => void): IUseCreatePermissio
 
     const resetCreate = () => {
         setSuccess(null);
+        form.resetFields();
+        dispatch(resetCreatePermissionAction());
     };
 
     return { form, loading, error, success, onSubmit, resetCreate };

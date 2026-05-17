@@ -3,7 +3,10 @@ import { Form } from "antd";
 import { useEffect, useState } from "react";
 import type { ITagEntity } from "@/modules/lookup/domain/entities/ITagEntity";
 import type { IUpdateTagCredentials } from "@/modules/lookup/presentation/model/IUpdateTagCredentials";
-import { updateTagAction } from "@/modules/lookup/presentation/store/updatetag.action";
+import {
+    resetUpdateTagAction,
+    updateTagAction
+} from "@/modules/lookup/presentation/store/updatetag.action";
 import { TagsNotification } from "@/modules/lookup/presentation/utils/notification/lookup.tags.notification";
 import type { Failure } from "@/shared/domain/failures/failure";
 import { useAppDispatch, useAppSelector } from "@/shared/presentation/store/store";
@@ -71,6 +74,8 @@ export const useUpdateTag = (tag: ITagEntity | null, onSuccess?: () => void): IU
 
     const resetUpdate = () => {
         setSuccess(null);
+        form.resetFields();
+        dispatch(resetUpdateTagAction());
         form.resetFields();
     };
 

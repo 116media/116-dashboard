@@ -1,8 +1,12 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import type { IContentTypeEntity } from "@/modules/lookup/domain/entities/IContentTypeEntity";
+import { lookupSlice } from "@/modules/lookup/presentation/store";
 import type { Failure } from "@/shared/domain/failures/failure";
 import container from "@/shared/infrastructure/service.locator";
 import { ActionType } from "./constants";
+
+export const resetActivateContentTypeAction = () =>
+    lookupSlice.actions.clear({ context: ActionType.ActivateContentType });
 
 /**
  * Async thunk to activate an inactive content type.

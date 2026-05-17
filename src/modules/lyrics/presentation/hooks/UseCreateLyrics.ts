@@ -2,7 +2,10 @@ import type { FormInstance } from "antd";
 import { Form } from "antd";
 import { useState } from "react";
 import type { ICreateLyricsCredentials } from "@/modules/lyrics/presentation/model/ICreateLyricsCredentials";
-import { createLyricsAction } from "@/modules/lyrics/presentation/store/createlyrics.action";
+import {
+    createLyricsAction,
+    resetCreateLyricsAction
+} from "@/modules/lyrics/presentation/store/createlyrics.action";
 import { LyricsNotification } from "@/modules/lyrics/presentation/utils/notification/lyrics.notification";
 import type { Failure } from "@/shared/domain/failures/failure";
 import { useAppDispatch, useAppSelector } from "@/shared/presentation/store/store";
@@ -63,6 +66,8 @@ export const useCreateLyrics = (onSuccess?: () => void): IUseCreateLyrics => {
 
     const resetCreate = () => {
         setSuccess(null);
+        form.resetFields();
+        dispatch(resetCreateLyricsAction());
     };
 
     return { form, loading, error, success, onSubmit, resetCreate };

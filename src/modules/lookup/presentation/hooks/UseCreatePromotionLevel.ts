@@ -2,7 +2,10 @@ import type { FormInstance } from "antd";
 import { Form } from "antd";
 import { useState } from "react";
 import type { ICreatePromotionLevelCredentials } from "@/modules/lookup/presentation/model/ICreatePromotionLevelCredentials";
-import { createPromotionLevelAction } from "@/modules/lookup/presentation/store/createpromotionlevel.action";
+import {
+    createPromotionLevelAction,
+    resetCreatePromotionLevelAction
+} from "@/modules/lookup/presentation/store/createpromotionlevel.action";
 import { PromotionLevelsNotification } from "@/modules/lookup/presentation/utils/notification/lookup.promotion-levels.notification";
 import type { Failure } from "@/shared/domain/failures/failure";
 import { useAppDispatch, useAppSelector } from "@/shared/presentation/store/store";
@@ -56,6 +59,8 @@ export const useCreatePromotionLevel = (onSuccess?: () => void): IUseCreatePromo
 
     const resetCreate = () => {
         setSuccess(null);
+        form.resetFields();
+        dispatch(resetCreatePromotionLevelAction());
     };
 
     return { form, loading, error, success, onSubmit, resetCreate };

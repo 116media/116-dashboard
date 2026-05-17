@@ -60,7 +60,6 @@ export const promotionLevelsTableColumns = (
         key: "status",
         width: 100,
         fixed: "end",
-        align: "center",
         sorter: (a, b) => {
             const order = (r: IPromotionLevelEntity) => (r.isActive ? 0 : 1);
             return order(a) - order(b);

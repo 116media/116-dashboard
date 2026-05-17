@@ -8,7 +8,9 @@ import {
 } from "@/shared/presentation/ui/Icons";
 import styles from "./index.module.scss";
 
-/** Available tab keys for the lookup sidebar navigation. */
+/**
+ * Available tab keys for the lookup sidebar navigation.
+ */
 export type LookupTab = "content-types" | "pricing-tiers" | "promotion-levels" | "tags";
 
 /**
@@ -23,7 +25,9 @@ interface ILookupSidebarProps {
     onChange: (tab: LookupTab) => void;
 }
 
-/** Tab definitions for the lookup sidebar menu. */
+/**
+ * Tab definitions for the lookup sidebar menu.
+ */
 const LOOKUP_TABS = [
     { key: "content-types", label: "Types de contenu", icon: <IconAppstoreOutlined /> },
     { key: "pricing-tiers", label: "Niveaux tarifaires", icon: <IconDollarOutlined /> },

@@ -2,7 +2,10 @@ import type { FormInstance } from "antd";
 import { Form } from "antd";
 import { useState } from "react";
 import type { ICreateTagCredentials } from "@/modules/lookup/presentation/model/ICreateTagCredentials";
-import { createTagAction } from "@/modules/lookup/presentation/store/createtag.action";
+import {
+    createTagAction,
+    resetCreateTagAction
+} from "@/modules/lookup/presentation/store/createtag.action";
 import { TagsNotification } from "@/modules/lookup/presentation/utils/notification/lookup.tags.notification";
 import type { Failure } from "@/shared/domain/failures/failure";
 import { useAppDispatch, useAppSelector } from "@/shared/presentation/store/store";
@@ -56,6 +59,8 @@ export const useCreateTag = (onSuccess?: () => void): IUseCreateTag => {
 
     const resetCreate = () => {
         setSuccess(null);
+        form.resetFields();
+        dispatch(resetCreateTagAction());
     };
 
     return { form, loading, error, success, onSubmit, resetCreate };

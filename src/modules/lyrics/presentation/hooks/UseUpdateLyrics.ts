@@ -2,7 +2,10 @@ import type { FormInstance } from "antd";
 import { Form } from "antd";
 import { useEffect, useState } from "react";
 import type { ILyricsEntity } from "@/modules/lyrics/domain/entities/ILyricsEntity";
-import { updateLyricsAction } from "@/modules/lyrics/presentation/store/updatelyrics.action";
+import {
+    resetUpdateLyricsAction,
+    updateLyricsAction
+} from "@/modules/lyrics/presentation/store/updatelyrics.action";
 import { LyricsNotification } from "@/modules/lyrics/presentation/utils/notification/lyrics.notification";
 import type { Failure } from "@/shared/domain/failures/failure";
 import { useAppDispatch, useAppSelector } from "@/shared/presentation/store/store";
@@ -72,6 +75,8 @@ export const useUpdateLyrics = (
 
     const resetUpdate = () => {
         setSuccess(null);
+        form.resetFields();
+        dispatch(resetUpdateLyricsAction());
         form.resetFields();
     };
 

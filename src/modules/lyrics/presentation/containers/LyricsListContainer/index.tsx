@@ -89,12 +89,13 @@ const LyricsListContainer: FC = () => {
             {modals.createOpen && (
                 <CreateEditModal
                     width={600}
-                    open={modals.createOpen}
                     formContext="CREATE"
+                    open={modals.createOpen}
                     loading={createLyrics.loading}
                     success={createLyrics.success}
                     onClose={() => modals.setCreateOpen(false)}
                     onSubmit={() => createLyrics.form.submit()}
+                    afterClose={() => createLyrics.resetCreate()}
                     title={{
                         create: "Créer des paroles",
                         edit: "Modifier les paroles"
@@ -116,8 +117,8 @@ const LyricsListContainer: FC = () => {
             {modals.editOpen && (
                 <CreateEditModal
                     width={600}
-                    open={modals.editOpen}
                     formContext="EDIT"
+                    open={modals.editOpen}
                     loading={updateLyrics.loading}
                     success={updateLyrics.success}
                     onClose={() => {
@@ -125,6 +126,7 @@ const LyricsListContainer: FC = () => {
                         updateLyrics.resetUpdate();
                     }}
                     onSubmit={() => updateLyrics.form.submit()}
+                    afterClose={() => updateLyrics.resetUpdate()}
                     title={{
                         create: "Créer des paroles",
                         edit: "Modifier les paroles"
@@ -167,6 +169,7 @@ const LyricsListContainer: FC = () => {
                     success={updateSeo.success}
                     error={updateSeo.error}
                     onSubmit={updateSeo.onSubmit}
+                    onReset={() => updateSeo.resetSeo()}
                     onCancel={() => {
                         modals.setSeoOpen(false);
                         updateSeo.resetSeo();

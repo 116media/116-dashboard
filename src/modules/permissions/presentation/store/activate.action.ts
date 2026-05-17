@@ -1,8 +1,12 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import type { IPermissionEntity } from "@/modules/permissions/domain/entities/IPermission";
+import { permissionsSlice } from "@/modules/permissions/presentation/store";
 import type { Failure } from "@/shared/domain/failures/failure";
 import container from "@/shared/infrastructure/service.locator";
 import { ActionType } from "./constants";
+
+export const resetActivatePermissionAction = () =>
+    permissionsSlice.actions.clear({ context: ActionType.ActivatePermission });
 
 /**
  * Async thunk to activate an inactive permission.

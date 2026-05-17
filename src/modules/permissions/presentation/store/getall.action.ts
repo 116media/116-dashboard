@@ -1,9 +1,13 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import type { IPermissionPaginatedResult } from "@/modules/permissions/domain/entities/IPermissionPaginatedResult";
 import type { IPermissionsQueryParams } from "@/modules/permissions/presentation/model/IPermissionsQueryParams";
+import { permissionsSlice } from "@/modules/permissions/presentation/store";
 import type { Failure } from "@/shared/domain/failures/failure";
 import container from "@/shared/infrastructure/service.locator";
 import { ActionType } from "./constants";
+
+export const resetGetAllPermissionsAction = () =>
+    permissionsSlice.actions.clear({ context: ActionType.GetAllPermissions });
 
 /**
  * Async thunk to fetch a paginated list of permissions.
