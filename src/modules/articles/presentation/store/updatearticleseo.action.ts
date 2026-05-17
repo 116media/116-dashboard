@@ -1,8 +1,12 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import type { IArticleEntity } from "@/modules/articles/domain/entities/IArticleEntity";
+import { articlesSlice } from "@/modules/articles/presentation/store";
 import type { Failure } from "@/shared/domain/failures/failure";
 import container from "@/shared/infrastructure/service.locator";
 import { ActionType } from "./constants";
+
+export const resetUpdateArticleSeoAction = () =>
+    articlesSlice.actions.clear({ context: ActionType.UpdateArticleSeo });
 
 /**
  * Async thunk to update SEO metadata for an article.

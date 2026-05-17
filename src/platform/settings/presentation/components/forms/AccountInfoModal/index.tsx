@@ -15,11 +15,12 @@ import styles from "./index.module.scss";
 interface IAccountInfoModalProps {
     isOpen: boolean;
     loading: boolean;
-    onClose: () => void;
     user: IProfile | null;
     success: string | null;
     error: Failure | null | undefined;
     form: FormInstance<IUpdateAccountCredentials>;
+    onClose: () => void;
+    onReset?: () => void;
     onSubmit: (values: IUpdateAccountCredentials) => void;
 }
 
@@ -31,6 +32,7 @@ const AccountInfoModal: FC<IAccountInfoModalProps> = ({
     error,
     success,
     onSubmit,
+    onReset,
     user
 }) => {
     const [country, setCountry] = useState<ICountryObject>();
@@ -63,6 +65,10 @@ const AccountInfoModal: FC<IAccountInfoModalProps> = ({
             onClose={onClose}
             formContext="EDIT"
             onSuccessClose={onClose}
+            afterClose={() => {
+                form.resetFields();
+                onReset?.();
+            }}
             onSubmit={() => form.submit()}
             title={{
                 create: "",

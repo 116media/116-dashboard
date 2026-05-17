@@ -80,8 +80,8 @@ export const Theme: ThemeConfig = {
             fontSizeLG: 14
         },
         Alert: {
-            withDescriptionPadding: "1rem !important",
-            defaultPadding: "1rem !important"
+            withDescriptionPadding: 12,
+            defaultPadding: 12
         }
     }
 } as const;

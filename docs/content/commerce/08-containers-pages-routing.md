@@ -103,12 +103,12 @@ Add one top-level entry for the commerce section:
 {
     label: "Commandes",
     path: ORDERS_PATH,
-    icon: IconShoppingCartOutlined,
+    icon: IconShoppingOutlined,
     permission: { resource: "orders", action: "read" }
 },
 ```
 
-> Icon choice should be verified against `src/shared/presentation/ui/Icons/index.tsx`. Add `ShoppingCartOutlined` export if not already present.
+> Icon choice should be verified against `src/shared/presentation/ui/Icons/index.tsx`. Add `ShoppingOutlined` export if not already present.
 
 ---
 
@@ -166,7 +166,7 @@ commerce: commerceReducer,
 
 **File:** `src/shared/presentation/ui/Icons/index.tsx`
 
-Export any new icons needed for navigation (e.g., `ShoppingCartOutlined`).
+Export any new icons needed for navigation (e.g., `ShoppingOutlined`).
 
 ---
 

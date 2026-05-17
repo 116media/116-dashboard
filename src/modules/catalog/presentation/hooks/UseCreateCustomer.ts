@@ -2,7 +2,10 @@ import type { FormInstance } from "antd";
 import { Form } from "antd";
 import { useState } from "react";
 import type { ICreateCustomerCredentials } from "@/modules/catalog/presentation/model/ICreateCustomerCredentials";
-import { createCustomerAction } from "@/modules/catalog/presentation/store/createcustomer.action";
+import {
+    createCustomerAction,
+    resetCreateCustomerAction
+} from "@/modules/catalog/presentation/store/createcustomer.action";
 import { CustomersNotification } from "@/modules/catalog/presentation/utils/notification/catalog.customers.notification";
 import type { Failure } from "@/shared/domain/failures/failure";
 import { useAppDispatch, useAppSelector } from "@/shared/presentation/store/store";
@@ -54,6 +57,8 @@ export const useCreateCustomer = (onSuccess?: () => void): IUseCreateCustomer =>
 
     const resetCreate = () => {
         setSuccess(null);
+        form.resetFields();
+        dispatch(resetCreateCustomerAction());
     };
 
     return { form, loading, error, success, onSubmit, resetCreate };

@@ -1,8 +1,12 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import type { IArticleEntity } from "@/modules/articles/domain/entities/IArticleEntity";
+import { articlesSlice } from "@/modules/articles/presentation/store";
 import type { Failure } from "@/shared/domain/failures/failure";
 import container from "@/shared/infrastructure/service.locator";
 import { ActionType } from "./constants";
+
+export const resetUpdateArticleAction = () =>
+    articlesSlice.actions.clear({ context: ActionType.UpdateArticle });
 
 /**
  * Async thunk to update an existing article.

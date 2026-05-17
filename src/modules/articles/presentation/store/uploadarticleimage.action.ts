@@ -1,9 +1,13 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import type { IArticleImageEntity } from "@/modules/articles/domain/entities/IArticleImageEntity";
+import { articlesSlice } from "@/modules/articles/presentation/store";
 import type { Failure } from "@/shared/domain/failures/failure";
 import type { EnumArticleImageType } from "@/shared/infrastructure/api/generated/116.api";
 import container from "@/shared/infrastructure/service.locator";
 import { ActionType } from "./constants";
+
+export const resetUploadArticleImageAction = () =>
+    articlesSlice.actions.clear({ context: ActionType.UploadArticleImage });
 
 /**
  * Async thunk to upload an image for an article.

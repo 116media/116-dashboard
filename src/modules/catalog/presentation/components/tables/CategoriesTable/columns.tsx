@@ -77,7 +77,6 @@ export const categoriesTableColumns = (
         key: "status",
         width: 100,
         fixed: "end",
-        align: "center",
         render: (_: boolean, record: ICategoryEntity) => (
             <StatusTag
                 status={record.isActive ? "active" : "inactive"}

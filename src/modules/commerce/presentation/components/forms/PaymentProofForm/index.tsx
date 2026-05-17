@@ -1,6 +1,6 @@
 import type { FormInstance } from "antd";
 import { Form, Select } from "antd";
-import { type FC, useCallback, useState } from "react";
+import { type FC, useCallback } from "react";
 import { PAYMENT_METHOD_OPTIONS } from "@/modules/commerce/presentation/constants/commerce.payment.dropdown";
 import type { IAttachPaymentProofCredentials } from "@/modules/commerce/presentation/model/IAttachPaymentProofCredentials";
 import { PaymentValidator } from "@/modules/commerce/presentation/utils/validators/commerce.payment.validator";
@@ -38,19 +38,15 @@ interface IPaymentProofFormProps {
  * @returns {JSX.Element} The rendered payment proof form
  */
 const PaymentProofForm: FC<IPaymentProofFormProps> = ({ form, error, onSubmit }) => {
-    const [hasFile, setHasFile] = useState(false);
-
     const handleFileSelect = useCallback(
         (file: File) => {
             form.setFieldValue("file", [{ originFileObj: file }]);
-            setHasFile(true);
         },
         [form]
     );
 
     const handleFileRemove = useCallback(() => {
         form.setFieldValue("file", null);
-        setHasFile(false);
     }, [form]);
 
     return (
@@ -76,8 +72,9 @@ const PaymentProofForm: FC<IPaymentProofFormProps> = ({ form, error, onSubmit })
             </Item>
 
             <Item
+                name="file"
                 label="Preuve de paiement"
-                rules={[{ required: !hasFile, message: "La preuve de paiement est requise" }]}
+                rules={[{ required: true, message: "La preuve de paiement est requise" }]}
             >
                 <FileUploader
                     mode="deferred"

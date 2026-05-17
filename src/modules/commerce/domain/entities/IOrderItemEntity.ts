@@ -18,7 +18,9 @@ import type { EnumCoreContentType } from "@/shared/infrastructure/api/generated/
 export interface IOrderItemEntity {
     id: string;
     contentKind: EnumCoreContentType;
+    categoryId: string;
     categoryName: string;
+    promotionLevelId?: string | null;
     promotionLevelName?: string | null;
     promoPriceUsd?: number | null;
     socialBoost: boolean;

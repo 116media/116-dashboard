@@ -2,7 +2,10 @@ import type { FormInstance } from "antd";
 import { Form } from "antd";
 import { useState } from "react";
 import type { IRejectArticleCredentials } from "@/modules/articles/presentation/model/IRejectArticleCredentials";
-import { rejectArticleAction } from "@/modules/articles/presentation/store/rejectarticle.action";
+import {
+    rejectArticleAction,
+    resetRejectArticleAction
+} from "@/modules/articles/presentation/store/rejectarticle.action";
 import { ArticlesNotification } from "@/modules/articles/presentation/utils/notification/articles.notification";
 import type { Failure } from "@/shared/domain/failures/failure";
 import { useAppDispatch, useAppSelector } from "@/shared/presentation/store/store";
@@ -58,6 +61,8 @@ export const useRejectArticle = (): IUseRejectArticle => {
 
     const resetReject = () => {
         setSuccess(null);
+        form.resetFields();
+        dispatch(resetRejectArticleAction());
     };
 
     return { form, loading, error, success, onSubmit, resetReject };

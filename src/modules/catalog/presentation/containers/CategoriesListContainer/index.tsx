@@ -93,12 +93,13 @@ const CategoriesListContainer: FC = () => {
             {modals.createOpen && (
                 <CreateEditModal
                     width={480}
-                    open={modals.createOpen}
                     formContext="CREATE"
+                    open={modals.createOpen}
                     loading={createCategory.loading}
                     success={createCategory.success}
                     onClose={() => modals.setCreateOpen(false)}
                     onSubmit={() => createCategory.form.submit()}
+                    afterClose={() => createCategory.resetCreate()}
                     title={{
                         create: "Créer une catégorie",
                         edit: "Modifier la catégorie"
@@ -121,8 +122,8 @@ const CategoriesListContainer: FC = () => {
             {modals.editOpen && (
                 <CreateEditModal
                     width={480}
-                    open={modals.editOpen}
                     formContext="EDIT"
+                    open={modals.editOpen}
                     loading={updateCategory.loading}
                     success={updateCategory.success}
                     onClose={() => {
@@ -130,6 +131,7 @@ const CategoriesListContainer: FC = () => {
                         updateCategory.resetUpdate();
                     }}
                     onSubmit={() => updateCategory.form.submit()}
+                    afterClose={() => updateCategory.resetUpdate()}
                     title={{
                         create: "Créer une catégorie",
                         edit: "Modifier la catégorie"

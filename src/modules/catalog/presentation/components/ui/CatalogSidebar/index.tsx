@@ -7,7 +7,9 @@ import {
 } from "@/shared/presentation/ui/Icons";
 import styles from "./index.module.scss";
 
-/** Available tab keys for the catalog sidebar navigation. */
+/**
+ * Available tab keys for the catalog sidebar navigation.
+ */
 export type CatalogTab = "categories" | "customers" | "packages";
 
 interface ICatalogSidebarProps {

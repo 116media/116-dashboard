@@ -2,7 +2,10 @@ import type { FormInstance } from "antd";
 import { Form } from "antd";
 import { useState } from "react";
 import type { ICreateCategoryCredentials } from "@/modules/catalog/presentation/model/ICreateCategoryCredentials";
-import { createCategoryAction } from "@/modules/catalog/presentation/store/createcategory.action";
+import {
+    createCategoryAction,
+    resetCreateCategoryAction
+} from "@/modules/catalog/presentation/store/createcategory.action";
 import { CategoriesNotification } from "@/modules/catalog/presentation/utils/notification/catalog.categories.notification";
 import type { Failure } from "@/shared/domain/failures/failure";
 import { useAppDispatch, useAppSelector } from "@/shared/presentation/store/store";
@@ -64,6 +67,8 @@ export const useCreateCategory = (onSuccess?: () => void): IUseCreateCategory =>
 
     const resetCreate = () => {
         setSuccess(null);
+        form.resetFields();
+        dispatch(resetCreateCategoryAction());
     };
 
     return { form, loading, error, success, onSubmit, resetCreate };

@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import type { IArticleEntity } from "@/modules/articles/domain/entities/IArticleEntity";
-import { updateArticleTagsAction } from "@/modules/articles/presentation/store/updatearticletags.action";
+import {
+    resetUpdateArticleTagsAction,
+    updateArticleTagsAction
+} from "@/modules/articles/presentation/store/updatearticletags.action";
 import { ArticlesNotification } from "@/modules/articles/presentation/utils/notification/articles.notification";
 import type { Failure } from "@/shared/domain/failures/failure";
 import { useAppDispatch, useAppSelector } from "@/shared/presentation/store/store";
@@ -75,6 +78,7 @@ export const useUpdateArticleTags = (
 
     const resetTags = () => {
         setSuccess(null);
+        dispatch(resetUpdateArticleTagsAction());
         setTagIds([]);
     };
 

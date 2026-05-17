@@ -30,7 +30,9 @@ interface ISessionCardProps {
     onRevoke: (id: string) => void;
 }
 
-/** Maps device types to their corresponding Ant Design icon components. */
+/**
+ * Maps device types to their corresponding Ant Design icon components.
+ */
 const deviceIconMap: Record<EnumDevice, FC> = {
     [EnumDevice.Desktop]: IconDesktopOutlined,
     [EnumDevice.Mobile]: IconMobileOutlined,

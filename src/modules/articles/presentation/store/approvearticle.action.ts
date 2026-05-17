@@ -1,8 +1,12 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import type { IArticleActionResponse } from "@/modules/articles/domain/entities/IArticleActionResponse";
+import { articlesSlice } from "@/modules/articles/presentation/store";
 import type { Failure } from "@/shared/domain/failures/failure";
 import container from "@/shared/infrastructure/service.locator";
 import { ActionType } from "./constants";
+
+export const resetApproveArticleAction = () =>
+    articlesSlice.actions.clear({ context: ActionType.ApproveArticle });
 
 /**
  * Async thunk to approve an article.

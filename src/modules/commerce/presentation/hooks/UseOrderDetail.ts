@@ -1,6 +1,7 @@
 import { useCallback, useEffect } from "react";
 import type { IOrderDetailEntity } from "@/modules/commerce/domain/entities/IOrderDetailEntity";
 import type { IPaymentEntity } from "@/modules/commerce/domain/entities/IPaymentEntity";
+import { commerceSlice } from "@/modules/commerce/presentation/store";
 import { getOrderByIdAction } from "@/modules/commerce/presentation/store/getorderbyid.action";
 import { getOrderPaymentAction } from "@/modules/commerce/presentation/store/getorderpayment.action";
 import type { Failure } from "@/shared/domain/failures/failure";
@@ -50,7 +51,10 @@ export const useOrderDetail = (orderId: string): IUseOrderDetail => {
 
     useEffect(() => {
         reload();
-    }, [reload]);
+        return () => {
+            dispatch(commerceSlice.actions.purge(["getOrderById", "getOrderPayment"]));
+        };
+    }, [reload, dispatch]);
 
     return {
         order: (order as IOrderDetailEntity) ?? null,

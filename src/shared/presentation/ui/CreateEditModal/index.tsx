@@ -17,6 +17,7 @@ import FormSuccessResult from "@/shared/presentation/ui/FormSuccessResult";
  * @property {number} [width] - Modal width (default: 590)
  * @property {ReactNode} children - Form content
  * @property {() => void} onSuccessClose - Close handler after success
+ * @property {() => void} [afterClose] - Resets form and Redux error state on close
  */
 export interface ICreateEditModalProps {
     open: boolean;
@@ -29,6 +30,7 @@ export interface ICreateEditModalProps {
     width?: number;
     children: ReactNode;
     onSuccessClose: () => void;
+    afterClose?: () => void;
 }
 
 /**
@@ -54,7 +56,8 @@ const CreateEditModal: FC<ICreateEditModalProps> = ({
     title,
     width = 590,
     children,
-    onSuccessClose
+    onSuccessClose,
+    afterClose
 }) => {
     const modalTitle = formContext === "CREATE" ? title.create : title.edit;
 
@@ -64,13 +67,16 @@ const CreateEditModal: FC<ICreateEditModalProps> = ({
             open={open}
             width={width}
             destroyOnHidden
+            afterClose={afterClose}
             onCancel={onClose}
             closable={!success}
+            keyboard={!success}
+            mask={{ closable: !success }}
             title={!success && modalTitle}
             footer={
                 success ? null : (
                     <Flex gap={8} justify="space-between" flex={1}>
-                        <Button onClick={onClose} danger>
+                        <Button danger onClick={onClose}>
                             Annuler
                         </Button>
                         <Button type="primary" loading={loading} onClick={onSubmit}>

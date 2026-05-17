@@ -20,7 +20,9 @@ import type { EnumOrderStatus } from "@/shared/infrastructure/api/generated/116.
  */
 export interface IOrderDetailEntity {
     id: string;
+    customerId: string;
     customerName: string;
+    packageId?: string | null;
     status: EnumOrderStatus;
     totalAmountUsd: number;
     items: IOrderItemEntity[];

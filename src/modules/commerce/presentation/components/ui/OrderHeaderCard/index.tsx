@@ -63,7 +63,7 @@ const OrderHeaderCard: FC<IOrderHeaderCardProps> = ({
     isPendingPayment
 }) => (
     <Card>
-        <Flex justify="space-between" align="center" className={styles.orderHeader}>
+        <Flex justify="space-between" gap={12} align="center" className={styles.orderHeader}>
             <Flex align="center" justify="space-between" flex={1}>
                 <Title level={4} className={styles.orderHeader__title}>
                     {order.customerName}
@@ -71,7 +71,7 @@ const OrderHeaderCard: FC<IOrderHeaderCardProps> = ({
                 <StatusTag status={order.status} config={ORDER_STATUS_CONFIG} />
             </Flex>
 
-            <Space>
+            <Space size="middle">
                 {isDraft && (
                     <>
                         <Button onClick={onEditOrder}>Modifier</Button>
@@ -99,7 +99,7 @@ const OrderHeaderCard: FC<IOrderHeaderCardProps> = ({
                 icon={<IconDollarOutlined />}
                 value={`$${(order.totalAmountUsd ?? 0).toFixed(2)}`}
             />
-            <DetailField label="ID" value={order.id} icon={<IconTagOutlined />} />
+            <DetailField label="ID" value={order.id} icon={<IconTagOutlined />} copyable />
             <DetailField
                 label="Créée le"
                 icon={<IconClockCircleOutlined />}

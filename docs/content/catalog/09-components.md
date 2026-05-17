@@ -44,7 +44,8 @@ Used inside the pricing management panel (add pricing row):
 | --- | --- | --- | --- |
 | `name` | Nom | `Input` | required, max 100 |
 | `description` | Description | `TextArea` | optional, max 500 |
-| `flatPriceUsd` | Prix forfaitaire (USD) | `InputNumber` | required, min 0 |
+
+> Price is no longer an input field. It is derived from the required slots' category tier prices and displayed as `CalculatedPriceUsd` (read-only).
 
 ### `forms/PackageSlotForm/index.tsx`
 
@@ -100,7 +101,7 @@ Action type: `"edit"`
 | Column | DataIndex | Sortable | Render |
 | --- | --- | --- | --- |
 | Nom | `name` | Yes | `<Text strong>` |
-| Prix forfaitaire | `flatPriceUsd` | Yes | `${n.toFixed(2)} USD` |
+| Prix (USD) | `calculatedPriceUsd` | Yes | `${n.toFixed(2)} $` |
 | Créneaux | `slots` | No | `{n} créneau(x)` (slots count) |
 | Statut | `isActive` | Yes | `<StatusTag>` |
 | Actions | — | No | `<TableActionDropdown>` |

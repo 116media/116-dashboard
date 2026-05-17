@@ -2,7 +2,10 @@ import type { FormInstance } from "antd";
 import { Form } from "antd";
 import { useState } from "react";
 import type { ICreateArticleCredentials } from "@/modules/articles/presentation/model/ICreateArticleCredentials";
-import { createArticleAction } from "@/modules/articles/presentation/store/createarticle.action";
+import {
+    createArticleAction,
+    resetCreateArticleAction
+} from "@/modules/articles/presentation/store/createarticle.action";
 import { ArticlesNotification } from "@/modules/articles/presentation/utils/notification/articles.notification";
 import type { Failure } from "@/shared/domain/failures/failure";
 import { useAppDispatch, useAppSelector } from "@/shared/presentation/store/store";
@@ -64,6 +67,8 @@ export const useCreateArticle = (onSuccess?: () => void): IUseCreateArticle => {
 
     const resetCreate = () => {
         setSuccess(null);
+        form.resetFields();
+        dispatch(resetCreateArticleAction());
     };
 
     return { form, loading, error, success, onSubmit, resetCreate };

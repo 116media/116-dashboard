@@ -1,5 +1,5 @@
 import type { FormInstance } from "antd";
-import { Form, Input, InputNumber } from "antd";
+import { Form, Input } from "antd";
 import type { FC } from "react";
 import type { ICreatePackageCredentials } from "@/modules/catalog/presentation/model/ICreatePackageCredentials";
 import { PackagesValidator } from "@/modules/catalog/presentation/utils/validators/catalog.packages.validator";
@@ -9,14 +9,6 @@ import ErrorAlert from "@/shared/presentation/ui/ErrorAlert";
 const { Item } = Form;
 const { TextArea } = Input;
 
-/**
- * Props for the PackageForm component.
- *
- * @interface IPackageFormProps
- * @property {FormInstance} form - Ant Design form instance
- * @property {Failure | null | undefined} error - API error to display
- * @property {(values: ICreatePackageCredentials) => void} onSubmit - Form submission handler
- */
 interface IPackageFormProps {
     form: FormInstance;
     error: Failure | null | undefined;
@@ -29,13 +21,9 @@ interface IPackageFormProps {
  * @component
  *
  * @description
- * Renders name, description, and flatPriceUsd fields with
- * client-side validation matching the backend constraints.
- * This is a create-only form — no edit mode or initial values
- * are needed. Displays API errors via `ErrorAlert`.
- *
- * @param {IPackageFormProps} props - Component props
- * @returns {JSX.Element} The package form
+ * Renders name and description fields with client-side validation
+ * matching backend constraints. The package price is derived from
+ * the required slots' category tier prices — not set manually.
  */
 const PackageForm: FC<IPackageFormProps> = ({ form, error, onSubmit }) => {
     return (
@@ -64,14 +52,6 @@ const PackageForm: FC<IPackageFormProps> = ({ form, error, onSubmit }) => {
                     placeholder="Description du package"
                     autoSize={{ minRows: 3 }}
                 />
-            </Item>
-
-            <Item
-                name="flatPriceUsd"
-                label="Prix forfaitaire (USD)"
-                rules={PackagesValidator.flatPriceUsd("Prix forfaitaire")}
-            >
-                <InputNumber min={0} step={0.5} placeholder="Prix forfaitaire en USD" />
             </Item>
         </Form>
     );

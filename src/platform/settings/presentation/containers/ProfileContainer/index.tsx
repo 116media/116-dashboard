@@ -169,6 +169,7 @@ const ProfileContainer: FC = () => {
                 onClose={updateAccount.close}
                 loading={updateAccount.loading}
                 onSubmit={updateAccount.onSubmit}
+                onReset={() => updateAccount.resetUpdate()}
             />
         </div>
     );

@@ -90,7 +90,7 @@ export {
     SettingOutlined as IconSettingOutlined,
     ShareAltOutlined as IconShareAltOutlined,
     ShopOutlined as IconShopOutlined,
-    ShoppingCartOutlined as IconShoppingCartOutlined,
+    ShoppingOutlined as IconShoppingOutlined,
     SoundOutlined as IconSoundOutlined,
     StarFilled as IconStarFilled,
     StarOutlined as IconStarOutlined,

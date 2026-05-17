@@ -26,6 +26,7 @@ interface IArticleSeoModalProps {
     form: FormInstance<IUpdateArticleSeoCredentials>;
     onSubmit: (values: IUpdateArticleSeoCredentials) => void;
     onCancel: () => void;
+    onReset?: () => void;
     onSuccessClose: () => void;
 }
 
@@ -49,7 +50,8 @@ const ArticleSeoModal: FC<IArticleSeoModalProps> = ({
     form,
     onSubmit,
     onCancel,
-    onSuccessClose
+    onSuccessClose,
+    onReset
 }) => {
     return (
         <CreateEditModal
@@ -59,8 +61,12 @@ const ArticleSeoModal: FC<IArticleSeoModalProps> = ({
             success={success}
             onClose={onCancel}
             onSubmit={() => form.submit()}
-            title={{ create: "Ajouter le SEO", edit: "Modifier le SEO" }}
             onSuccessClose={onSuccessClose}
+            afterClose={() => {
+                form.resetFields();
+                onReset?.();
+            }}
+            title={{ create: "Ajouter le SEO", edit: "Modifier le SEO" }}
         >
             <ArticleSeoForm form={form} error={error} onSubmit={onSubmit} />
         </CreateEditModal>

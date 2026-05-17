@@ -17,7 +17,7 @@ import {
     IconSafetyOutlined,
     IconSettingOutlined,
     IconShopOutlined,
-    IconShoppingCartOutlined,
+    IconShoppingOutlined,
     IconSoundOutlined,
     IconStarOutlined,
     IconTagOutlined,
@@ -199,7 +199,7 @@ export const NAVIGATION_ITEMS: INavigationItem[] = [
     {
         path: ORDERS_PATH,
         label: "Ventes",
-        icon: IconShoppingCartOutlined,
+        icon: IconShoppingOutlined,
         children: [
             {
                 path: ORDERS_PATH,

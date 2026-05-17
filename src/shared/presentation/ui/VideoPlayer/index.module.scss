@@ -1,0 +1,34 @@
+@use "@/shared/presentation/styles/colors" as colors;
+@use "@/shared/presentation/styles/dimensions" as dimensions;
+
+.videoPlayer {
+    width: 100%;
+    overflow: hidden;
+    border-radius: dimensions.$border-radius;
+    margin-top: calc(dimensions.$padding / 2);
+
+    --plyr-color-main: #{colors.$primary};
+    --plyr-video-control-color: #{colors.$white};
+    --plyr-video-control-color-hover: #{colors.$white};
+    --plyr-video-control-background-hover: #{colors.$primary};
+    --plyr-badge-background: #{colors.$primary};
+    --plyr-range-fill-background: #{colors.$primary};
+    --plyr-control-radius: #{dimensions.$border-radius};
+    --plyr-video-controls-background: linear-gradient(
+        rgba(colors.$black, 0),
+        rgba(colors.$black, 0.75)
+    );
+
+    :global(.plyr) {
+        border-radius: dimensions.$border-radius;
+    }
+
+    :global(.plyr__video-wrapper) {
+        border-radius: dimensions.$border-radius;
+    }
+
+    :global(.plyr--video) {
+        border-radius: dimensions.$border-radius;
+        overflow: hidden;
+    }
+}

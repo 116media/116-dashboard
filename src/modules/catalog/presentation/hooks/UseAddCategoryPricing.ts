@@ -2,7 +2,10 @@ import type { FormInstance } from "antd";
 import { Form } from "antd";
 import { useState } from "react";
 import type { IAddCategoryPricingCredentials } from "@/modules/catalog/presentation/model/IAddCategoryPricingCredentials";
-import { addCategoryPricingAction } from "@/modules/catalog/presentation/store/addcategorypricing.action";
+import {
+    addCategoryPricingAction,
+    resetAddCategoryPricingAction
+} from "@/modules/catalog/presentation/store/addcategorypricing.action";
 import { CategoriesNotification } from "@/modules/catalog/presentation/utils/notification/catalog.categories.notification";
 import type { Failure } from "@/shared/domain/failures/failure";
 import { useAppDispatch, useAppSelector } from "@/shared/presentation/store/store";
@@ -62,6 +65,8 @@ export const useAddCategoryPricing = (
 
     const resetAdd = () => {
         setSuccess(null);
+        form.resetFields();
+        dispatch(resetAddCategoryPricingAction());
     };
 
     return { form, loading, error, success, onSubmit, resetAdd };

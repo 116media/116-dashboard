@@ -8,7 +8,9 @@ import {
 } from "@/shared/presentation/ui/Icons";
 import styles from "./index.module.scss";
 
-/** Available tab keys for the settings sidebar navigation. */
+/**
+ * Available tab keys for the settings sidebar navigation.
+ */
 export type SettingsTab = "profile" | "security" | "notification" | "account";
 
 /**
@@ -23,7 +25,9 @@ interface ISettingsSidebarProps {
     onChange: (tab: SettingsTab) => void;
 }
 
-/** Tab definitions for the settings sidebar menu. */
+/**
+ * Tab definitions for the settings sidebar menu.
+ */
 const SETTINGS_TABS = [
     { key: "profile", label: "Profil", icon: <IconUserOutlined /> },
     { key: "security", label: "Sécurité", icon: <IconLockOutlined /> },

@@ -129,6 +129,7 @@ const ArticlesListContainer: FC = () => {
                     list.reload();
                 }}
                 onSubmit={() => updateArticle.form.submit()}
+                afterClose={() => updateArticle.resetUpdate()}
                 title={{
                     create: "Créer un article",
                     edit: "Modifier l'article"
@@ -190,6 +191,7 @@ const ArticlesListContainer: FC = () => {
                 success={updateSeo.success}
                 error={updateSeo.error}
                 onSubmit={updateSeo.onSubmit}
+                onReset={() => updateSeo.resetSeo()}
                 onCancel={() => {
                     modals.setSeoOpen(false);
                     updateSeo.resetSeo();

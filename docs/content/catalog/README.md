@@ -55,7 +55,7 @@ The Catalog module manages the "product catalog" of the B2B content platform:
 
 - **CategoryEntity** — name, slug, description, contentTypeId, isFree, isActive + pricing tiers
 - **CustomerEntity** — fullName, email, phone, company, notes
-- **PackageEntity** — name, description, flatPriceUsd, isActive + slots
+- **PackageEntity** — name, description, calculatedPriceUsd (derived), isActive + slots
 - **PackageSlotEntity** — categoryId, isRequired, quantity
 
 ## Module Path

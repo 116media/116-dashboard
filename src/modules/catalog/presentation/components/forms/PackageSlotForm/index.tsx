@@ -74,16 +74,16 @@ const PackageSlotForm: FC<IPackageSlotFormProps> = ({ form, error, onSubmit }) =
                 />
             </Item>
 
+            <Item name="quantity" label="Quantité" rules={PackagesValidator.quantity("Quantité")}>
+                <InputNumber min={1} placeholder="Quantité" />
+            </Item>
+
             <Item name="isRequired" valuePropName="checked">
                 <SwitchField
                     title="Obligatoire"
                     icon={<IconExclamationCircleOutlined />}
                     description="Ce créneau doit être rempli dans le package."
                 />
-            </Item>
-
-            <Item name="quantity" label="Quantité" rules={PackagesValidator.quantity("Quantité")}>
-                <InputNumber min={1} placeholder="Quantité" />
             </Item>
         </Form>
     );

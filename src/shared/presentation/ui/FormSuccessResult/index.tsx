@@ -1,5 +1,5 @@
 import { Button, Result } from "antd";
-import type { FC } from "react";
+import { type FC, useEffect } from "react";
 
 import styles from "./index.module.scss";
 
@@ -32,12 +32,19 @@ export interface IFormSuccessResultProps {
  * @param {IFormSuccessResultProps} props - Component props
  * @returns {JSX.Element} The success result
  */
+const AUTO_CLOSE_DELAY_MS = 3000;
+
 const FormSuccessResult: FC<IFormSuccessResultProps> = ({
     title,
     subtitle,
     onClose,
     closeLabel = "Fermer"
 }) => {
+    useEffect(() => {
+        const timer = setTimeout(onClose, AUTO_CLOSE_DELAY_MS);
+        return () => clearTimeout(timer);
+    }, [onClose]);
+
     return (
         <div className={styles.formSuccessResult}>
             <Result

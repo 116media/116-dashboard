@@ -3,7 +3,10 @@ import { Form } from "antd";
 import { useEffect, useState } from "react";
 import { setCurrentUserAction } from "@/platform/session/presentation/store/currentuser.action";
 import type { IUpdateAccountCredentials } from "@/platform/settings/presentation/model/IUpdateAccountCredentials";
-import { updateAccountAction } from "@/platform/settings/presentation/store/profile.action";
+import {
+    resetUpdateAccountAction,
+    updateAccountAction
+} from "@/platform/settings/presentation/store/profile.action";
 import { SettingsNotification } from "@/platform/settings/presentation/utils/notification/settings.notification";
 import type { Failure } from "@/shared/domain/failures/failure";
 import { COUNTRY_LIST, type ICountryObject } from "@/shared/infrastructure/constants/countries";
@@ -21,6 +24,7 @@ interface IUseUpdateAccount {
     open: () => void;
     close: () => void;
     onSubmit: (formValues: IUpdateAccountCredentials) => void;
+    resetUpdate: () => void;
 }
 
 /**
@@ -91,5 +95,11 @@ export const useUpdateAccount = (): IUseUpdateAccount => {
         }
     };
 
-    return { form, loading, error, success, isOpen, open, close, onSubmit };
+    const resetUpdate = () => {
+        setSuccess(null);
+        form.resetFields();
+        dispatch(resetUpdateAccountAction());
+    };
+
+    return { form, loading, error, success, isOpen, open, close, onSubmit, resetUpdate };
 };

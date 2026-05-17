@@ -1,6 +1,7 @@
 import type { FormInstance } from "antd";
 import { Form } from "antd";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import type { IOrderDetailEntity } from "@/modules/commerce/domain/entities/IOrderDetailEntity";
 import type { ICreateOrderCredentials } from "@/modules/commerce/presentation/model/ICreateOrderCredentials";
 import { editOrderAction } from "@/modules/commerce/presentation/store/editorder.action";
 import { OrdersNotification } from "@/modules/commerce/presentation/utils/notification/commerce.orders.notification";
@@ -10,11 +11,6 @@ import { showNotification } from "@/shared/presentation/utils/notification/notif
 
 const { useForm } = Form;
 
-/**
- * Return type for the edit order hook.
- *
- * @interface IUseEditOrder
- */
 interface IUseEditOrder {
     form: FormInstance<ICreateOrderCredentials>;
     loading: boolean;
@@ -30,17 +26,32 @@ interface IUseEditOrder {
  * @description
  * Manages form state, submission, and success feedback for
  * editing an existing order's customer and package.
+ * Pre-fills the form with the current order's customer by
+ * reverse-looking up the customer ID from the name.
  *
  * @param orderId - The order UUID to edit
+ * @param order - The current order entity for pre-filling
  * @param onSuccess - Optional callback after successful edit
- * @returns {IUseEditOrder} Form instance, loading/error state, submit handler, and reset function
  */
-export const useEditOrder = (orderId: string | null, onSuccess?: () => void): IUseEditOrder => {
+export const useEditOrder = (
+    orderId: string | null,
+    order: IOrderDetailEntity | null,
+    onSuccess?: () => void
+): IUseEditOrder => {
     const dispatch = useAppDispatch();
     const [form] = useForm<ICreateOrderCredentials>();
     const [success, setSuccess] = useState<string | null>(null);
 
     const { loading, error } = useAppSelector(({ commerce: { editOrder } }) => editOrder);
+
+    useEffect(() => {
+        if (!order) return;
+
+        form.setFieldsValue({
+            customerId: order.customerId,
+            packageId: order.packageId
+        });
+    }, [order, form]);
 
     const onSubmit = async (values: ICreateOrderCredentials): Promise<void> => {
         if (!orderId) return;

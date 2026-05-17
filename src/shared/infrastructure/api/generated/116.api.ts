@@ -56,6 +56,7 @@ export enum EnumCoreContentType {
   Article = "Article",
   Video = "Video",
   Short = "Short",
+  Custom = "Custom",
 }
 
 export enum EnumContentStatus {
@@ -318,8 +319,6 @@ export interface AdminCreateOrderResponse {
 export interface AdminCreatePackageRequest {
   name: string;
   description: string;
-  /** @format double */
-  flatPriceUsd: number;
 }
 
 export interface AdminCreatePackageResponse {
@@ -939,6 +938,10 @@ export interface AdminUpdateRoleResponse {
   role: RoleDto;
 }
 
+export interface AdminUpdateShortVideoResponse {
+  shortVideo: ShortVideoDto;
+}
+
 export interface AdminUpdateTagRequest {
   name: string;
   slug: string;
@@ -1199,7 +1202,11 @@ export interface ContentOrderDetailDto {
   updatedBy?: string | null;
   /** @format uuid */
   id: string;
+  /** @format uuid */
+  customerId: string;
   customerName: string;
+  /** @format uuid */
+  packageId?: string | null;
   status: EnumOrderStatus;
   /** @format double */
   totalAmountUsd: number;
@@ -1367,7 +1374,11 @@ export interface OrderItemDto {
   /** @format uuid */
   id: string;
   contentKind: EnumCoreContentType;
+  /** @format uuid */
+  categoryId: string;
   categoryName: string;
+  /** @format uuid */
+  promotionLevelId?: string | null;
   promotionLevelName?: string | null;
   /** @format double */
   promoPriceUsd?: number | null;
@@ -1388,7 +1399,7 @@ export interface PackageDto {
   name: string;
   description: string;
   /** @format double */
-  flatPriceUsd: number;
+  calculatedPriceUsd: number;
   isActive: boolean;
   slots: PackageSlotDto[];
 }
@@ -8332,6 +8343,64 @@ export class Api<
         path: `/api/v1/admin/shorts/${id}`,
         method: "GET",
         secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * @description Updates the editable metadata of a short video (title, parent video link)
+     * and optionally replaces the video file. The slug is immutable after creation
+     * to preserve public URLs shared on social media.
+     * 
+     * When a new video file is provided, it overwrites the existing file in cloud storage
+     * using the same storage key.
+     * 
+     * **Authentication Requirements:**
+     * 
+     * - User must be authenticated with a valid access token
+     * - User must have Admin or SuperAdmin role
+     * 
+     * **Response Codes:**
+     * 
+     * - Returns 200 OK with updated short video details on success
+     * - Returns 400 Bad Request if validation fails
+     * - Returns 401 Unauthorized if access token is invalid or expired
+     * - Returns 403 Forbidden if user lacks Admin role
+     * - Returns 404 Not Found if the short video does not exist
+     * - Returns 429 Too Many Requests if the rate limit is exceeded
+     *
+     * @tags admin::shorts
+     * @name UpdateShortVideo
+     * @summary Update short video metadata and optionally replace the video file
+     * @request PUT:/api/v1/admin/shorts/{id}
+     * @secure
+     * @response `200` `AdminUpdateShortVideoResponse` OK
+     * @response `400` `ProblemDetails` Bad Request
+     * @response `401` `ProblemDetails` Unauthorized
+     * @response `403` `ProblemDetails` Forbidden
+     * @response `404` `ProblemDetails` Not Found
+     * @response `429` `ProblemDetails` Too Many Requests
+     */
+    updateShortVideo: (
+      id: string,
+      query: {
+        title: string;
+        /** @format uuid */
+        videoId?: string;
+      },
+      data: {
+        /** @format binary */
+        videoFile?: File;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<AdminUpdateShortVideoResponse, ProblemDetails>({
+        path: `/api/v1/admin/shorts/${id}`,
+        method: "PUT",
+        query: query,
+        body: data,
+        secure: true,
+        type: ContentType.FormData,
         format: "json",
         ...params,
       }),

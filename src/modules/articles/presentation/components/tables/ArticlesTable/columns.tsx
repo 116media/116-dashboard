@@ -63,7 +63,6 @@ export const articlesTableColumns = (
         dataIndex: "status",
         key: "status",
         width: 160,
-        align: "center",
         render: (status: EnumContentStatus) => (
             <StatusTag status={status} config={CONTENT_STATUS_CONFIG} />
         )

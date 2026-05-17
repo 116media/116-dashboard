@@ -82,12 +82,13 @@ const PackagesListContainer: FC = () => {
             {modals.createOpen && (
                 <CreateEditModal
                     width={480}
-                    open={modals.createOpen}
                     formContext="CREATE"
+                    open={modals.createOpen}
                     loading={createPackage.loading}
                     success={createPackage.success}
                     onClose={() => modals.setCreateOpen(false)}
                     onSubmit={() => createPackage.form.submit()}
+                    afterClose={() => createPackage.resetCreate()}
                     title={{
                         create: "Créer un package",
                         edit: "Modifier le package"
