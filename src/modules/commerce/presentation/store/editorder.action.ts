@@ -1,9 +1,13 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import type { IOrderSummaryEntity } from "@/modules/commerce/domain/entities/IOrderSummaryEntity";
 import type { IEditOrderCredentials } from "@/modules/commerce/presentation/model/IEditOrderCredentials";
+import { commerceSlice } from "@/modules/commerce/presentation/store";
 import type { Failure } from "@/shared/domain/failures/failure";
 import container from "@/shared/infrastructure/service.locator";
 import { ActionType } from "./constants";
+
+export const resetEditOrderAction = () =>
+    commerceSlice.actions.clear({ context: ActionType.EditOrder });
 
 /**
  * Async thunk to edit a draft order.

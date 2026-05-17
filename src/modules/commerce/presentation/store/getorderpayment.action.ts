@@ -1,8 +1,12 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import type { IPaymentEntity } from "@/modules/commerce/domain/entities/IPaymentEntity";
+import { commerceSlice } from "@/modules/commerce/presentation/store";
 import type { Failure } from "@/shared/domain/failures/failure";
 import container from "@/shared/infrastructure/service.locator";
 import { ActionType } from "./constants";
+
+export const resetGetOrderPaymentAction = () =>
+    commerceSlice.actions.clear({ context: ActionType.GetOrderPayment });
 
 /**
  * Async thunk to fetch an order's payment record.

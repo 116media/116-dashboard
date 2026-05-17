@@ -3,7 +3,10 @@ import { Form } from "antd";
 import { useEffect, useState } from "react";
 import type { ICategoryEntity } from "@/modules/catalog/domain/entities/ICategoryEntity";
 import type { IUpdateCategoryCredentials } from "@/modules/catalog/presentation/model/IUpdateCategoryCredentials";
-import { updateCategoryAction } from "@/modules/catalog/presentation/store/updatecategory.action";
+import {
+    resetUpdateCategoryAction,
+    updateCategoryAction
+} from "@/modules/catalog/presentation/store/updatecategory.action";
 import { CategoriesNotification } from "@/modules/catalog/presentation/utils/notification/catalog.categories.notification";
 import type { Failure } from "@/shared/domain/failures/failure";
 import { useAppDispatch, useAppSelector } from "@/shared/presentation/store/store";
@@ -77,6 +80,8 @@ export const useUpdateCategory = (
 
     const resetUpdate = () => {
         setSuccess(null);
+        form.resetFields();
+        dispatch(resetUpdateCategoryAction());
         form.resetFields();
     };
 

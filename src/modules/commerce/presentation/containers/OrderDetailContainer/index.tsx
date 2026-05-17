@@ -46,34 +46,19 @@ const OrderDetailContainer: FC = () => {
     const modals = useOrderDetailModals();
     const orderActions = useOrderActions(detail.reload);
     const paymentActions = usePaymentActions(detail.reload);
-    const addItem = useAddOrderItem(orderId ?? null, () => {
-        modals.setAddItemOpen(false);
-        detail.reload();
-    });
-    const addTier = useAddItemTier(orderId ?? null, modals.selectedItemId, () => {
-        modals.setAddTierOpen(false);
-        detail.reload();
-    });
-    const attachProof = useAttachPaymentProof(orderId ?? null, () => {
-        modals.setProofOpen(false);
-        detail.reload();
-    });
+    const addItem = useAddOrderItem(orderId ?? null, detail.reload);
+    const addTier = useAddItemTier(orderId ?? null, modals.selectedItemId, detail.reload);
+    const attachProof = useAttachPaymentProof(orderId ?? null, detail.reload);
     const editOrder = useEditOrder(
         orderId ?? null,
         (detail.order as IOrderDetailEntity) ?? null,
-        () => {
-            modals.setEditOrderOpen(false);
-            detail.reload();
-        }
+        detail.reload
     );
     const editItem = useEditOrderItem(
         orderId ?? null,
         modals.selectedItemId,
         modals.selectedItem,
-        () => {
-            modals.setEditItemOpen(false);
-            detail.reload();
-        }
+        detail.reload
     );
 
     useEffect(() => {
@@ -136,12 +121,13 @@ const OrderDetailContainer: FC = () => {
             {modals.addItemOpen && (
                 <CreateEditModal
                     width={480}
-                    open={modals.addItemOpen}
                     formContext="CREATE"
+                    open={modals.addItemOpen}
                     loading={addItem.loading}
                     success={addItem.success}
-                    onClose={() => modals.setAddItemOpen(false)}
                     onSubmit={() => addItem.form.submit()}
+                    onClose={() => modals.setAddItemOpen(false)}
+                    afterClose={() => addItem.resetAddItem()}
                     title={{
                         create: "Ajouter un produit",
                         edit: "Ajouter un produit"
@@ -155,6 +141,7 @@ const OrderDetailContainer: FC = () => {
                     <OrderItemForm
                         form={addItem.form}
                         error={addItem.error}
+                        isBonusDefault={!!order.packageId}
                         onSubmit={addItem.onSubmit}
                     />
                 </CreateEditModal>
@@ -163,12 +150,13 @@ const OrderDetailContainer: FC = () => {
             {modals.addTierOpen && (
                 <CreateEditModal
                     width={480}
-                    open={modals.addTierOpen}
                     formContext="CREATE"
+                    open={modals.addTierOpen}
                     loading={addTier.loading}
                     success={addTier.success}
-                    onClose={() => modals.setAddTierOpen(false)}
                     onSubmit={() => addTier.form.submit()}
+                    onClose={() => modals.setAddTierOpen(false)}
+                    afterClose={() => addTier.resetAddTier()}
                     title={{
                         create: "Ajouter une tranche",
                         edit: "Ajouter une tranche"
@@ -191,12 +179,13 @@ const OrderDetailContainer: FC = () => {
             {modals.proofOpen && (
                 <CreateEditModal
                     width={480}
-                    open={modals.proofOpen}
                     formContext="CREATE"
+                    open={modals.proofOpen}
                     loading={attachProof.loading}
                     success={attachProof.success}
                     onClose={() => modals.setProofOpen(false)}
                     onSubmit={() => attachProof.form.submit()}
+                    afterClose={() => attachProof.resetAttachProof()}
                     title={{
                         create: "Attacher une preuve de paiement",
                         edit: "Attacher une preuve de paiement"
@@ -218,12 +207,13 @@ const OrderDetailContainer: FC = () => {
             {modals.editOrderOpen && (
                 <CreateEditModal
                     width={480}
-                    open={modals.editOrderOpen}
                     formContext="EDIT"
+                    open={modals.editOrderOpen}
                     loading={editOrder.loading}
                     success={editOrder.success}
-                    onClose={() => modals.setEditOrderOpen(false)}
                     onSubmit={() => editOrder.form.submit()}
+                    onClose={() => modals.setEditOrderOpen(false)}
+                    afterClose={() => editOrder.resetEdit()}
                     title={{
                         create: "Modifier la commande",
                         edit: "Modifier la commande"
@@ -245,12 +235,13 @@ const OrderDetailContainer: FC = () => {
             {modals.editItemOpen && (
                 <CreateEditModal
                     width={480}
-                    open={modals.editItemOpen}
                     formContext="EDIT"
+                    open={modals.editItemOpen}
                     loading={editItem.loading}
                     success={editItem.success}
-                    onClose={() => modals.setEditItemOpen(false)}
                     onSubmit={() => editItem.form.submit()}
+                    onClose={() => modals.setEditItemOpen(false)}
+                    afterClose={() => editItem.resetEdit()}
                     title={{
                         create: "Modifier le produit",
                         edit: "Modifier le produit"

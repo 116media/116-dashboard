@@ -43,21 +43,6 @@ export const PackagesValidator = {
     ],
 
     /**
-     * Validates package flat price field.
-     *
-     * @param {string} label - Display name for error messages
-     * @returns {Rule[]} Array of validation rules
-     *
-     * @remarks
-     * - Required field
-     * - Must be at least 0
-     */
-    flatPriceUsd: (label: string): Rule[] => [
-        ValidatorUtils.required(label),
-        ValidatorUtils.numericMin(label, 0)
-    ],
-
-    /**
      * Validates slot category selection field.
      *
      * @param {string} label - Display name for error messages

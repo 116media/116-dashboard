@@ -1,8 +1,12 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import type { IOrderDetailEntity } from "@/modules/commerce/domain/entities/IOrderDetailEntity";
+import { commerceSlice } from "@/modules/commerce/presentation/store";
 import type { Failure } from "@/shared/domain/failures/failure";
 import container from "@/shared/infrastructure/service.locator";
 import { ActionType } from "./constants";
+
+export const resetGetOrderByIdAction = () =>
+    commerceSlice.actions.clear({ context: ActionType.GetOrderById });
 
 /**
  * Async thunk to fetch a single order by ID.

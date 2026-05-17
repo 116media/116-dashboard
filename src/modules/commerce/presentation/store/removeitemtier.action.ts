@@ -1,8 +1,12 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import type { ICommerceActionResponse } from "@/modules/commerce/domain/entities/ICommerceActionResponse";
+import { commerceSlice } from "@/modules/commerce/presentation/store";
 import type { Failure } from "@/shared/domain/failures/failure";
 import container from "@/shared/infrastructure/service.locator";
 import { ActionType } from "./constants";
+
+export const resetRemoveItemTierAction = () =>
+    commerceSlice.actions.clear({ context: ActionType.RemoveItemTier });
 
 /**
  * Async thunk to remove a pricing tier from an order item.

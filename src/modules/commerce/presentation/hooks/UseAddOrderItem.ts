@@ -2,7 +2,10 @@ import type { FormInstance } from "antd";
 import { Form } from "antd";
 import { useState } from "react";
 import type { IAddOrderItemCredentials } from "@/modules/commerce/presentation/model/IAddOrderItemCredentials";
-import { addItemToOrderAction } from "@/modules/commerce/presentation/store/additemtoorder.action";
+import {
+    addItemToOrderAction,
+    resetAddItemToOrderAction
+} from "@/modules/commerce/presentation/store/additemtoorder.action";
 import { OrdersNotification } from "@/modules/commerce/presentation/utils/notification/commerce.orders.notification";
 import type { Failure } from "@/shared/domain/failures/failure";
 import { useAppDispatch, useAppSelector } from "@/shared/presentation/store/store";
@@ -61,6 +64,8 @@ export const useAddOrderItem = (
 
     const resetAddItem = () => {
         setSuccess(null);
+        form.resetFields();
+        dispatch(resetAddItemToOrderAction());
     };
 
     return { form, loading, error, success, onSubmit, resetAddItem };

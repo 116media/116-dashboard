@@ -1,8 +1,12 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import type { ICustomerEntity } from "@/modules/catalog/domain/entities/ICustomerEntity";
+import { catalogSlice } from "@/modules/catalog/presentation/store";
 import type { Failure } from "@/shared/domain/failures/failure";
 import container from "@/shared/infrastructure/service.locator";
 import { ActionType } from "./constants";
+
+export const resetUpdateCustomerAction = () =>
+    catalogSlice.actions.clear({ context: ActionType.UpdateCustomer });
 
 /**
  * Async thunk to update an existing customer.

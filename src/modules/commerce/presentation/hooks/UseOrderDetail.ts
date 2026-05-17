@@ -45,7 +45,6 @@ export const useOrderDetail = (orderId: string): IUseOrderDetail => {
     const reload = useCallback(() => {
         if (orderId) {
             dispatch(getOrderByIdAction(orderId));
-            dispatch(getOrderPaymentAction(orderId));
         }
     }, [dispatch, orderId]);
 
@@ -55,6 +54,11 @@ export const useOrderDetail = (orderId: string): IUseOrderDetail => {
             dispatch(commerceSlice.actions.purge(["getOrderById", "getOrderPayment"]));
         };
     }, [reload, dispatch]);
+
+    useEffect(() => {
+        const currentOrder = order as IOrderDetailEntity | null;
+        if (orderId && currentOrder?.hasPayment) dispatch(getOrderPaymentAction(orderId));
+    }, [dispatch, orderId, order]);
 
     return {
         order: (order as IOrderDetailEntity) ?? null,

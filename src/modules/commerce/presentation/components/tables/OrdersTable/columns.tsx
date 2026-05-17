@@ -76,7 +76,6 @@ export const ordersTableColumns = (
         dataIndex: "status",
         key: "status",
         width: 160,
-        align: "center",
         render: (status: EnumOrderStatus) => (
             <StatusTag status={status} config={ORDER_STATUS_CONFIG} />
         )

@@ -1,8 +1,12 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import type { ICatalogActionResponse } from "@/modules/catalog/domain/entities/ICatalogActionResponse";
+import { catalogSlice } from "@/modules/catalog/presentation/store";
 import type { Failure } from "@/shared/domain/failures/failure";
 import container from "@/shared/infrastructure/service.locator";
 import { ActionType } from "./constants";
+
+export const resetRemoveCategoryPricingAction = () =>
+    catalogSlice.actions.clear({ context: ActionType.RemoveCategoryPricing });
 
 /**
  * Async thunk to remove pricing from a category.

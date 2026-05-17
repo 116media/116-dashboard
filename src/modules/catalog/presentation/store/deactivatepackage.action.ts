@@ -1,8 +1,12 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import type { IPackageEntity } from "@/modules/catalog/domain/entities/IPackageEntity";
+import { catalogSlice } from "@/modules/catalog/presentation/store";
 import type { Failure } from "@/shared/domain/failures/failure";
 import container from "@/shared/infrastructure/service.locator";
 import { ActionType } from "./constants";
+
+export const resetDeactivatePackageAction = () =>
+    catalogSlice.actions.clear({ context: ActionType.DeactivatePackage });
 
 /**
  * Async thunk to deactivate an active package.

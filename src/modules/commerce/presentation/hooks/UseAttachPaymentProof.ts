@@ -3,7 +3,9 @@ import { Form } from "antd";
 import { useState } from "react";
 import { usePaymentActions } from "@/modules/commerce/presentation/hooks/UsePaymentActions";
 import type { IAttachPaymentProofCredentials } from "@/modules/commerce/presentation/model/IAttachPaymentProofCredentials";
+import { resetAttachPaymentProofAction } from "@/modules/commerce/presentation/store/attachpaymentproof.action";
 import type { Failure } from "@/shared/domain/failures/failure";
+import { useAppDispatch } from "@/shared/presentation/store/store";
 
 const { useForm } = Form;
 
@@ -37,6 +39,7 @@ export const useAttachPaymentProof = (
     orderId: string | null,
     onSuccess?: () => void
 ): IUseAttachPaymentProof => {
+    const dispatch = useAppDispatch();
     const [form] = useForm<IAttachPaymentProofCredentials>();
     const [success, setSuccess] = useState<string | null>(null);
     const paymentActions = usePaymentActions(() => {
@@ -56,6 +59,8 @@ export const useAttachPaymentProof = (
 
     const resetAttachProof = () => {
         setSuccess(null);
+        form.resetFields();
+        dispatch(resetAttachPaymentProofAction());
     };
 
     return {

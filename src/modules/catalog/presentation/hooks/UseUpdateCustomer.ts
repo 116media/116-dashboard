@@ -3,7 +3,10 @@ import { Form } from "antd";
 import { useEffect, useState } from "react";
 import type { ICustomerEntity } from "@/modules/catalog/domain/entities/ICustomerEntity";
 import type { IUpdateCustomerCredentials } from "@/modules/catalog/presentation/model/IUpdateCustomerCredentials";
-import { updateCustomerAction } from "@/modules/catalog/presentation/store/updatecustomer.action";
+import {
+    resetUpdateCustomerAction,
+    updateCustomerAction
+} from "@/modules/catalog/presentation/store/updatecustomer.action";
 import { CustomersNotification } from "@/modules/catalog/presentation/utils/notification/catalog.customers.notification";
 import type { Failure } from "@/shared/domain/failures/failure";
 import { useAppDispatch, useAppSelector } from "@/shared/presentation/store/store";
@@ -71,6 +74,8 @@ export const useUpdateCustomer = (
 
     const resetUpdate = () => {
         setSuccess(null);
+        form.resetFields();
+        dispatch(resetUpdateCustomerAction());
         form.resetFields();
     };
 

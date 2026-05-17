@@ -4,15 +4,15 @@ import type { IOrderItemEntity } from "@/modules/commerce/domain/entities/IOrder
 import type { IOrderSummaryEntity } from "@/modules/commerce/domain/entities/IOrderSummaryEntity";
 import type { IPaymentEntity } from "@/modules/commerce/domain/entities/IPaymentEntity";
 import type { IPaymentSummaryEntity } from "@/modules/commerce/domain/entities/IPaymentSummaryEntity";
-import type {
-    ContentOrderDetailDto,
-    ContentOrderSummaryDto,
+import {
+    type ContentOrderDetailDto,
+    type ContentOrderSummaryDto,
     EnumOrderStatus,
-    EnumPaymentMethod,
-    EnumPaymentStatus,
-    ItemTierDto,
-    OrderItemDto,
-    PaymentDto
+    type EnumPaymentMethod,
+    type EnumPaymentStatus,
+    type ItemTierDto,
+    type OrderItemDto,
+    type PaymentDto
 } from "@/shared/infrastructure/api/generated/116.api";
 
 /**
@@ -144,6 +144,9 @@ export const CommerceMapper = {
             customerName: dto.customerName,
             packageId: dto.packageId,
             status: dto.status,
+            hasPayment:
+                dto.status === EnumOrderStatus.PendingPayment ||
+                dto.status === EnumOrderStatus.Paid,
             totalAmountUsd: dto.totalAmountUsd,
             items: dto.items.map(CommerceMapper.orderItemFromDto),
             payment: dto.payment ? CommerceMapper.paymentFromDto(dto.payment) : null,

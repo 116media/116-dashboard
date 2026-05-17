@@ -3,7 +3,10 @@ import { Form } from "antd";
 import { useEffect, useState } from "react";
 import type { IOrderDetailEntity } from "@/modules/commerce/domain/entities/IOrderDetailEntity";
 import type { ICreateOrderCredentials } from "@/modules/commerce/presentation/model/ICreateOrderCredentials";
-import { editOrderAction } from "@/modules/commerce/presentation/store/editorder.action";
+import {
+    editOrderAction,
+    resetEditOrderAction
+} from "@/modules/commerce/presentation/store/editorder.action";
 import { OrdersNotification } from "@/modules/commerce/presentation/utils/notification/commerce.orders.notification";
 import type { Failure } from "@/shared/domain/failures/failure";
 import { useAppDispatch, useAppSelector } from "@/shared/presentation/store/store";
@@ -75,6 +78,8 @@ export const useEditOrder = (
 
     const resetEdit = () => {
         setSuccess(null);
+        form.resetFields();
+        dispatch(resetEditOrderAction());
     };
 
     return { form, loading, error, success, onSubmit, resetEdit };
