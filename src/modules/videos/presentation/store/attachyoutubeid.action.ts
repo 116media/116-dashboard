@@ -5,8 +5,8 @@ import type { Failure } from "@/shared/domain/failures/failure";
 import container from "@/shared/infrastructure/service.locator";
 import { ActionType } from "./constants";
 
-export const resetAttachYoutubeIdAction = () =>
-    videosSlice.actions.clear({ context: ActionType.AttachYoutubeId });
+export const resetAttachYoutubeVideoUrlAction = () =>
+    videosSlice.actions.clear({ context: ActionType.AttachYoutubeVideoUrl });
 
 /**
  * Async thunk to attach a YouTube video ID to a video.
@@ -18,9 +18,9 @@ export const resetAttachYoutubeIdAction = () =>
  */
 export const attachYoutubeIdAction = createAsyncThunk<
     IVideoEntity,
-    { id: string; data: { youtubeVideoId: string } },
+    { id: string; data: { youtubeVideoUrl: string } },
     { rejectValue: Failure }
->(ActionType.AttachYoutubeId, async (params, { rejectWithValue }) => {
+>(ActionType.AttachYoutubeVideoUrl, async (params, { rejectWithValue }) => {
     const result = await container.cradle.attachYoutubeIdUseCase.execute(params);
 
     if (!result.ok) return rejectWithValue(result.error);

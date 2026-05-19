@@ -6,6 +6,7 @@ import ArticleSeoForm from "@/modules/articles/presentation/components/forms/Art
 import ArticleTagsForm from "@/modules/articles/presentation/components/forms/ArticleTagsForm";
 import ArticleCreateSummary from "@/modules/articles/presentation/components/ui/ArticleCreateSummary";
 import { useCreateArticleWizard } from "@/modules/articles/presentation/hooks/UseCreateArticleWizard";
+import { usePaidOrderItems } from "@/modules/commerce/presentation/hooks/UsePaidOrderItems";
 import ErrorAlert from "@/shared/presentation/ui/ErrorAlert";
 import styles from "./index.module.scss";
 
@@ -34,6 +35,7 @@ const ArticleCreateWizard: FC<IArticleCreateWizardProps> = ({ open, onClose, onS
         wizard.reset();
         onSuccess();
     });
+    const orderItems = usePaidOrderItems("article");
 
     const handleClose = () => {
         wizard.reset();
@@ -45,7 +47,11 @@ const ArticleCreateWizard: FC<IArticleCreateWizardProps> = ({ open, onClose, onS
             key="step1"
             error={wizard.error}
             form={wizard.step1Form}
+            orderItems={orderItems}
             onSubmit={() => wizard.goNext()}
+            onOrderItemChange={(option) => {
+                wizard.setSocialBoost(option?.socialBoost ?? false);
+            }}
         />,
         <ArticleBodyForm
             key="step2"

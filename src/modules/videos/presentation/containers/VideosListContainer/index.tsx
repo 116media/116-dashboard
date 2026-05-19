@@ -13,9 +13,9 @@ import VideoSeoModal from "@/modules/videos/presentation/components/ui/VideoSeoM
 import VideoTagsModal from "@/modules/videos/presentation/components/ui/VideoTagsModal";
 import VideoThumbnailUploadModal from "@/modules/videos/presentation/components/ui/VideoThumbnailUploadModal";
 import VideoWorkflowModal from "@/modules/videos/presentation/components/ui/VideoWorkflowModal";
-import YoutubeIdModal from "@/modules/videos/presentation/components/ui/YoutubeIdModal";
+import YoutubeUrlModal from "@/modules/videos/presentation/components/ui/YoutubeUrlModal";
 import { VIDEO_STATUS_OPTIONS } from "@/modules/videos/presentation/constants/videos.status";
-import { useAttachYoutubeId } from "@/modules/videos/presentation/hooks/UseAttachYoutubeId";
+import { useAttachYoutubeVideoUrl } from "@/modules/videos/presentation/hooks/UseAttachYoutubeVideoUrl";
 import { useScheduleShoot } from "@/modules/videos/presentation/hooks/UseScheduleShoot";
 import { useUpdateVideo } from "@/modules/videos/presentation/hooks/UseUpdateVideo";
 import { useUpdateVideoSeo } from "@/modules/videos/presentation/hooks/UseUpdateVideoSeo";
@@ -24,8 +24,12 @@ import { useUploadVideoThumbnail } from "@/modules/videos/presentation/hooks/Use
 import { useVideoModals } from "@/modules/videos/presentation/hooks/UseVideoModals";
 import { useVideosList } from "@/modules/videos/presentation/hooks/UseVideosList";
 import { useVideoWorkflow } from "@/modules/videos/presentation/hooks/UseVideoWorkflow";
+import {
+    getVideoByIdAction,
+    resetGetVideoByIdAction
+} from "@/modules/videos/presentation/store/getvideobyid.action";
 import { useResizableColumns } from "@/shared/presentation/hooks/UseResizableColumns";
-import { useAppDispatch } from "@/shared/presentation/store/store";
+import { useAppDispatch, useAppSelector } from "@/shared/presentation/store/store";
 import CreateEditModal from "@/shared/presentation/ui/CreateEditModal";
 import ErrorAlert from "@/shared/presentation/ui/ErrorAlert";
 import { IconVideoCameraFilled } from "@/shared/presentation/ui/Icons";
@@ -49,14 +53,12 @@ const VideosListContainer: FC = () => {
     const dispatch = useAppDispatch();
     const list = useVideosList();
     const modals = useVideoModals(list.reload);
-    const updateVideo = useUpdateVideo(modals.selectedEntity as IVideoEntity | null, list.reload);
-    const updateSeo = useUpdateVideoSeo(modals.selectedEntity as IVideoEntity | null, list.reload);
-    const updateTags = useUpdateVideoTags(
-        modals.selectedEntity as IVideoEntity | null,
-        list.reload
-    );
+    const { data: fullVideo } = useAppSelector(({ videos: { getVideoById } }) => getVideoById);
+    const updateVideo = useUpdateVideo(fullVideo as IVideoEntity | null, list.reload);
+    const updateSeo = useUpdateVideoSeo(fullVideo as IVideoEntity | null, list.reload);
+    const updateTags = useUpdateVideoTags(fullVideo as IVideoEntity | null, list.reload);
     const uploadThumbnail = useUploadVideoThumbnail();
-    const attachYoutube = useAttachYoutubeId();
+    const attachYoutube = useAttachYoutubeVideoUrl();
     const scheduleShoot = useScheduleShoot();
     const workflow = useVideoWorkflow(list.reload);
     const { isSuperAdmin, isAdminOrSuperAdmin } = useAuthorization();
@@ -66,6 +68,13 @@ const VideosListContainer: FC = () => {
         dispatch(getAllCustomersAction({ pageIndex: 0, pageSize: 100 }));
         dispatch(getTagsAction());
     }, [dispatch]);
+
+    useEffect(() => {
+        if (modals.selectedEntity && (modals.editOpen || modals.tagsOpen || modals.seoOpen)) {
+            dispatch(resetGetVideoByIdAction());
+            dispatch(getVideoByIdAction(modals.selectedEntity.id));
+        }
+    }, [dispatch, modals.selectedEntity, modals.editOpen, modals.tagsOpen, modals.seoOpen]);
 
     const { columns: tableColumns } = useResizableColumns(
         videosTableColumns(modals.handleAction, isSuperAdmin, isAdminOrSuperAdmin)
@@ -124,11 +133,14 @@ const VideosListContainer: FC = () => {
             {modals.editOpen && (
                 <CreateEditModal
                     width={600}
-                    open={modals.editOpen}
                     formContext="EDIT"
+                    open={modals.editOpen}
                     loading={updateVideo.loading}
                     success={updateVideo.success}
-                    afterClose={() => updateVideo.resetUpdate()}
+                    afterClose={() => {
+                        updateVideo.resetUpdate();
+                        dispatch(resetGetVideoByIdAction());
+                    }}
                     onClose={() => {
                         modals.setEditOpen(false);
                         updateVideo.resetUpdate();
@@ -147,6 +159,7 @@ const VideosListContainer: FC = () => {
                     <VideoDetailsForm
                         form={updateVideo.form}
                         error={updateVideo.error}
+                        orderItems={updateVideo.orderItems}
                         onSubmit={updateVideo.onSubmit}
                     />
                 </CreateEditModal>
@@ -231,13 +244,13 @@ const VideosListContainer: FC = () => {
             )}
 
             {modals.youtubeOpen && (
-                <YoutubeIdModal
+                <YoutubeUrlModal
                     open={modals.youtubeOpen}
                     form={attachYoutube.form}
                     loading={attachYoutube.loading}
                     success={attachYoutube.success}
                     error={attachYoutube.error}
-                    initialYoutubeId={modals.selectedEntity?.youtubeVideoId}
+                    initialYoutubeVideoUrl={modals.selectedEntity?.youtubeVideoUrl}
                     onReset={() => attachYoutube.resetYoutube()}
                     onSubmit={(values) => {
                         if (modals.selectedEntity) {

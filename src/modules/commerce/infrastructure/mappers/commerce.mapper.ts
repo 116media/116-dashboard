@@ -7,6 +7,7 @@ import type { IPaymentSummaryEntity } from "@/modules/commerce/domain/entities/I
 import {
     type ContentOrderDetailDto,
     type ContentOrderSummaryDto,
+    EnumCoreContentType,
     EnumOrderStatus,
     type EnumPaymentMethod,
     type EnumPaymentStatus,
@@ -74,6 +75,8 @@ export const CommerceMapper = {
         return {
             id: dto.id,
             contentKind: dto.contentKind,
+            isVideoType: dto.contentKind === EnumCoreContentType.Video,
+            isArticleType: dto.contentKind === EnumCoreContentType.Article,
             categoryId: dto.categoryId,
             categoryName: dto.categoryName,
             promotionLevelId: dto.promotionLevelId,

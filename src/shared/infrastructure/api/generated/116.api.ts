@@ -213,11 +213,11 @@ export interface AdminAttachPaymentProofResponse {
   proof: FileDto;
 }
 
-export interface AdminAttachYoutubeIdRequest {
-  youtubeVideoId: string;
+export interface AdminAttachYoutubeVideoUrlRequest {
+  youtubeVideoUrl: string;
 }
 
-export interface AdminAttachYoutubeIdResponse {
+export interface AdminAttachYoutubeVideoUrlResponse {
   video: VideoDetailDto;
 }
 
@@ -1078,6 +1078,11 @@ export interface ArticleDetailDto {
   tags: TagDto[];
   /** @format int32 */
   readTimeInMinutes: number;
+  /** @format uuid */
+  customerId?: string | null;
+  customerName?: string | null;
+  /** @format uuid */
+  orderItemId?: string | null;
   author?: AuthorDto | null;
 }
 
@@ -2039,7 +2044,7 @@ export interface VideoDetailDto {
   authorId: string;
   status: EnumContentStatus;
   rejectionReason?: string | null;
-  youtubeVideoId?: string | null;
+  youtubeVideoUrl?: string | null;
   isFeatured: boolean;
   /** @format date-time */
   featuredUntil?: string | null;
@@ -2051,6 +2056,11 @@ export interface VideoDetailDto {
   metaTitle?: string | null;
   metaDescription?: string | null;
   tags: TagDto[];
+  /** @format uuid */
+  customerId?: string | null;
+  customerName?: string | null;
+  /** @format uuid */
+  orderItemId?: string | null;
   author?: AuthorDto | null;
 }
 
@@ -2084,7 +2094,7 @@ export interface VideoSummaryDto {
   thumbnailUrl?: string | null;
   authorId: string;
   status: EnumContentStatus;
-  youtubeVideoId?: string | null;
+  youtubeVideoUrl?: string | null;
   isFeatured: boolean;
   hasLyrics: boolean;
   /** @format date-time */
@@ -9616,7 +9626,7 @@ export class Api<
       }),
 
     /**
-     * @description Attaches a YouTube video ID to a video and automatically downloads
+     * @description Attaches a full YouTube video URL to a video and automatically downloads
      * the YouTube thumbnail, re-uploading it to Cloudinary.
      * 
      * If the video already has a thumbnail, the old Cloudinary asset is deleted
@@ -9639,23 +9649,23 @@ export class Api<
      * - Returns 404 Not Found if the video does not exist
      *
      * @tags admin::videos
-     * @name AttachYoutubeId
-     * @summary Attach a YouTube video ID
+     * @name AttachYoutubeVideoUrl
+     * @summary Attach a YouTube video URL
      * @request PATCH:/api/v1/admin/videos/{id}/youtube
      * @secure
-     * @response `200` `AdminAttachYoutubeIdResponse` OK
+     * @response `200` `AdminAttachYoutubeVideoUrlResponse` OK
      * @response `400` `ProblemDetails` Bad Request
      * @response `401` `ProblemDetails` Unauthorized
      * @response `403` `ProblemDetails` Forbidden
      * @response `404` `ProblemDetails` Not Found
      * @response `429` `ProblemDetails` Too Many Requests
      */
-    attachYoutubeId: (
+    attachYoutubeVideoUrl: (
       id: string,
-      data: AdminAttachYoutubeIdRequest,
+      data: AdminAttachYoutubeVideoUrlRequest,
       params: RequestParams = {},
     ) =>
-      this.request<AdminAttachYoutubeIdResponse, ProblemDetails>({
+      this.request<AdminAttachYoutubeVideoUrlResponse, ProblemDetails>({
         path: `/api/v1/admin/videos/${id}/youtube`,
         method: "PATCH",
         body: data,

@@ -1,8 +1,15 @@
-import Plyr from "plyr";
-import "plyr/dist/plyr.css";
+import { Plyr as PlyrReact } from "plyr-react";
+import "plyr-react/plyr.css";
 import type { FC } from "react";
-import { useEffect, useRef } from "react";
+import { useMemo } from "react";
 import styles from "./index.module.scss";
+
+const PLYR_OPTIONS: Plyr.Options = {
+    controls: ["play-large", "play", "progress", "current-time", "mute", "volume", "fullscreen"],
+    resetOnEnd: true,
+    clickToPlay: true,
+    hideControls: true
+};
 
 interface IVideoPlayerProps {
     src?: string | null;
@@ -12,63 +19,47 @@ interface IVideoPlayerProps {
 }
 
 /**
- * Shared video player powered by Plyr.
+ * Shared video player powered by plyr-react.
  *
  * @component
  *
  * @description
- * Renders a themed video player for HTML5 video files or YouTube embeds.
- * Uses Plyr for consistent playback controls across browsers.
- * Styled to match the dashboard design system via CSS custom properties.
+ * Renders a Plyr-powered player for both HTML5 video files and YouTube embeds.
+ * Styles are applied via CSS custom properties in the companion SCSS module.
  */
 const VideoPlayer: FC<IVideoPlayerProps> = ({ src, youtubeId, poster, maxHeight }) => {
-    const containerRef = useRef<HTMLDivElement>(null);
-    const playerRef = useRef<Plyr | null>(null);
+    const source = useMemo<Plyr.SourceInfo | undefined>(() => {
+        if (youtubeId) {
+            return { type: "video", sources: [{ src: youtubeId, provider: "youtube" }] };
+        }
+        if (src) {
+            const ext = src.split("?")[0].split(".").pop()?.toLowerCase();
+            const mimeTypes: Record<string, string> = {
+                mp4: "video/mp4",
+                mov: "video/quicktime",
+                webm: "video/webm",
+                avi: "video/x-msvideo",
+                mkv: "video/x-matroska",
+                "3gp": "video/3gpp"
+            };
+            const mimeType = (ext && mimeTypes[ext]) || "video/mp4";
+            return {
+                type: "video",
+                poster: poster ?? undefined,
+                sources: [{ src, type: mimeType }]
+            };
+        }
+        return undefined;
+    }, [src, youtubeId, poster]);
 
-    useEffect(() => {
-        if (!containerRef.current) return;
-
-        const element = containerRef.current.querySelector(
-            youtubeId ? "[data-plyr-provider]" : "video"
-        );
-        if (!element) return;
-
-        playerRef.current = new Plyr(element as HTMLElement, {
-            controls: [
-                "play-large",
-                "play",
-                "progress",
-                "current-time",
-                "mute",
-                "volume",
-                "fullscreen"
-            ],
-            resetOnEnd: true,
-            clickToPlay: true,
-            hideControls: true
-        });
-
-        return () => {
-            playerRef.current?.destroy();
-            playerRef.current = null;
-        };
-    }, [youtubeId]);
-
-    if (!src && !youtubeId) return null;
+    if (!source) return null;
 
     return (
         <div
             className={styles.videoPlayer}
             style={maxHeight ? { maxHeight, overflow: "hidden" } : undefined}
         >
-            {youtubeId ? (
-                <div data-plyr-provider="youtube" data-plyr-embed-id={youtubeId} />
-            ) : (
-                // biome-ignore lint/a11y/useMediaCaption: captions not available for user-uploaded previews
-                <video playsInline controls data-poster={poster ?? undefined}>
-                    <source src={src ?? ""} type="video/mp4" />
-                </video>
-            )}
+            <PlyrReact source={source} options={PLYR_OPTIONS} />
         </div>
     );
 };

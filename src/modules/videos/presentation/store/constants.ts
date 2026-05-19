@@ -13,7 +13,7 @@ export const ActionType = {
     ArchiveVideo: "Videos/archiveVideo",
     DeleteVideo: "Videos/deleteVideo",
     UploadVideoThumbnail: "Videos/uploadVideoThumbnail",
-    AttachYoutubeId: "Videos/attachYoutubeId",
+    AttachYoutubeVideoUrl: "Videos/attachYoutubeId",
     UpdateVideoSeo: "Videos/updateVideoSeo",
     UpdateVideoTags: "Videos/updateVideoTags",
     ScheduleShoot: "Videos/scheduleShoot"

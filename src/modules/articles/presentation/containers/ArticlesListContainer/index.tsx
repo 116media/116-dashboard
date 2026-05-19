@@ -143,6 +143,7 @@ const ArticlesListContainer: FC = () => {
                 <ArticleDetailsForm
                     form={updateArticle.form}
                     error={updateArticle.error}
+                    orderItems={updateArticle.orderItems}
                     onSubmit={updateArticle.onSubmit}
                     onCoverUpload={async (file) => {
                         const entityId = modals.selectedEntity?.id;

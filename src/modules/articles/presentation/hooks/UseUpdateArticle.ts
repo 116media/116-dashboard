@@ -10,6 +10,7 @@ import {
     updateArticleAction
 } from "@/modules/articles/presentation/store/updatearticle.action";
 import { ArticlesNotification } from "@/modules/articles/presentation/utils/notification/articles.notification";
+import { usePaidOrderItems } from "@/modules/commerce/presentation/hooks/UsePaidOrderItems";
 import type { Failure } from "@/shared/domain/failures/failure";
 import { useAppDispatch, useAppSelector } from "@/shared/presentation/store/store";
 import { showNotification } from "@/shared/presentation/utils/notification/notification.utils";
@@ -23,6 +24,7 @@ interface IUseUpdateArticle {
     detailLoading: boolean;
     error: Failure | null | undefined;
     success: string | null;
+    orderItems: ReturnType<typeof usePaidOrderItems>;
     onSubmit: (values: IUpdateArticleCredentials) => Promise<void>;
     resetUpdate: () => void;
 }
@@ -33,7 +35,8 @@ interface IUseUpdateArticle {
  * @description
  * Fetches the full article detail (including body) when the
  * selected article changes, then pre-populates the form.
- * The list only provides summary data without body content.
+ * When the article has a customerId, order items are fetched
+ * for that customer so the orderItemId select displays correctly.
  */
 export const useUpdateArticle = (
     article: IArticleSummaryEntity | null,
@@ -43,6 +46,8 @@ export const useUpdateArticle = (
     const [form] = useForm<IUpdateArticleCredentials>();
     const [success, setSuccess] = useState<string | null>(null);
     const [detailLoading, setDetailLoading] = useState(false);
+    const [fetchedDetail, setFetchedDetail] = useState<IArticleEntity | null>(null);
+    const orderItems = usePaidOrderItems("article");
 
     const { loading, error } = useAppSelector(({ articles: { updateArticle } }) => updateArticle);
 
@@ -55,6 +60,7 @@ export const useUpdateArticle = (
 
             if (getArticleByIdAction.fulfilled.match(result)) {
                 const detail = result.payload as IArticleEntity;
+                setFetchedDetail(detail);
                 form.setFieldsValue({
                     categoryId: detail.categoryId,
                     title: detail.title,
@@ -67,12 +73,23 @@ export const useUpdateArticle = (
                     metaTitle: detail.metaTitle,
                     metaDescription: detail.metaDescription
                 });
+
+                if (detail.customerId) {
+                    form.setFieldValue("customerId", detail.customerId);
+                    orderItems.fetchByCustomer(detail.customerId);
+                }
             }
             setDetailLoading(false);
         };
 
         fetchDetail();
-    }, [article, dispatch, form]);
+    }, [article, dispatch, form, orderItems.fetchByCustomer]);
+
+    useEffect(() => {
+        if (!fetchedDetail?.orderItemId || orderItems.loading || orderItems.options.length === 0)
+            return;
+        form.setFieldValue("orderItemId", fetchedDetail.orderItemId);
+    }, [fetchedDetail, orderItems.options, orderItems.loading, form]);
 
     const onSubmit = async (values: IUpdateArticleCredentials): Promise<void> => {
         if (!article) return;
@@ -96,10 +113,11 @@ export const useUpdateArticle = (
 
     const resetUpdate = () => {
         setSuccess(null);
+        setFetchedDetail(null);
         form.resetFields();
         dispatch(resetUpdateArticleAction());
         form.resetFields();
     };
 
-    return { form, loading, detailLoading, error, success, onSubmit, resetUpdate };
+    return { form, loading, detailLoading, error, success, orderItems, onSubmit, resetUpdate };
 };

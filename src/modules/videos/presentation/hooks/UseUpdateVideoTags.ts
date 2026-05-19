@@ -49,7 +49,7 @@ export const useUpdateVideoTags = (
 
     useEffect(() => {
         if (video) {
-            setTagIds(video.tags.map((t) => t.id));
+            setTagIds(video.tags?.map((t) => t.id) ?? []);
         }
     }, [video]);
 

@@ -129,7 +129,7 @@ import { registerShortsDependencies } from "@/modules/shorts/infrastructure/depe
 import type { IVideosRepositoryPort } from "@/modules/videos/application/repositories/videos.repository.port";
 import type { ApproveVideoUseCase } from "@/modules/videos/application/usecases/approvevideo.usecase";
 import type { ArchiveVideoUseCase } from "@/modules/videos/application/usecases/archivevideo.usecase";
-import type { AttachYoutubeIdUseCase } from "@/modules/videos/application/usecases/attachyoutubeid.usecase";
+import type { AttachYoutubeVideoUrlUseCase } from "@/modules/videos/application/usecases/attachyoutubeid.usecase";
 import type { CreateVideoUseCase } from "@/modules/videos/application/usecases/createvideo.usecase";
 import type { DeleteVideoUseCase } from "@/modules/videos/application/usecases/deletevideo.usecase";
 import type { GetAllVideosUseCase } from "@/modules/videos/application/usecases/getallvideos.usecase";
@@ -343,7 +343,7 @@ export interface Cradle {
     archiveVideoUseCase: ArchiveVideoUseCase;
     deleteVideoUseCase: DeleteVideoUseCase;
     uploadVideoThumbnailUseCase: UploadVideoThumbnailUseCase;
-    attachYoutubeIdUseCase: AttachYoutubeIdUseCase;
+    attachYoutubeIdUseCase: AttachYoutubeVideoUrlUseCase;
     updateVideoSeoUseCase: UpdateVideoSeoUseCase;
     updateVideoTagsUseCase: UpdateVideoTagsUseCase;
     scheduleShootUseCase: ScheduleShootUseCase;

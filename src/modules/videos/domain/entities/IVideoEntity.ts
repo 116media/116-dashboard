@@ -17,7 +17,7 @@ import type { EnumContentStatus } from "@/shared/infrastructure/api/generated/11
  * @property {string} authorId - UUID of the author (identity user)
  * @property {EnumContentStatus} status - Current editorial workflow status
  * @property {string | null} rejectionReason - Reason for rejection, if rejected
- * @property {string | null} youtubeVideoId - YouTube video identifier
+ * @property {string | null} youtubeVideoUrl - YouTube video identifier
  * @property {boolean} isFeatured - Whether the video is featured
  * @property {string | null} featuredUntil - ISO timestamp for featured expiry
  * @property {boolean} hasLyrics - Whether the video has associated lyrics
@@ -25,6 +25,9 @@ import type { EnumContentStatus } from "@/shared/infrastructure/api/generated/11
  * @property {string | null} publishedAt - ISO timestamp of publication
  * @property {string | null} metaTitle - SEO meta title
  * @property {string | null} metaDescription - SEO meta description
+ * @property {string | null} customerId - UUID of the B2B customer, null for free content
+ * @property {string | null} customerName - Full name of the B2B customer, null for free content
+ * @property {string | null} orderItemId - UUID of the linked order item, null for free content
  * @property {ITagEntity[]} tags - Assigned tags
  * @property {string | null} createdAt - ISO creation timestamp
  * @property {string | null} updatedAt - ISO last-update timestamp
@@ -43,7 +46,7 @@ export interface IVideoEntity {
     authorId: string;
     status: EnumContentStatus;
     rejectionReason?: string | null;
-    youtubeVideoId?: string | null;
+    youtubeVideoUrl?: string | null;
     isFeatured: boolean;
     featuredUntil?: string | null;
     hasLyrics: boolean;
@@ -51,6 +54,9 @@ export interface IVideoEntity {
     publishedAt?: string | null;
     metaTitle?: string | null;
     metaDescription?: string | null;
+    customerId?: string | null;
+    customerName?: string | null;
+    orderItemId?: string | null;
     tags: ITagEntity[];
     createdAt?: string | null;
     updatedAt?: string | null;

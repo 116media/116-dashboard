@@ -1,5 +1,7 @@
 import { Button, Divider, Flex, Modal, Steps, Typography } from "antd";
 import type { FC } from "react";
+import { useState } from "react";
+import { usePaidOrderItems } from "@/modules/commerce/presentation/hooks/UsePaidOrderItems";
 import VideoContentForm from "@/modules/videos/presentation/components/forms/VideoContentForm";
 import VideoInfoForm from "@/modules/videos/presentation/components/forms/VideoInfoForm";
 import VideoSeoForm from "@/modules/videos/presentation/components/forms/VideoSeoForm";
@@ -29,9 +31,13 @@ const VideoCreateWizard: FC<IVideoCreateWizardProps> = ({ open, onClose, onSucce
         wizard.reset();
         onSuccess();
     });
+    const orderItems = usePaidOrderItems("video");
+
+    const [socialBoostLocked, setSocialBoostLocked] = useState(false);
 
     const handleClose = () => {
         wizard.reset();
+        setSocialBoostLocked(false);
         onClose();
     };
 
@@ -40,9 +46,18 @@ const VideoCreateWizard: FC<IVideoCreateWizardProps> = ({ open, onClose, onSucce
             key="step1"
             form={wizard.step1Form}
             error={wizard.error}
+            orderItems={orderItems}
             onSubmit={() => wizard.goNext()}
+            onOrderItemChange={(option) => {
+                setSocialBoostLocked(option !== undefined);
+                wizard.step2Form.setFieldValue("socialBoost", option?.socialBoost ?? false);
+            }}
         />,
-        <VideoContentForm key="step2" form={wizard.step2Form} />,
+        <VideoContentForm
+            key="step2"
+            form={wizard.step2Form}
+            socialBoostLocked={socialBoostLocked}
+        />,
         <Flex key="step3" vertical gap={24}>
             <div>
                 <Title level={5}>Tags</Title>

@@ -2,7 +2,7 @@ import type { AwilixContainer } from "awilix";
 import { asClass } from "awilix";
 import { ApproveVideoUseCase } from "@/modules/videos/application/usecases/approvevideo.usecase";
 import { ArchiveVideoUseCase } from "@/modules/videos/application/usecases/archivevideo.usecase";
-import { AttachYoutubeIdUseCase } from "@/modules/videos/application/usecases/attachyoutubeid.usecase";
+import { AttachYoutubeVideoUrlUseCase } from "@/modules/videos/application/usecases/attachyoutubeid.usecase";
 import { CreateVideoUseCase } from "@/modules/videos/application/usecases/createvideo.usecase";
 import { DeleteVideoUseCase } from "@/modules/videos/application/usecases/deletevideo.usecase";
 import { GetAllVideosUseCase } from "@/modules/videos/application/usecases/getallvideos.usecase";
@@ -49,7 +49,7 @@ export function registerVideosDependencies(container: AwilixContainer): void {
 
         // Commands -- Media & Metadata
         uploadVideoThumbnailUseCase: asClass(UploadVideoThumbnailUseCase).transient(),
-        attachYoutubeIdUseCase: asClass(AttachYoutubeIdUseCase).transient(),
+        attachYoutubeIdUseCase: asClass(AttachYoutubeVideoUrlUseCase).transient(),
         updateVideoSeoUseCase: asClass(UpdateVideoSeoUseCase).transient(),
         updateVideoTagsUseCase: asClass(UpdateVideoTagsUseCase).transient(),
         scheduleShootUseCase: asClass(ScheduleShootUseCase).transient()

@@ -194,7 +194,7 @@ rejectVideoUseCase: RejectVideoUseCase;
 archiveVideoUseCase: ArchiveVideoUseCase;
 deleteVideoUseCase: DeleteVideoUseCase;
 uploadVideoThumbnailUseCase: UploadVideoThumbnailUseCase;
-attachYoutubeIdUseCase: AttachYoutubeIdUseCase;
+attachYoutubeIdUseCase: AttachYoutubeVideoUrlUseCase;
 updateVideoSeoUseCase: UpdateVideoSeoUseCase;
 updateVideoTagsUseCase: UpdateVideoTagsUseCase;
 scheduleShootUseCase: ScheduleShootUseCase;
