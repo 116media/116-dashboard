@@ -1,7 +1,7 @@
 import type { IArticleImageEntity } from "@/modules/articles/domain/entities/IArticleImageEntity";
 import type { ITagEntity } from "@/modules/lookup/domain/entities/ITagEntity";
 import type { IAuthorEntity } from "@/shared/domain/entities/IAuthorEntity";
-import type { EnumContentStatus } from "@/shared/infrastructure/api/generated/116.api";
+import type { ContentStatus } from "@/shared/domain/enums/content-status.enum";
 
 /**
  * Domain entity for a full article detail view.
@@ -17,7 +17,7 @@ import type { EnumContentStatus } from "@/shared/infrastructure/api/generated/11
  * @property {string} body - Rich text HTML content
  * @property {string | null} coverImageUrl - URL of the cover image
  * @property {string} authorId - UUID of the author (identity user)
- * @property {EnumContentStatus} status - Current editorial workflow status
+ * @property {ContentStatus} status - Current editorial workflow status
  * @property {string | null} rejectionReason - Reason for rejection, if rejected
  * @property {boolean} isFeatured - Whether the article is featured
  * @property {string | null} featuredUntil - ISO timestamp for featured expiry
@@ -45,7 +45,7 @@ export interface IArticleEntity {
     body: string;
     coverImageUrl?: string | null;
     authorId: string;
-    status: EnumContentStatus;
+    status: ContentStatus;
     rejectionReason?: string | null;
     isFeatured: boolean;
     featuredUntil?: string | null;

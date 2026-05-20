@@ -1,7 +1,7 @@
+import type { ArticleImageType } from "@/modules/articles/domain/enums/article-image-type.enum";
 import { uploadArticleImageAction } from "@/modules/articles/presentation/store/uploadarticleimage.action";
 import { ArticlesNotification } from "@/modules/articles/presentation/utils/notification/articles.notification";
 import type { Failure } from "@/shared/domain/failures/failure";
-import type { EnumArticleImageType } from "@/shared/infrastructure/api/generated/116.api";
 import { useAppDispatch, useAppSelector } from "@/shared/presentation/store/store";
 import { showNotification } from "@/shared/presentation/utils/notification/notification.utils";
 
@@ -13,7 +13,7 @@ import { showNotification } from "@/shared/presentation/utils/notification/notif
 interface IUseUploadArticleImage {
     loading: boolean;
     error: Failure | null | undefined;
-    onUpload: (id: string, file: File, imageType: EnumArticleImageType) => Promise<string | null>;
+    onUpload: (id: string, file: File, imageType: ArticleImageType) => Promise<string | null>;
 }
 
 /**
@@ -36,7 +36,7 @@ export const useUploadArticleImage = (): IUseUploadArticleImage => {
     const onUpload = async (
         id: string,
         file: File,
-        imageType: EnumArticleImageType
+        imageType: ArticleImageType
     ): Promise<string | null> => {
         const result = await dispatch(uploadArticleImageAction({ id, data: { file, imageType } }));
 

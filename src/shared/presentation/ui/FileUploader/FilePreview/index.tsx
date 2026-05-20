@@ -51,9 +51,22 @@ const FilePreview: FC<IFilePreviewProps> = ({
         <Flex vertical gap={8} className={styles.filePreview}>
             {hasMeta && (
                 <Flex justify="space-between" align="center" className={styles.filePreview__meta}>
-                    <Flex gap={8} align="center">
-                        {fileName && <Text strong>{fileName}</Text>}
-                        {fileSize && <Text type="secondary">{fileSize}</Text>}
+                    <Flex
+                        gap={2}
+                        align="center"
+                        justify="space-between"
+                        className={styles.filePreview__metaInfo}
+                    >
+                        {fileName && (
+                            <Text strong ellipsis className={styles.filePreview__fileName}>
+                                {fileName}
+                            </Text>
+                        )}
+                        {fileSize && (
+                            <Text type="secondary" className={styles.filePreview__fileSize}>
+                                {fileSize}
+                            </Text>
+                        )}
                     </Flex>
                     {removeButton}
                 </Flex>

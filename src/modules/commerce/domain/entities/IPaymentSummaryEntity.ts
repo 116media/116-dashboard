@@ -1,8 +1,6 @@
-import type {
-    EnumOrderStatus,
-    EnumPaymentMethod,
-    EnumPaymentStatus
-} from "@/shared/infrastructure/api/generated/116.api";
+import type { OrderStatus } from "@/shared/domain/enums/order-status.enum";
+import type { PaymentMethod } from "@/shared/domain/enums/payment-method.enum";
+import type { PaymentStatus } from "@/shared/domain/enums/payment-status.enum";
 
 /**
  * Domain entity for a payment record summary in list views.
@@ -13,9 +11,9 @@ import type {
  * @property {string} orderId - Linked order UUID
  * @property {string} customerName - Full name of the B2B customer
  * @property {number} amountUsd - Payment amount in USD
- * @property {EnumPaymentMethod | null} paymentMethod - Payment method used, or null
- * @property {EnumPaymentStatus} status - Payment verification status
- * @property {EnumOrderStatus} orderStatus - Lifecycle status of the linked order
+ * @property {PaymentMethod | null} paymentMethod - Payment method used, or null
+ * @property {PaymentStatus} status - Payment verification status
+ * @property {OrderStatus} orderStatus - Lifecycle status of the linked order
  * @property {string | null} verifiedBy - UUID of the verifying admin
  * @property {string | null} verifiedByUserName - Display name of the verifying admin
  * @property {string | null} verifiedAt - ISO timestamp of verification
@@ -29,9 +27,9 @@ export interface IPaymentSummaryEntity {
     orderId: string;
     customerName: string;
     amountUsd: number;
-    paymentMethod?: EnumPaymentMethod | null;
-    status: EnumPaymentStatus;
-    orderStatus: EnumOrderStatus;
+    paymentMethod?: PaymentMethod | null;
+    status: PaymentStatus;
+    orderStatus: OrderStatus;
     verifiedBy?: string | null;
     verifiedByUserName?: string | null;
     verifiedAt?: string | null;

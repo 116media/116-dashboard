@@ -1,8 +1,8 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import type { IArticleImageEntity } from "@/modules/articles/domain/entities/IArticleImageEntity";
+import type { ArticleImageType } from "@/modules/articles/domain/enums/article-image-type.enum";
 import { articlesSlice } from "@/modules/articles/presentation/store";
 import type { Failure } from "@/shared/domain/failures/failure";
-import type { EnumArticleImageType } from "@/shared/infrastructure/api/generated/116.api";
 import container from "@/shared/infrastructure/service.locator";
 import { ActionType } from "./constants";
 
@@ -19,7 +19,7 @@ export const resetUploadArticleImageAction = () =>
  */
 export const uploadArticleImageAction = createAsyncThunk<
     IArticleImageEntity,
-    { id: string; data: { file: File; imageType: EnumArticleImageType } },
+    { id: string; data: { file: File; imageType: ArticleImageType } },
     { rejectValue: Failure }
 >(ActionType.UploadArticleImage, async (params, { rejectWithValue }) => {
     const result = await container.cradle.uploadArticleImageUseCase.execute(params);

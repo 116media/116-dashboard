@@ -6,7 +6,7 @@ import {
     type OrderAction
 } from "@/modules/commerce/presentation/constants/commerce.orders.dropdown";
 import { ORDER_STATUS_CONFIG } from "@/modules/commerce/presentation/constants/order.status.config";
-import type { EnumOrderStatus } from "@/shared/infrastructure/api/generated/116.api";
+import type { OrderStatus } from "@/shared/domain/enums/order-status.enum";
 import StatusTag from "@/shared/presentation/ui/StatusTag";
 import type { ITableActionItem } from "@/shared/presentation/ui/TableActionDropdown";
 import TableActionDropdown from "@/shared/presentation/ui/TableActionDropdown";
@@ -76,9 +76,7 @@ export const ordersTableColumns = (
         dataIndex: "status",
         key: "status",
         width: 160,
-        render: (status: EnumOrderStatus) => (
-            <StatusTag status={status} config={ORDER_STATUS_CONFIG} />
-        )
+        render: (status: OrderStatus) => <StatusTag status={status} config={ORDER_STATUS_CONFIG} />
     },
     {
         title: "Actions",

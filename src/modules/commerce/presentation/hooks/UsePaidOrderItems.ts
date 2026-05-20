@@ -3,7 +3,7 @@ import type { IOrderDetailEntity } from "@/modules/commerce/domain/entities/IOrd
 import type { IOrderItemEntity } from "@/modules/commerce/domain/entities/IOrderItemEntity";
 import { getOrderByIdAction } from "@/modules/commerce/presentation/store/getorderbyid.action";
 import { listOrdersAction } from "@/modules/commerce/presentation/store/listorders.action";
-import { EnumOrderStatus } from "@/shared/infrastructure/api/generated/116.api";
+import { OrderStatus } from "@/shared/domain/enums/order-status.enum";
 import { useAppDispatch } from "@/shared/presentation/store/store";
 
 export interface IOrderItemOption {
@@ -59,7 +59,7 @@ export const usePaidOrderItems = (contentKind?: ContentKindFilter): IUsePaidOrde
                 listOrdersAction({
                     pageIndex: 0,
                     pageSize: 100,
-                    status: EnumOrderStatus.Paid,
+                    status: OrderStatus.Paid,
                     customerId
                 })
             );

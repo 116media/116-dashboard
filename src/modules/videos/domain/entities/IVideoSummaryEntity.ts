@@ -1,4 +1,4 @@
-import type { EnumContentStatus } from "@/shared/infrastructure/api/generated/116.api";
+import type { ContentStatus } from "@/shared/domain/enums/content-status.enum";
 
 /**
  * Domain entity for a video summary in list views.
@@ -12,7 +12,8 @@ import type { EnumContentStatus } from "@/shared/infrastructure/api/generated/11
  * @property {string} slug - URL-safe slug
  * @property {string | null} thumbnailUrl - URL of the video thumbnail
  * @property {string} authorId - UUID of the author (identity user)
- * @property {EnumContentStatus} status - Current editorial workflow status
+ * @property {ContentStatus} status - Current editorial workflow status
+ * @property {boolean} canDelete - Whether the video can be permanently deleted
  * @property {string | null} youtubeVideoUrl - YouTube video identifier
  * @property {boolean} isFeatured - Whether the video is featured
  * @property {boolean} hasLyrics - Whether the video has associated lyrics
@@ -30,7 +31,8 @@ export interface IVideoSummaryEntity {
     slug: string;
     thumbnailUrl?: string | null;
     authorId: string;
-    status: EnumContentStatus;
+    status: ContentStatus;
+    canDelete: boolean;
     youtubeVideoUrl?: string | null;
     isFeatured: boolean;
     hasLyrics: boolean;

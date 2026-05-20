@@ -1,4 +1,4 @@
-import { EnumContentStatus } from "@/shared/infrastructure/api/generated/116.api";
+import { ContentStatus } from "@/shared/domain/enums/content-status.enum";
 import {
     IconCheckCircleOutlined,
     IconClockCircleOutlined,
@@ -17,33 +17,33 @@ import type { IStatusConfig } from "@/shared/presentation/ui/StatusTag";
  * → Published / Rejected / Archived.
  */
 export const CONTENT_STATUS_CONFIG: Record<string, IStatusConfig> = {
-    [EnumContentStatus.Draft]: { label: "brouillon", color: "default", icon: <IconEditOutlined /> },
-    [EnumContentStatus.PendingPayment]: {
+    [ContentStatus.Draft]: { label: "brouillon", color: "default", icon: <IconEditOutlined /> },
+    [ContentStatus.PendingPayment]: {
         label: "paiement en cours",
         color: "warning",
         icon: <IconClockCircleOutlined />
     },
-    [EnumContentStatus.PendingReview]: {
+    [ContentStatus.PendingReview]: {
         label: "en attente de revue",
         color: "processing",
         icon: <IconClockCircleOutlined />
     },
-    [EnumContentStatus.Approved]: {
+    [ContentStatus.Approved]: {
         label: "approuvé",
         color: "cyan",
         icon: <IconCheckCircleOutlined />
     },
-    [EnumContentStatus.Published]: {
+    [ContentStatus.Published]: {
         label: "publié",
         color: "success",
         icon: <IconCheckCircleOutlined />
     },
-    [EnumContentStatus.Rejected]: {
+    [ContentStatus.Rejected]: {
         label: "rejeté",
         color: "error",
         icon: <IconExclamationCircleOutlined />
     },
-    [EnumContentStatus.Archived]: {
+    [ContentStatus.Archived]: {
         label: "archivé",
         color: "default",
         icon: <IconSaveOutlined />

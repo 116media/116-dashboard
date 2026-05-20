@@ -1,10 +1,10 @@
+import { OrderStatus } from "@/shared/domain/enums/order-status.enum";
 import type { IStatusOption } from "@/shared/domain/types/pagination";
-import { EnumOrderStatus } from "@/shared/infrastructure/api/generated/116.api";
 
 /**
  * Status filter values for the orders list.
  */
-export type OrderStatusFilter = "all" | EnumOrderStatus;
+export type OrderStatusFilter = "all" | OrderStatus;
 
 /**
  * Status filter options for the orders table toolbar.
@@ -15,8 +15,8 @@ export type OrderStatusFilter = "all" | EnumOrderStatus;
  */
 export const ORDER_STATUS_OPTIONS: IStatusOption<OrderStatusFilter>[] = [
     { value: "all", label: "Tous" },
-    { value: EnumOrderStatus.Draft, label: "Brouillon" },
-    { value: EnumOrderStatus.PendingPayment, label: "Paiement en cours" },
-    { value: EnumOrderStatus.Paid, label: "Payé" },
-    { value: EnumOrderStatus.Cancelled, label: "Annulé" }
+    { value: OrderStatus.Draft, label: "Brouillon" },
+    { value: OrderStatus.PendingPayment, label: "Paiement en cours" },
+    { value: OrderStatus.Paid, label: "Payé" },
+    { value: OrderStatus.Cancelled, label: "Annulé" }
 ];

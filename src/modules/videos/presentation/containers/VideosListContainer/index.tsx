@@ -238,6 +238,7 @@ const VideosListContainer: FC = () => {
                     open={modals.thumbnailOpen}
                     loading={uploadThumbnail.loading}
                     videoId={modals.selectedEntity?.id ?? null}
+                    currentThumbnailUrl={modals.selectedEntity?.thumbnailUrl}
                     onUpload={uploadThumbnail.onUpload}
                     onCancel={() => modals.setThumbnailOpen(false)}
                 />

@@ -5,7 +5,7 @@ import {
     ARTICLE_DROPDOWN_ITEMS,
     type ArticleAction
 } from "@/modules/articles/presentation/constants/articles.dropdown";
-import type { EnumContentStatus } from "@/shared/infrastructure/api/generated/116.api";
+import type { ContentStatus } from "@/shared/domain/enums/content-status.enum";
 import { CONTENT_STATUS_CONFIG } from "@/shared/presentation/constants/content.status.config";
 import { Colors } from "@/shared/presentation/constants/theme";
 import { IconCheckCircleFilled, IconCloseCircleFilled } from "@/shared/presentation/ui/Icons";
@@ -63,7 +63,7 @@ export const articlesTableColumns = (
         dataIndex: "status",
         key: "status",
         width: 160,
-        render: (status: EnumContentStatus) => (
+        render: (status: ContentStatus) => (
             <StatusTag status={status} config={CONTENT_STATUS_CONFIG} />
         )
     },

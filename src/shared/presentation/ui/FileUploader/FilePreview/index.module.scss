@@ -11,6 +11,21 @@
         margin-bottom: calc(dimensions.$padding / 4);
     }
 
+    &__metaInfo {
+        flex: 1;
+        min-width: 0;
+    }
+
+    &__fileName {
+        flex: 3;
+        min-width: 0;
+    }
+
+    &__fileSize {
+        flex: 2;
+        min-width: 0;
+    }
+
     [class~="ant-image"] {
         border-radius: dimensions.$border-radius;
         overflow: hidden;

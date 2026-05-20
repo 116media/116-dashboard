@@ -1,3 +1,4 @@
+import dayjs from "dayjs";
 import type { IVideosRepositoryPort } from "@/modules/videos/application/repositories/videos.repository.port";
 import type { IVideoActionResponse } from "@/modules/videos/domain/entities/IVideoActionResponse";
 import type { IVideoEntity } from "@/modules/videos/domain/entities/IVideoEntity";
@@ -16,6 +17,7 @@ import type { Result } from "@/shared/domain/results/result";
 import { err, ok } from "@/shared/domain/results/result";
 import type { IPaginatedResult } from "@/shared/domain/types/pagination";
 import { apiClient } from "@/shared/infrastructure/api/client";
+import type { EnumContentStatus } from "@/shared/infrastructure/api/generated/116.api";
 import { ProblemMapper } from "@/shared/infrastructure/mappers/problem.mapper";
 
 /**
@@ -33,7 +35,7 @@ export class VideosRepositoryImpl implements IVideosRepositoryPort {
             const response = await apiClient.api.adminGetAllVideos({
                 pageIndex: params.pageIndex,
                 pageSize: params.pageSize,
-                status: params.status,
+                status: params.status as EnumContentStatus | undefined,
                 categoryId: params.categoryId,
                 search: params.search
             });
@@ -69,7 +71,11 @@ export class VideosRepositoryImpl implements IVideosRepositoryPort {
 
     async updateVideo(id: string, data: IUpdateVideoCredentials): Promise<Result<IVideoEntity>> {
         try {
-            const response = await apiClient.api.updateVideo(id, data);
+            const { featuredUntil, ...rest } = data;
+            const response = await apiClient.api.updateVideo(id, {
+                ...rest,
+                featuredUntil: featuredUntil ? dayjs(featuredUntil).toISOString() : null
+            });
             return ok(VideosMapper.videoFromDto(response.data.video));
         } catch (error) {
             return err(ProblemMapper.toFailure(error));

@@ -1,10 +1,10 @@
+import { ContentStatus } from "@/shared/domain/enums/content-status.enum";
 import type { IStatusOption } from "@/shared/domain/types/pagination";
-import { EnumContentStatus } from "@/shared/infrastructure/api/generated/116.api";
 
 /**
  * Status filter values for the videos list.
  */
-export type VideoStatusFilter = "all" | EnumContentStatus;
+export type VideoStatusFilter = "all" | ContentStatus;
 
 /**
  * Status filter options for the videos table toolbar.
@@ -15,11 +15,11 @@ export type VideoStatusFilter = "all" | EnumContentStatus;
  */
 export const VIDEO_STATUS_OPTIONS: IStatusOption<VideoStatusFilter>[] = [
     { value: "all", label: "Tous" },
-    { value: EnumContentStatus.Draft, label: "Brouillon" },
-    { value: EnumContentStatus.PendingPayment, label: "Paiement en cours" },
-    { value: EnumContentStatus.PendingReview, label: "En attente de revue" },
-    { value: EnumContentStatus.Approved, label: "Approuvé" },
-    { value: EnumContentStatus.Published, label: "Publié" },
-    { value: EnumContentStatus.Rejected, label: "Rejeté" },
-    { value: EnumContentStatus.Archived, label: "Archivé" }
+    { value: ContentStatus.Draft, label: "Brouillon" },
+    { value: ContentStatus.PendingPayment, label: "Paiement en cours" },
+    { value: ContentStatus.PendingReview, label: "En attente de revue" },
+    { value: ContentStatus.Approved, label: "Approuvé" },
+    { value: ContentStatus.Published, label: "Publié" },
+    { value: ContentStatus.Rejected, label: "Rejeté" },
+    { value: ContentStatus.Archived, label: "Archivé" }
 ];

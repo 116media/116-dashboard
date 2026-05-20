@@ -14,7 +14,7 @@ Full spec for the shorts module — 7 admin endpoints with a simple activate/dea
 | PATCH | `/api/v1/admin/shorts/{id}/activate` | SuperAdminOnly | Activer |
 | PATCH | `/api/v1/admin/shorts/{id}/deactivate` | SuperAdminOnly | Désactiver |
 | DELETE | `/api/v1/admin/shorts/{id}` | SuperAdminOnly | Supprimer définitivement |
-| POST | `/api/v1/admin/shorts/{id}/thumbnail` | AdminOrSuperAdmin | Importer la vignette |
+| POST | `/api/v1/admin/shorts/{id}/thumbnail` | AdminOrSuperAdmin | Importer la miniature |
 | GET | `/api/v1/admin/shorts` | AdminOrSuperAdmin | Lister tous les shorts |
 | GET | `/api/v1/admin/shorts/{id}` | AdminOrSuperAdmin | Obtenir par identifiant |
 
@@ -199,7 +199,7 @@ export const ShortsContentValidator = {
 | `activateSuccess` | "Short activé" | "Le short a été activé avec succès." |
 | `deactivateSuccess` | "Short désactivé" | "Le short a été désactivé avec succès." |
 | `deleteSuccess` | "Short supprimé" | "Le short a été supprimé définitivement." |
-| `uploadThumbnailSuccess` | "Vignette téléversée" | "La vignette a été téléversée avec succès." |
+| `uploadThumbnailSuccess` | "Miniature uploadée" | "La miniature a été uploadée avec succès." |
 
 ---
 
@@ -211,7 +211,7 @@ export const ShortsContentValidator = {
 
 | Action | Label | Hidden condition |
 | --- | --- | --- |
-| `thumbnail` | "Changer la vignette" | `!isAdminOrSuperAdmin` |
+| `thumbnail` | "Changer la miniature" | `!isAdminOrSuperAdmin` |
 | `activate` | "Activer" | `!isSuperAdmin \|\| record.isActive` |
 | `deactivate` | "Désactiver" | `!isSuperAdmin \|\| !record.isActive` |
 | `delete` | "Supprimer" | `!isSuperAdmin` |

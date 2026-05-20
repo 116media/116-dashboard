@@ -1,13 +1,16 @@
 import type { IArticleEntity } from "@/modules/articles/domain/entities/IArticleEntity";
 import type { IArticleImageEntity } from "@/modules/articles/domain/entities/IArticleImageEntity";
 import type { IArticleSummaryEntity } from "@/modules/articles/domain/entities/IArticleSummaryEntity";
+import { mapArticleImageType } from "@/modules/articles/infrastructure/mappers/article-image-type.mapper";
 import type { ITagEntity } from "@/modules/lookup/domain/entities/ITagEntity";
+import { ContentStatus } from "@/shared/domain/enums/content-status.enum";
 import type {
     ArticleDetailDto,
     ArticleImageDto,
     ArticleSummaryDto,
     TagDto
 } from "@/shared/infrastructure/api/generated/116.api";
+import { mapContentStatus } from "@/shared/infrastructure/mappers/content-status.mapper";
 
 /**
  * Mapper for converting API DTOs to domain entities in the articles module.
@@ -34,7 +37,7 @@ export const ArticlesMapper = {
             id: dto.id,
             url: dto.url,
             storageKey: dto.storageKey,
-            imageType: dto.imageType
+            imageType: mapArticleImageType(dto.imageType)
         };
     },
 
@@ -69,7 +72,7 @@ export const ArticlesMapper = {
             body: dto.body,
             coverImageUrl: dto.coverImageUrl,
             authorId: dto.authorId,
-            status: dto.status,
+            status: mapContentStatus(dto.status),
             rejectionReason: dto.rejectionReason,
             isFeatured: dto.isFeatured,
             featuredUntil: dto.featuredUntil,
@@ -104,6 +107,7 @@ export const ArticlesMapper = {
      * @returns {IArticleSummaryEntity} Mapped article summary entity
      */
     articleSummaryFromDto(dto: ArticleSummaryDto): IArticleSummaryEntity {
+        const status = mapContentStatus(dto.status);
         return {
             id: dto.id,
             categoryId: dto.categoryId,
@@ -113,7 +117,8 @@ export const ArticlesMapper = {
             headline: dto.headline,
             coverImageUrl: dto.coverImageUrl,
             authorId: dto.authorId,
-            status: dto.status,
+            status,
+            canDelete: [ContentStatus.Draft, ContentStatus.Rejected].includes(status),
             isFeatured: dto.isFeatured,
             publishedAt: dto.publishedAt,
             createdAt: dto.createdAt,

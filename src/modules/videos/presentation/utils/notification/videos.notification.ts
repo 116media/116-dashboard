@@ -113,8 +113,8 @@ export const VideosNotification = {
      */
     uploadThumbnailSuccess: {
         type: "success",
-        title: "Vignette téléversée",
-        description: "La vignette a été téléversée avec succès."
+        title: "Miniature uploadée",
+        description: "La miniature a été uploadée avec succès."
     } as INotificationConfig,
 
     /**

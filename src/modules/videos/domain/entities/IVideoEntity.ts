@@ -1,5 +1,5 @@
 import type { ITagEntity } from "@/modules/lookup/domain/entities/ITagEntity";
-import type { EnumContentStatus } from "@/shared/infrastructure/api/generated/116.api";
+import type { ContentStatus } from "@/shared/domain/enums/content-status.enum";
 
 /**
  * Domain entity for a full video detail view.
@@ -15,7 +15,7 @@ import type { EnumContentStatus } from "@/shared/infrastructure/api/generated/11
  * @property {string | null} thumbnailUrl - URL of the video thumbnail
  * @property {string | null} thumbnailStorageKey - Storage key for the thumbnail asset
  * @property {string} authorId - UUID of the author (identity user)
- * @property {EnumContentStatus} status - Current editorial workflow status
+ * @property {ContentStatus} status - Current editorial workflow status
  * @property {string | null} rejectionReason - Reason for rejection, if rejected
  * @property {string | null} youtubeVideoUrl - YouTube video identifier
  * @property {boolean} isFeatured - Whether the video is featured
@@ -44,7 +44,7 @@ export interface IVideoEntity {
     thumbnailUrl?: string | null;
     thumbnailStorageKey?: string | null;
     authorId: string;
-    status: EnumContentStatus;
+    status: ContentStatus;
     rejectionReason?: string | null;
     youtubeVideoUrl?: string | null;
     isFeatured: boolean;

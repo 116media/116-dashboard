@@ -1,5 +1,5 @@
 import type { IArticleSummaryEntity } from "@/modules/articles/domain/entities/IArticleSummaryEntity";
-import { EnumContentStatus } from "@/shared/infrastructure/api/generated/116.api";
+import { ContentStatus } from "@/shared/domain/enums/content-status.enum";
 
 /**
  * Available action types for an article record.
@@ -17,8 +17,8 @@ export type ArticleAction =
     | "delete";
 
 interface IArticleDropdownItem {
-    key: ArticleAction;
     label: string;
+    key: ArticleAction;
     danger?: boolean;
     hidden: (
         record: IArticleSummaryEntity,
@@ -50,18 +50,17 @@ export const ARTICLE_DROPDOWN_ITEMS: IArticleDropdownItem[] = [
         key: "submit",
         label: "Soumettre",
         hidden: (r, isSuperAdmin) =>
-            !isSuperAdmin ||
-            ![EnumContentStatus.Draft, EnumContentStatus.Rejected].includes(r.status)
+            !isSuperAdmin || ![ContentStatus.Draft, ContentStatus.Rejected].includes(r.status)
     },
     {
         key: "approve",
         label: "Approuver",
-        hidden: (r, isSuperAdmin) => !isSuperAdmin || r.status !== EnumContentStatus.PendingReview
+        hidden: (r, isSuperAdmin) => !isSuperAdmin || r.status !== ContentStatus.PendingReview
     },
     {
         key: "publish",
         label: "Publier",
-        hidden: (r, isSuperAdmin) => !isSuperAdmin || r.status !== EnumContentStatus.Approved
+        hidden: (r, isSuperAdmin) => !isSuperAdmin || r.status !== ContentStatus.Approved
     },
     {
         key: "reject",
@@ -69,14 +68,18 @@ export const ARTICLE_DROPDOWN_ITEMS: IArticleDropdownItem[] = [
         danger: true,
         hidden: (r, isSuperAdmin) =>
             !isSuperAdmin ||
-            ![EnumContentStatus.PendingReview, EnumContentStatus.Approved].includes(r.status)
+            ![ContentStatus.PendingReview, ContentStatus.Approved].includes(r.status)
     },
     {
         key: "archive",
         label: "Archiver",
         hidden: (r, isSuperAdmin) =>
-            !isSuperAdmin ||
-            ![EnumContentStatus.Published, EnumContentStatus.Rejected].includes(r.status)
+            !isSuperAdmin || ![ContentStatus.Published, ContentStatus.Rejected].includes(r.status)
     },
-    { key: "delete", label: "Supprimer", danger: true, hidden: (_, isSuperAdmin) => !isSuperAdmin }
+    {
+        key: "delete",
+        label: "Supprimer",
+        danger: true,
+        hidden: (r, isSuperAdmin) => !isSuperAdmin || !r.canDelete
+    }
 ];

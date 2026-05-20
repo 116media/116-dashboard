@@ -113,8 +113,8 @@ export const ArticlesNotification = {
      */
     uploadImageSuccess: {
         type: "success",
-        title: "Image téléversée",
-        description: "L'image a été téléversée avec succès."
+        title: "Image uploadée",
+        description: "L'image a été uploadée avec succès."
     } as INotificationConfig,
 
     /**

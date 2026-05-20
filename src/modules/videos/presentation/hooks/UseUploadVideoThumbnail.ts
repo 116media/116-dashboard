@@ -12,7 +12,7 @@ import { showNotification } from "@/shared/presentation/utils/notification/notif
 interface IUseUploadVideoThumbnail {
     loading: boolean;
     error: Failure | null | undefined;
-    onUpload: (id: string, file: File) => Promise<void>;
+    onUpload: (id: string, file: File) => Promise<boolean>;
 }
 
 /**
@@ -32,18 +32,23 @@ export const useUploadVideoThumbnail = (): IUseUploadVideoThumbnail => {
         ({ videos: { uploadVideoThumbnail } }) => uploadVideoThumbnail
     );
 
-    const onUpload = async (id: string, file: File): Promise<void> => {
+    const onUpload = async (id: string, file: File): Promise<boolean> => {
         const result = await dispatch(uploadVideoThumbnailAction({ id, data: { file } }));
 
         if (uploadVideoThumbnailAction.fulfilled.match(result)) {
             showNotification(VideosNotification.uploadThumbnailSuccess);
-        } else if (uploadVideoThumbnailAction.rejected.match(result) && result.payload) {
+            return true;
+        }
+
+        if (uploadVideoThumbnailAction.rejected.match(result) && result.payload) {
             showNotification({
                 type: "error",
                 title: result.payload.title,
                 description: result.payload.detail
             });
         }
+
+        return false;
     };
 
     return { loading, error, onUpload };

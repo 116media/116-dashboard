@@ -1,5 +1,6 @@
 import type { FormInstance } from "antd";
 import { Form } from "antd";
+import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import type { IArticleEntity } from "@/modules/articles/domain/entities/IArticleEntity";
 import type { IArticleSummaryEntity } from "@/modules/articles/domain/entities/IArticleSummaryEntity";
@@ -69,7 +70,7 @@ export const useUpdateArticle = (
                     coverImageUrl: detail.coverImageUrl,
                     socialBoost: false,
                     isFeatured: detail.isFeatured,
-                    featuredUntil: detail.featuredUntil,
+                    featuredUntil: detail.featuredUntil ? dayjs(detail.featuredUntil) : null,
                     metaTitle: detail.metaTitle,
                     metaDescription: detail.metaDescription
                 });
@@ -94,12 +95,14 @@ export const useUpdateArticle = (
     const onSubmit = async (values: IUpdateArticleCredentials): Promise<void> => {
         if (!article) return;
 
+        const { featuredUntil, ...rest } = values;
         const result = await dispatch(
             updateArticleAction({
                 id: article.id,
                 data: {
-                    ...values,
-                    slug: generateSlug(values.title, { unique: true })
+                    ...rest,
+                    slug: generateSlug(values.title, { unique: true }),
+                    featuredUntil: featuredUntil ? dayjs(featuredUntil).toISOString() : null
                 }
             })
         );

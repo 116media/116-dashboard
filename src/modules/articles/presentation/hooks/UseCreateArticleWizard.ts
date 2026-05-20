@@ -2,6 +2,7 @@ import type { FormInstance } from "antd";
 import { Form } from "antd";
 import { useCallback, useState } from "react";
 import type { IArticleEntity } from "@/modules/articles/domain/entities/IArticleEntity";
+import { ArticleImageType } from "@/modules/articles/domain/enums/article-image-type.enum";
 import type { ICreateArticleCredentials } from "@/modules/articles/presentation/model/ICreateArticleCredentials";
 import type { IUpdateArticleSeoCredentials } from "@/modules/articles/presentation/model/IUpdateArticleSeoCredentials";
 import type { IWizardStep2Credentials } from "@/modules/articles/presentation/model/IWizardStep2Credentials";
@@ -14,7 +15,6 @@ import { updateArticleTagsAction } from "@/modules/articles/presentation/store/u
 import { uploadArticleImageAction } from "@/modules/articles/presentation/store/uploadarticleimage.action";
 import { ArticlesNotification } from "@/modules/articles/presentation/utils/notification/articles.notification";
 import type { Failure } from "@/shared/domain/failures/failure";
-import { EnumArticleImageType } from "@/shared/infrastructure/api/generated/116.api";
 import { useAppDispatch } from "@/shared/presentation/store/store";
 import { showNotification } from "@/shared/presentation/utils/notification/notification.utils";
 import { generateSlug } from "@/shared/presentation/utils/slug/slug.utils";
@@ -82,7 +82,7 @@ export const useCreateArticleWizard = (onSuccess: () => void): IUseCreateArticle
             const result = await dispatch(
                 uploadArticleImageAction({
                     id: articleId,
-                    data: { file, imageType: EnumArticleImageType.Body }
+                    data: { file, imageType: ArticleImageType.Body }
                 })
             );
 
@@ -101,7 +101,7 @@ export const useCreateArticleWizard = (onSuccess: () => void): IUseCreateArticle
             const result = await dispatch(
                 uploadArticleImageAction({
                     id: articleId,
-                    data: { file, imageType: EnumArticleImageType.Cover }
+                    data: { file, imageType: ArticleImageType.Cover }
                 })
             );
 

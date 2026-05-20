@@ -2,9 +2,9 @@ import { useCallback, useEffect, useState } from "react";
 import type { IArticleSummaryEntity } from "@/modules/articles/domain/entities/IArticleSummaryEntity";
 import type { ArticleStatusFilter } from "@/modules/articles/presentation/constants/articles.status";
 import { getArticlesAction } from "@/modules/articles/presentation/store/getarticles.action";
+import type { ContentStatus } from "@/shared/domain/enums/content-status.enum";
 import type { Failure } from "@/shared/domain/failures/failure";
 import type { IPaginatedResult } from "@/shared/domain/types/pagination";
-import type { EnumContentStatus } from "@/shared/infrastructure/api/generated/116.api";
 import { useDebounce } from "@/shared/presentation/hooks/UseDebounce";
 import { useAppDispatch, useAppSelector } from "@/shared/presentation/store/store";
 
@@ -53,8 +53,7 @@ export const useArticlesList = (): IUseArticlesList => {
     const [pageSize, setPageSize] = useState(10);
 
     const fetchArticles = useCallback(() => {
-        const status: EnumContentStatus | undefined =
-            statusFilter === "all" ? undefined : statusFilter;
+        const status: ContentStatus | undefined = statusFilter === "all" ? undefined : statusFilter;
 
         dispatch(
             getArticlesAction({

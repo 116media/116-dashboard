@@ -2,19 +2,17 @@ import { useCallback, useEffect, useState } from "react";
 import type { IPaymentSummaryEntity } from "@/modules/commerce/domain/entities/IPaymentSummaryEntity";
 import type { PaymentStatusFilter } from "@/modules/commerce/presentation/constants/commerce.payment.status";
 import { listPaymentsAction } from "@/modules/commerce/presentation/store/listpayments.action";
+import type { PaymentMethod } from "@/shared/domain/enums/payment-method.enum";
+import { PaymentStatus } from "@/shared/domain/enums/payment-status.enum";
 import type { Failure } from "@/shared/domain/failures/failure";
 import type { IPaginatedResult } from "@/shared/domain/types/pagination";
-import {
-    type EnumPaymentMethod,
-    EnumPaymentStatus
-} from "@/shared/infrastructure/api/generated/116.api";
 import { useDebounce } from "@/shared/presentation/hooks/UseDebounce";
 import { useAppDispatch, useAppSelector } from "@/shared/presentation/store/store";
 
 /**
  * Payment method filter type including "all" option.
  */
-export type PaymentMethodFilter = "all" | EnumPaymentMethod;
+export type PaymentMethodFilter = "all" | PaymentMethod;
 
 /**
  * Return type for the payments list hook.
@@ -57,16 +55,14 @@ export const usePaymentsList = (): IUsePaymentsList => {
 
     const [searchValue, setSearchValue] = useState("");
     const debouncedSearch = useDebounce(searchValue);
-    const [statusFilter, setStatusFilter] = useState<PaymentStatusFilter>(
-        EnumPaymentStatus.Pending
-    );
+    const [statusFilter, setStatusFilter] = useState<PaymentStatusFilter>(PaymentStatus.Pending);
     const [methodFilter, setMethodFilter] = useState<PaymentMethodFilter>("all");
     const [pageIndex, setPageIndex] = useState(0);
     const [pageSize, setPageSize] = useState(10);
 
     const fetchPayments = useCallback(() => {
-        const status = statusFilter === "all" ? undefined : (statusFilter as EnumPaymentStatus);
-        const method = methodFilter === "all" ? undefined : (methodFilter as EnumPaymentMethod);
+        const status = statusFilter === "all" ? undefined : statusFilter;
+        const method = methodFilter === "all" ? undefined : methodFilter;
 
         dispatch(
             listPaymentsAction({

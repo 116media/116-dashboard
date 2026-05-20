@@ -2,8 +2,8 @@ import { attachPaymentProofAction } from "@/modules/commerce/presentation/store/
 import { rejectPaymentAction } from "@/modules/commerce/presentation/store/rejectpayment.action";
 import { verifyPaymentAction } from "@/modules/commerce/presentation/store/verifypayment.action";
 import { PaymentNotification } from "@/modules/commerce/presentation/utils/notification/commerce.payment.notification";
+import type { PaymentMethod } from "@/shared/domain/enums/payment-method.enum";
 import type { Failure } from "@/shared/domain/failures/failure";
-import type { EnumPaymentMethod } from "@/shared/infrastructure/api/generated/116.api";
 import { useAppDispatch, useAppSelector } from "@/shared/presentation/store/store";
 import { showNotification } from "@/shared/presentation/utils/notification/notification.utils";
 
@@ -15,7 +15,7 @@ import { showNotification } from "@/shared/presentation/utils/notification/notif
 interface IUsePaymentActions {
     loading: boolean;
     error: Failure | null | undefined;
-    onAttachProof: (orderId: string, file: File, paymentMethod: EnumPaymentMethod) => Promise<void>;
+    onAttachProof: (orderId: string, file: File, paymentMethod: PaymentMethod) => Promise<void>;
     onVerify: (orderId: string, receiptUrl: string) => Promise<void>;
     onReject: (orderId: string, notes?: string) => Promise<void>;
 }
@@ -41,7 +41,7 @@ export const usePaymentActions = (reload: () => void): IUsePaymentActions => {
     const onAttachProof = async (
         orderId: string,
         file: File,
-        paymentMethod: EnumPaymentMethod
+        paymentMethod: PaymentMethod
     ): Promise<void> => {
         const result = await dispatch(
             attachPaymentProofAction({ orderId, data: { file, paymentMethod } })

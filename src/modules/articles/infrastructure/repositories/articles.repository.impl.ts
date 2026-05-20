@@ -1,3 +1,4 @@
+import dayjs from "dayjs";
 import type { IArticlesRepositoryPort } from "@/modules/articles/application/repositories/articles.repository.port";
 import type { IArticleActionResponse } from "@/modules/articles/domain/entities/IArticleActionResponse";
 import type { IArticleEntity } from "@/modules/articles/domain/entities/IArticleEntity";
@@ -15,6 +16,7 @@ import type { Result } from "@/shared/domain/results/result";
 import { err, ok } from "@/shared/domain/results/result";
 import type { IPaginatedResult } from "@/shared/domain/types/pagination";
 import { apiClient } from "@/shared/infrastructure/api/client";
+import type { EnumContentStatus } from "@/shared/infrastructure/api/generated/116.api";
 import { ProblemMapper } from "@/shared/infrastructure/mappers/problem.mapper";
 
 /**
@@ -32,7 +34,7 @@ export class ArticlesRepositoryImpl implements IArticlesRepositoryPort {
             const response = await apiClient.api.adminGetAllArticles({
                 pageIndex: params.pageIndex,
                 pageSize: params.pageSize,
-                status: params.status,
+                status: params.status as EnumContentStatus | undefined,
                 categoryId: params.categoryId,
                 search: params.search
             });
@@ -71,7 +73,11 @@ export class ArticlesRepositoryImpl implements IArticlesRepositoryPort {
         data: IUpdateArticleCredentials
     ): Promise<Result<IArticleEntity>> {
         try {
-            const response = await apiClient.api.updateArticle(id, data);
+            const { featuredUntil, ...rest } = data;
+            const response = await apiClient.api.updateArticle(id, {
+                ...rest,
+                featuredUntil: featuredUntil ? dayjs(featuredUntil).toISOString() : null
+            });
             return ok(ArticlesMapper.articleFromDto(response.data.article));
         } catch (error) {
             return err(ProblemMapper.toFailure(error));
