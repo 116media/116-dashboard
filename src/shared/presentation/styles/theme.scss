@@ -48,22 +48,31 @@
     display: flex;
     align-items: center;
 }
-[class~='ant-select-multiple'] {
-    [class~='ant-select-selector'] {
-        padding: 2.5px 4px !important;
-    }
-    [class~='ant-select-selection-item'] {
-        height: 30px !important;
-        line-height: 28px !important;
-    }
-}
 
 [class~='ant-input-lg'],
-[class~='ant-picker-large'],
-[class~='ant-select-lg'] {
+[class~='ant-picker-large'] {
     width: 100%;
     font-size: 14px !important;
     padding: 10px 12px !important;
+}
+
+[class~='ant-select-lg']:not([class~='ant-select-multiple']) {
+    width: 100%;
+    font-size: 14px !important;
+    padding: 10px 12px !important;
+}
+
+[class~='ant-select-multiple'] {
+    padding: 2px 12px 2px 2px !important;
+
+    [class~='ant-select-content-item'] {
+        padding: 0 4px !important;
+    }
+    [class~='ant-select-selection-item-content'] {
+        height: 30px !important;
+        line-height: 28px !important;
+        margin-right: 6px !important;
+    }
 }
 
 [class~='ant-input-number-lg'] {
@@ -306,4 +315,12 @@ input {
     to {
         transform: rotate(360deg);
     }
+}
+
+[class~="ant-select-dropdown"] {
+    padding: 0.3rem !important;
+}
+
+[class~="rc-virtual-list-holder-inner"]{
+    gap: 4px;
 }

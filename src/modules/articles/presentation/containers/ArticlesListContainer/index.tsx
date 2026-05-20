@@ -208,7 +208,7 @@ const ArticlesListContainer: FC = () => {
                 open={modals.tagsOpen}
                 loading={updateTags.loading}
                 success={updateTags.success}
-                tagIds={updateTags.tagIds}
+                tagNames={updateTags.tagNames}
                 onTagsChange={updateTags.onTagsChange}
                 onSubmit={updateTags.onSubmit}
                 onCancel={() => {

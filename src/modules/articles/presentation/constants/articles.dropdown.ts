@@ -1,5 +1,4 @@
 import type { IArticleSummaryEntity } from "@/modules/articles/domain/entities/IArticleSummaryEntity";
-import { ContentStatus } from "@/shared/domain/enums/content-status.enum";
 
 /**
  * Available action types for an article record.
@@ -49,32 +48,28 @@ export const ARTICLE_DROPDOWN_ITEMS: IArticleDropdownItem[] = [
     {
         key: "submit",
         label: "Soumettre",
-        hidden: (r, isSuperAdmin) =>
-            !isSuperAdmin || ![ContentStatus.Draft, ContentStatus.Rejected].includes(r.status)
+        hidden: (r, isSuperAdmin) => !isSuperAdmin || !r.canSubmit
     },
     {
         key: "approve",
         label: "Approuver",
-        hidden: (r, isSuperAdmin) => !isSuperAdmin || r.status !== ContentStatus.PendingReview
+        hidden: (r, isSuperAdmin) => !isSuperAdmin || !r.canApprove
     },
     {
         key: "publish",
         label: "Publier",
-        hidden: (r, isSuperAdmin) => !isSuperAdmin || r.status !== ContentStatus.Approved
+        hidden: (r, isSuperAdmin) => !isSuperAdmin || !r.canPublish
     },
     {
         key: "reject",
         label: "Rejeter",
         danger: true,
-        hidden: (r, isSuperAdmin) =>
-            !isSuperAdmin ||
-            ![ContentStatus.PendingReview, ContentStatus.Approved].includes(r.status)
+        hidden: (r, isSuperAdmin) => !isSuperAdmin || !r.canReject
     },
     {
         key: "archive",
         label: "Archiver",
-        hidden: (r, isSuperAdmin) =>
-            !isSuperAdmin || ![ContentStatus.Published, ContentStatus.Rejected].includes(r.status)
+        hidden: (r, isSuperAdmin) => !isSuperAdmin || !r.canArchive
     },
     {
         key: "delete",

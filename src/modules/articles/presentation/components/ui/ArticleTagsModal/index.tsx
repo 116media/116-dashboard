@@ -10,21 +10,21 @@ import FormSuccessResult from "@/shared/presentation/ui/FormSuccessResult";
  * @property {boolean} open - Whether the modal is visible
  * @property {boolean} loading - Loading state for the submit button
  * @property {string | null} success - Success message (shows success view when set)
- * @property {string[]} tagIds - Currently selected tag identifiers
- * @property {(ids: string[]) => void} onTagsChange - Callback when the tag selection changes
+ * @property {string[]} tagNames - Currently selected tag display names
+ * @property {(names: string[]) => void} onTagsChange - Callback when the tag selection changes
  * @property {() => void} onSubmit - Callback to save the tag selection
  * @property {() => void} onCancel - Cancel/close handler
  * @property {() => void} onSuccessClose - Close handler after success
  */
 interface IArticleTagsModalProps {
     open: boolean;
-    tagIds: string[];
+    tagNames: string[];
     loading: boolean;
     success: string | null;
     onSubmit: () => void;
     onCancel: () => void;
     onSuccessClose: () => void;
-    onTagsChange: (ids: string[]) => void;
+    onTagsChange: (names: string[]) => void;
 }
 
 /**
@@ -44,7 +44,7 @@ const ArticleTagsModal: FC<IArticleTagsModalProps> = ({
     open,
     loading,
     success,
-    tagIds,
+    tagNames,
     onTagsChange,
     onSubmit,
     onCancel,
@@ -75,7 +75,7 @@ const ArticleTagsModal: FC<IArticleTagsModalProps> = ({
             {success ? (
                 <FormSuccessResult title={success} onClose={onSuccessClose} />
             ) : (
-                <ArticleTagsForm tagIds={tagIds} onTagsChange={onTagsChange} />
+                <ArticleTagsForm tagNames={tagNames} onTagsChange={onTagsChange} />
             )}
         </Modal>
     );

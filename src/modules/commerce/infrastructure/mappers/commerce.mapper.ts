@@ -127,10 +127,14 @@ export const CommerceMapper = {
      * @returns {IOrderSummaryEntity} Mapped order summary entity with audit timestamps
      */
     orderSummaryFromDto(dto: ContentOrderSummaryDto): IOrderSummaryEntity {
+        const status = mapOrderStatus(dto.status);
         return {
             id: dto.id,
             customerName: dto.customerName,
-            status: mapOrderStatus(dto.status),
+            status,
+            canAddItem: status === OrderStatus.Draft,
+            canSubmit: status === OrderStatus.Draft,
+            canCancel: status !== OrderStatus.Paid && status !== OrderStatus.Cancelled,
             totalAmountUsd: dto.totalAmountUsd,
             itemCount: dto.itemCount,
             createdAt: dto.createdAt,

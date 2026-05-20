@@ -817,7 +817,7 @@ export interface AdminUpdateArticleSeoResponse {
 }
 
 export interface AdminUpdateArticleTagsRequest {
-  tagIds: string[];
+  tagNames: string[];
 }
 
 export interface AdminUpdateArticleTagsResponse {
@@ -983,7 +983,7 @@ export interface AdminUpdateVideoSeoResponse {
 }
 
 export interface AdminUpdateVideoTagsRequest {
-  tagIds: string[];
+  tagNames: string[];
 }
 
 export interface AdminUpdateVideoTagsResponse {

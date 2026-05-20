@@ -87,7 +87,9 @@ const YoutubeUrlForm: FC<IYoutubeUrlFormProps> = ({ form, error, onSubmit }) => 
                 />
             </Item>
 
-            {debouncedYoutubeUrl && <VideoPlayer youtubeId={debouncedYoutubeUrl} maxHeight={300} />}
+            {debouncedYoutubeUrl && (
+                <VideoPlayer youtubeUrl={debouncedYoutubeUrl} maxHeight={300} />
+            )}
         </Form>
     );
 };

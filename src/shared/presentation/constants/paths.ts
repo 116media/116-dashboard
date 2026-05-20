@@ -39,6 +39,7 @@ export const SETTING_NOTIFICATION_PATH = "/settings/notification";
 export const SETTING_ACCOUNT_PATH = "/settings/account";
 export const CONTENT_PATH = "/contents";
 export const VIDEO_PATH = "/videos";
+export const VIDEO_DETAIL_PATH = "/videos/detail";
 export const ARTICLE_PATH = "/articles";
 export const ARTICLE_DETAIL_PATH = "/articles/detail";
 

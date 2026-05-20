@@ -64,7 +64,7 @@ const ArticleCreateWizard: FC<IArticleCreateWizardProps> = ({ open, onClose, onS
         <Flex key="step3" vertical gap={24}>
             <div>
                 <Title level={5}>Tags</Title>
-                <ArticleTagsForm tagIds={wizard.tagIds} onTagsChange={wizard.onTagsChange} />
+                <ArticleTagsForm tagNames={wizard.tagNames} onTagsChange={wizard.onTagsChange} />
             </div>
             <Divider />
             <div>

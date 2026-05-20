@@ -21,6 +21,7 @@ import {
     SETTING_PATH,
     SHORTS_PATH,
     USER_PATH,
+    VIDEO_DETAIL_PATH,
     VIDEO_PATH
 } from "@/shared/presentation/constants/paths";
 import { PermissionRoute } from "@/shared/presentation/guards/PermissionRoute";
@@ -36,6 +37,7 @@ const ForgotPasswordPage = lazy(
 const OverviewPage = lazy(() => import("@/modules/overview/presentation/pages/OverviewPage"));
 const SettingsPage = lazy(() => import("@/platform/settings/presentation/pages/SettingsPage"));
 const VideosPage = lazy(() => import("@/modules/videos/presentation/pages/VideosPage"));
+const VideoDetailPage = lazy(() => import("@/modules/videos/presentation/pages/VideoDetailPage"));
 const ArticlesPage = lazy(() => import("@/modules/articles/presentation/pages/ArticlesPage"));
 const ArticleDetailPage = lazy(
     () => import("@/modules/articles/presentation/pages/ArticleDetailPage")
@@ -85,7 +87,13 @@ const protectedRoutes: RouteObject[] = [
                                 permissions={[{ resource: "videos", action: "read" }]}
                             />
                         ),
-                        children: [{ path: VIDEO_PATH, element: <VideosPage /> }]
+                        children: [
+                            {
+                                path: `${VIDEO_DETAIL_PATH}/:id`,
+                                element: <VideoDetailPage />
+                            },
+                            { path: VIDEO_PATH, element: <VideosPage /> }
+                        ]
                     },
                     {
                         element: (

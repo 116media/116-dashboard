@@ -2,10 +2,10 @@
 @use "@/shared/presentation/styles/dimensions" as dimensions;
 
 .videoPlayer {
+    position: relative;
     width: 100%;
     overflow: hidden;
     border-radius: dimensions.$border-radius;
-    margin-top: calc(dimensions.$padding / 2);
 
     --plyr-color-main: #{colors.$primary};
     --plyr-video-control-color: #{colors.$white};
@@ -30,5 +30,16 @@
     :global(.plyr--video) {
         border-radius: dimensions.$border-radius;
         overflow: hidden;
+        width: 100%;
+    }
+
+    &__poster {
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+        background-size: cover;
+        background-position: center;
+        border-radius: dimensions.$border-radius;
+        pointer-events: none;
     }
 }

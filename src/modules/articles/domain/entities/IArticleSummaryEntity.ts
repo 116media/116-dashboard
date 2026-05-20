@@ -15,6 +15,11 @@ import type { ContentStatus } from "@/shared/domain/enums/content-status.enum";
  * @property {string} authorId - UUID of the author (identity user)
  * @property {ContentStatus} status - Current editorial workflow status
  * @property {boolean} canDelete - Whether the article can be permanently deleted
+ * @property {boolean} canSubmit - Whether the article can be submitted for review
+ * @property {boolean} canApprove - Whether the article can be approved
+ * @property {boolean} canPublish - Whether the article can be published
+ * @property {boolean} canReject - Whether the article can be rejected
+ * @property {boolean} canArchive - Whether the article can be archived
  * @property {boolean} isFeatured - Whether the article is featured
  * @property {string | null} publishedAt - ISO timestamp of publication
  * @property {string | null} createdAt - ISO creation timestamp
@@ -33,6 +38,11 @@ export interface IArticleSummaryEntity {
     authorId: string;
     status: ContentStatus;
     canDelete: boolean;
+    canSubmit: boolean;
+    canApprove: boolean;
+    canPublish: boolean;
+    canReject: boolean;
+    canArchive: boolean;
     isFeatured: boolean;
     publishedAt?: string | null;
     createdAt?: string | null;

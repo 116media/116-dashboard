@@ -33,8 +33,8 @@ interface IUseCreateVideoWizard {
     step1Form: FormInstance<ICreateVideoCredentials>;
     step2Form: FormInstance<IWizardStep2Credentials>;
     seoForm: FormInstance<IUpdateVideoSeoCredentials>;
-    tagIds: string[];
-    onTagsChange: (ids: string[]) => void;
+    tagNames: string[];
+    onTagsChange: (names: string[]) => void;
     goNext: () => Promise<void>;
     goBack: () => void;
     onSubmit: () => Promise<void>;
@@ -56,7 +56,7 @@ export const useCreateVideoWizard = (onSuccess: () => void): IUseCreateVideoWiza
     const [video, setVideo] = useState<IVideoEntity | null>(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<Failure | null | undefined>(null);
-    const [tagIds, setTagIds] = useState<string[]>([]);
+    const [tagNames, setTagNames] = useState<string[]>([]);
 
     const [step1Form] = useForm<ICreateVideoCredentials>();
     const [step2Form] = useForm<IWizardStep2Credentials>();
@@ -139,8 +139,8 @@ export const useCreateVideoWizard = (onSuccess: () => void): IUseCreateVideoWiza
         setLoading(true);
         setError(null);
 
-        if (tagIds.length > 0) {
-            await dispatch(updateVideoTagsAction({ id: videoId, data: { tagIds } }));
+        if (tagNames.length > 0) {
+            await dispatch(updateVideoTagsAction({ id: videoId, data: { tagNames } }));
         }
 
         try {
@@ -197,7 +197,7 @@ export const useCreateVideoWizard = (onSuccess: () => void): IUseCreateVideoWiza
         setVideo(null);
         setLoading(false);
         setError(null);
-        setTagIds([]);
+        setTagNames([]);
         step1Form.resetFields();
         step2Form.resetFields();
         seoForm.resetFields();
@@ -212,8 +212,8 @@ export const useCreateVideoWizard = (onSuccess: () => void): IUseCreateVideoWiza
         step1Form,
         step2Form,
         seoForm,
-        tagIds,
-        onTagsChange: setTagIds,
+        tagNames,
+        onTagsChange: setTagNames,
         goNext,
         goBack,
         onSubmit: onSubmitFinal,

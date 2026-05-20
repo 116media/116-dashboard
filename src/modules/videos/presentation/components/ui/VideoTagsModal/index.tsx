@@ -10,8 +10,8 @@ import FormSuccessResult from "@/shared/presentation/ui/FormSuccessResult";
  * @property {boolean} open - Whether the modal is visible
  * @property {boolean} loading - Loading state for the submit button
  * @property {string | null} success - Success message (shows success view when set)
- * @property {string[]} tagIds - Currently selected tag identifiers
- * @property {(ids: string[]) => void} onTagsChange - Callback when the tag selection changes
+ * @property {string[]} tagNames - Currently selected tag display names
+ * @property {(names: string[]) => void} onTagsChange - Callback when the tag selection changes
  * @property {() => void} onSubmit - Callback to save the tag selection
  * @property {() => void} onCancel - Cancel/close handler
  * @property {() => void} onSuccessClose - Close handler after success
@@ -20,8 +20,8 @@ interface IVideoTagsModalProps {
     open: boolean;
     loading: boolean;
     success: string | null;
-    tagIds: string[];
-    onTagsChange: (ids: string[]) => void;
+    tagNames: string[];
+    onTagsChange: (names: string[]) => void;
     onSubmit: () => void;
     onCancel: () => void;
     onSuccessClose: () => void;
@@ -44,7 +44,7 @@ const VideoTagsModal: FC<IVideoTagsModalProps> = ({
     open,
     loading,
     success,
-    tagIds,
+    tagNames,
     onTagsChange,
     onSubmit,
     onCancel,
@@ -75,7 +75,7 @@ const VideoTagsModal: FC<IVideoTagsModalProps> = ({
             {success ? (
                 <FormSuccessResult title={success} onClose={onSuccessClose} />
             ) : (
-                <VideoTagsForm tagIds={tagIds} onTagsChange={onTagsChange} />
+                <VideoTagsForm tagNames={tagNames} onTagsChange={onTagsChange} />
             )}
         </Modal>
     );

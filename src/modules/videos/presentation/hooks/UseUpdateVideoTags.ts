@@ -15,8 +15,8 @@ import { showNotification } from "@/shared/presentation/utils/notification/notif
  * @interface IUseUpdateVideoTags
  */
 interface IUseUpdateVideoTags {
-    tagIds: string[];
-    onTagsChange: (ids: string[]) => void;
+    tagNames: string[];
+    onTagsChange: (names: string[]) => void;
     loading: boolean;
     error: Failure | null | undefined;
     success: string | null;
@@ -28,7 +28,7 @@ interface IUseUpdateVideoTags {
  * Custom hook for managing video tag assignments.
  *
  * @description
- * Manages a local `tagIds` state array, pre-populated from
+ * Manages a local `tagNames` state array, pre-populated from
  * the video's current tags. Provides a submit handler that
  * dispatches `updateVideoTagsAction` and shows a notification
  * on success.
@@ -42,19 +42,19 @@ export const useUpdateVideoTags = (
     onSuccess?: () => void
 ): IUseUpdateVideoTags => {
     const dispatch = useAppDispatch();
-    const [tagIds, setTagIds] = useState<string[]>([]);
+    const [tagNames, setTagNames] = useState<string[]>([]);
     const [success, setSuccess] = useState<string | null>(null);
 
     const { loading, error } = useAppSelector(({ videos: { updateVideoTags } }) => updateVideoTags);
 
     useEffect(() => {
         if (video) {
-            setTagIds(video.tags?.map((t) => t.id) ?? []);
+            setTagNames(video.tags?.map((t) => t.name) ?? []);
         }
     }, [video]);
 
-    const onTagsChange = (ids: string[]) => {
-        setTagIds(ids);
+    const onTagsChange = (names: string[]) => {
+        setTagNames(names);
     };
 
     const onSubmit = async (): Promise<void> => {
@@ -63,7 +63,7 @@ export const useUpdateVideoTags = (
         const result = await dispatch(
             updateVideoTagsAction({
                 id: video.id,
-                data: { tagIds }
+                data: { tagNames }
             })
         );
 
@@ -77,8 +77,8 @@ export const useUpdateVideoTags = (
     const resetTags = () => {
         setSuccess(null);
         dispatch(resetUpdateVideoTagsAction());
-        setTagIds([]);
+        setTagNames([]);
     };
 
-    return { tagIds, onTagsChange, loading, error, success, onSubmit, resetTags };
+    return { tagNames, onTagsChange, loading, error, success, onSubmit, resetTags };
 };

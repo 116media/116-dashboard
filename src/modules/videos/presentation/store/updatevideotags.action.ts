@@ -18,7 +18,7 @@ export const resetUpdateVideoTagsAction = () =>
  */
 export const updateVideoTagsAction = createAsyncThunk<
     IVideoActionResponse,
-    { id: string; data: { tagIds: string[] } },
+    { id: string; data: { tagNames: string[] } },
     { rejectValue: Failure }
 >(ActionType.UpdateVideoTags, async (params, { rejectWithValue }) => {
     const result = await container.cradle.updateVideoTagsUseCase.execute(params);

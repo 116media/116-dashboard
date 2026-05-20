@@ -15,8 +15,8 @@ import { showNotification } from "@/shared/presentation/utils/notification/notif
  * @interface IUseUpdateArticleTags
  */
 interface IUseUpdateArticleTags {
-    tagIds: string[];
-    onTagsChange: (ids: string[]) => void;
+    tagNames: string[];
+    onTagsChange: (names: string[]) => void;
     loading: boolean;
     error: Failure | null | undefined;
     success: string | null;
@@ -28,7 +28,7 @@ interface IUseUpdateArticleTags {
  * Custom hook for managing article tag assignments.
  *
  * @description
- * Manages a local `tagIds` state array, pre-populated from
+ * Manages a local `tagNames` state array, pre-populated from
  * the article's current tags. Provides a submit handler that
  * dispatches `updateArticleTagsAction` and shows a notification
  * on success.
@@ -42,7 +42,7 @@ export const useUpdateArticleTags = (
     onSuccess?: () => void
 ): IUseUpdateArticleTags => {
     const dispatch = useAppDispatch();
-    const [tagIds, setTagIds] = useState<string[]>([]);
+    const [tagNames, setTagNames] = useState<string[]>([]);
     const [success, setSuccess] = useState<string | null>(null);
 
     const { loading, error } = useAppSelector(
@@ -51,12 +51,12 @@ export const useUpdateArticleTags = (
 
     useEffect(() => {
         if (article) {
-            setTagIds((article.tags ?? []).map((t) => t.id));
+            setTagNames((article.tags ?? []).map((t) => t.name));
         }
     }, [article]);
 
-    const onTagsChange = (ids: string[]) => {
-        setTagIds(ids);
+    const onTagsChange = (names: string[]) => {
+        setTagNames(names);
     };
 
     const onSubmit = async (): Promise<void> => {
@@ -65,7 +65,7 @@ export const useUpdateArticleTags = (
         const result = await dispatch(
             updateArticleTagsAction({
                 id: article.id,
-                data: { tagIds }
+                data: { tagNames }
             })
         );
 
@@ -79,8 +79,8 @@ export const useUpdateArticleTags = (
     const resetTags = () => {
         setSuccess(null);
         dispatch(resetUpdateArticleTagsAction());
-        setTagIds([]);
+        setTagNames([]);
     };
 
-    return { tagIds, onTagsChange, loading, error, success, onSubmit, resetTags };
+    return { tagNames, onTagsChange, loading, error, success, onSubmit, resetTags };
 };

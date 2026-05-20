@@ -1,10 +1,10 @@
 import type { IVideoSummaryEntity } from "@/modules/videos/domain/entities/IVideoSummaryEntity";
-import { ContentStatus } from "@/shared/domain/enums/content-status.enum";
 
 /**
  * Available action types for a video record.
  */
 export type VideoAction =
+    | "view"
     | "edit"
     | "seo"
     | "tags"
@@ -46,6 +46,7 @@ interface IVideoDropdownItem {
  * - "delete" is restricted to SuperAdmin only.
  */
 export const VIDEO_DROPDOWN_ITEMS: IVideoDropdownItem[] = [
+    { key: "view", label: "Voir", hidden: () => false },
     { key: "edit", label: "Modifier", hidden: (_, __, isAdmin) => !isAdmin },
     { key: "seo", label: "Modifier le SEO", hidden: (_, __, isAdmin) => !isAdmin },
     { key: "tags", label: "Modifier les tags", hidden: (_, __, isAdmin) => !isAdmin },
@@ -59,33 +60,28 @@ export const VIDEO_DROPDOWN_ITEMS: IVideoDropdownItem[] = [
     {
         key: "submit",
         label: "Soumettre",
-        hidden: (r, isSuperAdmin) =>
-            !isSuperAdmin || ![ContentStatus.Draft, ContentStatus.Rejected].includes(r.status)
+        hidden: (r, isSuperAdmin) => !isSuperAdmin || !r.canSubmit
     },
     {
         key: "approve",
         label: "Approuver",
-        hidden: (r, isSuperAdmin) => !isSuperAdmin || r.status !== ContentStatus.PendingReview
+        hidden: (r, isSuperAdmin) => !isSuperAdmin || !r.canApprove
     },
     {
         key: "publish",
         label: "Publier",
-        hidden: (r, isSuperAdmin) =>
-            !isSuperAdmin || r.status !== ContentStatus.Approved || !r.youtubeVideoUrl
+        hidden: (r, isSuperAdmin) => !isSuperAdmin || !r.canPublish
     },
     {
         key: "reject",
         label: "Rejeter",
         danger: true,
-        hidden: (r, isSuperAdmin) =>
-            !isSuperAdmin ||
-            ![ContentStatus.PendingReview, ContentStatus.Approved].includes(r.status)
+        hidden: (r, isSuperAdmin) => !isSuperAdmin || !r.canReject
     },
     {
         key: "archive",
         label: "Archiver",
-        hidden: (r, isSuperAdmin) =>
-            !isSuperAdmin || ![ContentStatus.Published, ContentStatus.Rejected].includes(r.status)
+        hidden: (r, isSuperAdmin) => !isSuperAdmin || !r.canArchive
     },
     {
         danger: true,

@@ -1,4 +1,5 @@
 import type { ITagEntity } from "@/modules/lookup/domain/entities/ITagEntity";
+import type { IAuthorEntity } from "@/shared/domain/entities/IAuthorEntity";
 import type { ContentStatus } from "@/shared/domain/enums/content-status.enum";
 
 /**
@@ -29,6 +30,7 @@ import type { ContentStatus } from "@/shared/domain/enums/content-status.enum";
  * @property {string | null} customerName - Full name of the B2B customer, null for free content
  * @property {string | null} orderItemId - UUID of the linked order item, null for free content
  * @property {ITagEntity[]} tags - Assigned tags
+ * @property {IAuthorEntity | null} author - Author profile (identity user snapshot)
  * @property {string | null} createdAt - ISO creation timestamp
  * @property {string | null} updatedAt - ISO last-update timestamp
  * @property {string | null} createdBy - UUID of the creating admin
@@ -58,6 +60,7 @@ export interface IVideoEntity {
     customerName?: string | null;
     orderItemId?: string | null;
     tags: ITagEntity[];
+    author?: IAuthorEntity | null;
     createdAt?: string | null;
     updatedAt?: string | null;
     createdBy?: string | null;

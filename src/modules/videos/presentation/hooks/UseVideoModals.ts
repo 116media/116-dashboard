@@ -1,6 +1,8 @@
 import { useCallback, useState } from "react";
+import { useNavigate } from "react-router";
 import type { IVideoSummaryEntity } from "@/modules/videos/domain/entities/IVideoSummaryEntity";
 import type { VideoAction } from "@/modules/videos/presentation/constants/videos.dropdown";
+import { VIDEO_DETAIL_PATH } from "@/shared/presentation/constants/paths";
 
 /**
  * Return type for the video modals hook.
@@ -58,34 +60,42 @@ export const useVideoModals = (reload: () => void): IUseVideoModals => {
     const [currentAction, setCurrentAction] = useState<VideoAction | null>(null);
     const [selectedEntity, setSelectedEntity] = useState<IVideoSummaryEntity | null>(null);
 
-    const handleAction = useCallback((action: VideoAction, entity: IVideoSummaryEntity) => {
-        setSelectedEntity(entity);
+    const navigate = useNavigate();
 
-        switch (action) {
-            case "edit":
-                setEditOpen(true);
-                break;
-            case "seo":
-                setSeoOpen(true);
-                break;
-            case "tags":
-                setTagsOpen(true);
-                break;
-            case "thumbnail":
-                setThumbnailOpen(true);
-                break;
-            case "youtube":
-                setYoutubeOpen(true);
-                break;
-            case "shoot":
-                setShootOpen(true);
-                break;
-            default:
-                setCurrentAction(action);
-                setActionOpen(true);
-                break;
-        }
-    }, []);
+    const handleAction = useCallback(
+        (action: VideoAction, entity: IVideoSummaryEntity) => {
+            setSelectedEntity(entity);
+
+            switch (action) {
+                case "view":
+                    navigate(`${VIDEO_DETAIL_PATH}/${entity.id}`);
+                    break;
+                case "edit":
+                    setEditOpen(true);
+                    break;
+                case "seo":
+                    setSeoOpen(true);
+                    break;
+                case "tags":
+                    setTagsOpen(true);
+                    break;
+                case "thumbnail":
+                    setThumbnailOpen(true);
+                    break;
+                case "youtube":
+                    setYoutubeOpen(true);
+                    break;
+                case "shoot":
+                    setShootOpen(true);
+                    break;
+                default:
+                    setCurrentAction(action);
+                    setActionOpen(true);
+                    break;
+            }
+        },
+        [navigate]
+    );
 
     const handleActionConfirm = useCallback(
         async (actionMap: Record<string, (id: string) => Promise<void>>) => {
