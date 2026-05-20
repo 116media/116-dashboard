@@ -5,6 +5,8 @@ import {
     LYRICS_DROPDOWN_ITEMS,
     type LyricsAction
 } from "@/modules/lyrics/presentation/constants/lyrics.dropdown";
+import { Colors } from "@/shared/presentation/constants/theme";
+import { IconStopOutlined } from "@/shared/presentation/ui/Icons";
 import type { ITableActionItem } from "@/shared/presentation/ui/TableActionDropdown";
 import TableActionDropdown from "@/shared/presentation/ui/TableActionDropdown";
 
@@ -66,7 +68,7 @@ export const lyricsTableColumns = (
         width: 160,
         render: (_: unknown, record: ILyricsEntity) => {
             if (record.videoId) return <Text type="secondary">Video</Text>;
-            return <Text type="secondary">—</Text>;
+            return <IconStopOutlined style={{ color: Colors.Error, fontSize: 18 }} />;
         }
     },
     {

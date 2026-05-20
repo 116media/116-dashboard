@@ -109,7 +109,12 @@ export const VideosMapper = {
                 contentStatus
             ),
             canArchive: [ContentStatus.Published, ContentStatus.Rejected].includes(contentStatus),
+            canAttachYoutubeUrl:
+                !!dto.youtubeVideoUrl ||
+                !dto.shootingScheduledAt ||
+                new Date(dto.shootingScheduledAt) <= new Date(),
             youtubeVideoUrl: dto.youtubeVideoUrl,
+            shootingScheduledAt: dto.shootingScheduledAt ?? null,
             isFeatured: dto.isFeatured,
             hasLyrics: dto.hasLyrics,
             publishedAt: dto.publishedAt,

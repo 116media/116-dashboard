@@ -9,6 +9,8 @@ import type { OrderStatus } from "@/shared/domain/enums/order-status.enum";
 import type { PaymentMethod } from "@/shared/domain/enums/payment-method.enum";
 import type { PaymentStatus } from "@/shared/domain/enums/payment-status.enum";
 import { ADMIN_PATH } from "@/shared/presentation/constants/paths";
+import { Colors } from "@/shared/presentation/constants/theme";
+import { IconStopOutlined } from "@/shared/presentation/ui/Icons";
 import StatusTag from "@/shared/presentation/ui/StatusTag";
 import type { ITableActionItem } from "@/shared/presentation/ui/TableActionDropdown";
 import TableActionDropdown from "@/shared/presentation/ui/TableActionDropdown";
@@ -80,7 +82,7 @@ export const paymentsTableColumns = (
             method ? (
                 <Tag>{PAYMENT_METHOD_LABELS[method] ?? method}</Tag>
             ) : (
-                <Text type="secondary">—</Text>
+                <IconStopOutlined style={{ color: Colors.Error, fontSize: 18 }} />
             )
     },
     {
@@ -113,7 +115,7 @@ export const paymentsTableColumns = (
                     {record.verifiedByUserName ?? record.verifiedBy.slice(0, 8)}
                 </a>
             ) : (
-                <Text type="secondary">—</Text>
+                <IconStopOutlined style={{ color: Colors.Error, fontSize: 18 }} />
             )
     },
     {
@@ -125,7 +127,7 @@ export const paymentsTableColumns = (
             date ? (
                 <Text type="secondary">{dayjs(date).format("DD/MM/YYYY HH:mm")}</Text>
             ) : (
-                <Text type="secondary">—</Text>
+                <IconStopOutlined style={{ color: Colors.Error, fontSize: 18 }} />
             )
     },
     {
@@ -137,7 +139,7 @@ export const paymentsTableColumns = (
             date ? (
                 <Text type="secondary">{dayjs(date).format("DD/MM/YYYY HH:mm")}</Text>
             ) : (
-                <Text type="secondary">—</Text>
+                <IconStopOutlined style={{ color: Colors.Error, fontSize: 18 }} />
             )
     },
     {

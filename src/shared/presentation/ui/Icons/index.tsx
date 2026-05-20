@@ -94,6 +94,7 @@ export {
     SoundOutlined as IconSoundOutlined,
     StarFilled as IconStarFilled,
     StarOutlined as IconStarOutlined,
+    StopOutlined as IconStopOutlined,
     StrikethroughOutlined as IconStrikethroughOutlined,
     SyncOutlined as IconSyncOutlined,
     TabletOutlined as IconTabletOutlined,

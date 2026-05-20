@@ -11,6 +11,7 @@ import { Colors } from "@/shared/presentation/constants/theme";
 import {
     IconCheckCircleFilled,
     IconCloseCircleFilled,
+    IconStopOutlined,
     IconYoutubeFilled
 } from "@/shared/presentation/ui/Icons";
 import StatusTag from "@/shared/presentation/ui/StatusTag";
@@ -75,7 +76,7 @@ export const videosTableColumns = (
                     <IconYoutubeFilled style={{ color: Colors.Error, fontSize: 18 }} />
                 </Link>
             ) : (
-                <Text type="secondary">—</Text>
+                <IconStopOutlined style={{ color: Colors.Error, fontSize: 18 }} />
             )
     },
     {
@@ -114,15 +115,41 @@ export const videosTableColumns = (
             )
     },
     {
-        title: "Publié le",
-        dataIndex: "publishedAt",
-        key: "publishedAt",
+        title: "Tournage le",
+        dataIndex: "shootingScheduledAt",
+        key: "shootingScheduledAt",
+        width: 160,
+        sorter: (a, b) => (a.shootingScheduledAt ?? "").localeCompare(b.shootingScheduledAt ?? ""),
+        render: (date: string | null) =>
+            date ? (
+                <Text type="secondary">{dayjs(date).format("DD/MM/YYYY HH:mm")}</Text>
+            ) : (
+                <IconCloseCircleFilled style={{ color: Colors.Error, fontSize: 18 }} />
+            )
+    },
+    {
+        title: "Modifié le",
+        dataIndex: "updatedAt",
+        key: "updatedAt",
         width: 160,
         render: (date: string | null) =>
             date ? (
                 <Text type="secondary">{dayjs(date).format("DD/MM/YYYY HH:mm")}</Text>
             ) : (
-                <Text type="secondary">—</Text>
+                <IconStopOutlined style={{ color: Colors.Error, fontSize: 18 }} />
+            )
+    },
+    {
+        title: "Publié le",
+        dataIndex: "publishedAt",
+        key: "publishedAt",
+        width: 160,
+        fixed: "end",
+        render: (date: string | null) =>
+            date ? (
+                <Text type="secondary">{dayjs(date).format("DD/MM/YYYY HH:mm")}</Text>
+            ) : (
+                <IconStopOutlined style={{ color: Colors.Error, fontSize: 18 }} />
             )
     },
     {

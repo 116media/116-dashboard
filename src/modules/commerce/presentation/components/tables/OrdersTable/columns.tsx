@@ -7,6 +7,8 @@ import {
 } from "@/modules/commerce/presentation/constants/commerce.orders.dropdown";
 import { ORDER_STATUS_CONFIG } from "@/modules/commerce/presentation/constants/order.status.config";
 import type { OrderStatus } from "@/shared/domain/enums/order-status.enum";
+import { Colors } from "@/shared/presentation/constants/theme";
+import { IconStopOutlined } from "@/shared/presentation/ui/Icons";
 import StatusTag from "@/shared/presentation/ui/StatusTag";
 import type { ITableActionItem } from "@/shared/presentation/ui/TableActionDropdown";
 import TableActionDropdown from "@/shared/presentation/ui/TableActionDropdown";
@@ -68,7 +70,7 @@ export const ordersTableColumns = (
             date ? (
                 <Text type="secondary">{dayjs(date).format("DD/MM/YYYY hh:mm")}</Text>
             ) : (
-                <Text type="secondary">—</Text>
+                <IconStopOutlined style={{ color: Colors.Error, fontSize: 18 }} />
             )
     },
     {
