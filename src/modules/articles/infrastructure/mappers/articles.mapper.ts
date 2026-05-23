@@ -74,6 +74,7 @@ export const ArticlesMapper = {
             authorId: dto.authorId,
             status: mapContentStatus(dto.status),
             rejectionReason: dto.rejectionReason,
+            socialBoost: dto.socialBoost,
             isFeatured: dto.isFeatured,
             featuredUntil: dto.featuredUntil,
             publishedAt: dto.publishedAt,

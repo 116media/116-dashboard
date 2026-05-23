@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import type { IArticleEntity } from "@/modules/articles/domain/entities/IArticleEntity";
+import type { IArticleSummaryEntity } from "@/modules/articles/domain/entities/IArticleSummaryEntity";
+import { getArticleByIdAction } from "@/modules/articles/presentation/store/getarticlebyid.action";
 import {
     resetUpdateArticleTagsAction,
     updateArticleTagsAction
@@ -38,7 +40,7 @@ interface IUseUpdateArticleTags {
  * @returns Tag IDs, change handler, loading/error state, success message, and submit handler
  */
 export const useUpdateArticleTags = (
-    article: IArticleEntity | null,
+    article: IArticleSummaryEntity | null,
     onSuccess?: () => void
 ): IUseUpdateArticleTags => {
     const dispatch = useAppDispatch();
@@ -50,10 +52,18 @@ export const useUpdateArticleTags = (
     );
 
     useEffect(() => {
-        if (article) {
-            setTagNames((article.tags ?? []).map((t) => t.name));
-        }
-    }, [article]);
+        if (!article?.id) return;
+
+        const fetchDetail = async () => {
+            const result = await dispatch(getArticleByIdAction(article.id));
+            if (getArticleByIdAction.fulfilled.match(result)) {
+                const detail = result.payload as IArticleEntity;
+                setTagNames((detail.tags ?? []).map((t) => t.name));
+            }
+        };
+
+        fetchDetail();
+    }, [article, dispatch]);
 
     const onTagsChange = (names: string[]) => {
         setTagNames(names);

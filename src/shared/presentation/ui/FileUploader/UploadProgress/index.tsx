@@ -5,9 +5,9 @@ import styles from "./index.module.scss";
 const { Text } = Typography;
 
 interface IUploadProgressProps {
+    percent: number;
     fileName: string | null;
     fileSize: string | null;
-    percent: number;
 }
 
 /**

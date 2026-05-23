@@ -28,7 +28,7 @@ const { Item } = Form;
  * @property {(option: IOrderItemOption | undefined) => void} [onOrderItemChange] - Called when order item selection changes
  */
 interface IVideoInfoFormProps {
-    error: Failure | null | undefined;
+    error?: Failure | null | undefined;
     form: FormInstance<ICreateVideoCredentials>;
     orderItems: IUsePaidOrderItems;
     onSubmit: (values: ICreateVideoCredentials) => void;
@@ -128,11 +128,11 @@ const VideoInfoForm: FC<IVideoInfoFormProps> = ({
                     showSearch
                     allowClear
                     loading={orderItems.loading}
-                    disabled={orderItems.loading}
                     options={orderItems.options}
-                    placeholder="Sélectionner une commande"
+                    disabled={orderItems.loading}
                     popupMatchSelectWidth={false}
                     optionRender={SelectOptionBadged}
+                    placeholder="Sélectionner une commande"
                     onChange={(value) => {
                         const option = orderItems.options.find(
                             (o: IOrderItemOption) => o.value === value

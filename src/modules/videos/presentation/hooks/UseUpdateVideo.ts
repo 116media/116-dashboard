@@ -63,7 +63,7 @@ export const useUpdateVideo = (
             categoryId: video.categoryId,
             title: video.title,
             description: video.description,
-            socialBoost: false,
+            socialBoost: video.socialBoost,
             isFeatured: video.isFeatured,
             featuredUntil: video.featuredUntil ? dayjs(video.featuredUntil) : null,
             metaTitle: video.metaTitle,

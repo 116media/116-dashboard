@@ -47,14 +47,13 @@ const ShootScheduleForm: FC<IShootScheduleFormProps> = ({ form, error, onSubmit 
             <ErrorAlert error={error} showIcon closable banner={false} />
 
             <Item
-                name="shootingScheduledAt"
                 label="Date du tournage"
+                name="shootingScheduledAt"
                 rules={VideosShootValidator.shootingScheduledAt("Date du tournage")}
             >
                 <DatePicker
                     showTime
                     format="DD/MM/YYYY HH:mm"
-                    style={{ width: "100%" }}
                     placeholder="Sélectionner une date"
                 />
             </Item>

@@ -1,7 +1,9 @@
 import type { FormInstance } from "antd";
 import { Form } from "antd";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import type { IVideoSummaryEntity } from "@/modules/videos/domain/entities/IVideoSummaryEntity";
 import type { IScheduleShootCredentials } from "@/modules/videos/presentation/model/IScheduleShootCredentials";
+import { getVideoByIdAction } from "@/modules/videos/presentation/store/getvideobyid.action";
 import {
     resetScheduleShootAction,
     scheduleShootAction
@@ -9,6 +11,7 @@ import {
 import { VideosNotification } from "@/modules/videos/presentation/utils/notification/videos.notification";
 import type { Failure } from "@/shared/domain/failures/failure";
 import { useAppDispatch, useAppSelector } from "@/shared/presentation/store/store";
+import { dayjs } from "@/shared/presentation/utils/dayjs/dayjs.utils";
 import { showNotification } from "@/shared/presentation/utils/notification/notification.utils";
 
 const { useForm } = Form;
@@ -19,10 +22,10 @@ const { useForm } = Form;
  * @interface IUseScheduleShoot
  */
 interface IUseScheduleShoot {
-    form: FormInstance<IScheduleShootCredentials>;
     loading: boolean;
-    error: Failure | null | undefined;
     success: string | null;
+    error: Failure | null | undefined;
+    form: FormInstance<IScheduleShootCredentials>;
     onSubmit: (id: string, values: IScheduleShootCredentials) => Promise<void>;
     resetShoot: () => void;
 }
@@ -37,18 +40,39 @@ interface IUseScheduleShoot {
  *
  * @returns Form instance, loading/error state, success message, and submit handler
  */
-export const useScheduleShoot = (): IUseScheduleShoot => {
+export const useScheduleShoot = (video: IVideoSummaryEntity | null): IUseScheduleShoot => {
     const dispatch = useAppDispatch();
     const [form] = useForm<IScheduleShootCredentials>();
     const [success, setSuccess] = useState<string | null>(null);
 
     const { loading, error } = useAppSelector(({ videos: { scheduleShoot } }) => scheduleShoot);
 
+    useEffect(() => {
+        if (!video?.id) return;
+
+        const fetchDetail = async () => {
+            const result = await dispatch(getVideoByIdAction(video.id));
+            if (getVideoByIdAction.fulfilled.match(result)) {
+                const detail = result.payload;
+                if (detail.shootingScheduledAt) {
+                    form.setFieldsValue({
+                        shootingScheduledAt: dayjs(detail.shootingScheduledAt)
+                    });
+                }
+            }
+        };
+
+        fetchDetail();
+    }, [video, dispatch, form]);
+
     const onSubmit = async (id: string, values: IScheduleShootCredentials): Promise<void> => {
+        const { shootingScheduledAt } = values;
         const result = await dispatch(
             scheduleShootAction({
                 id,
-                data: { shootingScheduledAt: values.shootingScheduledAt }
+                data: {
+                    shootingScheduledAt: dayjs(shootingScheduledAt).toISOString()
+                }
             })
         );
 

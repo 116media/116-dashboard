@@ -1,4 +1,5 @@
 import { type FC, useCallback, useMemo, useState } from "react";
+import { showNotification } from "@/shared/presentation/utils/notification/notification.utils";
 import DropZone from "./DropZone";
 import FilePreview from "./FilePreview";
 import type { IUploadPreset } from "./presets";
@@ -85,7 +86,15 @@ const FileUploader: FC<IFileUploaderProps> = (props) => {
 
     const handleImmediateUpload = useCallback(
         async (file: File) => {
-            if (file.size > maxSizeBytes || isDeferred) return false;
+            if (file.size > maxSizeBytes) {
+                showNotification({
+                    type: "error",
+                    title: "Fichier trop volumineux",
+                    description: `Le fichier fait ${formatFileSize(file.size)}, la taille maximale est de ${formatFileSize(maxSizeBytes)}.`
+                });
+                return false;
+            }
+            if (isDeferred) return false;
 
             setFileName(file.name);
             setFileSize(formatFileSize(file.size));
@@ -119,7 +128,14 @@ const FileUploader: FC<IFileUploaderProps> = (props) => {
 
     const handleDeferredSelect = useCallback(
         (file: File) => {
-            if (file.size > maxSizeBytes) return false;
+            if (file.size > maxSizeBytes) {
+                showNotification({
+                    type: "error",
+                    title: "Fichier trop volumineux",
+                    description: `Le fichier fait ${formatFileSize(file.size)}, la taille maximale est de ${formatFileSize(maxSizeBytes)}.`
+                });
+                return false;
+            }
 
             setFileName(file.name);
             setFileSize(formatFileSize(file.size));

@@ -1,4 +1,4 @@
-import { ConfigProvider, Empty } from "antd";
+import { App as AntApp, ConfigProvider, Empty } from "antd";
 import dayjs from "dayjs";
 import fr from "dayjs/locale/fr";
 import relativeTime from "dayjs/plugin/relativeTime";
@@ -28,11 +28,13 @@ const App: FC = () => {
                     theme={Theme}
                     renderEmpty={() => <Empty image={Empty.PRESENTED_IMAGE_DEFAULT} />}
                 >
-                    <BrowserRouter>
-                        <NavigationProgress />
-                        <SessionExpiredModal />
-                        <AppRoutes />
-                    </BrowserRouter>
+                    <AntApp>
+                        <BrowserRouter>
+                            <NavigationProgress />
+                            <SessionExpiredModal />
+                            <AppRoutes />
+                        </BrowserRouter>
+                    </AntApp>
                 </ConfigProvider>
             </PersistGate>
         </Provider>

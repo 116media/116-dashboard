@@ -55,11 +55,11 @@ const VideosListContainer: FC = () => {
     const modals = useVideoModals(list.reload);
     const { data: fullVideo } = useAppSelector(({ videos: { getVideoById } }) => getVideoById);
     const updateVideo = useUpdateVideo(fullVideo as IVideoEntity | null, list.reload);
-    const updateSeo = useUpdateVideoSeo(fullVideo as IVideoEntity | null, list.reload);
-    const updateTags = useUpdateVideoTags(fullVideo as IVideoEntity | null, list.reload);
+    const updateSeo = useUpdateVideoSeo(modals.selectedEntity, list.reload);
+    const updateTags = useUpdateVideoTags(modals.selectedEntity, list.reload);
     const uploadThumbnail = useUploadVideoThumbnail();
     const attachYoutube = useAttachYoutubeVideoUrl();
-    const scheduleShoot = useScheduleShoot();
+    const scheduleShoot = useScheduleShoot(modals.selectedEntity);
     const workflow = useVideoWorkflow(list.reload);
     const { isSuperAdmin, isAdminOrSuperAdmin } = useAuthorization();
 
@@ -196,9 +196,9 @@ const VideosListContainer: FC = () => {
                 <VideoSeoModal
                     open={modals.seoOpen}
                     form={updateSeo.form}
+                    error={updateSeo.error}
                     loading={updateSeo.loading}
                     success={updateSeo.success}
-                    error={updateSeo.error}
                     onSubmit={updateSeo.onSubmit}
                     onReset={() => updateSeo.resetSeo()}
                     onCancel={() => {
@@ -219,8 +219,8 @@ const VideosListContainer: FC = () => {
                     loading={updateTags.loading}
                     success={updateTags.success}
                     tagNames={updateTags.tagNames}
-                    onTagsChange={updateTags.onTagsChange}
                     onSubmit={updateTags.onSubmit}
+                    onTagsChange={updateTags.onTagsChange}
                     onCancel={() => {
                         modals.setTagsOpen(false);
                         updateTags.resetTags();
@@ -238,9 +238,13 @@ const VideosListContainer: FC = () => {
                     open={modals.thumbnailOpen}
                     loading={uploadThumbnail.loading}
                     videoId={modals.selectedEntity?.id ?? null}
-                    currentThumbnailUrl={modals.selectedEntity?.thumbnailUrl}
-                    onUpload={uploadThumbnail.onUpload}
                     onCancel={() => modals.setThumbnailOpen(false)}
+                    currentThumbnailUrl={modals.selectedEntity?.thumbnailUrl}
+                    onUpload={async (id, file) => {
+                        const success = await uploadThumbnail.onUpload(id, file);
+                        if (success) list.reload();
+                        return success;
+                    }}
                 />
             )}
 
@@ -248,11 +252,11 @@ const VideosListContainer: FC = () => {
                 <YoutubeUrlModal
                     open={modals.youtubeOpen}
                     form={attachYoutube.form}
+                    error={attachYoutube.error}
                     loading={attachYoutube.loading}
                     success={attachYoutube.success}
-                    error={attachYoutube.error}
-                    initialYoutubeVideoUrl={modals.selectedEntity?.youtubeVideoUrl}
                     onReset={() => attachYoutube.resetYoutube()}
+                    initialYoutubeVideoUrl={modals.selectedEntity?.youtubeVideoUrl}
                     onSubmit={(values) => {
                         if (modals.selectedEntity) {
                             attachYoutube.onSubmit(modals.selectedEntity.id, values);
@@ -274,9 +278,9 @@ const VideosListContainer: FC = () => {
                 <ShootScheduleModal
                     open={modals.shootOpen}
                     form={scheduleShoot.form}
+                    error={scheduleShoot.error}
                     loading={scheduleShoot.loading}
                     success={scheduleShoot.success}
-                    error={scheduleShoot.error}
                     onReset={() => scheduleShoot.resetShoot()}
                     onSubmit={(values) => {
                         if (modals.selectedEntity) {

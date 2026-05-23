@@ -68,7 +68,7 @@ export const useUpdateArticle = (
                     headline: detail.headline,
                     body: detail.body,
                     coverImageUrl: detail.coverImageUrl,
-                    socialBoost: false,
+                    socialBoost: detail.socialBoost,
                     isFeatured: detail.isFeatured,
                     featuredUntil: detail.featuredUntil ? dayjs(detail.featuredUntil) : null,
                     metaTitle: detail.metaTitle,

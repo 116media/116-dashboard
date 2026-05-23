@@ -1,5 +1,6 @@
 import { Button, Divider, Flex, Modal, Steps, Typography } from "antd";
 import type { FC } from "react";
+import { useState } from "react";
 import ArticleBodyForm from "@/modules/articles/presentation/components/forms/ArticleBodyForm";
 import ArticleInfoForm from "@/modules/articles/presentation/components/forms/ArticleInfoForm";
 import ArticleSeoForm from "@/modules/articles/presentation/components/forms/ArticleSeoForm";
@@ -37,39 +38,47 @@ const ArticleCreateWizard: FC<IArticleCreateWizardProps> = ({ open, onClose, onS
     });
     const orderItems = usePaidOrderItems("article");
 
+    const [socialBoostLocked, setSocialBoostLocked] = useState(false);
+    const [featuredLocked, setFeaturedLocked] = useState(false);
+
     const handleClose = () => {
         wizard.reset();
+        setSocialBoostLocked(false);
+        setFeaturedLocked(false);
         onClose();
     };
 
     const stepContent = [
         <ArticleInfoForm
             key="step1"
-            error={wizard.error}
             form={wizard.step1Form}
             orderItems={orderItems}
+            socialBoostLocked={socialBoostLocked}
+            featuredLocked={featuredLocked}
             onSubmit={() => wizard.goNext()}
             onOrderItemChange={(option) => {
-                wizard.setSocialBoost(option?.socialBoost ?? false);
+                setSocialBoostLocked(option !== undefined);
+                setFeaturedLocked(option?.hasPromotion ?? false);
+                wizard.step1Form.setFieldValue("socialBoost", option?.socialBoost ?? false);
+                wizard.step1Form.setFieldValue("isFeatured", option?.hasPromotion ?? false);
             }}
         />,
         <ArticleBodyForm
             key="step2"
-            error={wizard.error}
             form={wizard.step2Form}
             onSubmit={() => wizard.goNext()}
             onImageUpload={wizard.onImageUpload}
             onCoverUpload={wizard.onCoverUpload}
         />,
-        <Flex key="step3" vertical gap={24}>
+        <Flex key="step3" vertical>
             <div>
                 <Title level={5}>Tags</Title>
                 <ArticleTagsForm tagNames={wizard.tagNames} onTagsChange={wizard.onTagsChange} />
             </div>
-            <Divider />
+            <Divider size="small" />
             <div>
                 <Title level={5}>SEO</Title>
-                <ArticleSeoForm form={wizard.seoForm} error={wizard.error} onSubmit={() => {}} />
+                <ArticleSeoForm form={wizard.seoForm} onSubmit={() => {}} />
             </div>
         </Flex>,
         <ArticleCreateSummary key="step4" article={wizard.article} />

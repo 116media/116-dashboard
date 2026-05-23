@@ -221,7 +221,8 @@ input {
     }
 }
 
-[class~="ant-input-data-count"]{
+[class~="ant-input-data-count"],
+[class~="ant-input-show-count-suffix"] {
     font-size: 9.5pt;
 }
 
@@ -323,4 +324,8 @@ input {
 
 [class~="rc-virtual-list-holder-inner"]{
     gap: 4px;
+}
+
+iframe {
+    border: none !important;
 }

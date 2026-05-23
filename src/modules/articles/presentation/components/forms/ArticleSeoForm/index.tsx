@@ -19,7 +19,7 @@ const { TextArea } = Input;
  */
 interface IArticleSeoFormProps {
     form: FormInstance<IUpdateArticleSeoCredentials>;
-    error: Failure | null | undefined;
+    error?: Failure | null | undefined;
     onSubmit: (values: IUpdateArticleSeoCredentials) => void;
 }
 
@@ -62,9 +62,9 @@ const ArticleSeoForm: FC<IArticleSeoFormProps> = ({ form, error, onSubmit }) => 
                 rules={ArticlesSeoValidator.metaDescription("Description SEO")}
             >
                 <TextArea
-                    maxLength={160}
-                    showCount
                     rows={3}
+                    showCount
+                    maxLength={160}
                     placeholder="Description SEO de l'article"
                 />
             </Item>

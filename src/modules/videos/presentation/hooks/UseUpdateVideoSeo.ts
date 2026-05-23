@@ -2,7 +2,9 @@ import type { FormInstance } from "antd";
 import { Form } from "antd";
 import { useEffect, useState } from "react";
 import type { IVideoEntity } from "@/modules/videos/domain/entities/IVideoEntity";
+import type { IVideoSummaryEntity } from "@/modules/videos/domain/entities/IVideoSummaryEntity";
 import type { IUpdateVideoSeoCredentials } from "@/modules/videos/presentation/model/IUpdateVideoSeoCredentials";
+import { getVideoByIdAction } from "@/modules/videos/presentation/store/getvideobyid.action";
 import {
     resetUpdateVideoSeoAction,
     updateVideoSeoAction
@@ -41,7 +43,7 @@ interface IUseUpdateVideoSeo {
  * @returns Form instance, loading/error state, success message, and submit handler
  */
 export const useUpdateVideoSeo = (
-    video: IVideoEntity | null,
+    video: IVideoSummaryEntity | null,
     onSuccess?: () => void
 ): IUseUpdateVideoSeo => {
     const dispatch = useAppDispatch();
@@ -51,13 +53,21 @@ export const useUpdateVideoSeo = (
     const { loading, error } = useAppSelector(({ videos: { updateVideoSeo } }) => updateVideoSeo);
 
     useEffect(() => {
-        if (video) {
-            form.setFieldsValue({
-                metaTitle: video.metaTitle ?? "",
-                metaDescription: video.metaDescription ?? ""
-            });
-        }
-    }, [video, form]);
+        if (!video?.id) return;
+
+        const fetchDetail = async () => {
+            const result = await dispatch(getVideoByIdAction(video.id));
+            if (getVideoByIdAction.fulfilled.match(result)) {
+                const detail = result.payload as IVideoEntity;
+                form.setFieldsValue({
+                    metaTitle: detail.metaTitle ?? "",
+                    metaDescription: detail.metaDescription ?? ""
+                });
+            }
+        };
+
+        fetchDetail();
+    }, [video, dispatch, form]);
 
     const onSubmit = async (values: IUpdateVideoSeoCredentials): Promise<void> => {
         if (!video) return;

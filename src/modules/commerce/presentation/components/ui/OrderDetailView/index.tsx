@@ -79,7 +79,7 @@ const OrderDetailView: FC<IOrderDetailViewProps> = ({
 
     return (
         <div>
-            <Space orientation="vertical" size="large" style={{ width: "100%" }}>
+            <Space orientation="vertical" size="large">
                 <OrderHeaderCard
                     order={order}
                     isDraft={isDraft}

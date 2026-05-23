@@ -1,13 +1,4 @@
 /**
- * Upload preset configuration for the shared FileUploader.
- *
- * @description
- * Each preset defines the accepted file extensions, max size,
- * and whether cropping is supported. Presets match the backend
- * validation rules in `FileConstants.cs` and `CloudinaryService.cs`.
- */
-
-/**
  * Accepted file extension configuration.
  *
  * @interface IUploadPreset
@@ -19,23 +10,23 @@
  * @property {string} hint - French hint text shown below the dropzone
  */
 export interface IUploadPreset {
-    extensions: string[];
+    hint: string;
     accept: string;
     maxSizeMB: number;
     croppable: boolean;
-    hint: string;
+    extensions: string[];
 }
 
 /**
  * Image-only preset for article images, video/short thumbnails.
- * Matches backend `ValidateFile()` — 1 MB, images only.
+ * Matches backend `ValidateFile()` — 2 MB, images only.
  */
 export const IMAGE_PRESET: IUploadPreset = {
-    extensions: [".jpg", ".jpeg", ".png", ".gif", ".webp"],
-    accept: "image/jpeg,image/jpg,image/png,image/gif,image/webp",
-    maxSizeMB: 1,
+    maxSizeMB: 2,
     croppable: true,
-    hint: "JPG, PNG, GIF ou WebP — 1 Mo max"
+    hint: "JPG, PNG, GIF ou WebP — 2 Mo max",
+    extensions: [".jpg", ".jpeg", ".png", ".gif", ".webp"],
+    accept: "image/jpeg,image/jpg,image/png,image/gif,image/webp"
 };
 
 /**
@@ -43,35 +34,35 @@ export const IMAGE_PRESET: IUploadPreset = {
  * Matches backend `ValidateRawFile()` — 5 MB, images + PDF.
  */
 export const RAW_FILE_PRESET: IUploadPreset = {
-    extensions: [".jpg", ".jpeg", ".png", ".gif", ".webp", ".pdf"],
-    accept: "image/jpeg,image/jpg,image/png,image/gif,image/webp,application/pdf",
     maxSizeMB: 5,
     croppable: true,
-    hint: "JPG, PNG, GIF, WebP ou PDF — 5 Mo max"
+    hint: "JPG, PNG, GIF, WebP ou PDF — 5 Mo max",
+    extensions: [".jpg", ".jpeg", ".png", ".gif", ".webp", ".pdf"],
+    accept: "image/jpeg,image/jpg,image/png,image/gif,image/webp,application/pdf"
 };
 
 /**
  * Avatar preset for profile pictures.
- * Matches backend `ValidateFile()` — 1 MB, images only, always croppable.
+ * Matches backend `ValidateFile()` — 2 MB, images only, always croppable.
  */
 export const AVATAR_PRESET: IUploadPreset = {
-    extensions: [".jpg", ".jpeg", ".png", ".gif", ".webp"],
-    accept: "image/jpeg,image/jpg,image/png,image/gif,image/webp",
-    maxSizeMB: 1,
+    maxSizeMB: 2,
     croppable: true,
-    hint: "JPG, PNG, GIF ou WebP — 1 Mo max"
+    hint: "JPG, PNG, GIF ou WebP — 2 Mo max",
+    extensions: [".jpg", ".jpeg", ".png", ".gif", ".webp"],
+    accept: "image/jpeg,image/jpg,image/png,image/gif,image/webp"
 };
 
 /**
  * Video file preset for short video uploads.
- * Matches backend `ValidateVideoFile()` — 100 MB, video formats only.
+ * Matches backend `ValidateVideoFile()` — 350 MB, video formats only.
  */
 export const VIDEO_PRESET: IUploadPreset = {
-    extensions: [".mp4", ".mov", ".webm", ".avi", ".mkv", ".3gp"],
-    accept: "video/mp4,video/quicktime,video/webm,video/x-msvideo,video/x-matroska,video/3gpp",
-    maxSizeMB: 100,
+    maxSizeMB: 350,
     croppable: false,
-    hint: "MP4, MOV, WebM, AVI ou MKV — 100 Mo max"
+    hint: "MP4, MOV, WebM, AVI ou MKV — 350 Mo max",
+    extensions: [".mp4", ".mov", ".webm", ".avi", ".mkv", ".3gp"],
+    accept: "video/mp4,video/quicktime,video/webm,video/x-msvideo,video/x-matroska,video/3gpp"
 };
 
 /**

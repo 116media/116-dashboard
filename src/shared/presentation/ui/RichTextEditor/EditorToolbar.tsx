@@ -49,6 +49,16 @@ const EditorToolbar: FC<IEditorToolbarProps> = ({ editor, onImageUpload, mode = 
         fileInputRef.current?.click();
     };
 
+    const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (!file || !onImageUpload) return;
+
+        const url = await onImageUpload(file);
+        editor.chain().focus().setImage({ src: url }).run();
+
+        e.target.value = "";
+    };
+
     const handleLinkConfirm = () => {
         if (linkUrl) {
             editor.chain().focus().setLink({ href: linkUrl, target: "_blank" }).run();
@@ -256,6 +266,13 @@ const EditorToolbar: FC<IEditorToolbarProps> = ({ editor, onImageUpload, mode = 
                             onClick={handleImageClick}
                         />
                     </Tooltip>
+                    <input
+                        ref={fileInputRef}
+                        type="file"
+                        accept="image/*"
+                        style={{ display: "none" }}
+                        onChange={handleImageChange}
+                    />
 
                     {/* Embed (YouTube, Facebook, Instagram, TikTok) */}
                     <Popover

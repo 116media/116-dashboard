@@ -1067,6 +1067,7 @@ export interface ArticleDetailDto {
   authorId: string;
   status: EnumContentStatus;
   rejectionReason?: string | null;
+  socialBoost: boolean;
   isFeatured: boolean;
   /** @format date-time */
   featuredUntil?: string | null;
@@ -2045,6 +2046,7 @@ export interface VideoDetailDto {
   status: EnumContentStatus;
   rejectionReason?: string | null;
   youtubeVideoUrl?: string | null;
+  socialBoost: boolean;
   isFeatured: boolean;
   /** @format date-time */
   featuredUntil?: string | null;

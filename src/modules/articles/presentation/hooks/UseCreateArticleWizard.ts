@@ -38,7 +38,6 @@ interface IUseCreateArticleWizard {
     goBack: () => void;
     onSubmit: () => Promise<void>;
     reset: () => void;
-    setSocialBoost: (value: boolean) => void;
 }
 
 /**
@@ -59,7 +58,6 @@ export const useCreateArticleWizard = (onSuccess: () => void): IUseCreateArticle
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<Failure | null | undefined>(null);
     const [tagNames, setTagNames] = useState<string[]>([]);
-    const [socialBoost, setSocialBoost] = useState(false);
 
     const [step1Form] = useForm<ICreateArticleCredentials>();
     const [step2Form] = useForm<IWizardStep2Credentials>();
@@ -161,8 +159,9 @@ export const useCreateArticleWizard = (onSuccess: () => void): IUseCreateArticle
                     headline: values.headline,
                     body: values.body,
                     coverImageUrl: values.coverImageUrl,
-                    socialBoost,
-                    isFeatured: false
+                    socialBoost: step1Form.getFieldValue("socialBoost") ?? false,
+                    isFeatured: step1Form.getFieldValue("isFeatured") ?? false,
+                    featuredUntil: step1Form.getFieldValue("featuredUntil") ?? null
                 }
             })
         );
@@ -242,7 +241,6 @@ export const useCreateArticleWizard = (onSuccess: () => void): IUseCreateArticle
         setLoading(false);
         setError(null);
         setTagNames([]);
-        setSocialBoost(false);
         step1Form.resetFields();
         step2Form.resetFields();
         seoForm.resetFields();
@@ -264,7 +262,6 @@ export const useCreateArticleWizard = (onSuccess: () => void): IUseCreateArticle
         goNext,
         goBack,
         onSubmit: onSubmitFinal,
-        reset,
-        setSocialBoost
+        reset
     };
 };
