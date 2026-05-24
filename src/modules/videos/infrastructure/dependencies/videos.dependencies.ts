@@ -5,6 +5,7 @@ import { ArchiveVideoUseCase } from "@/modules/videos/application/usecases/archi
 import { AttachYoutubeVideoUrlUseCase } from "@/modules/videos/application/usecases/attachyoutubeid.usecase";
 import { CreateVideoUseCase } from "@/modules/videos/application/usecases/createvideo.usecase";
 import { DeleteVideoUseCase } from "@/modules/videos/application/usecases/deletevideo.usecase";
+import { GetActiveVideosUseCase } from "@/modules/videos/application/usecases/getactivevideos.usecase";
 import { GetAllVideosUseCase } from "@/modules/videos/application/usecases/getallvideos.usecase";
 import { GetVideoByIdUseCase } from "@/modules/videos/application/usecases/getvideobyid.usecase";
 import { PublishVideoUseCase } from "@/modules/videos/application/usecases/publishvideo.usecase";
@@ -33,6 +34,7 @@ export function registerVideosDependencies(container: AwilixContainer): void {
 
         // Queries
         getAllVideosUseCase: asClass(GetAllVideosUseCase).transient(),
+        getActiveVideosUseCase: asClass(GetActiveVideosUseCase).transient(),
         getVideoByIdUseCase: asClass(GetVideoByIdUseCase).transient(),
 
         // Commands -- CRUD

@@ -13,5 +13,6 @@ export const lyricsInitialState: ILyricsState = {
     getLyrics: createInitialState(),
     createLyrics: createInitialState(),
     updateLyrics: createInitialState(),
-    updateLyricsSeo: createInitialState()
+    updateLyricsSeo: createInitialState(),
+    deleteLyrics: createInitialState()
 };

@@ -13,6 +13,7 @@ export const shortsInitialState: IShortsState = {
     getShorts: createInitialState(),
     getShortById: createInitialState(),
     createShort: createInitialState(),
+    updateShort: createInitialState(),
     activateShort: createInitialState(),
     deactivateShort: createInitialState(),
     deleteShort: createInitialState(),

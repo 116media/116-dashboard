@@ -14,6 +14,7 @@ export type IShortsState = {
     getShorts: IBasicInitialState<IPaginatedResult<IShortVideoEntity>>;
     getShortById: IBasicInitialState<IShortVideoEntity>;
     createShort: IBasicInitialState<IShortVideoEntity>;
+    updateShort: IBasicInitialState<IShortVideoEntity>;
     activateShort: IBasicInitialState<IShortActionResponse>;
     deactivateShort: IBasicInitialState<IShortActionResponse>;
     deleteShort: IBasicInitialState<IShortActionResponse>;

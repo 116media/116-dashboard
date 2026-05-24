@@ -18,6 +18,7 @@ interface IUseVideoModals {
     thumbnailOpen: boolean;
     youtubeOpen: boolean;
     shootOpen: boolean;
+    createShortOpen: boolean;
     currentAction: VideoAction | null;
     selectedEntity: IVideoSummaryEntity | null;
     setCreateOpen: (open: boolean) => void;
@@ -28,6 +29,7 @@ interface IUseVideoModals {
     setThumbnailOpen: (open: boolean) => void;
     setYoutubeOpen: (open: boolean) => void;
     setShootOpen: (open: boolean) => void;
+    setCreateShortOpen: (open: boolean) => void;
     handleAction: (action: VideoAction, entity: IVideoSummaryEntity) => void;
     handleActionConfirm: (
         actionMap: Record<string, (id: string) => Promise<void>>
@@ -56,6 +58,7 @@ export const useVideoModals = (reload: () => void): IUseVideoModals => {
     const [thumbnailOpen, setThumbnailOpen] = useState(false);
     const [youtubeOpen, setYoutubeOpen] = useState(false);
     const [shootOpen, setShootOpen] = useState(false);
+    const [createShortOpen, setCreateShortOpen] = useState(false);
 
     const [currentAction, setCurrentAction] = useState<VideoAction | null>(null);
     const [selectedEntity, setSelectedEntity] = useState<IVideoSummaryEntity | null>(null);
@@ -87,6 +90,9 @@ export const useVideoModals = (reload: () => void): IUseVideoModals => {
                     break;
                 case "shoot":
                     setShootOpen(true);
+                    break;
+                case "createShort":
+                    setCreateShortOpen(true);
                     break;
                 default:
                     setCurrentAction(action);
@@ -120,6 +126,7 @@ export const useVideoModals = (reload: () => void): IUseVideoModals => {
         thumbnailOpen,
         youtubeOpen,
         shootOpen,
+        createShortOpen,
         currentAction,
         selectedEntity,
         setCreateOpen,
@@ -130,6 +137,7 @@ export const useVideoModals = (reload: () => void): IUseVideoModals => {
         setThumbnailOpen,
         setYoutubeOpen,
         setShootOpen,
+        setCreateShortOpen,
         handleAction,
         handleActionConfirm
     };

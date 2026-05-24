@@ -1,6 +1,7 @@
 import { Table } from "antd";
 import type { FC } from "react";
 import { useAuthorization } from "@/modules/auth/presentation/hooks/UseAuthorization";
+import ShortDetailsForm from "@/modules/shorts/presentation/components/forms/ShortDetailsForm";
 import ShortVideoForm from "@/modules/shorts/presentation/components/forms/ShortVideoForm";
 import { shortsTableColumns } from "@/modules/shorts/presentation/components/tables/ShortsTable/columns";
 import ShortActionModal from "@/modules/shorts/presentation/components/ui/ShortActionModal";
@@ -10,6 +11,7 @@ import { useCreateShort } from "@/modules/shorts/presentation/hooks/UseCreateSho
 import { useShortActions } from "@/modules/shorts/presentation/hooks/UseShortActions";
 import { useShortModals } from "@/modules/shorts/presentation/hooks/UseShortModals";
 import { useShortsList } from "@/modules/shorts/presentation/hooks/UseShortsList";
+import { useUpdateShort } from "@/modules/shorts/presentation/hooks/UseUpdateShort";
 import { uploadShortThumbnailAction } from "@/modules/shorts/presentation/store/uploadshortthumbnail.action";
 import { ShortsNotification } from "@/modules/shorts/presentation/utils/notification/shorts.notification";
 import { useResizableColumns } from "@/shared/presentation/hooks/UseResizableColumns";
@@ -37,8 +39,9 @@ const ShortsListContainer: FC = () => {
     const list = useShortsList();
     const modals = useShortModals(list.reload);
     const createShort = useCreateShort(list.reload);
+    const updateShort = useUpdateShort(modals.selectedEntity, list.reload);
     const actions = useShortActions(list.reload);
-    const { isSuperAdmin } = useAuthorization();
+    const { isSuperAdmin, isAdminOrSuperAdmin } = useAuthorization();
 
     const { loading: thumbnailLoading } = useAppSelector(
         ({ shorts: { uploadShortThumbnail } }) => uploadShortThumbnail
@@ -61,7 +64,7 @@ const ShortsListContainer: FC = () => {
     };
 
     const { columns: tableColumns } = useResizableColumns(
-        shortsTableColumns(modals.handleAction, isSuperAdmin)
+        shortsTableColumns(modals.handleAction, isSuperAdmin, isAdminOrSuperAdmin)
     );
 
     return (
@@ -70,10 +73,10 @@ const ShortsListContainer: FC = () => {
 
             <PageHeader
                 title="Réels"
+                createLabel="Créer un réel"
                 icon={<IconPlaySquareOutlined />}
                 subtitle="Gérer les vidéos courtes."
-                onCreate={isSuperAdmin ? () => modals.setCreateOpen(true) : undefined}
-                createLabel="Créer un réel"
+                onCreate={isAdminOrSuperAdmin ? () => modals.setCreateOpen(true) : undefined}
             />
 
             <TableToolbar
@@ -106,13 +109,16 @@ const ShortsListContainer: FC = () => {
             {modals.createOpen && (
                 <CreateEditModal
                     width={480}
-                    open={modals.createOpen}
                     formContext="CREATE"
+                    open={modals.createOpen}
                     loading={createShort.loading}
                     success={createShort.success}
                     onSubmit={() => createShort.form.submit()}
-                    onClose={() => modals.setCreateOpen(false)}
                     afterClose={() => createShort.resetCreate()}
+                    onClose={() => {
+                        modals.setCreateOpen(false);
+                        createShort.resetCreate();
+                    }}
                     title={{
                         create: "Créer un réel",
                         edit: "Modifier le réel"
@@ -133,12 +139,46 @@ const ShortsListContainer: FC = () => {
                 </CreateEditModal>
             )}
 
+            {modals.editOpen && (
+                <CreateEditModal
+                    width={480}
+                    formContext="EDIT"
+                    open={modals.editOpen}
+                    loading={updateShort.loading}
+                    success={updateShort.success}
+                    onSubmit={updateShort.onSubmit}
+                    onClose={() => {
+                        modals.setEditOpen(false);
+                        updateShort.resetUpdate();
+                    }}
+                    afterClose={() => updateShort.resetUpdate()}
+                    title={{
+                        create: "Créer un réel",
+                        edit: "Modifier le réel"
+                    }}
+                    onSuccessClose={() => {
+                        modals.setEditOpen(false);
+                        updateShort.resetUpdate();
+                        list.reload();
+                    }}
+                >
+                    <ShortDetailsForm
+                        form={updateShort.form}
+                        error={updateShort.error}
+                        videoFile={updateShort.videoFile}
+                        currentVideoUrl={modals.selectedEntity?.videoUrl}
+                        onVideoFileChange={updateShort.setVideoFile}
+                        onSubmit={updateShort.onSubmit}
+                    />
+                </CreateEditModal>
+            )}
+
             <ShortActionModal
+                error={actions.error}
                 open={modals.actionOpen}
+                loading={actions.loading}
                 action={modals.currentAction}
                 short={modals.selectedEntity}
-                loading={actions.loading}
-                error={actions.error}
                 onConfirm={() =>
                     modals.handleActionConfirm({
                         activate: actions.onActivate,
@@ -151,11 +191,12 @@ const ShortsListContainer: FC = () => {
 
             {modals.thumbnailOpen && (
                 <ShortThumbnailUploadModal
-                    open={modals.thumbnailOpen}
                     loading={thumbnailLoading}
+                    open={modals.thumbnailOpen}
                     shortId={modals.selectedEntity?.id ?? null}
-                    onUpload={handleThumbnailUpload}
+                    currentThumbnailUrl={modals.selectedEntity?.thumbnailUrl}
                     onCancel={() => modals.setThumbnailOpen(false)}
+                    onUpload={handleThumbnailUpload}
                 />
             )}
         </>

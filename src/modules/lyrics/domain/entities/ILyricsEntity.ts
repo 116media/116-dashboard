@@ -1,3 +1,5 @@
+import type { IAuthorEntity } from "@/shared/domain/entities/IAuthorEntity";
+
 /**
  * Domain entity for a lyrics record.
  *
@@ -11,7 +13,8 @@
  * @property {string | null} videoId - Optional linked video UUID
  * @property {string | null} metaTitle - SEO meta title
  * @property {string | null} metaDescription - SEO meta description
- * @property {string | null} metaKeywords - SEO meta keywords
+ * @property {string} authorId - UUID of the author
+ * @property {IAuthorEntity | null} author - Resolved author profile
  * @property {string | null} createdAt - ISO creation timestamp
  * @property {string | null} updatedAt - ISO last-update timestamp
  * @property {string | null} createdBy - UUID of the creating admin
@@ -26,7 +29,8 @@ export interface ILyricsEntity {
     videoId?: string | null;
     metaTitle?: string | null;
     metaDescription?: string | null;
-    metaKeywords?: string | null;
+    authorId: string;
+    author?: IAuthorEntity | null;
     createdAt?: string | null;
     updatedAt?: string | null;
     createdBy?: string | null;

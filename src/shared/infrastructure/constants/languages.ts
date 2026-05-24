@@ -924,3 +924,13 @@ export const LANGUAGE_LIST: ILanguageObject[] = [
         nativeName: "Saɯ cueŋƅ, Saw cuengh"
     }
 ];
+
+const LANGUAGE_MAP = new Map(LANGUAGE_LIST.map((l) => [l.code, l]));
+
+/**
+ * Resolves an ISO 639-1 language code to its English name.
+ *
+ * @param code - ISO 639-1 two-letter code (e.g., "fr", "en")
+ * @returns The English language name, or the raw code if not found
+ */
+export const getLanguageName = (code: string): string => LANGUAGE_MAP.get(code)?.name ?? code;

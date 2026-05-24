@@ -1,3 +1,5 @@
+import type { IAuthorEntity } from "@/shared/domain/entities/IAuthorEntity";
+
 /**
  * Domain entity for a short video.
  *
@@ -14,6 +16,8 @@
  * @property {number} likeCount - Total number of likes
  * @property {number} shareCount - Total number of shares
  * @property {number} bookmarkCount - Total number of bookmarks
+ * @property {string} authorId - UUID of the author (identity user)
+ * @property {IAuthorEntity | null} author - Author profile (identity user snapshot)
  * @property {string | null} createdAt - ISO creation timestamp
  * @property {string | null} updatedAt - ISO last-update timestamp
  * @property {string | null} createdBy - UUID of the creating admin
@@ -25,12 +29,15 @@ export interface IShortVideoEntity {
     slug: string;
     videoUrl: string;
     thumbnailUrl?: string | null;
+    videoId?: string | null;
     hasFullVideo: boolean;
     isActive: boolean;
     viewCount: number;
     likeCount: number;
     shareCount: number;
     bookmarkCount: number;
+    authorId: string;
+    author?: IAuthorEntity | null;
     createdAt?: string | null;
     updatedAt?: string | null;
     createdBy?: string | null;

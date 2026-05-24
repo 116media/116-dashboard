@@ -1,16 +1,17 @@
-import { Form, Table } from "antd";
+import { Table } from "antd";
 import type { FC } from "react";
 import { useEffect } from "react";
 import { useAuthorization } from "@/modules/auth/presentation/hooks/UseAuthorization";
 import LyricsForm from "@/modules/lyrics/presentation/components/forms/LyricsForm";
 import { lyricsTableColumns } from "@/modules/lyrics/presentation/components/tables/LyricsTable/columns";
+import LyricsActionModal from "@/modules/lyrics/presentation/components/ui/LyricsActionModal";
 import LyricsSeoModal from "@/modules/lyrics/presentation/components/ui/LyricsSeoModal";
 import { useCreateLyrics } from "@/modules/lyrics/presentation/hooks/UseCreateLyrics";
+import { useLyricsActions } from "@/modules/lyrics/presentation/hooks/UseLyricsActions";
 import { useLyricsList } from "@/modules/lyrics/presentation/hooks/UseLyricsList";
 import { useLyricsModals } from "@/modules/lyrics/presentation/hooks/UseLyricsModals";
 import { useUpdateLyrics } from "@/modules/lyrics/presentation/hooks/UseUpdateLyrics";
 import { useUpdateLyricsSeo } from "@/modules/lyrics/presentation/hooks/UseUpdateLyricsSeo";
-import { LyricsContentValidator } from "@/modules/lyrics/presentation/utils/validators/lyrics.content.validator";
 import { getVideosAction } from "@/modules/videos/presentation/store/getvideos.action";
 import { useResizableColumns } from "@/shared/presentation/hooks/UseResizableColumns";
 import { useAppDispatch } from "@/shared/presentation/store/store";
@@ -19,10 +20,7 @@ import ErrorAlert from "@/shared/presentation/ui/ErrorAlert";
 import { IconFileTextOutlined } from "@/shared/presentation/ui/Icons";
 import PageHeader from "@/shared/presentation/ui/PageHeader";
 import ResizableTitle from "@/shared/presentation/ui/ResizableTable";
-import RichTextEditor from "@/shared/presentation/ui/RichTextEditor";
 import TableToolbar from "@/shared/presentation/ui/TableToolbar";
-
-const { Item } = Form;
 
 /**
  * Container for the lyrics list page.
@@ -37,6 +35,7 @@ const LyricsListContainer: FC = () => {
     const dispatch = useAppDispatch();
     const list = useLyricsList();
     const modals = useLyricsModals(list.reload);
+    const actions = useLyricsActions(list.reload);
     const createLyrics = useCreateLyrics(list.reload);
     const updateLyrics = useUpdateLyrics(modals.selectedEntity, list.reload);
     const updateSeo = useUpdateLyricsSeo(modals.selectedEntity, list.reload);
@@ -56,10 +55,10 @@ const LyricsListContainer: FC = () => {
 
             <PageHeader
                 title="Paroles"
-                subtitle="Gérer les paroles de chansons."
                 icon={<IconFileTextOutlined />}
-                onCreate={isSuperAdmin ? () => modals.setCreateOpen(true) : undefined}
                 createLabel="Créer des paroles"
+                subtitle="Gérer les paroles de chansons."
+                onCreate={isSuperAdmin ? () => modals.setCreateOpen(true) : undefined}
             />
 
             <TableToolbar
@@ -137,27 +136,11 @@ const LyricsListContainer: FC = () => {
                         list.reload();
                     }}
                 >
-                    <Form
+                    <LyricsForm
                         form={updateLyrics.form}
-                        size="large"
-                        layout="vertical"
-                        onFinish={updateLyrics.onSubmit}
-                        name="lyrics_edit_form"
-                        validateTrigger={["onSubmit", "onBlur"]}
-                    >
-                        <ErrorAlert error={updateLyrics.error} showIcon closable banner={false} />
-                        <Item
-                            name="lyricsText"
-                            label="Paroles"
-                            rules={LyricsContentValidator.lyricsText("Paroles")}
-                        >
-                            <RichTextEditor
-                                mode="simple"
-                                minHeight={200}
-                                placeholder="Texte des paroles"
-                            />
-                        </Item>
-                    </Form>
+                        error={updateLyrics.error}
+                        onSubmit={updateLyrics.onSubmit}
+                    />
                 </CreateEditModal>
             )}
 
@@ -181,6 +164,20 @@ const LyricsListContainer: FC = () => {
                     }}
                 />
             )}
+
+            <LyricsActionModal
+                error={actions.error}
+                open={modals.actionOpen}
+                loading={actions.loading}
+                action={modals.currentAction}
+                lyrics={modals.selectedEntity}
+                onConfirm={() =>
+                    modals.handleActionConfirm({
+                        delete: actions.onDelete
+                    })
+                }
+                onCancel={() => modals.setActionOpen(false)}
+            />
         </>
     );
 };

@@ -51,6 +51,15 @@ export class VideosRepositoryImpl implements IVideosRepositoryPort {
         }
     }
 
+    async getActiveVideos(): Promise<Result<IVideoSummaryEntity[]>> {
+        try {
+            const response = await apiClient.api.adminGetActiveVideos();
+            return ok(response.data.videos.map(VideosMapper.videoSummaryFromDto));
+        } catch (error) {
+            return err(ProblemMapper.toFailure(error));
+        }
+    }
+
     async getVideoById(id: string): Promise<Result<IVideoEntity>> {
         try {
             const response = await apiClient.api.adminGetVideoById(id);

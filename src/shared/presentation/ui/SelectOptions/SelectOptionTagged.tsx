@@ -1,5 +1,6 @@
 import { Flex, Tag, Typography } from "antd";
 import type { ReactNode } from "react";
+import styles from "./index.module.scss";
 
 const { Text } = Typography;
 
@@ -15,13 +16,13 @@ const SelectOptionTagged = (option: {
     label?: ReactNode;
     data: { tag?: string; secondary?: string };
 }) => (
-    <Flex justify="space-between" align="center" gap={16}>
+    <Flex justify="space-between" align="center" gap={16} className={styles.selectOption__row}>
         <Flex gap={8} align="center">
             {option.data.tag && <Tag color="purple-inverse">{option.data.tag}</Tag>}
             <span>{option.label}</span>
         </Flex>
         {option.data.secondary && (
-            <Text type="secondary" style={{ fontSize: 12 }}>
+            <Text type="secondary" className={styles.selectOption__secondary}>
                 {option.data.secondary}
             </Text>
         )}

@@ -33,6 +33,13 @@ export interface IVideosRepositoryPort {
     ): Promise<Result<IPaginatedResult<IVideoSummaryEntity>>>;
 
     /**
+     * Fetches all active videos (excluding Archived and Rejected).
+     *
+     * @returns Unpaginated list of active video summaries
+     */
+    getActiveVideos(): Promise<Result<IVideoSummaryEntity[]>>;
+
+    /**
      * Fetches a single video by its ID.
      *
      * @param id - The video UUID

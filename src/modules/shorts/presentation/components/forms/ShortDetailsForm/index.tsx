@@ -1,7 +1,7 @@
 import type { FormInstance } from "antd";
 import { Form, Input, Select } from "antd";
 import { type FC, useEffect, useMemo } from "react";
-import type { ICreateShortCredentials } from "@/modules/shorts/presentation/model/ICreateShortCredentials";
+import type { IUpdateShortCredentials } from "@/modules/shorts/presentation/model/IUpdateShortCredentials";
 import { ShortsContentValidator } from "@/modules/shorts/presentation/utils/validators/shorts.content.validator";
 import type { IVideoSummaryEntity } from "@/modules/videos/domain/entities/IVideoSummaryEntity";
 import { getActiveVideosAction } from "@/modules/videos/presentation/store/getactivevideos.action";
@@ -15,32 +15,35 @@ import VideoPlayer from "@/shared/presentation/ui/VideoPlayer";
 
 const { Item } = Form;
 
-interface IShortVideoFormProps {
+interface IShortDetailsFormProps {
+    form: FormInstance<IUpdateShortCredentials>;
+    error?: Failure | null | undefined;
     videoFile: File | null;
-    error: Failure | null | undefined;
-    form: FormInstance<ICreateShortCredentials>;
+    currentVideoUrl?: string | null;
     onVideoFileChange: (file: File | null) => void;
-    onSubmit: (values: ICreateShortCredentials) => void;
+    onSubmit: () => Promise<void>;
 }
 
 /**
- * Form for creating a new short video.
+ * Form for editing a short video.
  *
  * @component
  *
  * @description
- * Renders title, video select (from active videos), and a file
- * upload using the shared FileUploader in deferred mode with video
- * preset. Shows a Plyr-powered video preview when a file is selected.
+ * Renders title, video select (from active videos), and optional
+ * video file replacement using the shared FileUploader in deferred
+ * mode. Shows a video preview for the current or new file.
  */
-const ShortVideoForm: FC<IShortVideoFormProps> = ({
+const ShortDetailsForm: FC<IShortDetailsFormProps> = ({
     form,
     error,
     videoFile,
+    currentVideoUrl,
     onVideoFileChange,
     onSubmit
 }) => {
     const dispatch = useAppDispatch();
+
     const { data: videos, loading: videosLoading } = useAppSelector(
         ({ videos: { getActiveVideos } }) => getActiveVideos
     );
@@ -70,7 +73,7 @@ const ShortVideoForm: FC<IShortVideoFormProps> = ({
             size="large"
             layout="vertical"
             onFinish={onSubmit}
-            name="short_video_create_form"
+            name="short_details_form"
             validateTrigger={["onSubmit", "onBlur"]}
         >
             <ErrorAlert error={error} showIcon closable banner={false} />
@@ -90,7 +93,7 @@ const ShortVideoForm: FC<IShortVideoFormProps> = ({
                 />
             </Item>
 
-            <Item label="Fichier vidéo" required>
+            <Item label="Remplacer le fichier vidéo">
                 <FileUploader
                     mode="deferred"
                     showPreview={false}
@@ -100,9 +103,11 @@ const ShortVideoForm: FC<IShortVideoFormProps> = ({
                 />
             </Item>
 
-            {previewUrl && <VideoPlayer src={previewUrl} maxHeight={400} />}
+            {(previewUrl || currentVideoUrl) && (
+                <VideoPlayer src={previewUrl ?? currentVideoUrl} maxHeight={400} />
+            )}
         </Form>
     );
 };
 
-export default ShortVideoForm;
+export default ShortDetailsForm;

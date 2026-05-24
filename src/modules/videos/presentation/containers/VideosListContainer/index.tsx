@@ -4,6 +4,8 @@ import { useAuthorization } from "@/modules/auth/presentation/hooks/UseAuthoriza
 import { getAllCategoriesAction } from "@/modules/catalog/presentation/store/getallcategories.action";
 import { getAllCustomersAction } from "@/modules/catalog/presentation/store/getallcustomers.action";
 import { getTagsAction } from "@/modules/lookup/presentation/store/gettags.action";
+import ShortVideoForm from "@/modules/shorts/presentation/components/forms/ShortVideoForm";
+import { useCreateShort } from "@/modules/shorts/presentation/hooks/UseCreateShort";
 import type { IVideoEntity } from "@/modules/videos/domain/entities/IVideoEntity";
 import VideoDetailsForm from "@/modules/videos/presentation/components/forms/VideoDetailsForm";
 import { videosTableColumns } from "@/modules/videos/presentation/components/tables/VideosTable/columns";
@@ -60,6 +62,7 @@ const VideosListContainer: FC = () => {
     const uploadThumbnail = useUploadVideoThumbnail();
     const attachYoutube = useAttachYoutubeVideoUrl();
     const scheduleShoot = useScheduleShoot(modals.selectedEntity);
+    const createShort = useCreateShort(list.reload);
     const workflow = useVideoWorkflow(list.reload);
     const { isSuperAdmin, isAdminOrSuperAdmin } = useAuthorization();
 
@@ -75,6 +78,12 @@ const VideosListContainer: FC = () => {
             dispatch(getVideoByIdAction(modals.selectedEntity.id));
         }
     }, [dispatch, modals.selectedEntity, modals.editOpen, modals.tagsOpen, modals.seoOpen]);
+
+    useEffect(() => {
+        if (modals.createShortOpen && modals.selectedEntity) {
+            createShort.form.setFieldValue("videoId", modals.selectedEntity.id);
+        }
+    }, [modals.createShortOpen, modals.selectedEntity, createShort.form]);
 
     const { columns: tableColumns } = useResizableColumns(
         videosTableColumns(modals.handleAction, isSuperAdmin, isAdminOrSuperAdmin)
@@ -297,6 +306,39 @@ const VideosListContainer: FC = () => {
                         list.reload();
                     }}
                 />
+            )}
+
+            {modals.createShortOpen && (
+                <CreateEditModal
+                    width={480}
+                    formContext="CREATE"
+                    open={modals.createShortOpen}
+                    loading={createShort.loading}
+                    success={createShort.success}
+                    onSubmit={() => createShort.form.submit()}
+                    onClose={() => {
+                        modals.setCreateShortOpen(false);
+                        createShort.resetCreate();
+                    }}
+                    afterClose={() => createShort.resetCreate()}
+                    title={{
+                        create: "Créer un réel",
+                        edit: "Créer un réel"
+                    }}
+                    onSuccessClose={() => {
+                        modals.setCreateShortOpen(false);
+                        createShort.resetCreate();
+                        list.reload();
+                    }}
+                >
+                    <ShortVideoForm
+                        form={createShort.form}
+                        error={createShort.error}
+                        videoFile={createShort.videoFile}
+                        onVideoFileChange={createShort.setVideoFile}
+                        onSubmit={createShort.onSubmit}
+                    />
+                </CreateEditModal>
             )}
         </>
     );

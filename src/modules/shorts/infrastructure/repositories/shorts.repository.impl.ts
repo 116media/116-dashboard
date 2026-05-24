@@ -4,6 +4,7 @@ import type { IShortVideoEntity } from "@/modules/shorts/domain/entities/IShortV
 import { ShortsMapper } from "@/modules/shorts/infrastructure/mappers/shorts.mapper";
 import type { ICreateShortCredentials } from "@/modules/shorts/presentation/model/ICreateShortCredentials";
 import type { IShortsQueryParams } from "@/modules/shorts/presentation/model/IShortsQueryParams";
+import type { IUpdateShortCredentials } from "@/modules/shorts/presentation/model/IUpdateShortCredentials";
 import type { IUploadShortThumbnailCredentials } from "@/modules/shorts/presentation/model/IUploadShortThumbnailCredentials";
 import type { Result } from "@/shared/domain/results/result";
 import { err, ok } from "@/shared/domain/results/result";
@@ -54,6 +55,22 @@ export class ShortsRepositoryImpl implements IShortsRepositoryPort {
         try {
             const response = await apiClient.api.createShortVideo(
                 { title: data.title, slug: data.slug, videoId: data.videoId },
+                { videoFile: data.videoFile }
+            );
+            return ok(ShortsMapper.shortFromDto(response.data.shortVideo));
+        } catch (error) {
+            return err(ProblemMapper.toFailure(error));
+        }
+    }
+
+    async updateShort(
+        id: string,
+        data: IUpdateShortCredentials
+    ): Promise<Result<IShortVideoEntity>> {
+        try {
+            const response = await apiClient.api.updateShortVideo(
+                id,
+                { title: data.title, videoId: data.videoId },
                 { videoFile: data.videoFile }
             );
             return ok(ShortsMapper.shortFromDto(response.data.shortVideo));

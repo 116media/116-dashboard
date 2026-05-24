@@ -18,6 +18,7 @@ interface IShortThumbnailUploadModalProps {
     open: boolean;
     loading: boolean;
     shortId: string | null;
+    currentThumbnailUrl?: string | null;
     onUpload: (id: string, file: File) => void;
     onCancel: () => void;
 }
@@ -36,6 +37,7 @@ const ShortThumbnailUploadModal: FC<IShortThumbnailUploadModalProps> = ({
     open,
     loading,
     shortId,
+    currentThumbnailUrl,
     onUpload,
     onCancel
 }) => {
@@ -80,10 +82,11 @@ const ShortThumbnailUploadModal: FC<IShortThumbnailUploadModalProps> = ({
                     <div>
                         <FileUploader
                             mode="deferred"
-                            aspectRatio={1}
+                            aspectRatio={9 / 16}
                             preset={IMAGE_PRESET}
-                            onFileSelect={setFile}
+                            value={currentThumbnailUrl}
                             onRemove={() => setFile(null)}
+                            onFileSelect={setFile}
                         />
                     </div>
                 </Form.Item>

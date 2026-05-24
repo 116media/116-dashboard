@@ -13,10 +13,10 @@ import { useAppDispatch, useAppSelector } from "@/shared/presentation/store/stor
  */
 interface IUseLyricsList {
     loading: boolean;
-    error: Failure | null | undefined;
-    lyrics: IPaginatedResult<ILyricsEntity>;
     searchValue: string;
+    error: Failure | null | undefined;
     onSearch: (value: string) => void;
+    lyrics: IPaginatedResult<ILyricsEntity>;
     onSearchChange: (value: string) => void;
     onPageChange: (page: number, pageSize: number) => void;
     reload: () => void;

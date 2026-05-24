@@ -11,6 +11,7 @@ export type VideoAction =
     | "thumbnail"
     | "youtube"
     | "shoot"
+    | "createShort"
     | "submit"
     | "approve"
     | "publish"
@@ -60,6 +61,11 @@ export const VIDEO_DROPDOWN_ITEMS: IVideoDropdownItem[] = [
         key: "youtube",
         label: "Associer YouTube",
         hidden: (r, _, isAdmin) => !isAdmin || !r.canAttachYoutubeUrl
+    },
+    {
+        key: "createShort",
+        label: "Créer un réel",
+        hidden: (_, __, isAdmin) => !isAdmin
     },
     {
         key: "submit",

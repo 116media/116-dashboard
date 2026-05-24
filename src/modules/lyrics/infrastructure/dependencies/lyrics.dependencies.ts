@@ -1,6 +1,7 @@
 import type { AwilixContainer } from "awilix";
 import { asClass } from "awilix";
 import { CreateLyricsUseCase } from "@/modules/lyrics/application/usecases/createlyrics.usecase";
+import { DeleteLyricsUseCase } from "@/modules/lyrics/application/usecases/deletelyrics.usecase";
 import { GetAllLyricsUseCase } from "@/modules/lyrics/application/usecases/getalllyrics.usecase";
 import { UpdateLyricsUseCase } from "@/modules/lyrics/application/usecases/updatelyrics.usecase";
 import { UpdateLyricsSeoUseCase } from "@/modules/lyrics/application/usecases/updatelyricsseo.usecase";
@@ -28,6 +29,9 @@ export function registerLyricsDependencies(container: AwilixContainer): void {
         updateLyricsUseCase: asClass(UpdateLyricsUseCase).transient(),
 
         // Commands — SEO
-        updateLyricsSeoUseCase: asClass(UpdateLyricsSeoUseCase).transient()
+        updateLyricsSeoUseCase: asClass(UpdateLyricsSeoUseCase).transient(),
+
+        // Commands — Delete
+        deleteLyricsUseCase: asClass(DeleteLyricsUseCase).transient()
     });
 }

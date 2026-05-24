@@ -43,5 +43,17 @@ export const LyricsNotification = {
         type: "success",
         title: "SEO mis à jour",
         description: "Les informations SEO ont été mises à jour."
+    } as INotificationConfig,
+
+    /**
+     * Success notification for lyrics deletion.
+     *
+     * @description
+     * Displays when lyrics have been permanently deleted.
+     */
+    deleteSuccess: {
+        type: "success",
+        title: "Paroles supprimées",
+        description: "Les paroles ont été supprimées définitivement."
     } as INotificationConfig
 } as const;

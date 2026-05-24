@@ -30,7 +30,15 @@ export const LyricsMapper = {
             videoId: dto.videoId,
             metaTitle: dto.metaTitle,
             metaDescription: dto.metaDescription,
-            metaKeywords: dto.metaKeywords,
+            authorId: dto.authorId,
+            author: dto.author
+                ? {
+                      userName: dto.author.userName,
+                      email: dto.author.email ?? null,
+                      avatarUrl: dto.author.avatarUrl ?? null,
+                      role: dto.author.role ?? null
+                  }
+                : null,
             createdAt: dto.createdAt,
             updatedAt: dto.updatedAt,
             createdBy: dto.createdBy,

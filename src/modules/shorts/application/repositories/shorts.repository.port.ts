@@ -2,6 +2,7 @@ import type { IShortActionResponse } from "@/modules/shorts/domain/entities/ISho
 import type { IShortVideoEntity } from "@/modules/shorts/domain/entities/IShortVideoEntity";
 import type { ICreateShortCredentials } from "@/modules/shorts/presentation/model/ICreateShortCredentials";
 import type { IShortsQueryParams } from "@/modules/shorts/presentation/model/IShortsQueryParams";
+import type { IUpdateShortCredentials } from "@/modules/shorts/presentation/model/IUpdateShortCredentials";
 import type { IUploadShortThumbnailCredentials } from "@/modules/shorts/presentation/model/IUploadShortThumbnailCredentials";
 import type { Result } from "@/shared/domain/results/result";
 import type { IPaginatedResult } from "@/shared/domain/types/pagination";
@@ -38,6 +39,15 @@ export interface IShortsRepositoryPort {
      * @returns The created short video entity
      */
     createShort(data: ICreateShortCredentials): Promise<Result<IShortVideoEntity>>;
+
+    /**
+     * Updates a short video's title and optional linked video.
+     *
+     * @param id - The short video UUID
+     * @param data - Updated title and optional videoId
+     * @returns The updated short video entity
+     */
+    updateShort(id: string, data: IUpdateShortCredentials): Promise<Result<IShortVideoEntity>>;
 
     /**
      * Activates a short video.

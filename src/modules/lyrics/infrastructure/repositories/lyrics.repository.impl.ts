@@ -1,4 +1,5 @@
 import type { ILyricsRepositoryPort } from "@/modules/lyrics/application/repositories/lyrics.repository.port";
+import type { ILyricsActionResponse } from "@/modules/lyrics/domain/entities/ILyricsActionResponse";
 import type { ILyricsEntity } from "@/modules/lyrics/domain/entities/ILyricsEntity";
 import { LyricsMapper } from "@/modules/lyrics/infrastructure/mappers/lyrics.mapper";
 import type { ICreateLyricsCredentials } from "@/modules/lyrics/presentation/model/ICreateLyricsCredentials";
@@ -65,6 +66,15 @@ export class LyricsRepositoryImpl implements ILyricsRepositoryPort {
         try {
             const response = await apiClient.api.updateLyricsSeo(id, data);
             return ok(LyricsMapper.lyricsFromDto(response.data.lyrics));
+        } catch (error) {
+            return err(ProblemMapper.toFailure(error));
+        }
+    }
+
+    async deleteLyrics(id: string): Promise<Result<ILyricsActionResponse>> {
+        try {
+            const response = await apiClient.api.deleteLyrics(id);
+            return ok({ isSuccess: response.data.isSuccess });
         } catch (error) {
             return err(ProblemMapper.toFailure(error));
         }

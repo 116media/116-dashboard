@@ -1,6 +1,8 @@
 import { useCallback, useState } from "react";
+import { useNavigate } from "react-router";
 import type { IShortVideoEntity } from "@/modules/shorts/domain/entities/IShortVideoEntity";
 import type { ShortAction } from "@/modules/shorts/presentation/constants/shorts.dropdown";
+import { VIDEO_DETAIL_PATH } from "@/shared/presentation/constants/paths";
 
 /**
  * Return type for the short modals hook.
@@ -9,11 +11,13 @@ import type { ShortAction } from "@/modules/shorts/presentation/constants/shorts
  */
 interface IUseShortModals {
     createOpen: boolean;
+    editOpen: boolean;
     actionOpen: boolean;
     thumbnailOpen: boolean;
     currentAction: ShortAction | null;
     selectedEntity: IShortVideoEntity | null;
     setCreateOpen: (open: boolean) => void;
+    setEditOpen: (open: boolean) => void;
     setActionOpen: (open: boolean) => void;
     setThumbnailOpen: (open: boolean) => void;
     handleAction: (action: ShortAction, entity: IShortVideoEntity) => void;
@@ -36,25 +40,39 @@ interface IUseShortModals {
  */
 export const useShortModals = (reload: () => void): IUseShortModals => {
     const [createOpen, setCreateOpen] = useState(false);
+    const [editOpen, setEditOpen] = useState(false);
     const [actionOpen, setActionOpen] = useState(false);
     const [thumbnailOpen, setThumbnailOpen] = useState(false);
 
     const [currentAction, setCurrentAction] = useState<ShortAction | null>(null);
     const [selectedEntity, setSelectedEntity] = useState<IShortVideoEntity | null>(null);
 
-    const handleAction = useCallback((action: ShortAction, entity: IShortVideoEntity) => {
-        setSelectedEntity(entity);
+    const navigate = useNavigate();
 
-        switch (action) {
-            case "thumbnail":
-                setThumbnailOpen(true);
-                break;
-            default:
-                setCurrentAction(action);
-                setActionOpen(true);
-                break;
-        }
-    }, []);
+    const handleAction = useCallback(
+        (action: ShortAction, entity: IShortVideoEntity) => {
+            setSelectedEntity(entity);
+
+            switch (action) {
+                case "viewVideo":
+                    if (entity.videoId) {
+                        navigate(`${VIDEO_DETAIL_PATH}/${entity.videoId}`);
+                    }
+                    break;
+                case "edit":
+                    setEditOpen(true);
+                    break;
+                case "thumbnail":
+                    setThumbnailOpen(true);
+                    break;
+                default:
+                    setCurrentAction(action);
+                    setActionOpen(true);
+                    break;
+            }
+        },
+        [navigate]
+    );
 
     const handleActionConfirm = useCallback(
         async (actionMap: Record<string, (id: string) => Promise<void>>) => {
@@ -72,11 +90,13 @@ export const useShortModals = (reload: () => void): IUseShortModals => {
 
     return {
         createOpen,
+        editOpen,
         actionOpen,
         thumbnailOpen,
         currentAction,
         selectedEntity,
         setCreateOpen,
+        setEditOpen,
         setActionOpen,
         setThumbnailOpen,
         handleAction,

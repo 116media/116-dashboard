@@ -40,17 +40,5 @@ export const LyricsSeoValidator = {
     metaDescription: (label: string): Rule[] => [
         ValidatorUtils.required(label),
         ValidatorUtils.max(label, 160)
-    ],
-
-    /**
-     * Validates SEO meta keywords field.
-     *
-     * @param {string} label - Display name for error messages
-     * @returns {Rule[]} Array of validation rules
-     *
-     * @remarks
-     * - Optional field
-     * - Must not exceed 250 characters
-     */
-    metaKeywords: (label: string): Rule[] => [ValidatorUtils.max(label, 250)]
+    ]
 } as const;

@@ -63,6 +63,18 @@ export const ShortsNotification = {
      * @description
      * Displays when a thumbnail has been uploaded for a short video.
      */
+    /**
+     * Success notification for short video update.
+     *
+     * @description
+     * Displays when a short video has been updated successfully.
+     */
+    updateSuccess: {
+        type: "success",
+        title: "Réel modifié",
+        description: "Le réel a été modifié avec succès."
+    } as INotificationConfig,
+
     uploadThumbnailSuccess: {
         type: "success",
         title: "Miniature uploadée",
