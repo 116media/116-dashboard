@@ -32,6 +32,7 @@ ajouté
 ajoutée
 Aland
 Analyse
+Anglais
 Annulé
 annulée
 antd
@@ -41,6 +42,7 @@ appareils
 Approuver
 Approuvé
 approuvée
+Approuvés
 approvearticle
 approvevideo
 Appstore
@@ -68,12 +70,14 @@ attente
 Aucun
 Aucune
 Authentification
+autoplay
 Autorisation
 autorisée
 avant
 Avaric
 Avañeẽ
 avec
+avril
 Awilix
 ayisyen
 aymar
@@ -93,7 +97,9 @@ Bislama
 bizaad
 Bokmål
 Bolivarian
+borderless
 bosanski
+bouton
 brezhoneg
 Brouillon
 bulkupdatepermissions
@@ -119,19 +125,25 @@ choisie
 Chronique
 Chuang
 Cliquer
+clés
 Collez
 Commande
 Commandes
 Commencez
+Commentaires
 complet
+complète
 Complétez
+Configurer
 Configurez
 configuré
 configurée
 Confirmer
 Conflit
+connecté
 connectés
 Connexion
+Construire
 contenir
 Contenu
 Contenus
@@ -160,6 +172,7 @@ croppable
 crème
 créer
 créneau
+créneaux
 Créé
 créée
 créées
@@ -189,6 +202,7 @@ deletelyrics
 deleteshort
 deletetag
 deletevideo
+destructures
 Deutsch
 devrez
 Dhivehi
@@ -205,6 +219,7 @@ Durée
 déconnecter
 déconnecté
 Déconnexion
+définir
 définitivement
 déposer
 Désactiver
@@ -228,6 +243,7 @@ Entrez
 enverrons
 Envoyer
 envoyé
+equivelant
 erreur
 español
 Espèces
@@ -250,7 +266,10 @@ Filtrer
 finalised
 financières
 fiteny
+flexbox
 fonctionnalité
+Forfait
+Forfaits
 forgotpassword
 français
 française
@@ -267,6 +286,7 @@ Galego
 geekblue
 Gestion
 getactivevideos
+getall
 getallarticles
 getallcategories
 getallcontenttypes
@@ -283,13 +303,17 @@ getallvideos
 getarticlebyid
 getarticles
 getbyid
+getcategories
 getcategorybyid
 getcontenttypes
 getcustomerbyid
 getcustomerorders
+getcustomers
+getlyrics
 getorderbyid
 getorderpayment
 getpackagebyid
+getpackages
 getpermissionbyid
 getpricingtiers
 getprofile
@@ -298,6 +322,7 @@ getrolebyid
 getroles
 getsessions
 getshortbyid
+getshorts
 gettags
 getvideobyid
 getvideos
@@ -316,14 +341,17 @@ Gĩkũyũ
 harddelete
 harddeletepermission
 harddeleterole
+Hier
 Hiri
 Historique
 hotlinking
 hoverable
 hqdefault
 hrvatski
+identifiant
 Ikinyarwanda
 immédiatement
+impls
 Inactif
 Inactifs
 Inactives
@@ -357,6 +385,7 @@ Kanuri
 Kernewek
 Kichwa
 kieli
+kinix
 Kinyarwanda
 Kirundi
 Kiswahili
@@ -374,6 +403,7 @@ l'étape
 latine
 latviešu
 latéral
+lesquels
 Leste
 Letzeburgesch
 libphonenumber
@@ -389,6 +419,7 @@ listorders
 listpayments
 listpendingpaymentorders
 liée
+liées
 loopable
 lottiefiles
 Luba
@@ -410,6 +441,7 @@ Mayen
 Melayu
 Mettez
 Mettre
+Minifiers
 mises
 Modifié
 modifiée
@@ -418,6 +450,7 @@ moins
 Montant
 Motu
 msvideo
+Média
 Méthode
 Māori
 M̧ajeļ
@@ -430,6 +463,7 @@ Niveau
 Niveaux
 Nombre
 Norsk
+Notif
 nprogress
 Numéro
 numérotée
@@ -437,6 +471,7 @@ Nuosu
 Nuosuhxop
 Nyanja
 Obligatoire
+Obtenir
 Occitan
 offert
 offres
@@ -445,6 +480,7 @@ optimised
 Optionnel
 oqaasii
 orderitems
+Organises
 Oromo
 Oromoo
 Ossetian
@@ -505,6 +541,7 @@ rejet
 Rejeter
 Rejeté
 rejetée
+Rejetés
 removecategorypricing
 removeitem
 removeitemtier
@@ -539,6 +576,7 @@ Runa
 Rundi
 réactivé
 réactivée
+rédiger
 réel
 Réels
 Références
@@ -560,12 +598,15 @@ sauvegarde
 Saṁskṛta
 scheduleshoot
 serez
+serialisation
 seront
 serveur
 Sesotho
 Setswana
+seule
 Shona
 Shqip
+sidenav
 Sider
 signoutall
 Simi
@@ -587,6 +628,8 @@ soumis
 soumise
 soumission
 Statut
+Strikethrough
+Stringly
 submitarticle
 submitorder
 submitvideo
@@ -595,6 +638,7 @@ substates
 succès
 Suivant
 suomen
+SUPERADMIN
 Supprimer
 supprimé
 supprimée
@@ -604,9 +648,11 @@ supérieur
 survenue
 svenska
 Swati
+système
 sängö
 sécuriser
 Sécurité
+Sélection
 Sélectionner
 Sélectionnez
 sélectionné
@@ -647,6 +693,7 @@ updatecategorypricing
 updatecontenttype
 updatecustomer
 updatelyrics
+updatelyricseo
 updatelyricsseo
 updatepermission
 updatepricingtier
@@ -658,6 +705,7 @@ updatevideo
 updatevideoseo
 updatevideotags
 uploadarticleimage
+uploadshorth
 uploadshortthumbnail
 uploadvideothumbnail
 uploadée
@@ -671,6 +719,7 @@ Uyƣurqə
 Vakaviti
 Valencian
 valide
+validé
 valoda
 Venda
 venir
@@ -696,6 +745,7 @@ Vues
 vérification
 Vérifier
 Vérifié
+waddup
 Walon
 Wikang
 Wollof
@@ -709,6 +759,7 @@ Zhōngwén
 æвзаг
 écrire
 Édition
+éditoriales
 éditoriaux
 égal
 Événements
