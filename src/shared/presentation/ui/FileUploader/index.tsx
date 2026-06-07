@@ -74,6 +74,7 @@ const FileUploader: FC<IFileUploaderProps> = (props) => {
     } = props;
 
     const isDeferred = props.mode === "deferred";
+    const isVideo = useMemo(() => preset.accept.includes("video"), [preset.accept]);
 
     const [uploading, setUploading] = useState(false);
     const [progress, setProgress] = useState(0);
@@ -176,6 +177,7 @@ const FileUploader: FC<IFileUploaderProps> = (props) => {
             <FilePreview
                 label={label}
                 url={currentPreview}
+                isVideo={isVideo}
                 fileName={fileName}
                 fileSize={fileSize}
                 disabled={disabled}
