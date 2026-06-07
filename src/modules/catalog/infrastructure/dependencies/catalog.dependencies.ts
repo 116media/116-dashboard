@@ -16,9 +16,11 @@ import { GetCustomerByIdUseCase } from "@/modules/catalog/application/usecases/g
 import { GetPackageByIdUseCase } from "@/modules/catalog/application/usecases/getpackagebyid.usecase";
 import { RemoveCategoryPricingUseCase } from "@/modules/catalog/application/usecases/removecategorypricing.usecase";
 import { RemovePackageSlotUseCase } from "@/modules/catalog/application/usecases/removepackageslot.usecase";
+import { SetExclusiveCategoryUseCase } from "@/modules/catalog/application/usecases/setexclusivecategory.usecase";
 import { UpdateCategoryUseCase } from "@/modules/catalog/application/usecases/updatecategory.usecase";
 import { UpdateCategoryPricingUseCase } from "@/modules/catalog/application/usecases/updatecategorypricing.usecase";
 import { UpdateCustomerUseCase } from "@/modules/catalog/application/usecases/updatecustomer.usecase";
+import { UploadCategoryPosterUseCase } from "@/modules/catalog/application/usecases/uploadcategoryposter.usecase";
 import { CatalogRepositoryImpl } from "@/modules/catalog/infrastructure/repositories/catalog.repository.impl";
 
 /**
@@ -37,6 +39,8 @@ export function registerCatalogDependencies(container: AwilixContainer): void {
         updateCategoryUseCase: asClass(UpdateCategoryUseCase).transient(),
         activateCategoryUseCase: asClass(ActivateCategoryUseCase).transient(),
         deactivateCategoryUseCase: asClass(DeactivateCategoryUseCase).transient(),
+        setExclusiveCategoryUseCase: asClass(SetExclusiveCategoryUseCase).transient(),
+        uploadCategoryPosterUseCase: asClass(UploadCategoryPosterUseCase).transient(),
         addCategoryPricingUseCase: asClass(AddCategoryPricingUseCase).transient(),
         updateCategoryPricingUseCase: asClass(UpdateCategoryPricingUseCase).transient(),
         removeCategoryPricingUseCase: asClass(RemoveCategoryPricingUseCase).transient(),
