@@ -42,9 +42,11 @@ import type { GetCustomerByIdUseCase } from "@/modules/catalog/application/useca
 import type { GetPackageByIdUseCase } from "@/modules/catalog/application/usecases/getpackagebyid.usecase";
 import type { RemoveCategoryPricingUseCase } from "@/modules/catalog/application/usecases/removecategorypricing.usecase";
 import type { RemovePackageSlotUseCase } from "@/modules/catalog/application/usecases/removepackageslot.usecase";
+import type { SetExclusiveCategoryUseCase } from "@/modules/catalog/application/usecases/setexclusivecategory.usecase";
 import type { UpdateCategoryUseCase } from "@/modules/catalog/application/usecases/updatecategory.usecase";
 import type { UpdateCategoryPricingUseCase } from "@/modules/catalog/application/usecases/updatecategorypricing.usecase";
 import type { UpdateCustomerUseCase } from "@/modules/catalog/application/usecases/updatecustomer.usecase";
+import type { UploadCategoryPosterUseCase } from "@/modules/catalog/application/usecases/uploadcategoryposter.usecase";
 import { registerCatalogDependencies } from "@/modules/catalog/infrastructure/dependencies/catalog.dependencies";
 import type { ICommerceRepositoryPort } from "@/modules/commerce/application/repositories/commerce.repository.port";
 import type { AddItemToOrderUseCase } from "@/modules/commerce/application/usecases/additemtoorder.usecase";
@@ -128,6 +130,7 @@ import type { GetAllShortsUseCase } from "@/modules/shorts/application/usecases/
 import type { GetShortByIdUseCase } from "@/modules/shorts/application/usecases/getshortbyid.usecase";
 import type { UpdateShortUseCase } from "@/modules/shorts/application/usecases/updateshort.usecase";
 import type { UploadShortThumbnailUseCase } from "@/modules/shorts/application/usecases/uploadshortthumbnail.usecase";
+import type { UploadShortVideoUseCase } from "@/modules/shorts/application/usecases/uploadshortvideo.usecase";
 import { registerShortsDependencies } from "@/modules/shorts/infrastructure/dependencies/shorts.dependencies";
 import type { IVideosRepositoryPort } from "@/modules/videos/application/repositories/videos.repository.port";
 import type { ApproveVideoUseCase } from "@/modules/videos/application/usecases/approvevideo.usecase";
@@ -269,6 +272,8 @@ export interface Cradle {
     updateCategoryUseCase: UpdateCategoryUseCase;
     activateCategoryUseCase: ActivateCategoryUseCase;
     deactivateCategoryUseCase: DeactivateCategoryUseCase;
+    setExclusiveCategoryUseCase: SetExclusiveCategoryUseCase;
+    uploadCategoryPosterUseCase: UploadCategoryPosterUseCase;
     addCategoryPricingUseCase: AddCategoryPricingUseCase;
     updateCategoryPricingUseCase: UpdateCategoryPricingUseCase;
     removeCategoryPricingUseCase: RemoveCategoryPricingUseCase;
@@ -368,6 +373,7 @@ export interface Cradle {
     deactivateShortUseCase: DeactivateShortUseCase;
     deleteShortUseCase: DeleteShortUseCase;
     uploadShortThumbnailUseCase: UploadShortThumbnailUseCase;
+    uploadShortVideoUseCase: UploadShortVideoUseCase;
 
     // Lyrics repository
     lyricsRepository: ILyricsRepositoryPort;
