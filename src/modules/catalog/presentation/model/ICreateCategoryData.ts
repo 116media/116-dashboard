@@ -6,6 +6,7 @@
  * @property {string} slug - URL-friendly identifier (required)
  * @property {string} description - Category description (required, max 300 chars)
  * @property {boolean} isFree - Whether the category is free (required)
+ * @property {boolean} isExclusive - Whether the category is the exclusive show (video categories only)
  */
 export interface ICreateCategoryData {
     name: string;
@@ -13,4 +14,5 @@ export interface ICreateCategoryData {
     description: string;
     isFree: boolean;
     isGossip: boolean;
+    isExclusive: boolean;
 }
