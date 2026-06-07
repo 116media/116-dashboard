@@ -15,6 +15,7 @@ import type { IPackagesQueryParams } from "@/modules/catalog/presentation/model/
 import type { IUpdateCategoryCredentials } from "@/modules/catalog/presentation/model/IUpdateCategoryCredentials";
 import type { IUpdateCategoryPricingCredentials } from "@/modules/catalog/presentation/model/IUpdateCategoryPricingCredentials";
 import type { IUpdateCustomerCredentials } from "@/modules/catalog/presentation/model/IUpdateCustomerCredentials";
+import type { IUploadCategoryPosterCredentials } from "@/modules/catalog/presentation/model/IUploadCategoryPosterCredentials";
 import type { Result } from "@/shared/domain/results/result";
 import type { IPaginatedResult } from "@/shared/domain/types/pagination";
 
@@ -81,6 +82,27 @@ export interface ICatalogRepositoryPort {
      * @returns `ok(ICategoryEntity)` on success, `err(Failure)` on failure
      */
     deactivateCategory(id: string): Promise<Result<ICategoryEntity>>;
+
+    /**
+     * Marks a video category as the exclusive show. The backend enforces the mutex
+     * (at most one exclusive) and auto-unsets the previously exclusive category.
+     *
+     * @param id - The category UUID
+     * @returns `ok(ICategoryEntity)` on success, `err(Failure)` on failure
+     */
+    setExclusiveCategory(id: string): Promise<Result<ICategoryEntity>>;
+
+    /**
+     * Uploads (or replaces) a category poster image via the dedicated poster endpoint.
+     *
+     * @param id - The category UUID
+     * @param data - The poster image file payload
+     * @returns `ok(ICategoryEntity)` on success, `err(Failure)` on failure
+     */
+    uploadCategoryPoster(
+        id: string,
+        data: IUploadCategoryPosterCredentials
+    ): Promise<Result<ICategoryEntity>>;
 
     /**
      * Adds a pricing tier configuration to a category.
