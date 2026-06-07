@@ -38,34 +38,4 @@
             border-radius: dimensions.$border-radius;
         }
     }
-
-    &__skeleton {
-        width: 100% !important;
-        height: 240px !important;
-        border-radius: dimensions.$border-radius;
-
-        [class~="ant-skeleton-image"] {
-            width: 100% !important;
-            height: 100% !important;
-        }  
-    }
-
-    &__image {
-        max-width: 100%;
-        max-height: 240px;
-        border-radius: dimensions.$border-radius;
-        object-fit: contain;
-    }
-
-    &__file {
-        display: flex;
-        align-items: center;
-        gap: calc(dimensions.$padding / 2);
-        padding: calc(dimensions.$padding / 4) 0;
-    }
-
-    &__fileIcon {
-        font-size: 24px;
-        color: colors.$description;
-    }
 }
