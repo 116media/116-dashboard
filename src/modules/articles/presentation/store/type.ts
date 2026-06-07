@@ -26,6 +26,7 @@ export type IArticlesState = {
     uploadArticleImage: IBasicInitialState<IArticleImageEntity>;
     updateArticleSeo: IBasicInitialState<IArticleEntity>;
     updateArticleTags: IBasicInitialState<IArticleActionResponse>;
+    unpromoteArticle: IBasicInitialState<IArticleActionResponse>;
 };
 
 export type ArticlesStateKey = keyof IArticlesState;

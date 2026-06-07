@@ -19,7 +19,7 @@ interface IVideoContentFormProps {
  * @component
  *
  * @description
- * Renders description, social boost, and featured toggle fields.
+ * Renders description and social boost fields.
  */
 const VideoContentForm: FC<IVideoContentFormProps> = ({ form, socialBoostLocked }) => {
     return (

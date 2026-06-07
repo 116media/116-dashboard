@@ -18,6 +18,7 @@ import { rejectArticleAction } from "./rejectarticle.action";
 import { articlesInitialState } from "./state";
 import { submitArticleAction } from "./submitarticle.action";
 import type { ArticlesStateKey } from "./type";
+import { unpromoteArticleAction } from "./unpromotearticle.action";
 import { updateArticleAction } from "./updatearticle.action";
 import { updateArticleSeoAction } from "./updatearticleseo.action";
 import { updateArticleTagsAction } from "./updatearticletags.action";
@@ -97,7 +98,11 @@ export const articlesSlice = createSlice({
             // update article tags
             .addCase(updateArticleTagsAction.pending, ActionWrapperPending)
             .addCase(updateArticleTagsAction.fulfilled, ActionWrapperFulfilled)
-            .addCase(updateArticleTagsAction.rejected, ActionWrapperRejected);
+            .addCase(updateArticleTagsAction.rejected, ActionWrapperRejected)
+            // unpromote article
+            .addCase(unpromoteArticleAction.pending, ActionWrapperPending)
+            .addCase(unpromoteArticleAction.fulfilled, ActionWrapperFulfilled)
+            .addCase(unpromoteArticleAction.rejected, ActionWrapperRejected);
     }
 });
 

@@ -15,6 +15,7 @@ export interface IOrderItemOption {
     isVideoType: boolean;
     categoryName: string;
     socialBoost: boolean;
+    isBonus: boolean;
     hasPromotion: boolean;
 }
 
@@ -34,6 +35,7 @@ const formatItemOption = (item: IOrderItemEntity, order: IOrderDetailEntity): IO
     isVideoType: item.isVideoType,
     categoryName: item.categoryName,
     socialBoost: item.socialBoost,
+    isBonus: item.isBonus,
     hasPromotion: !!item.promotionLevelId,
     label: `${item.categoryName} · ${item.isArticleType ? "Article" : "Vidéo"}`
 });

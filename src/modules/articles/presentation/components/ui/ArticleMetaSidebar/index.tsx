@@ -19,7 +19,7 @@ interface IArticleMetaSidebarProps {
  * Four sections stacked vertically:
  * 1. Informations — status, category, author, dates
  * 2. SEO — meta title, meta description
- * 3. Options — featured toggle (read-only)
+ * 3. Options — promotion status (read-only)
  * 4. Images — masonry grid of uploaded images
  */
 const ArticleMetaSidebar: FC<IArticleMetaSidebarProps> = ({ article }) => (

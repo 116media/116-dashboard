@@ -13,6 +13,7 @@ export type ArticleAction =
     | "publish"
     | "reject"
     | "archive"
+    | "unpromote"
     | "delete";
 
 interface IArticleDropdownItem {
@@ -70,6 +71,12 @@ export const ARTICLE_DROPDOWN_ITEMS: IArticleDropdownItem[] = [
         key: "archive",
         label: "Archiver",
         hidden: (r, isSuperAdmin) => !isSuperAdmin || !r.canArchive
+    },
+    {
+        key: "unpromote",
+        label: "Retirer la promotion",
+        danger: true,
+        hidden: (r, isSuperAdmin) => !isSuperAdmin || !r.isPromoted
     },
     {
         key: "delete",

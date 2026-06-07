@@ -28,6 +28,7 @@ export type IVideosState = {
     updateVideoSeo: IBasicInitialState<IVideoEntity>;
     updateVideoTags: IBasicInitialState<IVideoActionResponse>;
     scheduleShoot: IBasicInitialState<IVideoEntity>;
+    unpromoteVideo: IBasicInitialState<IVideoActionResponse>;
 };
 
 export type VideosStateKey = keyof IVideosState;

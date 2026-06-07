@@ -47,6 +47,12 @@ export const ARTICLE_ACTION_CONFIG: Partial<Record<ArticleAction, ActionConfig>>
         confirmLabel: "Archiver",
         danger: false
     },
+    unpromote: {
+        title: "Retirer la promotion",
+        description: "La promotion active sera supprimée. Indiquez la raison pour l'audit.",
+        confirmLabel: "Retirer",
+        danger: true
+    },
     delete: {
         title: "Supprimer l'article",
         description: "L'article sera supprimé définitivement. Cette action est irréversible.",

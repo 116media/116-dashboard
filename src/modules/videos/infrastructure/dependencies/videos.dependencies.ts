@@ -12,6 +12,7 @@ import { PublishVideoUseCase } from "@/modules/videos/application/usecases/publi
 import { RejectVideoUseCase } from "@/modules/videos/application/usecases/rejectvideo.usecase";
 import { ScheduleShootUseCase } from "@/modules/videos/application/usecases/scheduleshoot.usecase";
 import { SubmitVideoUseCase } from "@/modules/videos/application/usecases/submitvideo.usecase";
+import { UnpromoteVideoUseCase } from "@/modules/videos/application/usecases/unpromotevideo.usecase";
 import { UpdateVideoUseCase } from "@/modules/videos/application/usecases/updatevideo.usecase";
 import { UpdateVideoSeoUseCase } from "@/modules/videos/application/usecases/updatevideoseo.usecase";
 import { UpdateVideoTagsUseCase } from "@/modules/videos/application/usecases/updatevideotags.usecase";
@@ -54,6 +55,9 @@ export function registerVideosDependencies(container: AwilixContainer): void {
         attachYoutubeIdUseCase: asClass(AttachYoutubeVideoUrlUseCase).transient(),
         updateVideoSeoUseCase: asClass(UpdateVideoSeoUseCase).transient(),
         updateVideoTagsUseCase: asClass(UpdateVideoTagsUseCase).transient(),
-        scheduleShootUseCase: asClass(ScheduleShootUseCase).transient()
+        scheduleShootUseCase: asClass(ScheduleShootUseCase).transient(),
+
+        // Commands -- Promotion
+        unpromoteVideoUseCase: asClass(UnpromoteVideoUseCase).transient()
     });
 }

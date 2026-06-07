@@ -1,11 +1,13 @@
 import type { AsyncThunk } from "@reduxjs/toolkit";
 import type { IRejectArticleCredentials } from "@/modules/articles/presentation/model/IRejectArticleCredentials";
+import type { IUnpromoteArticleCredentials } from "@/modules/articles/presentation/model/IUnpromoteArticleCredentials";
 import { approveArticleAction } from "@/modules/articles/presentation/store/approvearticle.action";
 import { archiveArticleAction } from "@/modules/articles/presentation/store/archivearticle.action";
 import { deleteArticleAction } from "@/modules/articles/presentation/store/deletearticle.action";
 import { publishArticleAction } from "@/modules/articles/presentation/store/publisharticle.action";
 import { rejectArticleAction } from "@/modules/articles/presentation/store/rejectarticle.action";
 import { submitArticleAction } from "@/modules/articles/presentation/store/submitarticle.action";
+import { unpromoteArticleAction } from "@/modules/articles/presentation/store/unpromotearticle.action";
 import { ArticlesNotification } from "@/modules/articles/presentation/utils/notification/articles.notification";
 import type { Failure } from "@/shared/domain/failures/failure";
 import { useAppDispatch, useAppSelector } from "@/shared/presentation/store/store";
@@ -25,6 +27,7 @@ interface IUseArticleWorkflow {
     onReject: (params: { id: string; data: IRejectArticleCredentials }) => Promise<boolean>;
     onArchive: (id: string) => Promise<void>;
     onDelete: (id: string) => Promise<void>;
+    onUnpromote: (params: { slug: string; data: IUnpromoteArticleCredentials }) => Promise<boolean>;
 }
 
 /**
@@ -48,6 +51,7 @@ export const useArticleWorkflow = (reload: () => void): IUseArticleWorkflow => {
     const rejectState = useAppSelector(({ articles: { rejectArticle } }) => rejectArticle);
     const archiveState = useAppSelector(({ articles: { archiveArticle } }) => archiveArticle);
     const deleteState = useAppSelector(({ articles: { deleteArticle } }) => deleteArticle);
+    const unpromoteState = useAppSelector(({ articles: { unpromoteArticle } }) => unpromoteArticle);
 
     const loading =
         submitState.loading ||
@@ -55,7 +59,8 @@ export const useArticleWorkflow = (reload: () => void): IUseArticleWorkflow => {
         publishState.loading ||
         rejectState.loading ||
         archiveState.loading ||
-        deleteState.loading;
+        deleteState.loading ||
+        unpromoteState.loading;
 
     const error =
         submitState.error ||
@@ -63,7 +68,8 @@ export const useArticleWorkflow = (reload: () => void): IUseArticleWorkflow => {
         publishState.error ||
         rejectState.error ||
         archiveState.error ||
-        deleteState.error;
+        deleteState.error ||
+        unpromoteState.error;
 
     const dispatchAction = async <T>(
         thunk: AsyncThunk<T, string, { rejectValue: Failure }>,
@@ -127,5 +133,38 @@ export const useArticleWorkflow = (reload: () => void): IUseArticleWorkflow => {
         return dispatchAction(deleteArticleAction, id, ArticlesNotification.deleteSuccess);
     };
 
-    return { loading, error, onSubmit, onApprove, onPublish, onReject, onArchive, onDelete };
+    const onUnpromote = async (params: {
+        slug: string;
+        data: IUnpromoteArticleCredentials;
+    }): Promise<boolean> => {
+        const result = await dispatch(unpromoteArticleAction(params));
+
+        if (unpromoteArticleAction.fulfilled.match(result)) {
+            showNotification(ArticlesNotification.unpromoteSuccess);
+            reload();
+            return true;
+        }
+
+        if (unpromoteArticleAction.rejected.match(result) && result.payload) {
+            showNotification({
+                type: "error",
+                title: result.payload.title,
+                description: result.payload.detail
+            });
+        }
+
+        return false;
+    };
+
+    return {
+        loading,
+        error,
+        onSubmit,
+        onApprove,
+        onPublish,
+        onReject,
+        onArchive,
+        onDelete,
+        onUnpromote
+    };
 };

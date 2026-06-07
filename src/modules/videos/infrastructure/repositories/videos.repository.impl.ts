@@ -8,6 +8,7 @@ import type { IAttachYoutubeUrlCredentials } from "@/modules/videos/presentation
 import type { ICreateVideoCredentials } from "@/modules/videos/presentation/model/ICreateVideoCredentials";
 import type { IRejectVideoCredentials } from "@/modules/videos/presentation/model/IRejectVideoCredentials";
 import type { IScheduleShootCredentials } from "@/modules/videos/presentation/model/IScheduleShootCredentials";
+import type { IUnpromoteVideoCredentials } from "@/modules/videos/presentation/model/IUnpromoteVideoCredentials";
 import type { IUpdateVideoCredentials } from "@/modules/videos/presentation/model/IUpdateVideoCredentials";
 import type { IUpdateVideoSeoCredentials } from "@/modules/videos/presentation/model/IUpdateVideoSeoCredentials";
 import type { IUpdateVideoTagsCredentials } from "@/modules/videos/presentation/model/IUpdateVideoTagsCredentials";
@@ -206,6 +207,18 @@ export class VideosRepositoryImpl implements IVideosRepositoryPort {
             });
             const videoResponse = await apiClient.api.adminGetVideoById(id);
             return ok(VideosMapper.videoFromDto(videoResponse.data.video));
+        } catch (error) {
+            return err(ProblemMapper.toFailure(error));
+        }
+    }
+
+    async unpromoteVideo(
+        slug: string,
+        data: IUnpromoteVideoCredentials
+    ): Promise<Result<IVideoActionResponse>> {
+        try {
+            await apiClient.api.forceUnpromoteVideo(slug, { reason: data.reason });
+            return ok({ isSuccess: true });
         } catch (error) {
             return err(ProblemMapper.toFailure(error));
         }

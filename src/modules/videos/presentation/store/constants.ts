@@ -17,7 +17,8 @@ export const ActionType = {
     AttachYoutubeVideoUrl: "Videos/attachYoutubeId",
     UpdateVideoSeo: "Videos/updateVideoSeo",
     UpdateVideoTags: "Videos/updateVideoTags",
-    ScheduleShoot: "Videos/scheduleShoot"
+    ScheduleShoot: "Videos/scheduleShoot",
+    UnpromoteVideo: "Videos/unpromoteVideo"
 } as const;
 
 /**

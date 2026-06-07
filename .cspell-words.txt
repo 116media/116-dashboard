@@ -576,6 +576,7 @@ restorepermission
 restorerole
 retirée
 Retour
+retrait
 Revenez
 revokesession
 reçu
@@ -695,6 +696,10 @@ Türkçe
 Unbookmark
 uniquement
 unparseable
+unpromotearticle
+unpromoteing
+unpromotes
+unpromotevideo
 Updateable
 updateaccount
 updatearticle

@@ -1,11 +1,13 @@
 import type { AsyncThunk } from "@reduxjs/toolkit";
 import type { IRejectVideoCredentials } from "@/modules/videos/presentation/model/IRejectVideoCredentials";
+import type { IUnpromoteVideoCredentials } from "@/modules/videos/presentation/model/IUnpromoteVideoCredentials";
 import { approveVideoAction } from "@/modules/videos/presentation/store/approvevideo.action";
 import { archiveVideoAction } from "@/modules/videos/presentation/store/archivevideo.action";
 import { deleteVideoAction } from "@/modules/videos/presentation/store/deletevideo.action";
 import { publishVideoAction } from "@/modules/videos/presentation/store/publishvideo.action";
 import { rejectVideoAction } from "@/modules/videos/presentation/store/rejectvideo.action";
 import { submitVideoAction } from "@/modules/videos/presentation/store/submitvideo.action";
+import { unpromoteVideoAction } from "@/modules/videos/presentation/store/unpromotevideo.action";
 import { VideosNotification } from "@/modules/videos/presentation/utils/notification/videos.notification";
 import type { Failure } from "@/shared/domain/failures/failure";
 import { useAppDispatch, useAppSelector } from "@/shared/presentation/store/store";
@@ -25,6 +27,7 @@ interface IUseVideoWorkflow {
     onReject: (params: { id: string; data: IRejectVideoCredentials }) => Promise<boolean>;
     onArchive: (id: string) => Promise<void>;
     onDelete: (id: string) => Promise<void>;
+    onUnpromote: (params: { slug: string; data: IUnpromoteVideoCredentials }) => Promise<boolean>;
 }
 
 /**
@@ -48,6 +51,7 @@ export const useVideoWorkflow = (reload: () => void): IUseVideoWorkflow => {
     const rejectState = useAppSelector(({ videos: { rejectVideo } }) => rejectVideo);
     const archiveState = useAppSelector(({ videos: { archiveVideo } }) => archiveVideo);
     const deleteState = useAppSelector(({ videos: { deleteVideo } }) => deleteVideo);
+    const unpromoteState = useAppSelector(({ videos: { unpromoteVideo } }) => unpromoteVideo);
 
     const loading =
         submitState.loading ||
@@ -55,7 +59,8 @@ export const useVideoWorkflow = (reload: () => void): IUseVideoWorkflow => {
         publishState.loading ||
         rejectState.loading ||
         archiveState.loading ||
-        deleteState.loading;
+        deleteState.loading ||
+        unpromoteState.loading;
 
     const error =
         submitState.error ||
@@ -63,7 +68,8 @@ export const useVideoWorkflow = (reload: () => void): IUseVideoWorkflow => {
         publishState.error ||
         rejectState.error ||
         archiveState.error ||
-        deleteState.error;
+        deleteState.error ||
+        unpromoteState.error;
 
     const dispatchAction = async <T>(
         thunk: AsyncThunk<T, string, { rejectValue: Failure }>,
@@ -127,5 +133,38 @@ export const useVideoWorkflow = (reload: () => void): IUseVideoWorkflow => {
         return dispatchAction(deleteVideoAction, id, VideosNotification.deleteSuccess);
     };
 
-    return { loading, error, onSubmit, onApprove, onPublish, onReject, onArchive, onDelete };
+    const onUnpromote = async (params: {
+        slug: string;
+        data: IUnpromoteVideoCredentials;
+    }): Promise<boolean> => {
+        const result = await dispatch(unpromoteVideoAction(params));
+
+        if (unpromoteVideoAction.fulfilled.match(result)) {
+            showNotification(VideosNotification.unpromoteSuccess);
+            reload();
+            return true;
+        }
+
+        if (unpromoteVideoAction.rejected.match(result) && result.payload) {
+            showNotification({
+                type: "error",
+                title: result.payload.title,
+                description: result.payload.detail
+            });
+        }
+
+        return false;
+    };
+
+    return {
+        loading,
+        error,
+        onSubmit,
+        onApprove,
+        onPublish,
+        onReject,
+        onArchive,
+        onDelete,
+        onUnpromote
+    };
 };

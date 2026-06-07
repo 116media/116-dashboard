@@ -5,6 +5,7 @@ import type { IAttachYoutubeUrlCredentials } from "@/modules/videos/presentation
 import type { ICreateVideoCredentials } from "@/modules/videos/presentation/model/ICreateVideoCredentials";
 import type { IRejectVideoCredentials } from "@/modules/videos/presentation/model/IRejectVideoCredentials";
 import type { IScheduleShootCredentials } from "@/modules/videos/presentation/model/IScheduleShootCredentials";
+import type { IUnpromoteVideoCredentials } from "@/modules/videos/presentation/model/IUnpromoteVideoCredentials";
 import type { IUpdateVideoCredentials } from "@/modules/videos/presentation/model/IUpdateVideoCredentials";
 import type { IUpdateVideoSeoCredentials } from "@/modules/videos/presentation/model/IUpdateVideoSeoCredentials";
 import type { IUpdateVideoTagsCredentials } from "@/modules/videos/presentation/model/IUpdateVideoTagsCredentials";
@@ -163,4 +164,16 @@ export interface IVideosRepositoryPort {
      * @returns The updated video entity
      */
     scheduleShoot(id: string, data: IScheduleShootCredentials): Promise<Result<IVideoEntity>>;
+
+    /**
+     * Force-unpromotes a promoted video (SuperAdmin only).
+     *
+     * @param slug - The video slug
+     * @param data - Justification reason for removing the promotion
+     * @returns Action response with success indicator
+     */
+    unpromoteVideo(
+        slug: string,
+        data: IUnpromoteVideoCredentials
+    ): Promise<Result<IVideoActionResponse>>;
 }
