@@ -20,7 +20,7 @@ import type { ContentStatus } from "@/shared/domain/enums/content-status.enum";
  * @property {boolean} canPublish - Whether the article can be published
  * @property {boolean} canReject - Whether the article can be rejected
  * @property {boolean} canArchive - Whether the article can be archived
- * @property {boolean} isFeatured - Whether the article is featured
+ * @property {boolean} isPromoted - Whether the article has an active paid promotion
  * @property {string | null} publishedAt - ISO timestamp of publication
  * @property {string | null} createdAt - ISO creation timestamp
  * @property {string | null} updatedAt - ISO last-update timestamp
@@ -43,7 +43,7 @@ export interface IArticleSummaryEntity {
     canPublish: boolean;
     canReject: boolean;
     canArchive: boolean;
-    isFeatured: boolean;
+    isPromoted: boolean;
     publishedAt?: string | null;
     createdAt?: string | null;
     updatedAt?: string | null;

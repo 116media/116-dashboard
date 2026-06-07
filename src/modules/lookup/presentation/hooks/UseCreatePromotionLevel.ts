@@ -7,7 +7,7 @@ import {
     resetCreatePromotionLevelAction
 } from "@/modules/lookup/presentation/store/createpromotionlevel.action";
 import { PromotionLevelsNotification } from "@/modules/lookup/presentation/utils/notification/lookup.promotion-levels.notification";
-import type { Failure } from "@/shared/domain/failures/failure";
+import type { Failure, ServerFailure } from "@/shared/domain/failures/failure";
 import { useAppDispatch, useAppSelector } from "@/shared/presentation/store/store";
 import { showNotification } from "@/shared/presentation/utils/notification/notification.utils";
 
@@ -54,6 +54,14 @@ export const useCreatePromotionLevel = (onSuccess?: () => void): IUseCreatePromo
             showNotification(PromotionLevelsNotification.createSuccess);
             form.resetFields();
             onSuccess?.();
+        }
+
+        if (createPromotionLevelAction.rejected.match(result)) {
+            const failure = result.payload as ServerFailure | undefined;
+            const spotError = failure?.errors?.find((e) => e.errorCode === "InvalidSpotPriority");
+            if (spotError) {
+                form.setFields([{ name: "spotPriority", errors: [spotError.errorMessage] }]);
+            }
         }
     };
 

@@ -39,12 +39,10 @@ const ArticleCreateWizard: FC<IArticleCreateWizardProps> = ({ open, onClose, onS
     const orderItems = usePaidOrderItems("article");
 
     const [socialBoostLocked, setSocialBoostLocked] = useState(false);
-    const [featuredLocked, setFeaturedLocked] = useState(false);
 
     const handleClose = () => {
         wizard.reset();
         setSocialBoostLocked(false);
-        setFeaturedLocked(false);
         onClose();
     };
 
@@ -54,13 +52,10 @@ const ArticleCreateWizard: FC<IArticleCreateWizardProps> = ({ open, onClose, onS
             form={wizard.step1Form}
             orderItems={orderItems}
             socialBoostLocked={socialBoostLocked}
-            featuredLocked={featuredLocked}
             onSubmit={() => wizard.goNext()}
             onOrderItemChange={(option) => {
                 setSocialBoostLocked(option !== undefined);
-                setFeaturedLocked(option?.hasPromotion ?? false);
                 wizard.step1Form.setFieldValue("socialBoost", option?.socialBoost ?? false);
-                wizard.step1Form.setFieldValue("isFeatured", option?.hasPromotion ?? false);
             }}
         />,
         <ArticleBodyForm

@@ -1,6 +1,8 @@
 import { Descriptions, Flex, Tag, Typography } from "antd";
 import type { FC } from "react";
 import type { IVideoEntity } from "@/modules/videos/domain/entities/IVideoEntity";
+import { Colors } from "@/shared/presentation/constants/theme";
+import { IconStopOutlined } from "@/shared/presentation/ui/Icons";
 
 const { Text } = Typography;
 
@@ -24,7 +26,9 @@ const VideoCreateSummary: FC<IVideoCreateSummaryProps> = ({ video }) => {
                 </Descriptions.Item>
                 <Descriptions.Item label="Catégorie">{video.categoryName}</Descriptions.Item>
                 <Descriptions.Item label="Description">
-                    {video.description || <Text type="secondary">—</Text>}
+                    {video.description || (
+                        <IconStopOutlined style={{ color: Colors.Error, fontSize: 18 }} />
+                    )}
                 </Descriptions.Item>
                 {video.tags && video.tags.length > 0 && (
                     <Descriptions.Item label="Tags">

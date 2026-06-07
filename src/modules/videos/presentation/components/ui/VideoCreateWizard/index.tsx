@@ -34,12 +34,10 @@ const VideoCreateWizard: FC<IVideoCreateWizardProps> = ({ open, onClose, onSucce
     const orderItems = usePaidOrderItems("video");
 
     const [socialBoostLocked, setSocialBoostLocked] = useState(false);
-    const [featuredLocked, setFeaturedLocked] = useState(false);
 
     const handleClose = () => {
         wizard.reset();
         setSocialBoostLocked(false);
-        setFeaturedLocked(false);
         onClose();
     };
 
@@ -51,16 +49,13 @@ const VideoCreateWizard: FC<IVideoCreateWizardProps> = ({ open, onClose, onSucce
             onSubmit={() => wizard.goNext()}
             onOrderItemChange={(option) => {
                 setSocialBoostLocked(option !== undefined);
-                setFeaturedLocked(option?.hasPromotion ?? false);
                 wizard.step2Form.setFieldValue("socialBoost", option?.socialBoost ?? false);
-                wizard.step2Form.setFieldValue("isFeatured", option?.hasPromotion ?? false);
             }}
         />,
         <VideoContentForm
             key="step2"
             form={wizard.step2Form}
             socialBoostLocked={socialBoostLocked}
-            featuredLocked={featuredLocked}
         />,
         <Flex key="step3" vertical>
             <div>

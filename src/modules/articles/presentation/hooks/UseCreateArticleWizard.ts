@@ -159,9 +159,7 @@ export const useCreateArticleWizard = (onSuccess: () => void): IUseCreateArticle
                     headline: values.headline,
                     body: values.body,
                     coverImageUrl: values.coverImageUrl,
-                    socialBoost: step1Form.getFieldValue("socialBoost") ?? false,
-                    isFeatured: step1Form.getFieldValue("isFeatured") ?? false,
-                    featuredUntil: step1Form.getFieldValue("featuredUntil") ?? null
+                    socialBoost: step1Form.getFieldValue("socialBoost") ?? false
                 }
             })
         );

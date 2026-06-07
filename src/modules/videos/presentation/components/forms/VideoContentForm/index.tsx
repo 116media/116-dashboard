@@ -1,8 +1,8 @@
 import type { FormInstance } from "antd";
-import { DatePicker, Form } from "antd";
+import { Form } from "antd";
 import type { FC } from "react";
 import { VideosContentValidator } from "@/modules/videos/presentation/utils/validators/videos.content.validator";
-import { IconFireFilled, IconStarFilled } from "@/shared/presentation/ui/Icons";
+import { IconFireFilled } from "@/shared/presentation/ui/Icons";
 import RichTextEditor from "@/shared/presentation/ui/RichTextEditor";
 import SwitchField from "@/shared/presentation/ui/SwitchField";
 
@@ -11,7 +11,6 @@ const { Item } = Form;
 interface IVideoContentFormProps {
     form: FormInstance;
     socialBoostLocked?: boolean;
-    featuredLocked?: boolean;
 }
 
 /**
@@ -22,11 +21,7 @@ interface IVideoContentFormProps {
  * @description
  * Renders description, social boost, and featured toggle fields.
  */
-const VideoContentForm: FC<IVideoContentFormProps> = ({
-    form,
-    socialBoostLocked,
-    featuredLocked
-}) => {
+const VideoContentForm: FC<IVideoContentFormProps> = ({ form, socialBoostLocked }) => {
     return (
         <Form form={form} size="large" layout="vertical" name="video_wizard_step2">
             <Item
@@ -48,25 +43,6 @@ const VideoContentForm: FC<IVideoContentFormProps> = ({
                     disabled={socialBoostLocked}
                     description="Promouvoir cette vidéo sur les réseaux sociaux."
                 />
-            </Item>
-
-            <Item name="isFeatured" valuePropName="checked">
-                <SwitchField
-                    title="En vedette"
-                    icon={<IconStarFilled />}
-                    disabled={featuredLocked}
-                    description="Afficher cette vidéo en avant sur la page d'accueil."
-                />
-            </Item>
-
-            <Item noStyle shouldUpdate={(prev, curr) => prev.isFeatured !== curr.isFeatured}>
-                {({ getFieldValue }) =>
-                    getFieldValue("isFeatured") ? (
-                        <Item name="featuredUntil" label="En vedette jusqu'au">
-                            <DatePicker disabled={featuredLocked} placeholder="Date d'expiration" />
-                        </Item>
-                    ) : null
-                }
             </Item>
         </Form>
     );

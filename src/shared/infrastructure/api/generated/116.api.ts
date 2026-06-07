@@ -267,6 +267,7 @@ export interface AdminCreateCategoryRequest {
   slug: string;
   description: string;
   isFree: boolean;
+  isGossip: boolean;
 }
 
 export interface AdminCreateCategoryResponse {
@@ -350,6 +351,8 @@ export interface AdminCreatePromotionLevelRequest {
   durationDays: number;
   /** @format double */
   priceUsd: number;
+  /** @format int32 */
+  spotPriority?: number | null;
 }
 
 export interface AdminCreatePromotionLevelResponse {
@@ -477,6 +480,28 @@ export interface AdminEditOrderResponse {
 
 export interface AdminForceLogoutUserResponse {
   isSuccess: boolean;
+}
+
+export interface AdminForceUnpromoteArticleRequest {
+  reason: string;
+}
+
+export interface AdminForceUnpromoteArticleResponse {
+  /** @format uuid */
+  articleId: string;
+  /** @format date-time */
+  unpromotedAt: string;
+}
+
+export interface AdminForceUnpromoteVideoRequest {
+  reason: string;
+}
+
+export interface AdminForceUnpromoteVideoResponse {
+  /** @format uuid */
+  videoId: string;
+  /** @format date-time */
+  unpromotedAt: string;
 }
 
 export interface AdminForgotPasswordRequest {
@@ -804,9 +829,6 @@ export interface AdminUpdateArticleRequest {
   /** @format uuid */
   orderItemId?: string | null;
   socialBoost: boolean;
-  isFeatured: boolean;
-  /** @format date-time */
-  featuredUntil?: string | null;
   metaTitle?: string | null;
   metaDescription?: string | null;
 }
@@ -849,6 +871,7 @@ export interface AdminUpdateCategoryRequest {
   name: string;
   slug: string;
   description: string;
+  isGossip: boolean;
 }
 
 export interface AdminUpdateCategoryResponse {
@@ -935,6 +958,8 @@ export interface AdminUpdatePromotionLevelRequest {
   durationDays: number;
   /** @format double */
   priceUsd: number;
+  /** @format int32 */
+  spotPriority?: number | null;
 }
 
 export interface AdminUpdatePromotionLevelResponse {
@@ -974,9 +999,6 @@ export interface AdminUpdateVideoRequest {
   /** @format uuid */
   orderItemId?: string | null;
   socialBoost: boolean;
-  isFeatured: boolean;
-  /** @format date-time */
-  featuredUntil?: string | null;
   metaTitle?: string | null;
   metaDescription?: string | null;
 }
@@ -1080,9 +1102,12 @@ export interface ArticleDetailDto {
   status: EnumContentStatus;
   rejectionReason?: string | null;
   socialBoost: boolean;
-  isFeatured: boolean;
+  isPromoted: boolean;
   /** @format date-time */
-  featuredUntil?: string | null;
+  promotedUntil?: string | null;
+  /** @format uuid */
+  promotionLevelId?: string | null;
+  promotionLevelName?: string | null;
   /** @format date-time */
   publishedAt?: string | null;
   metaTitle?: string | null;
@@ -1107,6 +1132,23 @@ export interface ArticleImageDto {
   imageType: EnumArticleImageType;
 }
 
+export interface ArticlePromotionSlotDto {
+  position: string;
+  articles: ArticleSummaryDto[];
+}
+
+export interface ArticlePromotionSpot3Dto {
+  /** @format int32 */
+  spotPriority: number;
+  slots: ArticlePromotionSlotDto[];
+}
+
+export interface ArticlePromotionSpotDto {
+  /** @format int32 */
+  spotPriority: number;
+  articles: ArticleSummaryDto[];
+}
+
 export interface ArticleSummaryDto {
   /** @format date-time */
   createdAt?: string | null;
@@ -1125,7 +1167,7 @@ export interface ArticleSummaryDto {
   coverImageUrl?: string | null;
   authorId: string;
   status: EnumContentStatus;
-  isFeatured: boolean;
+  isPromoted: boolean;
   /** @format date-time */
   publishedAt?: string | null;
 }
@@ -1179,6 +1221,7 @@ export interface CategoryDto {
   description: string;
   isFree: boolean;
   isActive: boolean;
+  isGossip: boolean;
   pricing: CategoryPricingDto[];
 }
 
@@ -1587,6 +1630,8 @@ export interface PromotionLevelDto {
   /** @format double */
   priceUsd: number;
   isActive: boolean;
+  /** @format int32 */
+  spotPriority?: number | null;
 }
 
 export interface PublicAddArticleCommentRequest {
@@ -1666,6 +1711,10 @@ export interface PublicGetActivePromotionLevelsResponse {
   promotionLevels: PromotionLevelDto[];
 }
 
+export interface PublicGetAllContentTypesResponse {
+  contentTypes: ContentTypeDto[];
+}
+
 export interface PublicGetAllTagsResponse {
   tags: TagDto[];
 }
@@ -1674,12 +1723,11 @@ export interface PublicGetArticleBySlugResponse {
   article: ArticleDetailDto;
 }
 
-export interface PublicGetFeaturedArticlesResponse {
-  articles: ArticleSummaryDto[];
-}
-
-export interface PublicGetFeaturedVideosResponse {
-  videos: VideoSummaryDto[];
+export interface PublicGetArticlePromotionFeedResponse {
+  spot1: ArticlePromotionSpotDto;
+  spot2: ArticlePromotionSpotDto;
+  spot3: ArticlePromotionSpot3Dto;
+  gossipStrip: ArticleSummaryDto[];
 }
 
 export interface PublicGetLyricsBySlugResponse {
@@ -1706,6 +1754,18 @@ export interface PublicGetOwnSessionsResponse {
   sessions: SessionDto[];
 }
 
+export interface PublicGetPopularTagsResponse {
+  tags: TagDto[];
+}
+
+export interface PublicGetPromotedArticlesResponse {
+  articles: ArticleSummaryDto[];
+}
+
+export interface PublicGetPromotedVideosResponse {
+  videos: VideoSummaryDto[];
+}
+
 export interface PublicGetPublicShortBySlugResponse {
   shortVideo: ShortVideoDto;
 }
@@ -1724,6 +1784,13 @@ export interface PublicGetPublishedVideosResponse {
 
 export interface PublicGetVideoBySlugResponse {
   video: VideoDetailDto;
+}
+
+export interface PublicGetVideoPromotionFeedResponse {
+  spot1: VideoPromotionSpotDto;
+  spot2: VideoPromotionSpotDto;
+  spot3: VideoPromotionSpot3Dto;
+  freeVideoStrip: VideoSummaryDto[];
 }
 
 export interface PublicLikeArticleResponse {
@@ -2064,9 +2131,12 @@ export interface VideoDetailDto {
   rejectionReason?: string | null;
   youtubeVideoUrl?: string | null;
   socialBoost: boolean;
-  isFeatured: boolean;
+  isPromoted: boolean;
   /** @format date-time */
-  featuredUntil?: string | null;
+  promotedUntil?: string | null;
+  /** @format uuid */
+  promotionLevelId?: string | null;
+  promotionLevelName?: string | null;
   hasLyrics: boolean;
   /** @format date-time */
   shootingScheduledAt?: string | null;
@@ -2096,6 +2166,23 @@ export interface VideoInPlaylistDto {
   sortOrder: number;
 }
 
+export interface VideoPromotionSlotDto {
+  position: string;
+  videos: VideoSummaryDto[];
+}
+
+export interface VideoPromotionSpot3Dto {
+  /** @format int32 */
+  spotPriority: number;
+  slots: VideoPromotionSlotDto[];
+}
+
+export interface VideoPromotionSpotDto {
+  /** @format int32 */
+  spotPriority: number;
+  videos: VideoSummaryDto[];
+}
+
 export interface VideoSummaryDto {
   /** @format date-time */
   createdAt?: string | null;
@@ -2114,7 +2201,7 @@ export interface VideoSummaryDto {
   authorId: string;
   status: EnumContentStatus;
   youtubeVideoUrl?: string | null;
-  isFeatured: boolean;
+  isPromoted: boolean;
   hasLyrics: boolean;
   /** @format date-time */
   publishedAt?: string | null;
@@ -2402,8 +2489,8 @@ export class Api<
      * in a mutable status — for example correcting a typo in the title of a rejected article.
      * \n
      * Covers metadata (title, slug, category), content (headline, body, cover image),
-     * commerce fields (customer, order item), promotion flags (social boost, featured
-     * placement), and SEO metadata (meta title, meta description).
+     * commerce fields (customer, order item), promotion flags (social boost),
+     * and SEO metadata (meta title, meta description).
      * \n
      * Allowed when the article status is <c>Draft</c>, <c>PendingPayment</c>,
      * <c>PendingReview</c>, or <c>Rejected</c>. Attempting to update an article
@@ -2421,8 +2508,6 @@ export class Api<
      * \n
      * **Commerce fields:** <c>customerId</c> and <c>orderItemId</c> must be provided
      * together or both omitted. Providing only one will return a 400 Bad Request.
-     * \n
-     * **Featured placement:** <c>featuredUntil</c> must be a future date when provided.
      * \n
      * **Authentication Requirements:**\n
      * - User must be authenticated with a valid access token\n
@@ -2909,6 +2994,58 @@ export class Api<
         path: `/api/v1/admin/articles/${id}/publish`,
         method: "PATCH",
         secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * @description Immediately removes the active paid promotion from an article, regardless of the
+     * original <c>PromotedUntil</c> expiry date.
+     * 
+     * The operation records three audit fields on the article:
+     * <c>UnpromotedAt</c> (UTC timestamp), <c>UnpromotedBy</c> (SuperAdmin UUID), and
+     * <c>UnpromotedReason</c> (free-text justification up to 500 chars).
+     * These fields are the inputs required to compute the pro-rata refund amount:
+     * <c>refund = PromoPriceSnapshotUsd × (PromotedUntil − UnpromotedAt) / DurationDays</c>.
+     * 
+     * The endpoint will return 400 Bad Request if the article is not currently promoted.
+     * 
+     * **Authentication Requirements:**
+     * 
+     * - User must be authenticated with a valid access token
+     * - User must have SuperAdmin role
+     * 
+     * **Response Codes:**
+     * 
+     * - Returns 200 OK with ArticleId and UnpromotedAt on success
+     * - Returns 400 Bad Request if the article is not currently promoted
+     * - Returns 401 Unauthorized if access token is invalid or expired
+     * - Returns 403 Forbidden if user lacks SuperAdmin role
+     * - Returns 404 Not Found if the article does not exist
+     *
+     * @tags admin::articles
+     * @name ForceUnpromoteArticle
+     * @summary Force-unpromote a promoted article (SuperAdmin only)
+     * @request PATCH:/api/v1/admin/articles/{slug}/unpromote
+     * @secure
+     * @response `200` `AdminForceUnpromoteArticleResponse` OK
+     * @response `400` `ProblemDetails` Bad Request
+     * @response `401` `ProblemDetails` Unauthorized
+     * @response `403` `ProblemDetails` Forbidden
+     * @response `404` `ProblemDetails` Not Found
+     * @response `429` `ProblemDetails` Too Many Requests
+     */
+    forceUnpromoteArticle: (
+      slug: string,
+      data: AdminForceUnpromoteArticleRequest,
+      params: RequestParams = {},
+    ) =>
+      this.request<AdminForceUnpromoteArticleResponse, ProblemDetails>({
+        path: `/api/v1/admin/articles/${slug}/unpromote`,
+        method: "PATCH",
+        body: data,
+        secure: true,
+        type: ContentType.Json,
         format: "json",
         ...params,
       }),
@@ -5439,7 +5576,7 @@ export class Api<
 
     /**
      * @description Verifies a PendingPayment order's payment, transitioning the order to Paid status.
-     * A receipt URL is recorded and social boost / featured promotion is stamped on any
+     * A receipt URL is recorded and social boost / promotion is stamped on any
      * already-linked content items.
      * 
      * **Authentication Requirements:**
@@ -9721,6 +9858,58 @@ export class Api<
       }),
 
     /**
+     * @description Immediately removes the active paid promotion from a video, regardless of the
+     * original <c>PromotedUntil</c> expiry date.
+     * 
+     * The operation records three audit fields on the video:
+     * <c>UnpromotedAt</c> (UTC timestamp), <c>UnpromotedBy</c> (SuperAdmin UUID), and
+     * <c>UnpromotedReason</c> (free-text justification up to 500 chars).
+     * These fields are the inputs required to compute the pro-rata refund amount:
+     * <c>refund = PromoPriceSnapshotUsd × (PromotedUntil − UnpromotedAt) / DurationDays</c>.
+     * 
+     * The endpoint will return 400 Bad Request if the video is not currently promoted.
+     * 
+     * **Authentication Requirements:**
+     * 
+     * - User must be authenticated with a valid access token
+     * - User must have SuperAdmin role
+     * 
+     * **Response Codes:**
+     * 
+     * - Returns 200 OK with VideoId and UnpromotedAt on success
+     * - Returns 400 Bad Request if the video is not currently promoted
+     * - Returns 401 Unauthorized if access token is invalid or expired
+     * - Returns 403 Forbidden if user lacks SuperAdmin role
+     * - Returns 404 Not Found if the video does not exist
+     *
+     * @tags admin::videos
+     * @name ForceUnpromoteVideo
+     * @summary Force-unpromote a promoted video (SuperAdmin only)
+     * @request PATCH:/api/v1/admin/videos/{slug}/unpromote
+     * @secure
+     * @response `200` `AdminForceUnpromoteVideoResponse` OK
+     * @response `400` `ProblemDetails` Bad Request
+     * @response `401` `ProblemDetails` Unauthorized
+     * @response `403` `ProblemDetails` Forbidden
+     * @response `404` `ProblemDetails` Not Found
+     * @response `429` `ProblemDetails` Too Many Requests
+     */
+    forceUnpromoteVideo: (
+      slug: string,
+      data: AdminForceUnpromoteVideoRequest,
+      params: RequestParams = {},
+    ) =>
+      this.request<AdminForceUnpromoteVideoResponse, ProblemDetails>({
+        path: `/api/v1/admin/videos/${slug}/unpromote`,
+        method: "PATCH",
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
      * @description Attaches a full YouTube video URL to a video and automatically downloads
      * the YouTube thumbnail, re-uploading it to Cloudinary.
      * 
@@ -10305,10 +10494,10 @@ export class Api<
       }),
 
     /**
-     * @description Retrieves the list of currently featured published articles for public consumption.
+     * @description Retrieves the list of currently promoted published articles for public consumption.
      * 
-     * Featured articles are handpicked published articles promoted on the homepage
-     * or highlighted sections of the site. Only published articles marked as featured
+     * Promoted articles are published articles with an active paid promotion on the homepage
+     * or highlighted sections of the site. Only published articles marked as promoted
      * are returned by this endpoint.
      * 
      * **Authentication Requirements:**
@@ -10317,21 +10506,64 @@ export class Api<
      * 
      * **Response Codes:**
      * 
-     * - Returns 200 OK with the list of featured articles
+     * - Returns 200 OK with the list of promoted articles
      * - Returns 429 Too Many Requests if rate limit is exceeded
      *
      * @tags public::articles
-     * @name GetFeaturedArticles
-     * @summary List featured articles
-     * @request GET:/api/v1/public/articles/featured
+     * @name GetPromotedArticles
+     * @summary List promoted articles
+     * @request GET:/api/v1/public/articles/promoted
      * @secure
-     * @response `200` `PublicGetFeaturedArticlesResponse` OK
+     * @response `200` `PublicGetPromotedArticlesResponse` OK
      * @response `429` `ProblemDetails` Too Many Requests
      */
-    getFeaturedArticles: (params: RequestParams = {}) =>
-      this.request<PublicGetFeaturedArticlesResponse, ProblemDetails>({
-        path: `/api/v1/public/articles/featured`,
+    getPromotedArticles: (params: RequestParams = {}) =>
+      this.request<PublicGetPromotedArticlesResponse, ProblemDetails>({
+        path: `/api/v1/public/articles/promoted`,
         method: "GET",
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * @description Returns the homepage article promotion feed, grouping promoted published articles by
+     * spot priority (1, 2, 3).
+     * 
+     * Each spot maps to a visual region on the homepage grid. Spot 3 distributes articles
+     * across two columns (a and b). Empty spots are filled with gossip fallback articles
+     * from the category flagged as the gossip fallback source.
+     * 
+     * A gossip strip of up to 3 additional articles is included below the grid.
+     * 
+     * **Authentication Requirements:**
+     * 
+     * - No authentication required
+     * 
+     * **Response Codes:**
+     * 
+     * - Returns 200 OK with the full promotion feed
+     * - Returns 429 Too Many Requests if rate limit is exceeded
+     *
+     * @tags public::articles
+     * @name GetArticlePromotionFeed
+     * @summary Article homepage promotion feed
+     * @request GET:/api/v1/public/articles/promotion/feed
+     * @secure
+     * @response `200` `PublicGetArticlePromotionFeedResponse` OK
+     * @response `429` `ProblemDetails` Too Many Requests
+     */
+    getArticlePromotionFeed: (
+      query?: {
+        /** @format int32 */
+        stripSize?: number;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<PublicGetArticlePromotionFeedResponse, ProblemDetails>({
+        path: `/api/v1/public/articles/promotion/feed`,
+        method: "GET",
+        query: query,
         secure: true,
         format: "json",
         ...params,
@@ -10408,6 +10640,36 @@ export class Api<
         path: `/api/v1/public/categories`,
         method: "GET",
         query: query,
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * @description Returns all content types available on the platform (e.g. Article, Video).
+     * 
+     * Used by the frontend to resolve a content type identifier by name before
+     * fetching categories scoped to that content type.
+     * 
+     * This endpoint is publicly accessible and does not require authentication.
+     * 
+     * **Response Codes:**
+     * 
+     * - Returns 200 OK with the list of content types on success
+     * - Returns 429 Too Many Requests if rate limit is exceeded
+     *
+     * @tags public::content-types
+     * @name PublicGetAllContentTypes
+     * @summary Get all content types
+     * @request GET:/api/v1/public/content-types
+     * @secure
+     * @response `200` `PublicGetAllContentTypesResponse` OK
+     * @response `429` `ProblemDetails` Too Many Requests
+     */
+    publicGetAllContentTypes: (params: RequestParams = {}) =>
+      this.request<PublicGetAllContentTypesResponse, ProblemDetails>({
+        path: `/api/v1/public/content-types`,
+        method: "GET",
         secure: true,
         format: "json",
         ...params,
@@ -12431,6 +12693,48 @@ export class Api<
       }),
 
     /**
+     * @description Returns the most-used tags ranked by their combined usage across articles
+     * and videos, most popular first.
+     * 
+     * Results are cached server-side for 10 minutes to avoid running the
+     * aggregation query on every request.
+     * 
+     * **Query Parameters:**
+     * 
+     * - `limit` (optional, default 10): maximum number of tags to return
+     * This endpoint is publicly accessible and does not require authentication.
+     * 
+     * **Response Codes:**
+     * 
+     * - Returns 200 OK with the list of popular tags on success
+     * - Returns 429 Too Many Requests if rate limit is exceeded
+     *
+     * @tags public::tags
+     * @name PublicGetPopularTags
+     * @summary Get popular tags
+     * @request GET:/api/v1/public/tags/popular
+     * @secure
+     * @response `200` `PublicGetPopularTagsResponse` OK
+     * @response `429` `ProblemDetails` Too Many Requests
+     */
+    publicGetPopularTags: (
+      query?: {
+        /** @format int32 */
+        limit?: number;
+        contentType?: string;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<PublicGetPopularTagsResponse, ProblemDetails>({
+        path: `/api/v1/public/tags/popular`,
+        method: "GET",
+        query: query,
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
      * @description Returns all available tags for browsing and filtering content.
      * 
      * Supports optional search filtering via the `search` query parameter.
@@ -12544,6 +12848,49 @@ export class Api<
       }),
 
     /**
+     * @description Returns the homepage video promotion feed, grouping promoted published videos by
+     * spot priority (1, 2, 3).
+     * 
+     * Each spot maps to a visual region on the homepage grid. Spot 3 distributes videos
+     * across two columns (a and b). Empty spots are filled with randomly selected free
+     * published videos (videos with no associated customer).
+     * 
+     * A free video strip of up to 3 randomly selected videos is included below the grid.
+     * 
+     * **Authentication Requirements:**
+     * 
+     * - No authentication required
+     * 
+     * **Response Codes:**
+     * 
+     * - Returns 200 OK with the full promotion feed
+     * - Returns 429 Too Many Requests if rate limit is exceeded
+     *
+     * @tags public::videos
+     * @name GetVideoPromotionFeed
+     * @summary Video homepage promotion feed
+     * @request GET:/api/v1/public/videos/promotion/feed
+     * @secure
+     * @response `200` `PublicGetVideoPromotionFeedResponse` OK
+     * @response `429` `ProblemDetails` Too Many Requests
+     */
+    getVideoPromotionFeed: (
+      query?: {
+        /** @format int32 */
+        stripSize?: number;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<PublicGetVideoPromotionFeedResponse, ProblemDetails>({
+        path: `/api/v1/public/videos/promotion/feed`,
+        method: "GET",
+        query: query,
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
      * @description Retrieves the full details of a single published video by its URL slug.
      * 
      * Powers the individual video page with the embedded YouTube player, star ratings,
@@ -12628,11 +12975,11 @@ export class Api<
       }),
 
     /**
-     * @description Retrieves the list of currently featured published videos.
+     * @description Retrieves the list of currently promoted published videos.
      * 
-     * A video is featured when an admin stamps it with a future expiry date after a
-     * Commerce promotion purchase. Only videos where is_featured = true,
-     * featured_until > now(), and status = Published are returned.
+     * A video is promoted when a Commerce promotion purchase is verified.
+     * Only videos where is_promoted = true,
+     * promoted_until > now(), and status = Published are returned.
      * 
      * **Authentication Requirements:**
      * 
@@ -12640,20 +12987,20 @@ export class Api<
      * 
      * **Response Codes:**
      * 
-     * - Returns 200 OK with featured video list on success
+     * - Returns 200 OK with promoted video list on success
      * - Returns 429 Too Many Requests if rate limit is exceeded
      *
      * @tags public::videos
-     * @name GetFeaturedVideos
-     * @summary List featured videos
-     * @request GET:/api/v1/public/videos/featured
+     * @name GetPromotedVideos
+     * @summary List promoted videos
+     * @request GET:/api/v1/public/videos/promoted
      * @secure
-     * @response `200` `PublicGetFeaturedVideosResponse` OK
+     * @response `200` `PublicGetPromotedVideosResponse` OK
      * @response `429` `ProblemDetails` Too Many Requests
      */
-    getFeaturedVideos: (params: RequestParams = {}) =>
-      this.request<PublicGetFeaturedVideosResponse, ProblemDetails>({
-        path: `/api/v1/public/videos/featured`,
+    getPromotedVideos: (params: RequestParams = {}) =>
+      this.request<PublicGetPromotedVideosResponse, ProblemDetails>({
+        path: `/api/v1/public/videos/promoted`,
         method: "GET",
         secure: true,
         format: "json",

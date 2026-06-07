@@ -1,4 +1,4 @@
-import { Typography } from "antd";
+import { Flex, Tag, Typography } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import type { IPromotionLevelEntity } from "@/modules/lookup/domain/entities/IPromotionLevelEntity";
 import {
@@ -6,6 +6,8 @@ import {
     type PromotionLevelAction
 } from "@/modules/lookup/presentation/constants/lookup.promotion-levels.dropdown";
 import { ENTITY_STATUS_CONFIG } from "@/shared/presentation/constants/entity.status.config";
+import { Colors } from "@/shared/presentation/constants/theme";
+import { IconStopOutlined } from "@/shared/presentation/ui/Icons";
 import StatusTag from "@/shared/presentation/ui/StatusTag";
 import type { ITableActionItem } from "@/shared/presentation/ui/TableActionDropdown";
 import TableActionDropdown from "@/shared/presentation/ui/TableActionDropdown";
@@ -53,6 +55,28 @@ export const promotionLevelsTableColumns = (
         width: 120,
         sorter: (a, b) => a.priceUsd - b.priceUsd,
         render: (price: number) => <Text type="secondary">${price} USD</Text>
+    },
+    {
+        title: "Spot",
+        dataIndex: "spotPriority",
+        key: "spotPriority",
+        width: 200,
+        defaultSortOrder: "ascend",
+        sorter: (a, b) => (a.spotPriority ?? 4) - (b.spotPriority ?? 4),
+        render: (spot: number | null) => {
+            if (!spot) return <IconStopOutlined style={{ color: Colors.Error, fontSize: 18 }} />;
+            const labels: Record<number, string> = {
+                1: "Carrousel héros",
+                2: "Carrousel latéral",
+                3: "Binôme inférieur"
+            };
+            return (
+                <Flex gap={8} align="center">
+                    <Tag color="purple-inverse">Spot {spot}</Tag>
+                    <Text type="secondary">{labels[spot] ?? `Spot ${spot}`}</Text>
+                </Flex>
+            );
+        }
     },
     {
         title: "Statut",

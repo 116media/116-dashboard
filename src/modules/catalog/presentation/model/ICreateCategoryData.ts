@@ -12,4 +12,5 @@ export interface ICreateCategoryData {
     slug: string;
     description: string;
     isFree: boolean;
+    isGossip: boolean;
 }

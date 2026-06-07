@@ -19,9 +19,9 @@ import type { ContentStatus } from "@/shared/domain/enums/content-status.enum";
  * @property {boolean} canPublish - Whether the video can be published (requires YouTube URL)
  * @property {boolean} canReject - Whether the video can be rejected
  * @property {boolean} canArchive - Whether the video can be archived
+ * @property {boolean} isPromoted - Whether the video has an active paid promotion
  * @property {boolean} canAttachYoutubeUrl - Whether a YouTube URL can be attached (false when a future shoot is scheduled)
  * @property {string | null} youtubeVideoUrl - YouTube video identifier
- * @property {boolean} isFeatured - Whether the video is featured
  * @property {boolean} hasLyrics - Whether the video has associated lyrics
  * @property {string | null} publishedAt - ISO timestamp of publication
  * @property {string | null} createdAt - ISO creation timestamp
@@ -44,10 +44,10 @@ export interface IVideoSummaryEntity {
     canPublish: boolean;
     canReject: boolean;
     canArchive: boolean;
+    isPromoted: boolean;
     canAttachYoutubeUrl: boolean;
     youtubeVideoUrl?: string | null;
     shootingScheduledAt?: string | null;
-    isFeatured: boolean;
     hasLyrics: boolean;
     publishedAt?: string | null;
     createdAt?: string | null;

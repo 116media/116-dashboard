@@ -526,7 +526,7 @@ The `TagMultiSelect` component loads all tags from the lookup store and renders 
 | Titre | `title` | Yes | `<Text strong>` |
 | Catégorie | `categoryName` | Yes | `<Text>` |
 | Statut | `status` | Yes | `<ContentStatusTag>` |
-| En vedette | `isFeatured` | Yes | `<BooleanTag>` |
+| Promu | `isPromoted` | Yes | `<BooleanTag>` |
 | Publié le | `publishedAt` | Yes | `dayjs().format()` |
 | Modifié le | `updatedAt` | Yes | `dayjs().format()` |
 | Actions | — | No | `<TableActionDropdown>` |

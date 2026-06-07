@@ -551,7 +551,7 @@ Displays a helper hint: "Saisir uniquement l'identifiant (ex: dQw4w9WgXcQ), pas 
 | Catégorie | `categoryName` | Yes | `<Text>` |
 | YouTube | `youtubeVideoUrl` | No | link icon if set |
 | Statut | `status` | Yes | `<ContentStatusTag>` |
-| En vedette | `isFeatured` | Yes | `<BooleanTag>` |
+| Promu | `isPromoted` | Yes | `<BooleanTag>` |
 | Paroles | `hasLyrics` | No | `<BooleanTag>` |
 | Publié le | `publishedAt` | Yes | `dayjs().format()` |
 | Modifié le | `updatedAt` | Yes | `dayjs().format()` |

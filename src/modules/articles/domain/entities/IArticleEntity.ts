@@ -19,14 +19,16 @@ import type { ContentStatus } from "@/shared/domain/enums/content-status.enum";
  * @property {string} authorId - UUID of the author (identity user)
  * @property {ContentStatus} status - Current editorial workflow status
  * @property {string | null} rejectionReason - Reason for rejection, if rejected
- * @property {boolean} isFeatured - Whether the article is featured
- * @property {string | null} featuredUntil - ISO timestamp for featured expiry
  * @property {string | null} publishedAt - ISO timestamp of publication
  * @property {string | null} metaTitle - SEO meta title
  * @property {string | null} metaDescription - SEO meta description
  * @property {string | null} customerId - UUID of the B2B customer, null for free content
  * @property {string | null} customerName - Full name of the B2B customer, null for free content
  * @property {string | null} orderItemId - UUID of the linked order item, null for free content
+ * @property {boolean} isPromoted - Whether the article is currently promoted
+ * @property {string | null} promotedUntil - ISO timestamp for promotion expiry
+ * @property {string | null} promotionLevelId - UUID of the applied promotion level
+ * @property {string | null} promotionLevelName - Display name of the applied promotion level
  * @property {IArticleImageEntity[]} images - Uploaded article images
  * @property {ITagEntity[]} tags - Assigned tags
  * @property {number} readTimeInMinutes - Estimated reading time
@@ -48,14 +50,16 @@ export interface IArticleEntity {
     status: ContentStatus;
     rejectionReason?: string | null;
     socialBoost: boolean;
-    isFeatured: boolean;
-    featuredUntil?: string | null;
     publishedAt?: string | null;
     metaTitle?: string | null;
     metaDescription?: string | null;
     customerId?: string | null;
     customerName?: string | null;
     orderItemId?: string | null;
+    isPromoted: boolean;
+    promotedUntil?: string | null;
+    promotionLevelId?: string | null;
+    promotionLevelName?: string | null;
     images: IArticleImageEntity[];
     tags: ITagEntity[];
     readTimeInMinutes: number;

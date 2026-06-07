@@ -1,7 +1,7 @@
 import type { FormInstance } from "antd";
 import { Form, Input, Select } from "antd";
 import type { FC } from "react";
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import type { ICategoryEntity } from "@/modules/catalog/domain/entities/ICategoryEntity";
 import type { ICreateCategoryCredentials } from "@/modules/catalog/presentation/model/ICreateCategoryCredentials";
 import { CategoriesValidator } from "@/modules/catalog/presentation/utils/validators/catalog.categories.validator";
@@ -10,7 +10,7 @@ import type { Failure } from "@/shared/domain/failures/failure";
 import type { FormContext } from "@/shared/domain/types/pagination";
 import { useAppSelector } from "@/shared/presentation/store/store";
 import ErrorAlert from "@/shared/presentation/ui/ErrorAlert";
-import { IconDollarOutlined } from "@/shared/presentation/ui/Icons";
+import { IconDollarOutlined, IconTagOutlined } from "@/shared/presentation/ui/Icons";
 import SwitchField from "@/shared/presentation/ui/SwitchField";
 
 const { Item } = Form;
@@ -68,11 +68,27 @@ const CategoryForm: FC<ICategoryFormProps> = ({
         [contentTypes]
     );
 
+    const [selectedContentTypeId, setSelectedContentTypeId] = useState<string | undefined>(
+        initialValues?.contentTypeId
+    );
+
+    const selectedContentType = useMemo(
+        () =>
+            ((contentTypes as IContentTypeEntity[]) ?? []).find(
+                (ct) => ct.id === selectedContentTypeId
+            ),
+        [contentTypes, selectedContentTypeId]
+    );
+
+    const isArticleType = selectedContentType?.name === "Article";
+
     useEffect(() => {
         if (formContext === "EDIT" && initialValues) {
+            setSelectedContentTypeId(initialValues.contentTypeId);
             form.setFieldsValue({
                 name: initialValues.name,
                 isFree: initialValues.isFree,
+                isGossip: initialValues.isGossip,
                 description: initialValues.description,
                 contentTypeId: initialValues.contentTypeId
             });
@@ -87,6 +103,9 @@ const CategoryForm: FC<ICategoryFormProps> = ({
             onFinish={onSubmit}
             name="category_form"
             validateTrigger={["onSubmit", "onBlur"]}
+            initialValues={
+                formContext === "CREATE" ? { isFree: false, isGossip: false } : undefined
+            }
         >
             <ErrorAlert error={error} showIcon closable banner={false} />
 
@@ -100,6 +119,7 @@ const CategoryForm: FC<ICategoryFormProps> = ({
                     options={contentTypeOptions}
                     disabled={formContext === "EDIT"}
                     placeholder="Sélectionner un type de contenu"
+                    onSelect={(val: string) => setSelectedContentTypeId(val)}
                 />
             </Item>
 
@@ -129,6 +149,16 @@ const CategoryForm: FC<ICategoryFormProps> = ({
                     description="Le contenu est accessible sans paiement."
                 />
             </Item>
+
+            {isArticleType && (
+                <Item name="isGossip" valuePropName="checked">
+                    <SwitchField
+                        title="Catégorie gossip"
+                        icon={<IconTagOutlined />}
+                        description="Catégorie d'article actualités non-confirmées et rumeurs"
+                    />
+                </Item>
+            )}
         </Form>
     );
 };

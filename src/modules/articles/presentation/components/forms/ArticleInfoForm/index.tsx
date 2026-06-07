@@ -1,5 +1,5 @@
 import type { FormInstance } from "antd";
-import { DatePicker, Form, Input, Select } from "antd";
+import { Form, Input, Select } from "antd";
 import type { FC } from "react";
 import { useMemo } from "react";
 import type { ICreateArticleCredentials } from "@/modules/articles/presentation/model/ICreateArticleCredentials";
@@ -13,7 +13,7 @@ import type {
 import type { Failure } from "@/shared/domain/failures/failure";
 import { useAppSelector } from "@/shared/presentation/store/store";
 import ErrorAlert from "@/shared/presentation/ui/ErrorAlert";
-import { IconFireFilled, IconStarFilled } from "@/shared/presentation/ui/Icons";
+import { IconFireFilled } from "@/shared/presentation/ui/Icons";
 import { SelectOptionBadged, SelectOptionDetail } from "@/shared/presentation/ui/SelectOptions";
 import SwitchField from "@/shared/presentation/ui/SwitchField";
 
@@ -34,7 +34,6 @@ interface IArticleInfoFormProps {
     form: FormInstance<ICreateArticleCredentials>;
     orderItems: IUsePaidOrderItems;
     socialBoostLocked?: boolean;
-    featuredLocked?: boolean;
     onSubmit: (values: ICreateArticleCredentials) => void;
     onOrderItemChange?: (option: IOrderItemOption | undefined) => void;
 }
@@ -57,7 +56,6 @@ const ArticleInfoForm: FC<IArticleInfoFormProps> = ({
     error,
     orderItems,
     socialBoostLocked,
-    featuredLocked,
     onSubmit,
     onOrderItemChange
 }) => {
@@ -156,25 +154,6 @@ const ArticleInfoForm: FC<IArticleInfoFormProps> = ({
                     disabled={socialBoostLocked}
                     description="Promouvoir cet article sur les réseaux sociaux."
                 />
-            </Item>
-
-            <Item name="isFeatured" valuePropName="checked">
-                <SwitchField
-                    title="En vedette"
-                    icon={<IconStarFilled />}
-                    disabled={featuredLocked}
-                    description="Afficher cet article en avant sur la page d'accueil."
-                />
-            </Item>
-
-            <Item noStyle shouldUpdate={(prev, curr) => prev.isFeatured !== curr.isFeatured}>
-                {({ getFieldValue }) =>
-                    getFieldValue("isFeatured") ? (
-                        <Item name="featuredUntil" label="En vedette jusqu'au">
-                            <DatePicker disabled={featuredLocked} placeholder="Date d'expiration" />
-                        </Item>
-                    ) : null
-                }
             </Item>
         </Form>
     );

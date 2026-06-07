@@ -1,5 +1,5 @@
 import type { FormInstance } from "antd";
-import { Form, Input, InputNumber } from "antd";
+import { Form, Input, InputNumber, Select } from "antd";
 import type { FC } from "react";
 import { useEffect } from "react";
 import type { IPromotionLevelEntity } from "@/modules/lookup/domain/entities/IPromotionLevelEntity";
@@ -8,6 +8,7 @@ import { PromotionLevelsValidator } from "@/modules/lookup/presentation/utils/va
 import type { Failure } from "@/shared/domain/failures/failure";
 import type { FormContext } from "@/shared/domain/types/pagination";
 import ErrorAlert from "@/shared/presentation/ui/ErrorAlert";
+import SelectOptionTagged from "@/shared/presentation/ui/SelectOptions/SelectOptionTagged";
 
 const { Item } = Form;
 
@@ -48,12 +49,19 @@ const PromotionLevelForm: FC<IPromotionLevelFormProps> = ({
     initialValues,
     onSubmit
 }) => {
+    const spotPriorityOptions = [
+        { value: 1, label: "Carrousel héros", tag: "Spot 1" },
+        { value: 2, label: "Carrousel latéral", tag: "Spot 2" },
+        { value: 3, label: "Binôme inférieur", tag: "Spot 3" }
+    ];
+
     useEffect(() => {
         if (formContext === "EDIT" && initialValues) {
             form.setFieldsValue({
                 name: initialValues.name,
                 durationDays: initialValues.durationDays,
-                priceUsd: initialValues.priceUsd
+                priceUsd: initialValues.priceUsd,
+                spotPriority: initialValues.spotPriority ?? null
             });
         }
     }, [formContext, initialValues, form]);
@@ -87,6 +95,19 @@ const PromotionLevelForm: FC<IPromotionLevelFormProps> = ({
                 rules={PromotionLevelsValidator.priceUsd("Prix")}
             >
                 <InputNumber min={0} step={0.5} placeholder="Prix en USD" />
+            </Item>
+
+            <Item
+                name="spotPriority"
+                label="Spot de promotion"
+                rules={PromotionLevelsValidator.spotPriority("Spot de promotion")}
+            >
+                <Select
+                    allowClear
+                    placeholder="Aucun spot"
+                    options={spotPriorityOptions}
+                    optionRender={SelectOptionTagged}
+                />
             </Item>
         </Form>
     );

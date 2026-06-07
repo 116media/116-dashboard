@@ -66,7 +66,8 @@ export const LookupMapper = {
             name: dto.name,
             durationDays: dto.durationDays,
             priceUsd: dto.priceUsd,
-            isActive: dto.isActive
+            isActive: dto.isActive,
+            spotPriority: dto.spotPriority ?? null
         };
     },
 

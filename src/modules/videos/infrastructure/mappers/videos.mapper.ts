@@ -58,8 +58,6 @@ export const VideosMapper = {
             rejectionReason: dto.rejectionReason,
             youtubeVideoUrl: dto.youtubeVideoUrl,
             socialBoost: dto.socialBoost,
-            isFeatured: dto.isFeatured,
-            featuredUntil: dto.featuredUntil,
             hasLyrics: dto.hasLyrics,
             shootingScheduledAt: dto.shootingScheduledAt,
             publishedAt: dto.publishedAt,
@@ -68,6 +66,10 @@ export const VideosMapper = {
             customerId: dto.customerId,
             customerName: dto.customerName,
             orderItemId: dto.orderItemId,
+            isPromoted: dto.isPromoted,
+            promotedUntil: dto.promotedUntil,
+            promotionLevelId: dto.promotionLevelId ?? null,
+            promotionLevelName: dto.promotionLevelName ?? null,
             tags: dto.tags.map(VideosMapper.tagFromDto),
             author: dto.author
                 ? {
@@ -110,13 +112,13 @@ export const VideosMapper = {
                 contentStatus
             ),
             canArchive: [ContentStatus.Published, ContentStatus.Rejected].includes(contentStatus),
+            isPromoted: dto.isPromoted,
             canAttachYoutubeUrl:
                 !!dto.youtubeVideoUrl ||
                 !dto.shootingScheduledAt ||
                 new Date(dto.shootingScheduledAt) <= new Date(),
             youtubeVideoUrl: dto.youtubeVideoUrl,
             shootingScheduledAt: dto.shootingScheduledAt ?? null,
-            isFeatured: dto.isFeatured,
             hasLyrics: dto.hasLyrics,
             publishedAt: dto.publishedAt,
             createdAt: dto.createdAt,

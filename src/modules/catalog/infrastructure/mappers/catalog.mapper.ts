@@ -60,6 +60,7 @@ export const CatalogMapper = {
             description: dto.description,
             isFree: dto.isFree,
             isActive: dto.isActive,
+            isGossip: dto.isGossip,
             pricing: dto.pricing.map(CatalogMapper.categoryPricingFromDto)
         };
     },

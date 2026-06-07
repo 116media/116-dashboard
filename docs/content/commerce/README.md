@@ -15,7 +15,7 @@ The Ventes module manages the order-to-payment lifecycle for B2B content commiss
 3. Submit order (Draft → PendingPayment)
 4. Attach payment proof
 5. Verify or reject payment
-6. On verification: stamps (SocialBoost, IsFeatured) applied to linked content
+6. On verification: stamps (SocialBoost, IsPromoted) applied to linked content
 
 ## Backend Endpoints (17)
 

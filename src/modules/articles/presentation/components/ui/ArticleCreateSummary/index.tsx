@@ -1,6 +1,8 @@
 import { Descriptions, Flex, Image, Tag, Typography } from "antd";
 import type { FC } from "react";
 import type { IArticleEntity } from "@/modules/articles/domain/entities/IArticleEntity";
+import { Colors } from "@/shared/presentation/constants/theme";
+import { IconStopOutlined } from "@/shared/presentation/ui/Icons";
 import styles from "./index.module.scss";
 
 const { Text } = Typography;
@@ -30,7 +32,9 @@ const ArticleCreateSummary: FC<IArticleCreateSummaryProps> = ({ article }) => {
                 </Descriptions.Item>
                 <Descriptions.Item label="Catégorie">{article.categoryName}</Descriptions.Item>
                 <Descriptions.Item label="Sommaire">
-                    {article.headline || <Text type="secondary">—</Text>}
+                    {article.headline || (
+                        <IconStopOutlined style={{ color: Colors.Error, fontSize: 18 }} />
+                    )}
                 </Descriptions.Item>
                 {article.coverImageUrl && (
                     <Descriptions.Item label="Couverture">

@@ -52,6 +52,7 @@ export const useCreateCategory = (onSuccess?: () => void): IUseCreateCategory =>
                 slug,
                 name: values.name,
                 isFree: values.isFree,
+                isGossip: values.isGossip ?? false,
                 description: values.description,
                 contentTypeId: values.contentTypeId
             })

@@ -1,5 +1,5 @@
 import type { FormInstance } from "antd";
-import { DatePicker, Form, Input, Select } from "antd";
+import { Form, Input, Select } from "antd";
 import type { FC } from "react";
 import { useCallback, useMemo } from "react";
 import type { IUpdateArticleCredentials } from "@/modules/articles/presentation/model/IUpdateArticleCredentials";
@@ -12,7 +12,7 @@ import { useAppSelector } from "@/shared/presentation/store/store";
 import ErrorAlert from "@/shared/presentation/ui/ErrorAlert";
 import FileUploader from "@/shared/presentation/ui/FileUploader";
 import { IMAGE_PRESET } from "@/shared/presentation/ui/FileUploader/presets";
-import { IconFireFilled, IconStarFilled } from "@/shared/presentation/ui/Icons";
+import { IconFireFilled } from "@/shared/presentation/ui/Icons";
 import RichTextEditor from "@/shared/presentation/ui/RichTextEditor";
 import { SelectOptionBadged, SelectOptionDetail } from "@/shared/presentation/ui/SelectOptions";
 import SwitchField from "@/shared/presentation/ui/SwitchField";
@@ -184,43 +184,6 @@ const ArticleDetailsForm: FC<IArticleDetailsFormProps> = ({
                                 description="Promouvoir cet article sur les réseaux sociaux."
                             />
                         </Item>
-                    );
-                }}
-            </Item>
-
-            <Item noStyle shouldUpdate={(prev, curr) => prev.orderItemId !== curr.orderItemId}>
-                {({ getFieldValue }) => {
-                    const selectedOption = orderItems.options.find(
-                        (o) => o.value === getFieldValue("orderItemId")
-                    );
-                    const locked = selectedOption?.hasPromotion ?? false;
-                    return (
-                        <>
-                            <Item name="isFeatured" valuePropName="checked">
-                                <SwitchField
-                                    disabled={locked}
-                                    title="En vedette"
-                                    icon={<IconStarFilled />}
-                                    description="Afficher cet article en avant sur la page d'accueil."
-                                />
-                            </Item>
-
-                            <Item
-                                noStyle
-                                shouldUpdate={(prev, curr) => prev.isFeatured !== curr.isFeatured}
-                            >
-                                {({ getFieldValue: getValue }) =>
-                                    getValue("isFeatured") ? (
-                                        <Item name="featuredUntil" label="En vedette jusqu'au">
-                                            <DatePicker
-                                                disabled={locked}
-                                                placeholder="Date d'expiration"
-                                            />
-                                        </Item>
-                                    ) : null
-                                }
-                            </Item>
-                        </>
                     );
                 }}
             </Item>

@@ -19,8 +19,6 @@ import type { ContentStatus } from "@/shared/domain/enums/content-status.enum";
  * @property {ContentStatus} status - Current editorial workflow status
  * @property {string | null} rejectionReason - Reason for rejection, if rejected
  * @property {string | null} youtubeVideoUrl - YouTube video identifier
- * @property {boolean} isFeatured - Whether the video is featured
- * @property {string | null} featuredUntil - ISO timestamp for featured expiry
  * @property {boolean} hasLyrics - Whether the video has associated lyrics
  * @property {string | null} shootingScheduledAt - ISO timestamp for scheduled shoot
  * @property {string | null} publishedAt - ISO timestamp of publication
@@ -29,6 +27,8 @@ import type { ContentStatus } from "@/shared/domain/enums/content-status.enum";
  * @property {string | null} customerId - UUID of the B2B customer, null for free content
  * @property {string | null} customerName - Full name of the B2B customer, null for free content
  * @property {string | null} orderItemId - UUID of the linked order item, null for free content
+ * @property {boolean} isPromoted - Whether the video is currently promoted
+ * @property {string | null} promotedUntil - ISO timestamp for promotion expiry
  * @property {ITagEntity[]} tags - Assigned tags
  * @property {IAuthorEntity | null} author - Author profile (identity user snapshot)
  * @property {string | null} createdAt - ISO creation timestamp
@@ -50,8 +50,6 @@ export interface IVideoEntity {
     rejectionReason?: string | null;
     youtubeVideoUrl?: string | null;
     socialBoost: boolean;
-    isFeatured: boolean;
-    featuredUntil?: string | null;
     hasLyrics: boolean;
     shootingScheduledAt?: string | null;
     publishedAt?: string | null;
@@ -60,6 +58,10 @@ export interface IVideoEntity {
     customerId?: string | null;
     customerName?: string | null;
     orderItemId?: string | null;
+    isPromoted: boolean;
+    promotedUntil?: string | null;
+    promotionLevelId?: string | null;
+    promotionLevelName?: string | null;
     tags: ITagEntity[];
     author?: IAuthorEntity | null;
     createdAt?: string | null;
