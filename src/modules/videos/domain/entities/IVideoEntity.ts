@@ -14,7 +14,6 @@ import type { ContentStatus } from "@/shared/domain/enums/content-status.enum";
  * @property {string} slug - URL-safe slug
  * @property {string} description - Video description text (max 2000 chars)
  * @property {string | null} thumbnailUrl - URL of the video thumbnail
- * @property {string | null} thumbnailStorageKey - Storage key for the thumbnail asset
  * @property {string} authorId - UUID of the author (identity user)
  * @property {ContentStatus} status - Current editorial workflow status
  * @property {string | null} rejectionReason - Reason for rejection, if rejected
@@ -44,7 +43,6 @@ export interface IVideoEntity {
     slug: string;
     description: string;
     thumbnailUrl?: string | null;
-    thumbnailStorageKey?: string | null;
     authorId: string;
     status: ContentStatus;
     rejectionReason?: string | null;
