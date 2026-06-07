@@ -21,6 +21,8 @@ export type ICatalogState = {
     updateCategory: IBasicInitialState<ICategoryEntity>;
     activateCategory: IBasicInitialState<ICategoryEntity>;
     deactivateCategory: IBasicInitialState<ICategoryEntity>;
+    setExclusiveCategory: IBasicInitialState<ICategoryEntity>;
+    uploadCategoryPoster: IBasicInitialState<ICategoryEntity>;
     addCategoryPricing: IBasicInitialState<ICategoryPricingEntity>;
     updateCategoryPricing: IBasicInitialState<ICategoryPricingEntity>;
     removeCategoryPricing: IBasicInitialState<ICatalogActionResponse>;
