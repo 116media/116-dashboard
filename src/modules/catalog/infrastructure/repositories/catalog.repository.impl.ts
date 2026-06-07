@@ -17,6 +17,7 @@ import type { IPackagesQueryParams } from "@/modules/catalog/presentation/model/
 import type { IUpdateCategoryCredentials } from "@/modules/catalog/presentation/model/IUpdateCategoryCredentials";
 import type { IUpdateCategoryPricingCredentials } from "@/modules/catalog/presentation/model/IUpdateCategoryPricingCredentials";
 import type { IUpdateCustomerCredentials } from "@/modules/catalog/presentation/model/IUpdateCustomerCredentials";
+import type { IUploadCategoryPosterCredentials } from "@/modules/catalog/presentation/model/IUploadCategoryPosterCredentials";
 import type { Result } from "@/shared/domain/results/result";
 import { err, ok } from "@/shared/domain/results/result";
 import type { IPaginatedResult } from "@/shared/domain/types/pagination";
@@ -85,6 +86,27 @@ export class CatalogRepositoryImpl implements ICatalogRepositoryPort {
     async activateCategory(id: string): Promise<Result<ICategoryEntity>> {
         try {
             const response = await apiClient.api.adminActivateCategory(id);
+            return ok(CatalogMapper.categoryFromDto(response.data.category));
+        } catch (error) {
+            return err(ProblemMapper.toFailure(error));
+        }
+    }
+
+    async setExclusiveCategory(id: string): Promise<Result<ICategoryEntity>> {
+        try {
+            const response = await apiClient.api.adminSetExclusiveCategory(id);
+            return ok(CatalogMapper.categoryFromDto(response.data.category));
+        } catch (error) {
+            return err(ProblemMapper.toFailure(error));
+        }
+    }
+
+    async uploadCategoryPoster(
+        id: string,
+        data: IUploadCategoryPosterCredentials
+    ): Promise<Result<ICategoryEntity>> {
+        try {
+            const response = await apiClient.api.adminUploadCategoryPoster(id, { file: data.file });
             return ok(CatalogMapper.categoryFromDto(response.data.category));
         } catch (error) {
             return err(ProblemMapper.toFailure(error));
