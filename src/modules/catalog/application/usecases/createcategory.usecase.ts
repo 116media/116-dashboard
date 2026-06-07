@@ -41,7 +41,8 @@ export class CreateCategoryUseCase implements ICreateCategoryUseCase {
             slug: params.slug,
             description: params.description,
             isFree: params.isFree,
-            isGossip: params.isGossip ?? false
+            isGossip: params.isGossip ?? false,
+            isExclusive: params.isExclusive ?? false
         });
     }
 }
