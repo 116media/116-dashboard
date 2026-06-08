@@ -1,6 +1,7 @@
 import type { AsyncThunk } from "@reduxjs/toolkit";
 import { activateCategoryAction } from "@/modules/catalog/presentation/store/activatecategory.action";
 import { deactivateCategoryAction } from "@/modules/catalog/presentation/store/deactivatecategory.action";
+import { setExclusiveCategoryAction } from "@/modules/catalog/presentation/store/setexclusivecategory.action";
 import { CategoriesNotification } from "@/modules/catalog/presentation/utils/notification/catalog.categories.notification";
 import type { Failure } from "@/shared/domain/failures/failure";
 import { useAppDispatch, useAppSelector } from "@/shared/presentation/store/store";
@@ -16,6 +17,7 @@ interface IUseCategoryActions {
     error: Failure | null | undefined;
     onActivate: (id: string) => Promise<void>;
     onDeactivate: (id: string) => Promise<void>;
+    onSetExclusive: (id: string) => Promise<void>;
 }
 
 /**
@@ -37,9 +39,12 @@ export const useCategoryActions = (reload: () => void): IUseCategoryActions => {
     const deactivateState = useAppSelector(
         ({ catalog: { deactivateCategory } }) => deactivateCategory
     );
+    const setExclusiveState = useAppSelector(
+        ({ catalog: { setExclusiveCategory } }) => setExclusiveCategory
+    );
 
-    const error = activateState.error || deactivateState.error;
-    const loading = activateState.loading || deactivateState.loading;
+    const error = activateState.error || deactivateState.error || setExclusiveState.error;
+    const loading = activateState.loading || deactivateState.loading || setExclusiveState.loading;
 
     const dispatchAction = async <T>(
         thunk: AsyncThunk<T, string, { rejectValue: Failure }>,
@@ -72,5 +77,13 @@ export const useCategoryActions = (reload: () => void): IUseCategoryActions => {
         );
     };
 
-    return { loading, error, onActivate, onDeactivate };
+    const onSetExclusive = (id: string) => {
+        return dispatchAction(
+            setExclusiveCategoryAction,
+            id,
+            CategoriesNotification.setExclusiveSuccess
+        );
+    };
+
+    return { loading, error, onActivate, onDeactivate, onSetExclusive };
 };
