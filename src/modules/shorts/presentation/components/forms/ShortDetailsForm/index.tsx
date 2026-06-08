@@ -11,16 +11,15 @@ import ErrorAlert from "@/shared/presentation/ui/ErrorAlert";
 import FileUploader from "@/shared/presentation/ui/FileUploader";
 import { VIDEO_PRESET } from "@/shared/presentation/ui/FileUploader/presets";
 import { SelectOptionDetail } from "@/shared/presentation/ui/SelectOptions";
-import VideoPlayer from "@/shared/presentation/ui/VideoPlayer";
 
 const { Item } = Form;
 
 interface IShortDetailsFormProps {
     form: FormInstance<IUpdateShortCredentials>;
     error?: Failure | null | undefined;
-    videoFile: File | null;
+    uploading: boolean;
     currentVideoUrl?: string | null;
-    onVideoFileChange: (file: File | null) => void;
+    onVideoUpload: (file: File) => Promise<void>;
     onSubmit: () => Promise<void>;
 }
 
@@ -30,16 +29,17 @@ interface IShortDetailsFormProps {
  * @component
  *
  * @description
- * Renders title, video select (from active videos), and optional
- * video file replacement using the shared FileUploader in deferred
- * mode. Shows a video preview for the current or new file.
+ * Renders title and video select (from active videos) for the JSON metadata update. The video
+ * file is replaced through a dedicated, decoupled upload (`onVideoUpload`) that fires as soon as
+ * a file is selected — separate from the metadata submission — and shows a preview of the
+ * current video.
  */
 const ShortDetailsForm: FC<IShortDetailsFormProps> = ({
     form,
     error,
-    videoFile,
+    uploading,
     currentVideoUrl,
-    onVideoFileChange,
+    onVideoUpload,
     onSubmit
 }) => {
     const dispatch = useAppDispatch();
@@ -60,11 +60,6 @@ const ShortDetailsForm: FC<IShortDetailsFormProps> = ({
                 secondary: v.categoryName
             })),
         [videos]
-    );
-
-    const previewUrl = useMemo(
-        () => (videoFile ? URL.createObjectURL(videoFile) : null),
-        [videoFile]
     );
 
     return (
@@ -93,19 +88,17 @@ const ShortDetailsForm: FC<IShortDetailsFormProps> = ({
                 />
             </Item>
 
-            <Item label="Remplacer le fichier vidéo">
+            <Item label="Fichier vidéo">
                 <FileUploader
                     mode="deferred"
-                    showPreview={false}
+                    value={currentVideoUrl}
+                    disabled={uploading}
                     preset={VIDEO_PRESET}
-                    onFileSelect={onVideoFileChange}
-                    onRemove={() => onVideoFileChange(null)}
+                    onFileSelect={(file) => {
+                        void onVideoUpload(file);
+                    }}
                 />
             </Item>
-
-            {(previewUrl || currentVideoUrl) && (
-                <VideoPlayer src={previewUrl ?? currentVideoUrl} maxHeight={400} />
-            )}
         </Form>
     );
 };
