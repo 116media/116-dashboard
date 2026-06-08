@@ -148,6 +148,7 @@ const CategoriesListContainer: FC = () => {
                         error={updateCategory.error}
                         initialValues={modals.selectedEntity}
                         onSubmit={updateCategory.onSubmit}
+                        onPosterUpload={updateCategory.onPosterUpload}
                     />
                 </CreateEditModal>
             )}
@@ -161,7 +162,8 @@ const CategoriesListContainer: FC = () => {
                 onConfirm={() =>
                     modals.handleActionConfirm({
                         activate: actions.onActivate,
-                        deactivate: actions.onDeactivate
+                        deactivate: actions.onDeactivate,
+                        setExclusive: actions.onSetExclusive
                     })
                 }
                 onCancel={() => modals.setActionOpen(false)}
