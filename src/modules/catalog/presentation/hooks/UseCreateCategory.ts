@@ -53,6 +53,7 @@ export const useCreateCategory = (onSuccess?: () => void): IUseCreateCategory =>
                 name: values.name,
                 isFree: values.isFree,
                 isGossip: values.isGossip ?? false,
+                isExclusive: values.isExclusive ?? false,
                 description: values.description,
                 contentTypeId: values.contentTypeId
             })
