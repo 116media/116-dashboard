@@ -6,6 +6,10 @@ import {
     createShortAction,
     resetCreateShortAction
 } from "@/modules/shorts/presentation/store/createshort.action";
+import {
+    resetUploadShortVideoAction,
+    uploadShortVideoAction
+} from "@/modules/shorts/presentation/store/uploadshortvideo.action";
 import { ShortsNotification } from "@/modules/shorts/presentation/utils/notification/shorts.notification";
 import type { Failure } from "@/shared/domain/failures/failure";
 import { useAppDispatch, useAppSelector } from "@/shared/presentation/store/store";
@@ -34,9 +38,10 @@ interface IUseCreateShort {
  * Custom hook for the create short video form logic.
  *
  * @description
- * Manages form state, file state for the video upload, submission,
- * and success feedback for creating a new short video. On success,
- * sets a success message and shows a toast notification.
+ * Creates the short video in two steps following the backend draft model: first it creates a
+ * JSON metadata draft, then it uploads the selected video file to that draft via the dedicated
+ * upload endpoint. The combined `loading` covers both steps so the modal stays busy until the
+ * file has been attached.
  *
  * @param onSuccess - Optional callback invoked after successful creation
  * @returns Form instance, loading/error state, file state, success message, and submit handler
@@ -47,35 +52,55 @@ export const useCreateShort = (onSuccess?: () => void): IUseCreateShort => {
     const [success, setSuccess] = useState<string | null>(null);
     const [videoFile, setVideoFile] = useState<File | null>(null);
 
-    const { loading, error } = useAppSelector(({ shorts: { createShort } }) => createShort);
+    const { loading: createLoading, error: createError } = useAppSelector(
+        ({ shorts: { createShort } }) => createShort
+    );
+    const { loading: uploadLoading, error: uploadError } = useAppSelector(
+        ({ shorts: { uploadShortVideo } }) => uploadShortVideo
+    );
 
     const onSubmit = async (values: ICreateShortCredentials): Promise<void> => {
         if (!videoFile) return;
 
-        const result = await dispatch(
+        const created = await dispatch(
             createShortAction({
                 title: values.title,
                 slug: generateSlug(values.title, { unique: true }),
-                videoFile,
                 videoId: values.videoId
             })
         );
 
-        if (createShortAction.fulfilled.match(result)) {
-            setSuccess(ShortsNotification.createSuccess.description);
-            showNotification(ShortsNotification.createSuccess);
-            form.resetFields();
-            setVideoFile(null);
-            onSuccess?.();
-        }
+        if (!createShortAction.fulfilled.match(created)) return;
+
+        const uploaded = await dispatch(
+            uploadShortVideoAction({ id: created.payload.id, data: { file: videoFile } })
+        );
+
+        if (!uploadShortVideoAction.fulfilled.match(uploaded)) return;
+
+        setSuccess(ShortsNotification.createSuccess.description);
+        showNotification(ShortsNotification.createSuccess);
+        form.resetFields();
+        setVideoFile(null);
+        onSuccess?.();
     };
 
     const resetCreate = () => {
         setSuccess(null);
         form.resetFields();
         dispatch(resetCreateShortAction());
+        dispatch(resetUploadShortVideoAction());
         setVideoFile(null);
     };
 
-    return { form, loading, error, success, videoFile, setVideoFile, onSubmit, resetCreate };
+    return {
+        form,
+        loading: createLoading || uploadLoading,
+        error: createError ?? uploadError,
+        success,
+        videoFile,
+        setVideoFile,
+        onSubmit,
+        resetCreate
+    };
 };
