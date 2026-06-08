@@ -16,6 +16,8 @@ export const catalogInitialState: ICatalogState = {
     updateCategory: createInitialState(),
     activateCategory: createInitialState(),
     deactivateCategory: createInitialState(),
+    setExclusiveCategory: createInitialState(),
+    uploadCategoryPoster: createInitialState(),
     addCategoryPricing: createInitialState(),
     updateCategoryPricing: createInitialState(),
     removeCategoryPricing: createInitialState(),
