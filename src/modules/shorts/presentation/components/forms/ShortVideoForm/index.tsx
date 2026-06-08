@@ -11,7 +11,6 @@ import ErrorAlert from "@/shared/presentation/ui/ErrorAlert";
 import FileUploader from "@/shared/presentation/ui/FileUploader";
 import { VIDEO_PRESET } from "@/shared/presentation/ui/FileUploader/presets";
 import { SelectOptionDetail } from "@/shared/presentation/ui/SelectOptions";
-import VideoPlayer from "@/shared/presentation/ui/VideoPlayer";
 
 const { Item } = Form;
 
@@ -93,14 +92,12 @@ const ShortVideoForm: FC<IShortVideoFormProps> = ({
             <Item label="Fichier vidéo" required>
                 <FileUploader
                     mode="deferred"
-                    showPreview={false}
+                    value={previewUrl}
                     preset={VIDEO_PRESET}
                     onFileSelect={onVideoFileChange}
                     onRemove={() => onVideoFileChange(null)}
                 />
             </Item>
-
-            {previewUrl && <VideoPlayer src={previewUrl} maxHeight={400} />}
         </Form>
     );
 };
