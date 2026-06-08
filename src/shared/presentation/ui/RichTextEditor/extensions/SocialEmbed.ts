@@ -196,13 +196,11 @@ export const SocialEmbed = Node.create({
             const config = PLATFORM_CONFIG[platform] ?? PLATFORM_CONFIG.social;
             const isEditable = editor.isEditable;
 
-            // ── Wrapper ──
             const dom = document.createElement("div");
             dom.className = "socialEmbed";
             dom.dataset.platform = platform;
             dom.style.setProperty("--social-brand", config.brandColor);
 
-            // ── Legend card (separate from body) ──
             const legend = document.createElement("div");
             legend.className = "socialEmbed__legend";
 
@@ -241,7 +239,6 @@ export const SocialEmbed = Node.create({
                 legend.appendChild(deleteBtn);
             }
 
-            // ── Iframe body (transparent, separated) ──
             const body = document.createElement("div");
             body.className = "socialEmbed__body";
 
