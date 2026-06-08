@@ -9,7 +9,8 @@ export const ActionType = {
     ActivateShort: "Shorts/activateShort",
     DeactivateShort: "Shorts/deactivateShort",
     DeleteShort: "Shorts/deleteShort",
-    UploadShortThumbnail: "Shorts/uploadShortThumbnail"
+    UploadShortThumbnail: "Shorts/uploadShortThumbnail",
+    UploadShortVideo: "Shorts/uploadShortVideo"
 } as const;
 
 /**
