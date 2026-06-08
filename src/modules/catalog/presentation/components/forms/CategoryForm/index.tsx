@@ -1,7 +1,7 @@
 import type { FormInstance } from "antd";
 import { Form, Input, Select } from "antd";
 import type { FC } from "react";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import type { ICategoryEntity } from "@/modules/catalog/domain/entities/ICategoryEntity";
 import type { ICreateCategoryCredentials } from "@/modules/catalog/presentation/model/ICreateCategoryCredentials";
 import { CategoriesValidator } from "@/modules/catalog/presentation/utils/validators/catalog.categories.validator";
@@ -10,7 +10,13 @@ import type { Failure } from "@/shared/domain/failures/failure";
 import type { FormContext } from "@/shared/domain/types/pagination";
 import { useAppSelector } from "@/shared/presentation/store/store";
 import ErrorAlert from "@/shared/presentation/ui/ErrorAlert";
-import { IconDollarOutlined, IconTagOutlined } from "@/shared/presentation/ui/Icons";
+import FileUploader from "@/shared/presentation/ui/FileUploader";
+import { IMAGE_PRESET } from "@/shared/presentation/ui/FileUploader/presets";
+import {
+    IconDollarOutlined,
+    IconStarOutlined,
+    IconTagOutlined
+} from "@/shared/presentation/ui/Icons";
 import SwitchField from "@/shared/presentation/ui/SwitchField";
 
 const { Item } = Form;
@@ -32,6 +38,7 @@ interface ICategoryFormProps {
     error: Failure | null | undefined;
     initialValues?: ICategoryEntity | null;
     onSubmit: (values: ICreateCategoryCredentials) => void;
+    onPosterUpload?: (file: File) => Promise<string | null>;
 }
 
 /**
@@ -54,7 +61,8 @@ const CategoryForm: FC<ICategoryFormProps> = ({
     error,
     formContext,
     initialValues,
-    onSubmit
+    onSubmit,
+    onPosterUpload
 }) => {
     const { data: contentTypes } = useAppSelector(
         ({ lookup: { getContentTypes } }) => getContentTypes
@@ -81,6 +89,8 @@ const CategoryForm: FC<ICategoryFormProps> = ({
     );
 
     const isArticleType = selectedContentType?.name === "Article";
+    const isVideoType = selectedContentType?.name === "Video";
+    const isEdit = formContext === "EDIT";
 
     useEffect(() => {
         if (formContext === "EDIT" && initialValues) {
@@ -89,11 +99,28 @@ const CategoryForm: FC<ICategoryFormProps> = ({
                 name: initialValues.name,
                 isFree: initialValues.isFree,
                 isGossip: initialValues.isGossip,
+                isExclusive: initialValues.isExclusive,
+                posterUrl: initialValues.posterUrl,
                 description: initialValues.description,
                 contentTypeId: initialValues.contentTypeId
             });
         }
     }, [formContext, initialValues, form]);
+
+    const handlePosterUpload = useCallback(
+        async (file: File): Promise<string> => {
+            if (!onPosterUpload) throw new Error("Poster upload not available");
+            const url = await onPosterUpload(file);
+            if (!url) throw new Error("Poster upload failed");
+            form.setFieldValue("posterUrl", url);
+            return url;
+        },
+        [onPosterUpload, form]
+    );
+
+    const handlePosterRemove = useCallback(() => {
+        form.setFieldValue("posterUrl", null);
+    }, [form]);
 
     return (
         <Form
@@ -104,7 +131,9 @@ const CategoryForm: FC<ICategoryFormProps> = ({
             name="category_form"
             validateTrigger={["onSubmit", "onBlur"]}
             initialValues={
-                formContext === "CREATE" ? { isFree: false, isGossip: false } : undefined
+                formContext === "CREATE"
+                    ? { isFree: false, isGossip: false, isExclusive: false }
+                    : undefined
             }
         >
             <ErrorAlert error={error} showIcon closable banner={false} />
@@ -156,6 +185,28 @@ const CategoryForm: FC<ICategoryFormProps> = ({
                         title="Catégorie gossip"
                         icon={<IconTagOutlined />}
                         description="Catégorie d'article actualités non-confirmées et rumeurs"
+                    />
+                </Item>
+            )}
+
+            {isVideoType && (
+                <Item name="isExclusive" valuePropName="checked">
+                    <SwitchField
+                        title="Émission exclusive"
+                        icon={<IconStarOutlined />}
+                        description="Mettre cette catégorie en avant comme émission exclusive sur l'accueil."
+                    />
+                </Item>
+            )}
+
+            {isEdit && (
+                <Item name="posterUrl" label="Affiche">
+                    <FileUploader
+                        aspectRatio={16 / 9}
+                        preset={IMAGE_PRESET}
+                        disabled={!onPosterUpload}
+                        onUpload={handlePosterUpload}
+                        onRemove={handlePosterRemove}
                     />
                 </Item>
             )}
