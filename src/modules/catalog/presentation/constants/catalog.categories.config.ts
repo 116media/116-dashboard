@@ -23,5 +23,12 @@ export const CATEGORY_ACTION_CONFIG: Partial<Record<CategoryAction, ActionConfig
         description: "Êtes-vous sûr de vouloir désactiver cette catégorie ?",
         confirmLabel: "Désactiver",
         danger: true
+    },
+    setExclusive: {
+        title: "Définir comme émission exclusive",
+        description:
+            "Êtes-vous sûr de vouloir définir cette catégorie comme émission exclusive ? L'émission exclusive actuelle sera automatiquement remplacée.",
+        confirmLabel: "Définir",
+        danger: false
     }
 };
