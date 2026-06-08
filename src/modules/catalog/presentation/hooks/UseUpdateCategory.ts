@@ -2,6 +2,7 @@ import type { FormInstance } from "antd";
 import { Form } from "antd";
 import { useEffect, useState } from "react";
 import type { ICategoryEntity } from "@/modules/catalog/domain/entities/ICategoryEntity";
+import { useUploadCategoryPoster } from "@/modules/catalog/presentation/hooks/UseUploadCategoryPoster";
 import type { IUpdateCategoryCredentials } from "@/modules/catalog/presentation/model/IUpdateCategoryCredentials";
 import {
     resetUpdateCategoryAction,
@@ -23,9 +24,11 @@ const { useForm } = Form;
 interface IUseUpdateCategory {
     form: FormInstance<IUpdateCategoryCredentials>;
     loading: boolean;
+    posterUploading: boolean;
     error: Failure | null | undefined;
     success: string | null;
     onSubmit: (values: IUpdateCategoryCredentials) => Promise<void>;
+    onPosterUpload: (file: File) => Promise<string | null>;
     resetUpdate: () => void;
 }
 
@@ -46,16 +49,25 @@ export const useUpdateCategory = (
     const dispatch = useAppDispatch();
     const [form] = useForm<IUpdateCategoryCredentials>();
     const [success, setSuccess] = useState<string | null>(null);
+    const { onUpload: uploadPoster, loading: posterUploading } = useUploadCategoryPoster();
 
     const { loading, error } = useAppSelector(({ catalog: { updateCategory } }) => updateCategory);
 
     useEffect(() => {
         if (category) {
             form.setFieldsValue({
-                name: category.name
+                name: category.name,
+                description: category.description,
+                isGossip: category.isGossip,
+                isExclusive: category.isExclusive
             });
         }
     }, [category, form]);
+
+    const onPosterUpload = async (file: File): Promise<string | null> => {
+        if (!category) return null;
+        return uploadPoster(category.id, file);
+    };
 
     const onSubmit = async (values: IUpdateCategoryCredentials): Promise<void> => {
         if (!category) return;
@@ -67,7 +79,8 @@ export const useUpdateCategory = (
                     name: values.name,
                     slug: generateSlug(values.name),
                     description: values.description,
-                    isGossip: values.isGossip ?? false
+                    isGossip: values.isGossip ?? false,
+                    isExclusive: values.isExclusive ?? false
                 }
             })
         );
@@ -86,5 +99,14 @@ export const useUpdateCategory = (
         form.resetFields();
     };
 
-    return { form, loading, error, success, onSubmit, resetUpdate };
+    return {
+        form,
+        loading,
+        posterUploading,
+        error,
+        success,
+        onSubmit,
+        onPosterUpload,
+        resetUpdate
+    };
 };
