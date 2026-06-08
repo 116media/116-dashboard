@@ -24,11 +24,13 @@ import { getCustomerByIdAction } from "./getcustomerbyid.action";
 import { getPackageByIdAction } from "./getpackagebyid.action";
 import { removeCategoryPricingAction } from "./removecategorypricing.action";
 import { removePackageSlotAction } from "./removepackageslot.action";
+import { setExclusiveCategoryAction } from "./setexclusivecategory.action";
 import { catalogInitialState } from "./state";
 import type { CatalogStateKey } from "./type";
 import { updateCategoryAction } from "./updatecategory.action";
 import { updateCategoryPricingAction } from "./updatecategorypricing.action";
 import { updateCustomerAction } from "./updatecustomer.action";
+import { uploadCategoryPosterAction } from "./uploadcategoryposter.action";
 
 /**
  * Redux slice for the catalog module.
@@ -77,6 +79,14 @@ export const catalogSlice = createSlice({
             .addCase(deactivateCategoryAction.pending, ActionWrapperPending)
             .addCase(deactivateCategoryAction.fulfilled, ActionWrapperFulfilled)
             .addCase(deactivateCategoryAction.rejected, ActionWrapperRejected)
+
+            .addCase(setExclusiveCategoryAction.pending, ActionWrapperPending)
+            .addCase(setExclusiveCategoryAction.fulfilled, ActionWrapperFulfilled)
+            .addCase(setExclusiveCategoryAction.rejected, ActionWrapperRejected)
+
+            .addCase(uploadCategoryPosterAction.pending, ActionWrapperPending)
+            .addCase(uploadCategoryPosterAction.fulfilled, ActionWrapperFulfilled)
+            .addCase(uploadCategoryPosterAction.rejected, ActionWrapperRejected)
             // add category pricing
             .addCase(addCategoryPricingAction.pending, ActionWrapperPending)
             .addCase(addCategoryPricingAction.fulfilled, ActionWrapperFulfilled)
