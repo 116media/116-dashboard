@@ -9,10 +9,11 @@ export const resetCreateShortAction = () =>
     shortsSlice.actions.clear({ context: ActionType.CreateShort });
 
 /**
- * Async thunk to create a new short video.
+ * Async thunk to create a new short video draft.
  *
  * @description
- * Dispatches `createShortUseCase` with title, slug, video file, and optional videoId.
+ * Dispatches `createShortUseCase` with title, slug, and optional videoId. The video file is
+ * uploaded separately afterwards via `uploadShortVideoAction`.
  * On success, stores the created short video in `shorts.createShort.data`.
  * On failure, stores the backend `Failure` in `shorts.createShort.error`.
  */
@@ -21,7 +22,6 @@ export const createShortAction = createAsyncThunk<
     {
         title: string;
         slug: string;
-        videoFile: File;
         videoId?: string;
     },
     { rejectValue: Failure }
