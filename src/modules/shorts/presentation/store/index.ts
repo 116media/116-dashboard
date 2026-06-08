@@ -17,12 +17,13 @@ import { shortsInitialState } from "./state";
 import type { ShortsStateKey } from "./type";
 import { updateShortAction } from "./updateshort.action";
 import { uploadShortThumbnailAction } from "./uploadshortthumbnail.action";
+import { uploadShortVideoAction } from "./uploadshortvideo.action";
 
 /**
  * Redux slice for the shorts module.
  *
  * @description
- * Manages state for 7 async operations using the shared
+ * Manages state for 9 async operations using the shared
  * ActionWrapper* reducer helpers. Includes `clear` (single reset)
  * and `purge` (selective reset) reducers.
  */
@@ -72,7 +73,11 @@ export const shortsSlice = createSlice({
             // upload short thumbnail
             .addCase(uploadShortThumbnailAction.pending, ActionWrapperPending)
             .addCase(uploadShortThumbnailAction.fulfilled, ActionWrapperFulfilled)
-            .addCase(uploadShortThumbnailAction.rejected, ActionWrapperRejected);
+            .addCase(uploadShortThumbnailAction.rejected, ActionWrapperRejected)
+            // upload short video file
+            .addCase(uploadShortVideoAction.pending, ActionWrapperPending)
+            .addCase(uploadShortVideoAction.fulfilled, ActionWrapperFulfilled)
+            .addCase(uploadShortVideoAction.rejected, ActionWrapperRejected);
     }
 });
 
