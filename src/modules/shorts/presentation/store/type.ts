@@ -19,6 +19,7 @@ export type IShortsState = {
     deactivateShort: IBasicInitialState<IShortActionResponse>;
     deleteShort: IBasicInitialState<IShortActionResponse>;
     uploadShortThumbnail: IBasicInitialState<IShortVideoEntity>;
+    uploadShortVideo: IBasicInitialState<IShortVideoEntity>;
 };
 
 export type ShortsStateKey = keyof IShortsState;
