@@ -8,7 +8,7 @@ import type { IAuthorEntity } from "@/shared/domain/entities/IAuthorEntity";
  * @property {string} id - Unique identifier (UUID)
  * @property {string} title - Short video display title
  * @property {string} slug - URL-safe slug
- * @property {string} videoUrl - URL of the short video
+ * @property {string | null} videoUrl - URL of the short video file, or null while still a draft
  * @property {string | null} thumbnailUrl - URL of the video thumbnail
  * @property {boolean} hasFullVideo - Whether a full video file exists
  * @property {boolean} isActive - Whether the short video is currently active
@@ -27,7 +27,7 @@ export interface IShortVideoEntity {
     id: string;
     title: string;
     slug: string;
-    videoUrl: string;
+    videoUrl: string | null;
     thumbnailUrl?: string | null;
     videoId?: string | null;
     hasFullVideo: boolean;
