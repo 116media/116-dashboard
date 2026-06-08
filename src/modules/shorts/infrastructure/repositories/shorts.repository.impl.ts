@@ -6,6 +6,7 @@ import type { ICreateShortCredentials } from "@/modules/shorts/presentation/mode
 import type { IShortsQueryParams } from "@/modules/shorts/presentation/model/IShortsQueryParams";
 import type { IUpdateShortCredentials } from "@/modules/shorts/presentation/model/IUpdateShortCredentials";
 import type { IUploadShortThumbnailCredentials } from "@/modules/shorts/presentation/model/IUploadShortThumbnailCredentials";
+import type { IUploadShortVideoCredentials } from "@/modules/shorts/presentation/model/IUploadShortVideoCredentials";
 import type { Result } from "@/shared/domain/results/result";
 import { err, ok } from "@/shared/domain/results/result";
 import type { IPaginatedResult } from "@/shared/domain/types/pagination";
@@ -53,10 +54,11 @@ export class ShortsRepositoryImpl implements IShortsRepositoryPort {
 
     async createShort(data: ICreateShortCredentials): Promise<Result<IShortVideoEntity>> {
         try {
-            const response = await apiClient.api.createShortVideo(
-                { title: data.title, slug: data.slug, videoId: data.videoId },
-                { videoFile: data.videoFile }
-            );
+            const response = await apiClient.api.createShortVideo({
+                title: data.title,
+                slug: data.slug,
+                videoId: data.videoId
+            });
             return ok(ShortsMapper.shortFromDto(response.data.shortVideo));
         } catch (error) {
             return err(ProblemMapper.toFailure(error));
@@ -68,11 +70,10 @@ export class ShortsRepositoryImpl implements IShortsRepositoryPort {
         data: IUpdateShortCredentials
     ): Promise<Result<IShortVideoEntity>> {
         try {
-            const response = await apiClient.api.updateShortVideo(
-                id,
-                { title: data.title, videoId: data.videoId },
-                { videoFile: data.videoFile }
-            );
+            const response = await apiClient.api.updateShortVideo(id, {
+                title: data.title,
+                videoId: data.videoId
+            });
             return ok(ShortsMapper.shortFromDto(response.data.shortVideo));
         } catch (error) {
             return err(ProblemMapper.toFailure(error));
@@ -112,6 +113,19 @@ export class ShortsRepositoryImpl implements IShortsRepositoryPort {
     ): Promise<Result<IShortVideoEntity>> {
         try {
             await apiClient.api.uploadShortVideoThumbnail(id, { file: data.file });
+            const refreshed = await apiClient.api.adminGetShortById(id);
+            return ok(ShortsMapper.shortFromDto(refreshed.data.shortVideo));
+        } catch (error) {
+            return err(ProblemMapper.toFailure(error));
+        }
+    }
+
+    async uploadShortVideo(
+        id: string,
+        data: IUploadShortVideoCredentials
+    ): Promise<Result<IShortVideoEntity>> {
+        try {
+            await apiClient.api.uploadShortVideoFile(id, { file: data.file });
             const refreshed = await apiClient.api.adminGetShortById(id);
             return ok(ShortsMapper.shortFromDto(refreshed.data.shortVideo));
         } catch (error) {
