@@ -25,7 +25,7 @@ export const ShortsMapper = {
             id: dto.id,
             title: dto.title,
             slug: dto.slug,
-            videoUrl: dto.videoUrl,
+            videoUrl: dto.videoUrl ?? null,
             thumbnailUrl: dto.thumbnailUrl,
             videoId: dto.videoId ?? null,
             hasFullVideo: dto.hasFullVideo,
