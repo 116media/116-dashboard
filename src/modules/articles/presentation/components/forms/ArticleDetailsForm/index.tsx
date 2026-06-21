@@ -1,7 +1,7 @@
 import type { FormInstance } from "antd";
 import { Form, Input, Select, Tag } from "antd";
 import type { FC } from "react";
-import { useCallback, useMemo } from "react";
+import { useMemo } from "react";
 import type { IUpdateArticleCredentials } from "@/modules/articles/presentation/model/IUpdateArticleCredentials";
 import { ArticlesContentValidator } from "@/modules/articles/presentation/utils/validators/articles.content.validator";
 import type { ICategoryEntity } from "@/modules/catalog/domain/entities/ICategoryEntity";
@@ -24,9 +24,11 @@ interface IArticleDetailsFormProps {
     form: FormInstance<IUpdateArticleCredentials>;
     error: Failure | null | undefined;
     orderItems: IUsePaidOrderItems;
+    coverFile: File | null;
+    currentCoverUrl?: string | null;
     onSubmit: (values: IUpdateArticleCredentials) => void;
     onImageUpload?: (file: File) => Promise<string>;
-    onCoverUpload?: (file: File) => Promise<string>;
+    onCoverFileChange: (file: File | null) => void;
 }
 
 /**
@@ -43,9 +45,11 @@ const ArticleDetailsForm: FC<IArticleDetailsFormProps> = ({
     form,
     error,
     orderItems,
+    coverFile,
+    currentCoverUrl,
     onSubmit,
     onImageUpload,
-    onCoverUpload
+    onCoverFileChange
 }) => {
     const { data: categories } = useAppSelector(
         ({ catalog: { getAllCategories } }) => getAllCategories
@@ -72,19 +76,10 @@ const ArticleDetailsForm: FC<IArticleDetailsFormProps> = ({
         [customers]
     );
 
-    const handleCoverUpload = useCallback(
-        async (file: File): Promise<string> => {
-            if (!onCoverUpload) throw new Error("Cover upload not available");
-            const url = await onCoverUpload(file);
-            form.setFieldValue("coverImageUrl", url);
-            return url;
-        },
-        [onCoverUpload, form]
+    const coverPreviewUrl = useMemo(
+        () => (coverFile ? URL.createObjectURL(coverFile) : null),
+        [coverFile]
     );
-
-    const handleCoverRemove = useCallback(() => {
-        form.setFieldValue("coverImageUrl", null);
-    }, [form]);
 
     return (
         <Form
@@ -125,13 +120,14 @@ const ArticleDetailsForm: FC<IArticleDetailsFormProps> = ({
                 <RichTextEditor placeholder="Contenu de l'article" onImageUpload={onImageUpload} />
             </Item>
 
-            <Item name="coverImageUrl" label="Image de couverture">
+            <Item label="Image de couverture">
                 <FileUploader
+                    mode="deferred"
                     aspectRatio={16 / 9}
                     preset={IMAGE_PRESET}
-                    disabled={!onCoverUpload}
-                    onUpload={handleCoverUpload}
-                    onRemove={handleCoverRemove}
+                    value={coverPreviewUrl ?? currentCoverUrl}
+                    onFileSelect={onCoverFileChange}
+                    onRemove={() => onCoverFileChange(null)}
                 />
             </Item>
 
