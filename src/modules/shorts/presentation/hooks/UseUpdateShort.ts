@@ -28,11 +28,11 @@ interface IUseUpdateShort {
     form: FormInstance<IUpdateShortCredentials>;
     loading: boolean;
     detailLoading: boolean;
-    uploadingVideo: boolean;
     error: Failure | null | undefined;
     success: string | null;
     videoUrl: string | null | undefined;
-    onVideoUpload: (file: File) => Promise<void>;
+    videoFile: File | null;
+    setVideoFile: (file: File | null) => void;
     onSubmit: () => Promise<void>;
     resetUpdate: () => void;
 }
@@ -41,14 +41,14 @@ interface IUseUpdateShort {
  * Custom hook for the update short video form logic.
  *
  * @description
- * Fetches the short detail to prefill the form and manages the JSON metadata update
- * (title, videoId). The video file is replaced via a dedicated, decoupled upload handler
- * (`onVideoUpload`) — mirroring how the article cover image is uploaded separately from the
- * content update — never bundled into the metadata submission.
+ * Fetches the short detail to prefill the form, then on submit updates the JSON metadata
+ * (title, videoId) and, only if a replacement video file was selected, uploads it via the
+ * dedicated endpoint. The file is captured locally and uploaded on save — nothing is sent to
+ * storage while the user is still editing, so cancelling leaves no orphaned upload.
  *
  * @param short - The short video entity to edit
  * @param onSuccess - Optional callback invoked after successful update
- * @returns Form instance, loading/error state, current video URL, and handlers
+ * @returns Form instance, loading/error state, current video URL, captured file, and handlers
  */
 export const useUpdateShort = (
     short: IShortVideoEntity | null,
@@ -59,6 +59,7 @@ export const useUpdateShort = (
     const [success, setSuccess] = useState<string | null>(null);
     const [detailLoading, setDetailLoading] = useState(false);
     const [videoUrl, setVideoUrl] = useState<string | null | undefined>(undefined);
+    const [videoFile, setVideoFile] = useState<File | null>(null);
 
     const { loading, error } = useAppSelector(({ shorts: { updateShort } }) => updateShort);
     const { loading: uploadingVideo, error: uploadError } = useAppSelector(
@@ -99,34 +100,26 @@ export const useUpdateShort = (
             })
         );
 
-        if (updateShortAction.fulfilled.match(result)) {
-            setSuccess(ShortsNotification.updateSuccess.description);
-            showNotification(ShortsNotification.updateSuccess);
-            onSuccess?.();
+        if (!updateShortAction.fulfilled.match(result)) return;
+
+        if (videoFile) {
+            const uploaded = await dispatch(
+                uploadShortVideoAction({ id: short.id, data: { file: videoFile } })
+            );
+            if (!uploadShortVideoAction.fulfilled.match(uploaded)) return;
+            setVideoUrl(uploaded.payload.videoUrl);
         }
-    };
 
-    const onVideoUpload = async (file: File): Promise<void> => {
-        if (!short) return;
-
-        const result = await dispatch(uploadShortVideoAction({ id: short.id, data: { file } }));
-
-        if (uploadShortVideoAction.fulfilled.match(result)) {
-            showNotification(ShortsNotification.uploadVideoSuccess);
-            setVideoUrl(result.payload.videoUrl);
-            onSuccess?.();
-        } else if (uploadShortVideoAction.rejected.match(result) && result.payload) {
-            showNotification({
-                type: "error",
-                title: result.payload.title,
-                description: result.payload.detail
-            });
-        }
+        setSuccess(ShortsNotification.updateSuccess.description);
+        showNotification(ShortsNotification.updateSuccess);
+        setVideoFile(null);
+        onSuccess?.();
     };
 
     const resetUpdate = () => {
         setSuccess(null);
         setVideoUrl(undefined);
+        setVideoFile(null);
         form.resetFields();
         dispatch(resetUpdateShortAction());
         dispatch(resetUploadShortVideoAction());
@@ -134,13 +127,13 @@ export const useUpdateShort = (
 
     return {
         form,
-        loading,
+        loading: loading || uploadingVideo,
         detailLoading,
-        uploadingVideo,
         error: error ?? uploadError,
         success,
         videoUrl,
-        onVideoUpload,
+        videoFile,
+        setVideoFile,
         onSubmit,
         resetUpdate
     };
