@@ -11,6 +11,7 @@ interface IFilePreviewProps {
     label?: string;
     disabled?: boolean;
     isVideo?: boolean;
+    isImage?: boolean;
     onRemove: () => void;
     fileName: string | null;
     fileSize: string | null;
@@ -31,6 +32,7 @@ const FilePreview: FC<IFilePreviewProps> = ({
     fileName,
     fileSize,
     isVideo = false,
+    isImage = false,
     disabled = false,
     onRemove
 }) => {
@@ -78,6 +80,7 @@ const FilePreview: FC<IFilePreviewProps> = ({
                 url={url}
                 label={label}
                 isVideo={isVideo}
+                isImage={isImage}
                 hasMeta={hasMeta}
                 fileName={fileName}
                 removeButton={removeButton}
