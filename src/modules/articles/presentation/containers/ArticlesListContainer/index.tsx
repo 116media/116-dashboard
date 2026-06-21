@@ -1,6 +1,5 @@
 import { Table } from "antd";
 import { type FC, useEffect } from "react";
-import { ArticleImageType } from "@/modules/articles/domain/enums/article-image-type.enum";
 import ArticleDetailsForm from "@/modules/articles/presentation/components/forms/ArticleDetailsForm";
 import { articlesTableColumns } from "@/modules/articles/presentation/components/tables/ArticlesTable/columns";
 import ArticleCreateWizard from "@/modules/articles/presentation/components/ui/ArticleCreateWizard";
@@ -14,7 +13,6 @@ import { useArticleWorkflow } from "@/modules/articles/presentation/hooks/UseArt
 import { useUpdateArticle } from "@/modules/articles/presentation/hooks/UseUpdateArticle";
 import { useUpdateArticleSeo } from "@/modules/articles/presentation/hooks/UseUpdateArticleSeo";
 import { useUpdateArticleTags } from "@/modules/articles/presentation/hooks/UseUpdateArticleTags";
-import { useUploadArticleImage } from "@/modules/articles/presentation/hooks/UseUploadArticleImage";
 import { useAuthorization } from "@/modules/auth/presentation/hooks/UseAuthorization";
 import { getAllCategoriesAction } from "@/modules/catalog/presentation/store/getallcategories.action";
 import { getAllCustomersAction } from "@/modules/catalog/presentation/store/getallcustomers.action";
@@ -46,7 +44,6 @@ const ArticlesListContainer: FC = () => {
     const updateArticle = useUpdateArticle(modals.selectedEntity, list.reload);
     const updateSeo = useUpdateArticleSeo(modals.selectedEntity, list.reload);
     const updateTags = useUpdateArticleTags(modals.selectedEntity, list.reload);
-    const uploadImage = useUploadArticleImage();
     const workflow = useArticleWorkflow(list.reload);
     const { isSuperAdmin, isAdminOrSuperAdmin } = useAuthorization();
 
@@ -137,17 +134,12 @@ const ArticlesListContainer: FC = () => {
                     form={updateArticle.form}
                     error={updateArticle.error}
                     orderItems={updateArticle.orderItems}
+                    coverFile={updateArticle.coverFile}
+                    currentCoverUrl={
+                        updateArticle.coverImageUrl ?? modals.selectedEntity?.coverImageUrl
+                    }
+                    onCoverFileChange={updateArticle.setCoverFile}
                     onSubmit={updateArticle.onSubmit}
-                    onCoverUpload={async (file) => {
-                        const entityId = modals.selectedEntity?.id;
-                        if (!entityId) return "";
-                        const url = await uploadImage.onUpload(
-                            entityId,
-                            file,
-                            ArticleImageType.Cover
-                        );
-                        return url ?? "";
-                    }}
                 />
             </CreateEditModal>
 
