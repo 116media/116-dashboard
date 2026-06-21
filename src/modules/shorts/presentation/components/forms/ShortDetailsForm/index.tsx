@@ -17,9 +17,9 @@ const { Item } = Form;
 interface IShortDetailsFormProps {
     form: FormInstance<IUpdateShortCredentials>;
     error?: Failure | null | undefined;
-    uploading: boolean;
+    videoFile: File | null;
     currentVideoUrl?: string | null;
-    onVideoUpload: (file: File) => Promise<void>;
+    onVideoFileChange: (file: File | null) => void;
     onSubmit: () => Promise<void>;
 }
 
@@ -29,17 +29,16 @@ interface IShortDetailsFormProps {
  * @component
  *
  * @description
- * Renders title and video select (from active videos) for the JSON metadata update. The video
- * file is replaced through a dedicated, decoupled upload (`onVideoUpload`) that fires as soon as
- * a file is selected — separate from the metadata submission — and shows a preview of the
- * current video.
+ * Renders title and video select (from active videos) for the JSON metadata update. A replacement
+ * video file is captured locally and uploaded only when the form is saved; the uploader previews
+ * the newly selected file, or the current video when none is selected.
  */
 const ShortDetailsForm: FC<IShortDetailsFormProps> = ({
     form,
     error,
-    uploading,
+    videoFile,
     currentVideoUrl,
-    onVideoUpload,
+    onVideoFileChange,
     onSubmit
 }) => {
     const dispatch = useAppDispatch();
@@ -60,6 +59,11 @@ const ShortDetailsForm: FC<IShortDetailsFormProps> = ({
                 secondary: v.categoryName
             })),
         [videos]
+    );
+
+    const previewUrl = useMemo(
+        () => (videoFile ? URL.createObjectURL(videoFile) : null),
+        [videoFile]
     );
 
     return (
@@ -91,12 +95,10 @@ const ShortDetailsForm: FC<IShortDetailsFormProps> = ({
             <Item label="Fichier vidéo">
                 <FileUploader
                     mode="deferred"
-                    value={currentVideoUrl}
-                    disabled={uploading}
+                    value={previewUrl ?? currentVideoUrl}
                     preset={VIDEO_PRESET}
-                    onFileSelect={(file) => {
-                        void onVideoUpload(file);
-                    }}
+                    onFileSelect={onVideoFileChange}
+                    onRemove={() => onVideoFileChange(null)}
                 />
             </Item>
         </Form>
