@@ -165,9 +165,9 @@ const ShortsListContainer: FC = () => {
                     <ShortDetailsForm
                         form={updateShort.form}
                         error={updateShort.error}
-                        uploading={updateShort.uploadingVideo}
+                        videoFile={updateShort.videoFile}
                         currentVideoUrl={updateShort.videoUrl ?? modals.selectedEntity?.videoUrl}
-                        onVideoUpload={updateShort.onVideoUpload}
+                        onVideoFileChange={updateShort.setVideoFile}
                         onSubmit={updateShort.onSubmit}
                     />
                 </CreateEditModal>
