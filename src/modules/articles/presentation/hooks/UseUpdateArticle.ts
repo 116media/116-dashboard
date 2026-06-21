@@ -4,6 +4,8 @@ import { Form } from "antd";
 import { useEffect, useState } from "react";
 import type { IArticleEntity } from "@/modules/articles/domain/entities/IArticleEntity";
 import type { IArticleSummaryEntity } from "@/modules/articles/domain/entities/IArticleSummaryEntity";
+import { ArticleImageType } from "@/modules/articles/domain/enums/article-image-type.enum";
+import { useUploadArticleImage } from "@/modules/articles/presentation/hooks/UseUploadArticleImage";
 import type { IUpdateArticleCredentials } from "@/modules/articles/presentation/model/IUpdateArticleCredentials";
 import { getArticleByIdAction } from "@/modules/articles/presentation/store/getarticlebyid.action";
 import {
@@ -25,6 +27,9 @@ interface IUseUpdateArticle {
     detailLoading: boolean;
     error: Failure | null | undefined;
     success: string | null;
+    coverImageUrl: string | null | undefined;
+    coverFile: File | null;
+    setCoverFile: (file: File | null) => void;
     orderItems: ReturnType<typeof usePaidOrderItems>;
     onSubmit: (values: IUpdateArticleCredentials) => Promise<void>;
     resetUpdate: () => void;
@@ -34,10 +39,9 @@ interface IUseUpdateArticle {
  * Custom hook for the edit article form logic.
  *
  * @description
- * Fetches the full article detail (including body) when the
- * selected article changes, then pre-populates the form.
- * When the article has a customerId, order items are fetched
- * for that customer so the orderItemId select displays correctly.
+ * Fetches the full article detail (including body) when the selected article changes, then
+ * pre-populates the form. The cover image is captured locally and uploaded on save (deferred),
+ * while inline body images keep uploading immediately as they are inserted in the editor.
  */
 export const useUpdateArticle = (
     article: IArticleSummaryEntity | null,
@@ -48,7 +52,10 @@ export const useUpdateArticle = (
     const [success, setSuccess] = useState<string | null>(null);
     const [detailLoading, setDetailLoading] = useState(false);
     const [fetchedDetail, setFetchedDetail] = useState<IArticleEntity | null>(null);
+    const [coverImageUrl, setCoverImageUrl] = useState<string | null | undefined>(undefined);
+    const [coverFile, setCoverFile] = useState<File | null>(null);
     const orderItems = usePaidOrderItems("article");
+    const uploadImage = useUploadArticleImage();
 
     const { loading, error } = useAppSelector(({ articles: { updateArticle } }) => updateArticle);
 
@@ -67,11 +74,11 @@ export const useUpdateArticle = (
                     title: detail.title,
                     headline: detail.headline,
                     body: detail.body,
-                    coverImageUrl: detail.coverImageUrl,
                     socialBoost: detail.socialBoost,
                     metaTitle: detail.metaTitle,
                     metaDescription: detail.metaDescription
                 });
+                setCoverImageUrl(detail.coverImageUrl);
 
                 if (detail.customerId) {
                     form.setFieldValue("customerId", detail.customerId);
@@ -85,9 +92,12 @@ export const useUpdateArticle = (
     }, [article, dispatch, form, orderItems.fetchByCustomer]);
 
     useEffect(() => {
-        if (!fetchedDetail?.orderItemId || orderItems.loading || orderItems.options.length === 0)
-            return;
-        form.setFieldValue("orderItemId", fetchedDetail.orderItemId);
+        const orderItemsReady = !orderItems.loading && orderItems.options.length > 0;
+        const canPrefillOrderItem = Boolean(fetchedDetail?.orderItemId) && orderItemsReady;
+
+        if (!canPrefillOrderItem) return;
+
+        form.setFieldValue("orderItemId", fetchedDetail?.orderItemId);
     }, [fetchedDetail, orderItems.options, orderItems.loading, form]);
 
     const onSubmit = async (values: IUpdateArticleCredentials): Promise<void> => {
@@ -103,20 +113,40 @@ export const useUpdateArticle = (
             })
         );
 
-        if (updateArticleAction.fulfilled.match(result)) {
-            setSuccess(ArticlesNotification.updateSuccess.description);
-            showNotification(ArticlesNotification.updateSuccess);
-            onSuccess?.();
+        if (!updateArticleAction.fulfilled.match(result)) return;
+
+        if (coverFile) {
+            const url = await uploadImage.onUpload(article.id, coverFile, ArticleImageType.Cover);
+            if (url === null) return;
+            setCoverImageUrl(url);
         }
+
+        setSuccess(ArticlesNotification.updateSuccess.description);
+        showNotification(ArticlesNotification.updateSuccess);
+        setCoverFile(null);
+        onSuccess?.();
     };
 
     const resetUpdate = () => {
         setSuccess(null);
         setFetchedDetail(null);
+        setCoverImageUrl(undefined);
+        setCoverFile(null);
         form.resetFields();
         dispatch(resetUpdateArticleAction());
-        form.resetFields();
     };
 
-    return { form, loading, detailLoading, error, success, orderItems, onSubmit, resetUpdate };
+    return {
+        form,
+        loading: loading || uploadImage.loading,
+        detailLoading,
+        error,
+        success,
+        coverImageUrl,
+        coverFile,
+        setCoverFile,
+        orderItems,
+        onSubmit,
+        resetUpdate
+    };
 };
