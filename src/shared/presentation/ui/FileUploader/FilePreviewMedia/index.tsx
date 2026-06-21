@@ -1,6 +1,6 @@
 import { Flex, Image, Skeleton, Typography } from "antd";
 import { type FC, type ReactNode, useEffect, useState } from "react";
-import { IconFilePdfOutlined } from "@/shared/presentation/ui/Icons";
+import { IconFilePdfOutlined, IconPlaySquareOutlined } from "@/shared/presentation/ui/Icons";
 import VideoPlayer from "@/shared/presentation/ui/VideoPlayer";
 import { isImageUrl } from "../utils";
 import styles from "./index.module.scss";
@@ -10,6 +10,7 @@ const { Text } = Typography;
 interface IFilePreviewMediaProps {
     url: string;
     isVideo: boolean;
+    isImage: boolean;
     label?: string;
     hasMeta: boolean;
     fileName: string | null;
@@ -29,23 +30,42 @@ interface IFilePreviewMediaProps {
 const FilePreviewMedia: FC<IFilePreviewMediaProps> = ({
     url,
     isVideo,
+    isImage,
     label,
     hasMeta,
     fileName,
     removeButton
 }) => {
     const [imageLoaded, setImageLoaded] = useState(false);
+    const [videoReady, setVideoReady] = useState(false);
 
     // biome-ignore lint/correctness/useExhaustiveDependencies: reset loading state when url changes
     useEffect(() => {
         setImageLoaded(false);
-    }, [url]);
+        setVideoReady(false);
+        if (!isVideo) return;
+
+        // Fallback reveal so the player is never permanently hidden if the ready event is missed.
+        const timeout = setTimeout(() => setVideoReady(true), 4000);
+        return () => clearTimeout(timeout);
+    }, [url, isVideo]);
 
     if (isVideo) {
-        return <VideoPlayer src={url} maxHeight={400} />;
+        return (
+            <>
+                {!videoReady && (
+                    <Skeleton.Node active className={styles.filePreviewMedia__skeleton}>
+                        <IconPlaySquareOutlined className={styles.filePreviewMedia__skeletonIcon} />
+                    </Skeleton.Node>
+                )}
+                <div style={videoReady ? undefined : { display: "none" }}>
+                    <VideoPlayer src={url} maxHeight={400} onReady={() => setVideoReady(true)} />
+                </div>
+            </>
+        );
     }
 
-    if (isImageUrl(url)) {
+    if (isImage || isImageUrl(url)) {
         return (
             <>
                 {!imageLoaded && (
