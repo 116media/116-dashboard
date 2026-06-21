@@ -75,6 +75,12 @@ const FileUploader: FC<IFileUploaderProps> = (props) => {
 
     const isDeferred = props.mode === "deferred";
     const isVideo = useMemo(() => preset.accept.includes("video"), [preset.accept]);
+    // Image-only presets render any selection (including local blob: previews) as an image,
+    // since blob URLs carry no extension for isImageUrl to detect.
+    const isImage = useMemo(
+        () => preset.accept.includes("image") && !preset.accept.includes("pdf"),
+        [preset.accept]
+    );
 
     const [uploading, setUploading] = useState(false);
     const [progress, setProgress] = useState(0);
@@ -178,6 +184,7 @@ const FileUploader: FC<IFileUploaderProps> = (props) => {
                 label={label}
                 url={currentPreview}
                 isVideo={isVideo}
+                isImage={isImage}
                 fileName={fileName}
                 fileSize={fileSize}
                 disabled={disabled}
