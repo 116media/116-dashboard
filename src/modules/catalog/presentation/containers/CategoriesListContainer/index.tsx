@@ -114,7 +114,9 @@ const CategoriesListContainer: FC = () => {
                         form={createCategory.form}
                         error={createCategory.error}
                         formContext="CREATE"
+                        posterFile={createCategory.posterFile}
                         onSubmit={createCategory.onSubmit}
+                        onPosterFileChange={createCategory.setPosterFile}
                     />
                 </CreateEditModal>
             )}
@@ -147,8 +149,10 @@ const CategoriesListContainer: FC = () => {
                         form={updateCategory.form}
                         error={updateCategory.error}
                         initialValues={modals.selectedEntity}
+                        posterFile={updateCategory.posterFile}
+                        posterUrl={updateCategory.posterUrl ?? modals.selectedEntity?.posterUrl}
                         onSubmit={updateCategory.onSubmit}
-                        onPosterUpload={updateCategory.onPosterUpload}
+                        onPosterFileChange={updateCategory.setPosterFile}
                     />
                 </CreateEditModal>
             )}
