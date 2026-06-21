@@ -7,10 +7,15 @@
         height: 240px !important;
         border-radius: dimensions.$border-radius;
 
-        [class~="ant-skeleton-image"] {
+        [class~="ant-skeleton-image"], [class~="ant-skeleton-node"] {
             width: 100% !important;
             height: 100% !important;
         }
+    }
+
+    &__skeletonIcon {
+        font-size: 40px;
+        color: rgba($color: colors.$text-muted, $alpha: 0.5);
     }
 
     &__image {
@@ -29,6 +34,6 @@
 
     &__fileIcon {
         font-size: 24px;
-        color: colors.$description;
+        color: colors.$text-muted;
     }
 }
