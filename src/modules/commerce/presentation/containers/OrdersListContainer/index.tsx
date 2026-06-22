@@ -163,6 +163,7 @@ const OrdersListContainer: FC = () => {
                     })
                 }
                 onCancel={() => modals.setActionOpen(false)}
+                onAfterClose={actions.resetActionError}
             />
         </>
     );
