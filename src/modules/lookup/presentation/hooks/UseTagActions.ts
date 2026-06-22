@@ -1,4 +1,7 @@
-import { deleteTagAction } from "@/modules/lookup/presentation/store/deletetag.action";
+import {
+    deleteTagAction,
+    resetDeleteTagAction
+} from "@/modules/lookup/presentation/store/deletetag.action";
 import { TagsNotification } from "@/modules/lookup/presentation/utils/notification/lookup.tags.notification";
 import type { Failure } from "@/shared/domain/failures/failure";
 import { useAppDispatch, useAppSelector } from "@/shared/presentation/store/store";
@@ -13,6 +16,7 @@ interface IUseTagActions {
     loading: boolean;
     error: Failure | null | undefined;
     onDelete: (id: string) => Promise<void>;
+    resetActionError: () => void;
 }
 
 /**
@@ -50,5 +54,9 @@ export const useTagActions = (reload: () => void): IUseTagActions => {
         }
     };
 
-    return { loading, error, onDelete };
+    const resetActionError = () => {
+        dispatch(resetDeleteTagAction());
+    };
+
+    return { loading, error, onDelete, resetActionError };
 };
