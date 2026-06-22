@@ -177,6 +177,7 @@ const LyricsListContainer: FC = () => {
                     })
                 }
                 onCancel={() => modals.setActionOpen(false)}
+                onAfterClose={actions.resetActionError}
             />
         </>
     );
