@@ -1,9 +1,24 @@
 import type { AsyncThunk } from "@reduxjs/toolkit";
-import { activateRoleAction } from "@/modules/roles/presentation/store/activate.action";
-import { deactivateRoleAction } from "@/modules/roles/presentation/store/deactivate.action";
-import { hardDeleteRoleAction } from "@/modules/roles/presentation/store/harddelete.action";
-import { restoreRoleAction } from "@/modules/roles/presentation/store/restore.action";
-import { softDeleteRoleAction } from "@/modules/roles/presentation/store/softdelete.action";
+import {
+    activateRoleAction,
+    resetActivateRoleAction
+} from "@/modules/roles/presentation/store/activate.action";
+import {
+    deactivateRoleAction,
+    resetDeactivateRoleAction
+} from "@/modules/roles/presentation/store/deactivate.action";
+import {
+    hardDeleteRoleAction,
+    resetHardDeleteRoleAction
+} from "@/modules/roles/presentation/store/harddelete.action";
+import {
+    resetRestoreRoleAction,
+    restoreRoleAction
+} from "@/modules/roles/presentation/store/restore.action";
+import {
+    resetSoftDeleteRoleAction,
+    softDeleteRoleAction
+} from "@/modules/roles/presentation/store/softdelete.action";
 import { RolesNotification } from "@/modules/roles/presentation/utils/notification/roles.notification";
 import type { Failure } from "@/shared/domain/failures/failure";
 import { useAppDispatch, useAppSelector } from "@/shared/presentation/store/store";
@@ -22,6 +37,7 @@ interface IUseRoleActions {
     onSoftDelete: (id: string) => Promise<void>;
     onHardDelete: (id: string) => Promise<void>;
     onRestore: (id: string) => Promise<void>;
+    resetActionError: () => void;
 }
 
 /**
@@ -93,5 +109,22 @@ export const useRoleActions = (reload: () => void): IUseRoleActions => {
     const onRestore = (id: string) =>
         dispatchAction(restoreRoleAction, id, RolesNotification.restoreSuccess);
 
-    return { loading, error, onActivate, onDeactivate, onSoftDelete, onHardDelete, onRestore };
+    const resetActionError = () => {
+        dispatch(resetActivateRoleAction());
+        dispatch(resetDeactivateRoleAction());
+        dispatch(resetSoftDeleteRoleAction());
+        dispatch(resetHardDeleteRoleAction());
+        dispatch(resetRestoreRoleAction());
+    };
+
+    return {
+        loading,
+        error,
+        onActivate,
+        onDeactivate,
+        onSoftDelete,
+        onHardDelete,
+        onRestore,
+        resetActionError
+    };
 };
