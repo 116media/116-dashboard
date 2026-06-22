@@ -22,6 +22,7 @@ interface IPricingTierActionModalProps {
     loading: boolean;
     onCancel: () => void;
     onConfirm: () => void;
+    onAfterClose?: () => void;
     pricingTier: IPricingTierEntity | null;
     action: PricingTierAction | null;
     error: Failure | null | undefined;
@@ -47,7 +48,8 @@ const PricingTierActionModal: FC<IPricingTierActionModalProps> = ({
     loading,
     error,
     onConfirm,
-    onCancel
+    onCancel,
+    onAfterClose
 }) => {
     const config = action ? PRICING_TIER_ACTION_CONFIG[action] : undefined;
 
@@ -62,6 +64,7 @@ const PricingTierActionModal: FC<IPricingTierActionModalProps> = ({
             title={config.title}
             onConfirm={onConfirm}
             danger={config.danger}
+            onAfterClose={onAfterClose}
             description={config.description}
         />
     );
