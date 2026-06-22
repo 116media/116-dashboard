@@ -17,6 +17,7 @@ import ActionModal from "@/shared/presentation/ui/ActionModal";
  * @property {IOrderSummaryEntity | null} order - The order being acted upon
  * @property {OrderAction | null} action - The action type (submit, cancel)
  * @property {Failure | null | undefined} error - Backend error to display
+ * @property {() => void} [onAfterClose] - Called once the modal has fully closed; resets the action error
  */
 interface IOrderActionModalProps {
     open: boolean;
@@ -26,6 +27,7 @@ interface IOrderActionModalProps {
     action: OrderAction | null;
     order: IOrderSummaryEntity | null;
     error: Failure | null | undefined;
+    onAfterClose?: () => void;
 }
 
 /**
@@ -48,7 +50,8 @@ const OrderActionModal: FC<IOrderActionModalProps> = ({
     loading,
     error,
     onConfirm,
-    onCancel
+    onCancel,
+    onAfterClose
 }) => {
     const config = action ? ORDER_ACTION_CONFIG[action] : undefined;
 
@@ -64,6 +67,7 @@ const OrderActionModal: FC<IOrderActionModalProps> = ({
             onConfirm={onConfirm}
             danger={config.danger}
             description={config.description}
+            onAfterClose={onAfterClose}
         />
     );
 };
