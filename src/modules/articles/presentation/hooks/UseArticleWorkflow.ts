@@ -1,13 +1,34 @@
 import type { AsyncThunk } from "@reduxjs/toolkit";
 import type { IRejectArticleCredentials } from "@/modules/articles/presentation/model/IRejectArticleCredentials";
 import type { IUnpromoteArticleCredentials } from "@/modules/articles/presentation/model/IUnpromoteArticleCredentials";
-import { approveArticleAction } from "@/modules/articles/presentation/store/approvearticle.action";
-import { archiveArticleAction } from "@/modules/articles/presentation/store/archivearticle.action";
-import { deleteArticleAction } from "@/modules/articles/presentation/store/deletearticle.action";
-import { publishArticleAction } from "@/modules/articles/presentation/store/publisharticle.action";
-import { rejectArticleAction } from "@/modules/articles/presentation/store/rejectarticle.action";
-import { submitArticleAction } from "@/modules/articles/presentation/store/submitarticle.action";
-import { unpromoteArticleAction } from "@/modules/articles/presentation/store/unpromotearticle.action";
+import {
+    approveArticleAction,
+    resetApproveArticleAction
+} from "@/modules/articles/presentation/store/approvearticle.action";
+import {
+    archiveArticleAction,
+    resetArchiveArticleAction
+} from "@/modules/articles/presentation/store/archivearticle.action";
+import {
+    deleteArticleAction,
+    resetDeleteArticleAction
+} from "@/modules/articles/presentation/store/deletearticle.action";
+import {
+    publishArticleAction,
+    resetPublishArticleAction
+} from "@/modules/articles/presentation/store/publisharticle.action";
+import {
+    rejectArticleAction,
+    resetRejectArticleAction
+} from "@/modules/articles/presentation/store/rejectarticle.action";
+import {
+    resetSubmitArticleAction,
+    submitArticleAction
+} from "@/modules/articles/presentation/store/submitarticle.action";
+import {
+    resetUnpromoteArticleAction,
+    unpromoteArticleAction
+} from "@/modules/articles/presentation/store/unpromotearticle.action";
 import { ArticlesNotification } from "@/modules/articles/presentation/utils/notification/articles.notification";
 import type { Failure } from "@/shared/domain/failures/failure";
 import { useAppDispatch, useAppSelector } from "@/shared/presentation/store/store";
@@ -28,6 +49,7 @@ interface IUseArticleWorkflow {
     onArchive: (id: string) => Promise<void>;
     onDelete: (id: string) => Promise<void>;
     onUnpromote: (params: { slug: string; data: IUnpromoteArticleCredentials }) => Promise<boolean>;
+    resetActionError: () => void;
 }
 
 /**
@@ -156,6 +178,16 @@ export const useArticleWorkflow = (reload: () => void): IUseArticleWorkflow => {
         return false;
     };
 
+    const resetActionError = () => {
+        dispatch(resetSubmitArticleAction());
+        dispatch(resetApproveArticleAction());
+        dispatch(resetPublishArticleAction());
+        dispatch(resetRejectArticleAction());
+        dispatch(resetArchiveArticleAction());
+        dispatch(resetDeleteArticleAction());
+        dispatch(resetUnpromoteArticleAction());
+    };
+
     return {
         loading,
         error,
@@ -165,6 +197,7 @@ export const useArticleWorkflow = (reload: () => void): IUseArticleWorkflow => {
         onReject,
         onArchive,
         onDelete,
-        onUnpromote
+        onUnpromote,
+        resetActionError
     };
 };
