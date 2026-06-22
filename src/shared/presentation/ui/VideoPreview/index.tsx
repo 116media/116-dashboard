@@ -1,4 +1,5 @@
-import type { ChangeEvent, FC } from "react";
+import { Button, Slider } from "antd";
+import type { FC } from "react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import {
@@ -96,8 +97,7 @@ const VideoPreview: FC<IVideoPreviewProps> = ({ open, src, poster, onClose }) =>
 
     const toggleMute = () => setMuted((previous) => !previous);
 
-    const onVolumeChange = (event: ChangeEvent<HTMLInputElement>) => {
-        const next = Number(event.target.value);
+    const onVolumeChange = (next: number) => {
         setVolume(next);
         setMuted(next === 0);
     };
@@ -122,41 +122,42 @@ const VideoPreview: FC<IVideoPreviewProps> = ({ open, src, poster, onClose }) =>
 
             <div ref={stageRef} className={styles.videoPreview__stage}>
                 <div className={styles.videoPreview__audio}>
-                    <button
-                        type="button"
+                    <Button
+                        type="text"
+                        shape="circle"
                         onClick={toggleMute}
-                        aria-label={isSilent ? "Activer le son" : "Couper le son"}
                         className={styles.videoPreview__muteButton}
-                    >
-                        {isSilent ? <IconMutedOutlined /> : <IconSoundOutlined />}
-                    </button>
+                        aria-label={isSilent ? "Activer le son" : "Couper le son"}
+                        icon={isSilent ? <IconMutedOutlined /> : <IconSoundOutlined />}
+                    />
 
-                    <input
+                    <Slider
                         min={0}
                         max={1}
                         step={0.05}
-                        type="range"
                         aria-label="Volume"
                         onChange={onVolumeChange}
+                        tooltip={{ open: false }}
                         value={isSilent ? 0 : volume}
                         className={styles.videoPreview__volume}
                     />
                 </div>
 
-                <button
-                    type="button"
+                <Button
+                    size="large"
+                    type="text"
+                    shape="circle"
                     onClick={onClose}
                     aria-label="Fermer"
+                    icon={<IconCloseCircleFilled />}
                     className={styles.videoPreview__close}
-                >
-                    <IconCloseCircleFilled />
-                </button>
+                />
 
                 <VideoPlayer
                     src={src}
+                    ratio="9:16"
                     poster={poster}
                     onReady={applyAudio}
-                    ratio="9:16"
                     controls={PREVIEW_CONTROLS}
                 />
             </div>
