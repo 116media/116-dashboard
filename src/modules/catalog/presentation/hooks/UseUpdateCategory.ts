@@ -59,16 +59,8 @@ export const useUpdateCategory = (
     const { loading, error } = useAppSelector(({ catalog: { updateCategory } }) => updateCategory);
 
     useEffect(() => {
-        if (category) {
-            form.setFieldsValue({
-                name: category.name,
-                description: category.description,
-                isGossip: category.isGossip,
-                isExclusive: category.isExclusive
-            });
-            setPosterUrl(category.posterUrl);
-        }
-    }, [category, form]);
+        setPosterUrl(category?.posterUrl);
+    }, [category]);
 
     const onSubmit = async (values: IUpdateCategoryCredentials): Promise<void> => {
         if (!category) return;
