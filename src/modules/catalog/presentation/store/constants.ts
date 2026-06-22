@@ -9,6 +9,8 @@ export const ActionType = {
     ActivateCategory: "Catalog/activateCategory",
     DeactivateCategory: "Catalog/deactivateCategory",
     SetExclusiveCategory: "Catalog/setExclusiveCategory",
+    PinCategoryToFeed: "Catalog/pinCategoryToFeed",
+    UnpinCategoryFromFeed: "Catalog/unpinCategoryFromFeed",
     UploadCategoryPoster: "Catalog/uploadCategoryPoster",
     AddCategoryPricing: "Catalog/addCategoryPricing",
     UpdateCategoryPricing: "Catalog/updateCategoryPricing",
