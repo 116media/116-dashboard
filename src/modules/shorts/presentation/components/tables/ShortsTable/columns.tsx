@@ -17,7 +17,7 @@ import StatusTag from "@/shared/presentation/ui/StatusTag";
 import type { ITableActionItem } from "@/shared/presentation/ui/TableActionDropdown";
 import TableActionDropdown from "@/shared/presentation/ui/TableActionDropdown";
 
-const { Text, Link } = Typography;
+const { Text } = Typography;
 
 export type { ShortAction };
 
@@ -31,12 +31,14 @@ export type { ShortAction };
  * @param onAction - Callback when a row action is triggered
  * @param isSuperAdmin - Whether the current user is a SuperAdmin
  * @param isAdminOrSuperAdmin - Whether the current user is Admin or SuperAdmin
+ * @param onPreviewVideo - Callback to open the réel video preview overlay
  * @returns Column configuration for the Ant Design Table
  */
 export const shortsTableColumns = (
     onAction: (action: ShortAction, record: IShortVideoEntity) => void,
     isSuperAdmin: boolean,
-    isAdminOrSuperAdmin: boolean
+    isAdminOrSuperAdmin: boolean,
+    onPreviewVideo: (url: string) => void
 ): ColumnsType<IShortVideoEntity> => [
     {
         title: "Titre",
@@ -59,9 +61,19 @@ export const shortsTableColumns = (
         align: "center",
         render: (videoUrl: string | null) =>
             videoUrl ? (
-                <Link href={videoUrl} target="_blank" rel="noopener noreferrer">
-                    <IconVideoCameraFilled style={{ color: Colors.BrandPrimary, fontSize: 18 }} />
-                </Link>
+                <IconVideoCameraFilled
+                    role="button"
+                    tabIndex={0}
+                    aria-label="Aperçu du réel"
+                    onClick={() => onPreviewVideo(videoUrl)}
+                    onKeyDown={(event) => {
+                        if (event.key === "Enter" || event.key === " ") {
+                            event.preventDefault();
+                            onPreviewVideo(videoUrl);
+                        }
+                    }}
+                    style={{ color: Colors.BrandPrimary, fontSize: 18, cursor: "pointer" }}
+                />
             ) : (
                 <IconStopOutlined style={{ color: Colors.Error, fontSize: 18 }} />
             )
