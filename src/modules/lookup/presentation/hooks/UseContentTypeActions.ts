@@ -1,6 +1,12 @@
 import type { AsyncThunk } from "@reduxjs/toolkit";
-import { activateContentTypeAction } from "@/modules/lookup/presentation/store/activatecontenttype.action";
-import { deactivateContentTypeAction } from "@/modules/lookup/presentation/store/deactivatecontenttype.action";
+import {
+    activateContentTypeAction,
+    resetActivateContentTypeAction
+} from "@/modules/lookup/presentation/store/activatecontenttype.action";
+import {
+    deactivateContentTypeAction,
+    resetDeactivateContentTypeAction
+} from "@/modules/lookup/presentation/store/deactivatecontenttype.action";
 import { ContentTypesNotification } from "@/modules/lookup/presentation/utils/notification/lookup.content-types.notification";
 import type { Failure } from "@/shared/domain/failures/failure";
 import { useAppDispatch, useAppSelector } from "@/shared/presentation/store/store";
@@ -16,6 +22,7 @@ interface IUseContentTypeActions {
     error: Failure | null | undefined;
     onActivate: (id: string) => Promise<void>;
     onDeactivate: (id: string) => Promise<void>;
+    resetActionError: () => void;
 }
 
 /**
@@ -78,5 +85,10 @@ export const useContentTypeActions = (reload: () => void): IUseContentTypeAction
         );
     };
 
-    return { loading, error, onActivate, onDeactivate };
+    const resetActionError = () => {
+        dispatch(resetActivateContentTypeAction());
+        dispatch(resetDeactivateContentTypeAction());
+    };
+
+    return { loading, error, onActivate, onDeactivate, resetActionError };
 };
