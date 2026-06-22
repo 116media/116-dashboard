@@ -150,6 +150,7 @@ const ContentTypesListContainer: FC = () => {
                     })
                 }
                 onCancel={() => modals.setActionOpen(false)}
+                onAfterClose={actions.resetActionError}
             />
         </>
     );
