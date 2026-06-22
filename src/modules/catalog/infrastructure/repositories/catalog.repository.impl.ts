@@ -101,6 +101,24 @@ export class CatalogRepositoryImpl implements ICatalogRepositoryPort {
         }
     }
 
+    async pinCategoryToFeed(id: string): Promise<Result<ICategoryEntity>> {
+        try {
+            const response = await apiClient.api.adminPinCategoryToFeed(id);
+            return ok(CatalogMapper.categoryFromDto(response.data.category));
+        } catch (error) {
+            return err(ProblemMapper.toFailure(error));
+        }
+    }
+
+    async unpinCategoryFromFeed(id: string): Promise<Result<ICategoryEntity>> {
+        try {
+            const response = await apiClient.api.adminUnpinCategoryFromFeed(id);
+            return ok(CatalogMapper.categoryFromDto(response.data.category));
+        } catch (error) {
+            return err(ProblemMapper.toFailure(error));
+        }
+    }
+
     async uploadCategoryPoster(
         id: string,
         data: IUploadCategoryPosterCredentials
