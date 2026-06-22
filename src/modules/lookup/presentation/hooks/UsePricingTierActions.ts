@@ -1,6 +1,12 @@
 import type { AsyncThunk } from "@reduxjs/toolkit";
-import { activatePricingTierAction } from "@/modules/lookup/presentation/store/activatepricingtier.action";
-import { deactivatePricingTierAction } from "@/modules/lookup/presentation/store/deactivatepricingtier.action";
+import {
+    activatePricingTierAction,
+    resetActivatePricingTierAction
+} from "@/modules/lookup/presentation/store/activatepricingtier.action";
+import {
+    deactivatePricingTierAction,
+    resetDeactivatePricingTierAction
+} from "@/modules/lookup/presentation/store/deactivatepricingtier.action";
 import { PricingTiersNotification } from "@/modules/lookup/presentation/utils/notification/lookup.pricing-tiers.notification";
 import type { Failure } from "@/shared/domain/failures/failure";
 import { useAppDispatch, useAppSelector } from "@/shared/presentation/store/store";
@@ -16,6 +22,7 @@ interface IUsePricingTierActions {
     error: Failure | null | undefined;
     onActivate: (id: string) => Promise<void>;
     onDeactivate: (id: string) => Promise<void>;
+    resetActionError: () => void;
 }
 
 /**
@@ -78,5 +85,10 @@ export const usePricingTierActions = (reload: () => void): IUsePricingTierAction
         );
     };
 
-    return { loading, error, onActivate, onDeactivate };
+    const resetActionError = () => {
+        dispatch(resetActivatePricingTierAction());
+        dispatch(resetDeactivatePricingTierAction());
+    };
+
+    return { loading, error, onActivate, onDeactivate, resetActionError };
 };
