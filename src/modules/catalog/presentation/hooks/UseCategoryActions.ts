@@ -1,7 +1,16 @@
 import type { AsyncThunk } from "@reduxjs/toolkit";
-import { activateCategoryAction } from "@/modules/catalog/presentation/store/activatecategory.action";
-import { deactivateCategoryAction } from "@/modules/catalog/presentation/store/deactivatecategory.action";
-import { setExclusiveCategoryAction } from "@/modules/catalog/presentation/store/setexclusivecategory.action";
+import {
+    activateCategoryAction,
+    resetActivateCategoryAction
+} from "@/modules/catalog/presentation/store/activatecategory.action";
+import {
+    deactivateCategoryAction,
+    resetDeactivateCategoryAction
+} from "@/modules/catalog/presentation/store/deactivatecategory.action";
+import {
+    resetSetExclusiveCategoryAction,
+    setExclusiveCategoryAction
+} from "@/modules/catalog/presentation/store/setexclusivecategory.action";
 import { CategoriesNotification } from "@/modules/catalog/presentation/utils/notification/catalog.categories.notification";
 import type { Failure } from "@/shared/domain/failures/failure";
 import { useAppDispatch, useAppSelector } from "@/shared/presentation/store/store";
@@ -18,6 +27,7 @@ interface IUseCategoryActions {
     onActivate: (id: string) => Promise<void>;
     onDeactivate: (id: string) => Promise<void>;
     onSetExclusive: (id: string) => Promise<void>;
+    resetActionError: () => void;
 }
 
 /**
@@ -85,5 +95,11 @@ export const useCategoryActions = (reload: () => void): IUseCategoryActions => {
         );
     };
 
-    return { loading, error, onActivate, onDeactivate, onSetExclusive };
+    const resetActionError = () => {
+        dispatch(resetActivateCategoryAction());
+        dispatch(resetDeactivateCategoryAction());
+        dispatch(resetSetExclusiveCategoryAction());
+    };
+
+    return { loading, error, onActivate, onDeactivate, onSetExclusive, resetActionError };
 };
