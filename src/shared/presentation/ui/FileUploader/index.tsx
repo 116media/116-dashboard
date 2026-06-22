@@ -1,10 +1,11 @@
 import { type FC, useCallback, useMemo, useState } from "react";
+import { FileUploaderNotification } from "@/shared/presentation/utils/notification/file-uploader.notification";
 import { showNotification } from "@/shared/presentation/utils/notification/notification.utils";
 import DropZone from "./DropZone";
 import FilePreview from "./FilePreview";
 import type { IUploadPreset } from "./presets";
 import UploadProgress from "./UploadProgress";
-import { formatFileSize } from "./utils";
+import { formatFileSize, isImageFile, isImageUrl } from "./utils";
 
 /**
  * Base props shared by both upload modes.
@@ -25,8 +26,8 @@ interface IFileUploaderBaseProps {
  */
 interface IImmediateUploadProps extends IFileUploaderBaseProps {
     mode?: "immediate";
-    onUpload: (file: File) => Promise<string>;
     onFileSelect?: never;
+    onUpload: (file: File) => Promise<string>;
 }
 
 /**
@@ -36,8 +37,8 @@ interface IImmediateUploadProps extends IFileUploaderBaseProps {
  */
 interface IDeferredUploadProps extends IFileUploaderBaseProps {
     mode: "deferred";
-    onFileSelect: (file: File) => void;
     onUpload?: never;
+    onFileSelect: (file: File) => void;
 }
 
 type IFileUploaderProps = IImmediateUploadProps | IDeferredUploadProps;
@@ -75,36 +76,45 @@ const FileUploader: FC<IFileUploaderProps> = (props) => {
 
     const isDeferred = props.mode === "deferred";
     const isVideo = useMemo(() => preset.accept.includes("video"), [preset.accept]);
+
     // Image-only presets render any selection (including local blob: previews) as an image,
-    // since blob URLs carry no extension for isImageUrl to detect.
-    const isImage = useMemo(
+    // since blob URLs carry no extension for isImageUrl to detect. Mixed presets that also
+    // accept PDF stay false here and rely on per-file detection (isImageSelection) instead.
+    const presetIsImage = useMemo(
         () => preset.accept.includes("image") && !preset.accept.includes("pdf"),
         [preset.accept]
     );
 
-    const [uploading, setUploading] = useState(false);
     const [progress, setProgress] = useState(0);
+    const [removed, setRemoved] = useState(false);
+    const [uploading, setUploading] = useState(false);
     const [fileName, setFileName] = useState<string | null>(null);
     const [fileSize, setFileSize] = useState<string | null>(null);
     const [previewUrl, setPreviewUrl] = useState<string | null>(value ?? null);
-    const [removed, setRemoved] = useState(false);
+
+    // Kind of the actual selected file, used to preview a mixed preset's image vs PDF
+    // correctly. Null until a file is chosen, then falls back to the initial value's kind.
+    const [isImageSelection, setIsImageSelection] = useState<boolean | null>(
+        value ? isImageUrl(value) : null
+    );
 
     const maxSizeBytes = useMemo(() => preset.maxSizeMB * 1024 * 1024, [preset.maxSizeMB]);
 
     const handleImmediateUpload = useCallback(
         async (file: File) => {
             if (file.size > maxSizeBytes) {
-                showNotification({
-                    type: "error",
-                    title: "Fichier trop volumineux",
-                    description: `Le fichier fait ${formatFileSize(file.size)}, la taille maximale est de ${formatFileSize(maxSizeBytes)}.`
-                });
+                const notification = FileUploaderNotification.fileTooLarge(
+                    formatFileSize(file.size),
+                    formatFileSize(maxSizeBytes)
+                );
+                showNotification(notification);
                 return false;
             }
             if (isDeferred) return false;
 
             setFileName(file.name);
             setFileSize(formatFileSize(file.size));
+            setIsImageSelection(isImageFile(file));
             setUploading(true);
             setProgress(0);
 
@@ -136,16 +146,18 @@ const FileUploader: FC<IFileUploaderProps> = (props) => {
     const handleDeferredSelect = useCallback(
         (file: File) => {
             if (file.size > maxSizeBytes) {
-                showNotification({
-                    type: "error",
-                    title: "Fichier trop volumineux",
-                    description: `Le fichier fait ${formatFileSize(file.size)}, la taille maximale est de ${formatFileSize(maxSizeBytes)}.`
-                });
+                const notification = FileUploaderNotification.fileTooLarge(
+                    formatFileSize(file.size),
+                    formatFileSize(maxSizeBytes)
+                );
+
+                showNotification(notification);
                 return false;
             }
 
             setFileName(file.name);
             setFileSize(formatFileSize(file.size));
+            setIsImageSelection(isImageFile(file));
             setPreviewUrl(URL.createObjectURL(file));
             setRemoved(false);
             (props as IDeferredUploadProps).onFileSelect(file);
@@ -169,9 +181,11 @@ const FileUploader: FC<IFileUploaderProps> = (props) => {
         setFileSize(null);
         setProgress(0);
         setRemoved(true);
+        setIsImageSelection(null);
         onRemove?.();
     }, [onRemove]);
 
+    const isImage = isImageSelection ?? presetIsImage;
     const currentPreview = removed ? null : (previewUrl ?? value);
 
     if (uploading) {
