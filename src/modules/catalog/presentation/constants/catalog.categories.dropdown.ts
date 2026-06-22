@@ -43,12 +43,9 @@ export const CATEGORY_DROPDOWN_ITEMS: ICategoryDropdownItem[] = [
     },
     {
         key: "setExclusive",
-        label: "Définir comme exclusive",
+        label: "Mettre en exclusivité",
         hidden: (record, isSuperAdmin) =>
-            !isSuperAdmin ||
-            record.contentTypeName !== "Video" ||
-            !record.isActive ||
-            record.isExclusive
+            !isSuperAdmin || !record.isVideoType || !record.isActive || record.isExclusive
     },
     {
         key: "managePricing",
