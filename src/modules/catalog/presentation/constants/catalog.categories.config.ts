@@ -25,10 +25,10 @@ export const CATEGORY_ACTION_CONFIG: Partial<Record<CategoryAction, ActionConfig
         danger: true
     },
     setExclusive: {
-        title: "Définir comme émission exclusive",
+        title: "Mettre en exclusivité",
         description:
-            "Êtes-vous sûr de vouloir définir cette catégorie comme émission exclusive ? L'émission exclusive actuelle sera automatiquement remplacée.",
-        confirmLabel: "Définir",
+            "Cette catégorie deviendra le contenu exclusif de l'accueil et remplacera la catégorie exclusive actuelle.",
+        confirmLabel: "Confirmer",
         danger: false
     }
 };
