@@ -1,5 +1,8 @@
 import type { AsyncThunk } from "@reduxjs/toolkit";
-import { deleteLyricsAction } from "@/modules/lyrics/presentation/store/deletelyrics.action";
+import {
+    deleteLyricsAction,
+    resetDeleteLyricsAction
+} from "@/modules/lyrics/presentation/store/deletelyrics.action";
 import { LyricsNotification } from "@/modules/lyrics/presentation/utils/notification/lyrics.notification";
 import type { Failure } from "@/shared/domain/failures/failure";
 import { useAppDispatch, useAppSelector } from "@/shared/presentation/store/store";
@@ -14,6 +17,7 @@ interface IUseLyricsActions {
     loading: boolean;
     error: Failure | null | undefined;
     onDelete: (id: string) => Promise<void>;
+    resetActionError: () => void;
 }
 
 /**
@@ -57,5 +61,9 @@ export const useLyricsActions = (reload: () => void): IUseLyricsActions => {
         return dispatchAction(deleteLyricsAction, id, LyricsNotification.deleteSuccess);
     };
 
-    return { loading, error, onDelete };
+    const resetActionError = () => {
+        dispatch(resetDeleteLyricsAction());
+    };
+
+    return { loading, error, onDelete, resetActionError };
 };
