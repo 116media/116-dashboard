@@ -32,21 +32,26 @@ const HTML5_PLYR_OPTIONS: Plyr.Options = {
     }
 };
 
+/**
+ * Props for the VideoPlayer component.
+ *
+ * @interface IVideoPlayerProps
+ * @property {string | null} [src] - Direct video file URL to play with the HTML5 player; ignored when youtubeUrl is provided
+ * @property {string | null} [youtubeUrl] - YouTube URL or video id to embed; takes precedence over src
+ * @property {string | null} [poster] - Optional poster image shown before playback begins
+ * @property {number} [maxHeight] - Caps the player height in pixels and clips any overflow
+ * @property {() => void} [onReady] - Called once the underlying player has finished initializing
+ * @property {Plyr.Options["controls"]} [controls] - Overrides the Plyr controls array; defaults to the full control set
+ * @property {Plyr.Options["ratio"]} [ratio] - Overrides the player aspect ratio (e.g. "9:16" for vertical shorts); defaults to "16:9"
+ */
 interface IVideoPlayerProps {
     src?: string | null;
     youtubeUrl?: string | null;
     poster?: string | null;
     maxHeight?: number;
     onReady?: () => void;
-    /**
-     * Overrides the Plyr controls array. Defaults to the full control set.
-     */
     controls?: Plyr.Options["controls"];
-    /**
-     * Overrides the player aspect ratio (e.g. "9:16" for vertical shorts).
-     * Defaults to "16:9".
-     */
-    ratio?: string;
+    ratio?: Plyr.Options["ratio"];
 }
 
 /**
