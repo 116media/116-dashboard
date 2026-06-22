@@ -96,6 +96,9 @@ const CategoryForm: FC<ICategoryFormProps> = ({
     const isArticleType = selectedContentType?.name === "Article";
     const isVideoType = selectedContentType?.name === "Video";
 
+    // An inactive category cannot be made exclusive (backend: CannotMakeInactiveExclusive).
+    const isExclusiveDisabled = formContext === "EDIT" && initialValues?.isActive === false;
+
     const posterPreviewUrl = useMemo(
         () => (posterFile ? URL.createObjectURL(posterFile) : null),
         [posterFile]
@@ -186,6 +189,7 @@ const CategoryForm: FC<ICategoryFormProps> = ({
                 <Item name="isExclusive" valuePropName="checked">
                     <SwitchField
                         title="Émission exclusive"
+                        disabled={isExclusiveDisabled}
                         icon={<IconStarOutlined />}
                         description="Cette catégorie sera en contenu exclusive sur l'accueil."
                     />
