@@ -18,6 +18,8 @@ import type { ICategoryPricingEntity } from "@/modules/catalog/domain/entities/I
  * @property {boolean} isActive - Whether the category is currently active
  * @property {boolean} isGossip - Whether this is the gossip fallback source for the homepage feed
  * @property {boolean} isExclusive - Whether this category is the currently featured exclusive show (video categories only, at most one at a time)
+ * @property {boolean} isPinnedToFeed - Whether this category is currently pinned as a section of the homepage feed
+ * @property {string | null} pinnedToFeedAt - ISO timestamp of when the category was pinned to the feed, or null when it is not pinned
  * @property {string | null} posterUrl - Resolved URL of the show's poster image, or null when no poster is set
  * @property {ICategoryPricingEntity[]} pricing - Configured pricing tiers
  */
@@ -36,6 +38,8 @@ export interface ICategoryEntity {
     isActive: boolean;
     isGossip: boolean;
     isExclusive: boolean;
+    isPinnedToFeed: boolean;
+    pinnedToFeedAt: string | null;
     posterUrl: string | null;
     pricing: ICategoryPricingEntity[];
 }
