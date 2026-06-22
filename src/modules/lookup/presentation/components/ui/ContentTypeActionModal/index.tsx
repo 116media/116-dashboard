@@ -22,6 +22,7 @@ interface IContentTypeActionModalProps {
     loading: boolean;
     onCancel: () => void;
     onConfirm: () => void;
+    onAfterClose?: () => void;
     contentType: IContentTypeEntity | null;
     action: ContentTypeAction | null;
     error: Failure | null | undefined;
@@ -47,7 +48,8 @@ const ContentTypeActionModal: FC<IContentTypeActionModalProps> = ({
     loading,
     error,
     onConfirm,
-    onCancel
+    onCancel,
+    onAfterClose
 }) => {
     const config = action ? CONTENT_TYPE_ACTION_CONFIG[action] : undefined;
 
@@ -62,6 +64,7 @@ const ContentTypeActionModal: FC<IContentTypeActionModalProps> = ({
             title={config.title}
             onConfirm={onConfirm}
             danger={config.danger}
+            onAfterClose={onAfterClose}
             description={config.description}
         />
     );
