@@ -40,9 +40,11 @@ import type { GetAllPackagesUseCase } from "@/modules/catalog/application/usecas
 import type { GetCategoryByIdUseCase } from "@/modules/catalog/application/usecases/getcategorybyid.usecase";
 import type { GetCustomerByIdUseCase } from "@/modules/catalog/application/usecases/getcustomerbyid.usecase";
 import type { GetPackageByIdUseCase } from "@/modules/catalog/application/usecases/getpackagebyid.usecase";
+import type { PinCategoryToFeedUseCase } from "@/modules/catalog/application/usecases/pincategorytofeed.usecase";
 import type { RemoveCategoryPricingUseCase } from "@/modules/catalog/application/usecases/removecategorypricing.usecase";
 import type { RemovePackageSlotUseCase } from "@/modules/catalog/application/usecases/removepackageslot.usecase";
 import type { SetExclusiveCategoryUseCase } from "@/modules/catalog/application/usecases/setexclusivecategory.usecase";
+import type { UnpinCategoryFromFeedUseCase } from "@/modules/catalog/application/usecases/unpincategoryfromfeed.usecase";
 import type { UpdateCategoryUseCase } from "@/modules/catalog/application/usecases/updatecategory.usecase";
 import type { UpdateCategoryPricingUseCase } from "@/modules/catalog/application/usecases/updatecategorypricing.usecase";
 import type { UpdateCustomerUseCase } from "@/modules/catalog/application/usecases/updatecustomer.usecase";
@@ -273,6 +275,8 @@ export interface Cradle {
     activateCategoryUseCase: ActivateCategoryUseCase;
     deactivateCategoryUseCase: DeactivateCategoryUseCase;
     setExclusiveCategoryUseCase: SetExclusiveCategoryUseCase;
+    pinCategoryToFeedUseCase: PinCategoryToFeedUseCase;
+    unpinCategoryFromFeedUseCase: UnpinCategoryFromFeedUseCase;
     uploadCategoryPosterUseCase: UploadCategoryPosterUseCase;
     addCategoryPricingUseCase: AddCategoryPricingUseCase;
     updateCategoryPricingUseCase: UpdateCategoryPricingUseCase;
