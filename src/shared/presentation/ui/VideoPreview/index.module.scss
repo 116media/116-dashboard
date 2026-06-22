@@ -1,0 +1,141 @@
+@use "@/shared/presentation/styles/colors" as colors;
+@use "@/shared/presentation/styles/dimensions" as dimensions;
+
+
+.videoPreview {
+    position: fixed;
+    inset: 0;
+    z-index: 1100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    background: rgba(colors.$black, 0.65);
+    animation: videoPreviewFade 0.2s ease;
+    
+    @keyframes videoPreviewFade {
+        from {
+            opacity: 0;
+        }
+    
+        to {
+            opacity: 1;
+        }
+    }
+    
+    @keyframes videoPreviewZoom {
+        from {
+            opacity: 0;
+            transform: scale(0.1);
+        }
+    
+        to {
+            opacity: 1;
+            transform: scale(1);
+        }
+    }
+
+    &__mask {
+        position: absolute;
+        inset: 0;
+        z-index: 0;
+        padding: 0;
+        cursor: default;
+        background: transparent;
+        border: none;
+    }
+
+    &__stage {
+        position: relative;
+        z-index: 1;
+        height: min(80vh, 160vw);
+        aspect-ratio: 9 / 16;
+        cursor: default;
+        animation: videoPreviewZoom 0.25s ease;
+    }
+
+    &__audio {
+        position: absolute;
+        z-index: 3;
+        top: 12px;
+        left: 12px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 6px 12px 6px 6px;
+        background: rgba(colors.$black, 0.4);
+        border-radius: dimensions.$border-radius;
+    }
+
+    &__muteButton {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 32px;
+        height: 32px;
+        padding: 0;
+        font-size: 18px;
+        color: colors.$white;
+        cursor: pointer;
+        background: transparent;
+        border: none;
+        border-radius: 50%;
+        transition: background 0.2s ease;
+
+        &:hover {
+            background: rgba(colors.$white, 0.15);
+        }
+    }
+
+    &__volume {
+        width: 90px;
+        height: 4px;
+        cursor: pointer;
+        appearance: none;
+        background: rgba(colors.$white, 0.3);
+        border-radius: 999px;
+        outline: none;
+
+        &::-webkit-slider-thumb {
+            width: 12px;
+            height: 12px;
+            appearance: none;
+            background: colors.$white;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        &::-moz-range-thumb {
+            width: 12px;
+            height: 12px;
+            background: colors.$white;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+    }
+
+    &__close {
+        position: absolute;
+        z-index: 2;
+        top: 14px;
+        right: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        padding: 0;
+        font-size: 20px;
+        color: colors.$primary;
+        cursor: pointer;
+        background: transparent;
+        border: none;
+        border-radius: dimensions.$border-radius;
+        transition: background 0.2s ease;
+
+        &:hover {
+            background: rgba(colors.$white, 0.15);
+        }
+    }
+}
