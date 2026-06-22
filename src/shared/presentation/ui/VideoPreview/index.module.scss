@@ -9,7 +9,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 24px;
+    padding: dimensions.$padding;
     background: rgba(colors.$black, 0.65);
     animation: videoPreviewFade 0.2s ease;
     
@@ -48,7 +48,7 @@
     &__stage {
         position: relative;
         z-index: 1;
-        height: min(80vh, 160vw);
+        height: min(90vh, 160vw);
         aspect-ratio: 9 / 16;
         cursor: default;
         animation: videoPreviewZoom 0.25s ease;
@@ -89,30 +89,7 @@
 
     &__volume {
         width: 90px;
-        height: 4px;
-        cursor: pointer;
-        appearance: none;
-        background: rgba(colors.$white, 0.3);
-        border-radius: 999px;
-        outline: none;
-
-        &::-webkit-slider-thumb {
-            width: 12px;
-            height: 12px;
-            appearance: none;
-            background: colors.$white;
-            border-radius: 50%;
-            cursor: pointer;
-        }
-
-        &::-moz-range-thumb {
-            width: 12px;
-            height: 12px;
-            background: colors.$white;
-            border: none;
-            border-radius: 50%;
-            cursor: pointer;
-        }
+        margin: 0;
     }
 
     &__close {
@@ -123,10 +100,6 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        width: 40px;
-        height: 40px;
-        padding: 0;
-        font-size: 20px;
         color: colors.$primary;
         cursor: pointer;
         background: transparent;
