@@ -22,6 +22,7 @@ import { IconPlaySquareOutlined } from "@/shared/presentation/ui/Icons";
 import PageHeader from "@/shared/presentation/ui/PageHeader";
 import ResizableTitle from "@/shared/presentation/ui/ResizableTable";
 import TableToolbar from "@/shared/presentation/ui/TableToolbar";
+import VideoPreview from "@/shared/presentation/ui/VideoPreview";
 import { showNotification } from "@/shared/presentation/utils/notification/notification.utils";
 
 /**
@@ -64,7 +65,12 @@ const ShortsListContainer: FC = () => {
     };
 
     const { columns: tableColumns } = useResizableColumns(
-        shortsTableColumns(modals.handleAction, isSuperAdmin, isAdminOrSuperAdmin)
+        shortsTableColumns(
+            modals.handleAction,
+            isSuperAdmin,
+            isAdminOrSuperAdmin,
+            modals.handlePreviewVideo
+        )
     );
 
     return (
@@ -200,6 +206,12 @@ const ShortsListContainer: FC = () => {
                     onUpload={handleThumbnailUpload}
                 />
             )}
+
+            <VideoPreview
+                open={modals.previewOpen}
+                src={modals.previewUrl}
+                onClose={modals.closePreview}
+            />
         </>
     );
 };
