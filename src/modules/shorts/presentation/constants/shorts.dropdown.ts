@@ -30,21 +30,21 @@ interface IShortDropdownItem {
  */
 export const SHORT_DROPDOWN_ITEMS: IShortDropdownItem[] = [
     { key: "edit", label: "Modifier", hidden: (_, __, isAdmin) => !isAdmin },
-    { key: "viewVideo", label: "Voir la vidéo", hidden: (r) => !r.videoId },
+    { key: "viewVideo", label: "Voir la vidéo associée", hidden: (r) => !r.videoId },
     {
         key: "activate",
         label: "Activer",
         hidden: (r, isSuperAdmin) => !isSuperAdmin || r.isActive
     },
     {
-        key: "deactivate",
-        label: "Désactiver",
-        hidden: (r, isSuperAdmin) => !isSuperAdmin || !r.isActive
-    },
-    {
         key: "thumbnail",
         label: "Importer une miniature",
         hidden: (_, __, isAdmin) => !isAdmin
+    },
+    {
+        key: "deactivate",
+        label: "Désactiver",
+        hidden: (r, isSuperAdmin) => !isSuperAdmin || !r.isActive
     },
     {
         key: "delete",
