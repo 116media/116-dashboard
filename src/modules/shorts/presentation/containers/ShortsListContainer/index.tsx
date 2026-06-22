@@ -187,6 +187,7 @@ const ShortsListContainer: FC = () => {
                     })
                 }
                 onCancel={() => modals.setActionOpen(false)}
+                onAfterClose={actions.resetActionError}
             />
 
             {modals.thumbnailOpen && (
