@@ -22,6 +22,7 @@ interface ICategoryActionModalProps {
     loading: boolean;
     onCancel: () => void;
     onConfirm: () => void;
+    onAfterClose?: () => void;
     category: ICategoryEntity | null;
     action: CategoryAction | null;
     error: Failure | null | undefined;
@@ -47,7 +48,8 @@ const CategoryActionModal: FC<ICategoryActionModalProps> = ({
     loading,
     error,
     onConfirm,
-    onCancel
+    onCancel,
+    onAfterClose
 }) => {
     const config = action ? CATEGORY_ACTION_CONFIG[action] : undefined;
 
@@ -62,6 +64,7 @@ const CategoryActionModal: FC<ICategoryActionModalProps> = ({
             title={config.title}
             onConfirm={onConfirm}
             danger={config.danger}
+            onAfterClose={onAfterClose}
             description={config.description}
         />
     );
