@@ -17,12 +17,33 @@ export const formatFileSize = (bytes: number): string => {
 };
 
 /**
+ * Determines whether a selected File is an image, from its MIME type with an
+ * extension fallback.
+ *
+ * @description
+ * Presets that accept both images and PDF cannot decide between an image preview and a
+ * document icon from the preset alone, and the local `blob:` preview URL carries no
+ * extension for `isImageUrl` to read. Inspecting the actual `File` lets an image render
+ * as a preview instead of falling back to the generic file icon.
+ *
+ * @param file - The selected file
+ * @returns true if the file is an image
+ */
+export const isImageFile = (file: File): boolean => {
+    if (file.type) return file.type.startsWith("image/");
+    const lower = file.name.toLowerCase();
+    return IMAGE_EXTENSIONS.some((ext) => lower.endsWith(ext));
+};
+
+/**
  * Determines whether a URL points to an image file.
  *
  * @param url - The file URL to check
  * @returns true if the URL is an image
  */
 export const isImageUrl = (url: string): boolean => {
+    if (typeof url !== "string") return false;
+
     const lower = url.toLowerCase();
     if (IMAGE_EXTENSIONS.some((ext) => lower.includes(ext))) return true;
     if (lower.endsWith(".pdf") || lower.includes("application/pdf")) return false;
