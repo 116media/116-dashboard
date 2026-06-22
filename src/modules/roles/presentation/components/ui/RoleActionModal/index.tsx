@@ -16,6 +16,7 @@ import ActionModal from "@/shared/presentation/ui/ActionModal";
  * @property {Failure | null | undefined} error - Backend error
  * @property {() => void} onConfirm - Confirm handler
  * @property {() => void} onCancel - Cancel/close handler
+ * @property {() => void} [onAfterClose] - Callback fired after the modal close transition completes
  */
 interface IRoleActionModalProps {
     open: boolean;
@@ -25,6 +26,7 @@ interface IRoleActionModalProps {
     role: IRoleEntity | null;
     action: RoleAction | null;
     error: Failure | null | undefined;
+    onAfterClose?: () => void;
 }
 
 /**
@@ -47,7 +49,8 @@ const RoleActionModal: FC<IRoleActionModalProps> = ({
     loading,
     error,
     onConfirm,
-    onCancel
+    onCancel,
+    onAfterClose
 }) => {
     const config = action ? ROLE_ACTION_CONFIG[action] : undefined;
 
@@ -62,6 +65,7 @@ const RoleActionModal: FC<IRoleActionModalProps> = ({
             title={config.title}
             onConfirm={onConfirm}
             danger={config.danger}
+            onAfterClose={onAfterClose}
             description={config.description}
         />
     );
