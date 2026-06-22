@@ -93,6 +93,25 @@ export interface ICatalogRepositoryPort {
     setExclusiveCategory(id: string): Promise<Result<ICategoryEntity>>;
 
     /**
+     * Pins a video category to the homepage feed so it appears as a section with its
+     * latest published videos. The backend enforces the per-content-type cap and
+     * auto-unpins the oldest pinned category (FIFO) when the cap is exceeded.
+     *
+     * @param id - The category UUID
+     * @returns `ok(ICategoryEntity)` on success, `err(Failure)` on failure
+     */
+    pinCategoryToFeed(id: string): Promise<Result<ICategoryEntity>>;
+
+    /**
+     * Unpins a category from the homepage feed. Idempotent — unpinning a category
+     * that is not pinned succeeds as a no-op.
+     *
+     * @param id - The category UUID
+     * @returns `ok(ICategoryEntity)` on success, `err(Failure)` on failure
+     */
+    unpinCategoryFromFeed(id: string): Promise<Result<ICategoryEntity>>;
+
+    /**
      * Uploads (or replaces) a category poster image via the dedicated poster endpoint.
      *
      * @param id - The category UUID
