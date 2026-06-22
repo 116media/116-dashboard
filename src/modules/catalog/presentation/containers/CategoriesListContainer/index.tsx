@@ -171,6 +171,7 @@ const CategoriesListContainer: FC = () => {
                     })
                 }
                 onCancel={() => modals.setActionOpen(false)}
+                onAfterClose={actions.resetActionError}
             />
 
             <CategoryPricingPanel
