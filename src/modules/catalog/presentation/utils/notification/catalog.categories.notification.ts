@@ -106,6 +106,30 @@ export const CategoriesNotification = {
     } as INotificationConfig,
 
     /**
+     * Success notification for pinning a category to the homepage feed.
+     *
+     * @description
+     * Displays when a category has been pinned to the homepage feed.
+     */
+    pinToFeedSuccess: {
+        type: "success",
+        title: "Catégorie épinglée",
+        description: "La catégorie a été épinglée au fil d'actualité avec succès."
+    } as INotificationConfig,
+
+    /**
+     * Success notification for unpinning a category from the homepage feed.
+     *
+     * @description
+     * Displays when a category has been detached from the homepage feed.
+     */
+    unpinFromFeedSuccess: {
+        type: "success",
+        title: "Catégorie détachée",
+        description: "La catégorie a été détachée du fil d'actualité avec succès."
+    } as INotificationConfig,
+
+    /**
      * Success notification for uploading a category poster image.
      *
      * @description
