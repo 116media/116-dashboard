@@ -17,6 +17,8 @@ export const catalogInitialState: ICatalogState = {
     activateCategory: createInitialState(),
     deactivateCategory: createInitialState(),
     setExclusiveCategory: createInitialState(),
+    pinCategoryToFeed: createInitialState(),
+    unpinCategoryFromFeed: createInitialState(),
     uploadCategoryPoster: createInitialState(),
     addCategoryPricing: createInitialState(),
     updateCategoryPricing: createInitialState(),
