@@ -38,6 +38,15 @@ interface IVideoPlayerProps {
     poster?: string | null;
     maxHeight?: number;
     onReady?: () => void;
+    /**
+     * Overrides the Plyr controls array. Defaults to the full control set.
+     */
+    controls?: Plyr.Options["controls"];
+    /**
+     * Overrides the player aspect ratio (e.g. "9:16" for vertical shorts).
+     * Defaults to "16:9".
+     */
+    ratio?: string;
 }
 
 /**
@@ -49,8 +58,25 @@ interface IVideoPlayerProps {
  * Renders a Plyr-powered player for both HTML5 video files and YouTube embeds.
  * Styles are applied via CSS custom properties in the companion SCSS module.
  */
-const VideoPlayer: FC<IVideoPlayerProps> = ({ src, youtubeUrl, poster, maxHeight, onReady }) => {
+const VideoPlayer: FC<IVideoPlayerProps> = ({
+    src,
+    youtubeUrl,
+    poster,
+    maxHeight,
+    onReady,
+    controls,
+    ratio
+}) => {
     const containerRef = useRef<HTMLDivElement>(null);
+
+    const options = useMemo<Plyr.Options>(() => {
+        const base = youtubeUrl ? SHARED_PLYR_OPTIONS : HTML5_PLYR_OPTIONS;
+        return {
+            ...base,
+            ...(controls ? { controls } : {}),
+            ...(ratio ? { ratio } : {})
+        };
+    }, [youtubeUrl, controls, ratio]);
 
     const source = useMemo<Plyr.SourceInfo | undefined>(() => {
         if (youtubeUrl) {
@@ -101,10 +127,7 @@ const VideoPlayer: FC<IVideoPlayerProps> = ({ src, youtubeUrl, poster, maxHeight
             className={styles.videoPlayer}
             style={maxHeight ? { maxHeight, overflow: "hidden" } : undefined}
         >
-            <PlyrReact
-                source={source}
-                options={youtubeUrl ? SHARED_PLYR_OPTIONS : HTML5_PLYR_OPTIONS}
-            />
+            <PlyrReact source={source} options={options} />
         </div>
     );
 };
