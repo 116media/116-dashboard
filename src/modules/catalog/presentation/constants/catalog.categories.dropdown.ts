@@ -3,7 +3,14 @@ import type { ICategoryEntity } from "@/modules/catalog/domain/entities/ICategor
 /**
  * Available action types for a category record.
  */
-export type CategoryAction = "edit" | "activate" | "deactivate" | "managePricing" | "setExclusive";
+export type CategoryAction =
+    | "edit"
+    | "activate"
+    | "deactivate"
+    | "managePricing"
+    | "setExclusive"
+    | "pinToFeed"
+    | "unpinFromFeed";
 
 interface ICategoryDropdownItem {
     key: CategoryAction;
@@ -29,6 +36,10 @@ interface ICategoryDropdownItem {
  * - "activate" and "deactivate" are available to Admin and SuperAdmin.
  * - "setExclusive" is SuperAdmin-only and limited to active video categories
  *   that are not already the exclusive show.
+ * - "pinToFeed" is SuperAdmin-only and limited to active video categories that
+ *   are not already pinned to the feed.
+ * - "unpinFromFeed" is SuperAdmin-only and shown only for categories currently
+ *   pinned to the feed.
  */
 export const CATEGORY_DROPDOWN_ITEMS: ICategoryDropdownItem[] = [
     {
@@ -46,6 +57,18 @@ export const CATEGORY_DROPDOWN_ITEMS: ICategoryDropdownItem[] = [
         label: "Mettre en exclusivité",
         hidden: (record, isSuperAdmin) =>
             !isSuperAdmin || !record.isVideoType || !record.isActive || record.isExclusive
+    },
+    {
+        key: "pinToFeed",
+        label: "Épingler au fil d'actualité",
+        hidden: (record, isSuperAdmin) =>
+            !isSuperAdmin || !record.isVideoType || !record.isActive || record.isPinnedToFeed
+    },
+    {
+        key: "unpinFromFeed",
+        label: "Détacher du fil d'actualité",
+        danger: true,
+        hidden: (record, isSuperAdmin) => !isSuperAdmin || !record.isPinnedToFeed
     },
     {
         key: "managePricing",
