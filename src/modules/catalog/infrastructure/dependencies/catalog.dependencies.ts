@@ -14,9 +14,11 @@ import { GetAllPackagesUseCase } from "@/modules/catalog/application/usecases/ge
 import { GetCategoryByIdUseCase } from "@/modules/catalog/application/usecases/getcategorybyid.usecase";
 import { GetCustomerByIdUseCase } from "@/modules/catalog/application/usecases/getcustomerbyid.usecase";
 import { GetPackageByIdUseCase } from "@/modules/catalog/application/usecases/getpackagebyid.usecase";
+import { PinCategoryToFeedUseCase } from "@/modules/catalog/application/usecases/pincategorytofeed.usecase";
 import { RemoveCategoryPricingUseCase } from "@/modules/catalog/application/usecases/removecategorypricing.usecase";
 import { RemovePackageSlotUseCase } from "@/modules/catalog/application/usecases/removepackageslot.usecase";
 import { SetExclusiveCategoryUseCase } from "@/modules/catalog/application/usecases/setexclusivecategory.usecase";
+import { UnpinCategoryFromFeedUseCase } from "@/modules/catalog/application/usecases/unpincategoryfromfeed.usecase";
 import { UpdateCategoryUseCase } from "@/modules/catalog/application/usecases/updatecategory.usecase";
 import { UpdateCategoryPricingUseCase } from "@/modules/catalog/application/usecases/updatecategorypricing.usecase";
 import { UpdateCustomerUseCase } from "@/modules/catalog/application/usecases/updatecustomer.usecase";
@@ -40,6 +42,8 @@ export function registerCatalogDependencies(container: AwilixContainer): void {
         activateCategoryUseCase: asClass(ActivateCategoryUseCase).transient(),
         deactivateCategoryUseCase: asClass(DeactivateCategoryUseCase).transient(),
         setExclusiveCategoryUseCase: asClass(SetExclusiveCategoryUseCase).transient(),
+        pinCategoryToFeedUseCase: asClass(PinCategoryToFeedUseCase).transient(),
+        unpinCategoryFromFeedUseCase: asClass(UnpinCategoryFromFeedUseCase).transient(),
         uploadCategoryPosterUseCase: asClass(UploadCategoryPosterUseCase).transient(),
         addCategoryPricingUseCase: asClass(AddCategoryPricingUseCase).transient(),
         updateCategoryPricingUseCase: asClass(UpdateCategoryPricingUseCase).transient(),
