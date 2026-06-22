@@ -1,6 +1,12 @@
 import type { AsyncThunk } from "@reduxjs/toolkit";
-import { activatePackageAction } from "@/modules/catalog/presentation/store/activatepackage.action";
-import { deactivatePackageAction } from "@/modules/catalog/presentation/store/deactivatepackage.action";
+import {
+    activatePackageAction,
+    resetActivatePackageAction
+} from "@/modules/catalog/presentation/store/activatepackage.action";
+import {
+    deactivatePackageAction,
+    resetDeactivatePackageAction
+} from "@/modules/catalog/presentation/store/deactivatepackage.action";
 import { PackagesNotification } from "@/modules/catalog/presentation/utils/notification/catalog.packages.notification";
 import type { Failure } from "@/shared/domain/failures/failure";
 import { useAppDispatch, useAppSelector } from "@/shared/presentation/store/store";
@@ -16,6 +22,7 @@ interface IUsePackageActions {
     error: Failure | null | undefined;
     onActivate: (id: string) => Promise<void>;
     onDeactivate: (id: string) => Promise<void>;
+    resetActionError: () => void;
 }
 
 /**
@@ -68,5 +75,10 @@ export const usePackageActions = (reload: () => void): IUsePackageActions => {
         return dispatchAction(deactivatePackageAction, id, PackagesNotification.deactivateSuccess);
     };
 
-    return { loading, error, onActivate, onDeactivate };
+    const resetActionError = () => {
+        dispatch(resetActivatePackageAction());
+        dispatch(resetDeactivatePackageAction());
+    };
+
+    return { loading, error, onActivate, onDeactivate, resetActionError };
 };
