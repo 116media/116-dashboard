@@ -1,6 +1,12 @@
 import type { AsyncThunk } from "@reduxjs/toolkit";
-import { cancelOrderAction } from "@/modules/commerce/presentation/store/cancelorder.action";
-import { submitOrderAction } from "@/modules/commerce/presentation/store/submitorder.action";
+import {
+    cancelOrderAction,
+    resetCancelOrderAction
+} from "@/modules/commerce/presentation/store/cancelorder.action";
+import {
+    resetSubmitOrderAction,
+    submitOrderAction
+} from "@/modules/commerce/presentation/store/submitorder.action";
 import { OrdersNotification } from "@/modules/commerce/presentation/utils/notification/commerce.orders.notification";
 import type { Failure } from "@/shared/domain/failures/failure";
 import { useAppDispatch, useAppSelector } from "@/shared/presentation/store/store";
@@ -16,6 +22,7 @@ interface IUseOrderActions {
     error: Failure | null | undefined;
     onSubmit: (id: string) => Promise<void>;
     onCancel: (id: string) => Promise<void>;
+    resetActionError: () => void;
 }
 
 /**
@@ -60,5 +67,10 @@ export const useOrderActions = (reload: () => void): IUseOrderActions => {
         return dispatchAction(cancelOrderAction, id, OrdersNotification.cancelSuccess);
     };
 
-    return { loading, error, onSubmit, onCancel };
+    const resetActionError = () => {
+        dispatch(resetSubmitOrderAction());
+        dispatch(resetCancelOrderAction());
+    };
+
+    return { loading, error, onSubmit, onCancel, resetActionError };
 };
