@@ -8,9 +8,17 @@ import {
     resetDeactivateCategoryAction
 } from "@/modules/catalog/presentation/store/deactivatecategory.action";
 import {
+    pinCategoryToFeedAction,
+    resetPinCategoryToFeedAction
+} from "@/modules/catalog/presentation/store/pincategorytofeed.action";
+import {
     resetSetExclusiveCategoryAction,
     setExclusiveCategoryAction
 } from "@/modules/catalog/presentation/store/setexclusivecategory.action";
+import {
+    resetUnpinCategoryFromFeedAction,
+    unpinCategoryFromFeedAction
+} from "@/modules/catalog/presentation/store/unpincategoryfromfeed.action";
 import { CategoriesNotification } from "@/modules/catalog/presentation/utils/notification/catalog.categories.notification";
 import type { Failure } from "@/shared/domain/failures/failure";
 import { useAppDispatch, useAppSelector } from "@/shared/presentation/store/store";
@@ -27,6 +35,8 @@ interface IUseCategoryActions {
     onActivate: (id: string) => Promise<void>;
     onDeactivate: (id: string) => Promise<void>;
     onSetExclusive: (id: string) => Promise<void>;
+    onPinToFeed: (id: string) => Promise<void>;
+    onUnpinFromFeed: (id: string) => Promise<void>;
     resetActionError: () => void;
 }
 
@@ -52,9 +62,25 @@ export const useCategoryActions = (reload: () => void): IUseCategoryActions => {
     const setExclusiveState = useAppSelector(
         ({ catalog: { setExclusiveCategory } }) => setExclusiveCategory
     );
+    const pinToFeedState = useAppSelector(
+        ({ catalog: { pinCategoryToFeed } }) => pinCategoryToFeed
+    );
+    const unpinFromFeedState = useAppSelector(
+        ({ catalog: { unpinCategoryFromFeed } }) => unpinCategoryFromFeed
+    );
 
-    const error = activateState.error || deactivateState.error || setExclusiveState.error;
-    const loading = activateState.loading || deactivateState.loading || setExclusiveState.loading;
+    const error =
+        activateState.error ||
+        deactivateState.error ||
+        setExclusiveState.error ||
+        pinToFeedState.error ||
+        unpinFromFeedState.error;
+    const loading =
+        activateState.loading ||
+        deactivateState.loading ||
+        setExclusiveState.loading ||
+        pinToFeedState.loading ||
+        unpinFromFeedState.loading;
 
     const dispatchAction = async <T>(
         thunk: AsyncThunk<T, string, { rejectValue: Failure }>,
@@ -95,11 +121,34 @@ export const useCategoryActions = (reload: () => void): IUseCategoryActions => {
         );
     };
 
+    const onPinToFeed = (id: string) => {
+        return dispatchAction(pinCategoryToFeedAction, id, CategoriesNotification.pinToFeedSuccess);
+    };
+
+    const onUnpinFromFeed = (id: string) => {
+        return dispatchAction(
+            unpinCategoryFromFeedAction,
+            id,
+            CategoriesNotification.unpinFromFeedSuccess
+        );
+    };
+
     const resetActionError = () => {
         dispatch(resetActivateCategoryAction());
         dispatch(resetDeactivateCategoryAction());
         dispatch(resetSetExclusiveCategoryAction());
+        dispatch(resetPinCategoryToFeedAction());
+        dispatch(resetUnpinCategoryFromFeedAction());
     };
 
-    return { loading, error, onActivate, onDeactivate, onSetExclusive, resetActionError };
+    return {
+        loading,
+        error,
+        onActivate,
+        onDeactivate,
+        onSetExclusive,
+        onPinToFeed,
+        onUnpinFromFeed,
+        resetActionError
+    };
 };
