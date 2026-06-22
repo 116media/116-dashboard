@@ -30,5 +30,18 @@ export const CATEGORY_ACTION_CONFIG: Partial<Record<CategoryAction, ActionConfig
             "Cette catégorie deviendra le contenu exclusif de l'accueil et remplacera la catégorie exclusive actuelle.",
         confirmLabel: "Confirmer",
         danger: false
+    },
+    pinToFeed: {
+        title: "Épingler au fil d'actualité",
+        description:
+            "Cette catégorie apparaîtra comme une section du fil d'actualité avec ses dernières vidéos. Une fois la limite atteinte, la plus ancienne est automatiquement détachée.",
+        confirmLabel: "Épingler",
+        danger: false
+    },
+    unpinFromFeed: {
+        title: "Détacher du fil d'actualité",
+        description: "Cette catégorie ne sera plus affichée comme section du fil d'actualité.",
+        confirmLabel: "Détacher",
+        danger: true
     }
 };
