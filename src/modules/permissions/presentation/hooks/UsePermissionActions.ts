@@ -1,9 +1,24 @@
 import type { AsyncThunk } from "@reduxjs/toolkit";
-import { activatePermissionAction } from "@/modules/permissions/presentation/store/activate.action";
-import { deactivatePermissionAction } from "@/modules/permissions/presentation/store/deactivate.action";
-import { hardDeletePermissionAction } from "@/modules/permissions/presentation/store/harddelete.action";
-import { restorePermissionAction } from "@/modules/permissions/presentation/store/restore.action";
-import { softDeletePermissionAction } from "@/modules/permissions/presentation/store/softdelete.action";
+import {
+    activatePermissionAction,
+    resetActivatePermissionAction
+} from "@/modules/permissions/presentation/store/activate.action";
+import {
+    deactivatePermissionAction,
+    resetDeactivatePermissionAction
+} from "@/modules/permissions/presentation/store/deactivate.action";
+import {
+    hardDeletePermissionAction,
+    resetHardDeletePermissionAction
+} from "@/modules/permissions/presentation/store/harddelete.action";
+import {
+    resetRestorePermissionAction,
+    restorePermissionAction
+} from "@/modules/permissions/presentation/store/restore.action";
+import {
+    resetSoftDeletePermissionAction,
+    softDeletePermissionAction
+} from "@/modules/permissions/presentation/store/softdelete.action";
 import { PermissionsNotification } from "@/modules/permissions/presentation/utils/notification/permissions.notification";
 import type { Failure } from "@/shared/domain/failures/failure";
 import { useAppDispatch, useAppSelector } from "@/shared/presentation/store/store";
@@ -22,6 +37,7 @@ interface IUsePermissionActions {
     onSoftDelete: (id: string) => Promise<void>;
     onHardDelete: (id: string) => Promise<void>;
     onRestore: (id: string) => Promise<void>;
+    resetActionError: () => void;
 }
 
 /**
@@ -92,6 +108,14 @@ export const usePermissionActions = (reload: () => void): IUsePermissionActions 
     const onRestore = (id: string) =>
         dispatchAction(restorePermissionAction, id, PermissionsNotification.restoreSuccess);
 
+    const resetActionError = () => {
+        dispatch(resetActivatePermissionAction());
+        dispatch(resetDeactivatePermissionAction());
+        dispatch(resetSoftDeletePermissionAction());
+        dispatch(resetHardDeletePermissionAction());
+        dispatch(resetRestorePermissionAction());
+    };
+
     return {
         loading,
         error,
@@ -99,6 +123,7 @@ export const usePermissionActions = (reload: () => void): IUsePermissionActions 
         onDeactivate,
         onSoftDelete,
         onHardDelete,
-        onRestore
+        onRestore,
+        resetActionError
     };
 };
