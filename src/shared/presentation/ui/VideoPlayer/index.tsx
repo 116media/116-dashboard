@@ -1,7 +1,7 @@
 import { Plyr as PlyrReact } from "plyr-react";
 import "plyr-react/plyr.css";
 import type { FC } from "react";
-import { useMemo } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { extractYoutubeId } from "@/modules/videos/presentation/utils/youtube/youtube.utils";
 import styles from "./index.module.scss";
 
@@ -37,6 +37,7 @@ interface IVideoPlayerProps {
     youtubeUrl?: string | null;
     poster?: string | null;
     maxHeight?: number;
+    onReady?: () => void;
 }
 
 /**
@@ -48,7 +49,9 @@ interface IVideoPlayerProps {
  * Renders a Plyr-powered player for both HTML5 video files and YouTube embeds.
  * Styles are applied via CSS custom properties in the companion SCSS module.
  */
-const VideoPlayer: FC<IVideoPlayerProps> = ({ src, youtubeUrl, poster, maxHeight }) => {
+const VideoPlayer: FC<IVideoPlayerProps> = ({ src, youtubeUrl, poster, maxHeight, onReady }) => {
+    const containerRef = useRef<HTMLDivElement>(null);
+
     const source = useMemo<Plyr.SourceInfo | undefined>(() => {
         if (youtubeUrl) {
             const id = extractYoutubeId(youtubeUrl) ?? youtubeUrl;
@@ -74,10 +77,27 @@ const VideoPlayer: FC<IVideoPlayerProps> = ({ src, youtubeUrl, poster, maxHeight
         return undefined;
     }, [src, youtubeUrl, poster]);
 
+    // biome-ignore lint/correctness/useExhaustiveDependencies: re-attach the load listener when the source changes
+    useEffect(() => {
+        if (!onReady) return;
+
+        const video = containerRef.current?.querySelector("video");
+        if (!video) return;
+
+        if (video.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA) {
+            onReady();
+            return;
+        }
+
+        video.addEventListener("loadeddata", onReady, { once: true });
+        return () => video.removeEventListener("loadeddata", onReady);
+    }, [onReady, src, youtubeUrl]);
+
     if (!source) return null;
 
     return (
         <div
+            ref={containerRef}
             className={styles.videoPlayer}
             style={maxHeight ? { maxHeight, overflow: "hidden" } : undefined}
         >

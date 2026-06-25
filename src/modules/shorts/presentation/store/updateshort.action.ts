@@ -13,8 +13,8 @@ export const resetUpdateShortAction = () =>
  * Async thunk to update a short video.
  *
  * @description
- * Dispatches `updateShortUseCase` with the short ID, title,
- * optional videoId, and optional video file replacement.
+ * Dispatches `updateShortUseCase` with the short ID, title, and optional videoId. The video file
+ * is replaced separately via `uploadShortVideoAction`.
  * On success, stores the updated entity in `shorts.updateShort.data`.
  * On failure, stores the backend `Failure` in `shorts.updateShort.error`.
  */

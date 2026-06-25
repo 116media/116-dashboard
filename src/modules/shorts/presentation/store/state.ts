@@ -17,5 +17,6 @@ export const shortsInitialState: IShortsState = {
     activateShort: createInitialState(),
     deactivateShort: createInitialState(),
     deleteShort: createInitialState(),
-    uploadShortThumbnail: createInitialState()
+    uploadShortThumbnail: createInitialState(),
+    uploadShortVideo: createInitialState()
 };

@@ -4,6 +4,7 @@ import type { ICreateShortCredentials } from "@/modules/shorts/presentation/mode
 import type { IShortsQueryParams } from "@/modules/shorts/presentation/model/IShortsQueryParams";
 import type { IUpdateShortCredentials } from "@/modules/shorts/presentation/model/IUpdateShortCredentials";
 import type { IUploadShortThumbnailCredentials } from "@/modules/shorts/presentation/model/IUploadShortThumbnailCredentials";
+import type { IUploadShortVideoCredentials } from "@/modules/shorts/presentation/model/IUploadShortVideoCredentials";
 import type { Result } from "@/shared/domain/results/result";
 import type { IPaginatedResult } from "@/shared/domain/types/pagination";
 
@@ -33,9 +34,9 @@ export interface IShortsRepositoryPort {
     getShortById(id: string): Promise<Result<IShortVideoEntity>>;
 
     /**
-     * Creates a new short video with a video file upload.
+     * Creates a new short video draft (metadata only). The video file is uploaded separately.
      *
-     * @param data - Title, slug, video file, and optional videoId
+     * @param data - Title, slug, and optional parent videoId
      * @returns The created short video entity
      */
     createShort(data: ICreateShortCredentials): Promise<Result<IShortVideoEntity>>;
@@ -83,5 +84,17 @@ export interface IShortsRepositoryPort {
     uploadShortThumbnail(
         id: string,
         data: IUploadShortThumbnailCredentials
+    ): Promise<Result<IShortVideoEntity>>;
+
+    /**
+     * Uploads (or replaces) the video file for a short video draft.
+     *
+     * @param id - The short video UUID
+     * @param data - Video file to upload
+     * @returns The updated short video entity with the resolved video URL
+     */
+    uploadShortVideo(
+        id: string,
+        data: IUploadShortVideoCredentials
     ): Promise<Result<IShortVideoEntity>>;
 }

@@ -166,7 +166,7 @@ const ShortsListContainer: FC = () => {
                         form={updateShort.form}
                         error={updateShort.error}
                         videoFile={updateShort.videoFile}
-                        currentVideoUrl={modals.selectedEntity?.videoUrl}
+                        currentVideoUrl={updateShort.videoUrl ?? modals.selectedEntity?.videoUrl}
                         onVideoFileChange={updateShort.setVideoFile}
                         onSubmit={updateShort.onSubmit}
                     />
@@ -187,6 +187,7 @@ const ShortsListContainer: FC = () => {
                     })
                 }
                 onCancel={() => modals.setActionOpen(false)}
+                onAfterClose={actions.resetActionError}
             />
 
             {modals.thumbnailOpen && (

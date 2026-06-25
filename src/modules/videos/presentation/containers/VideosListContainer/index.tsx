@@ -207,6 +207,7 @@ const VideosListContainer: FC = () => {
                     if (success) modals.setActionOpen(false);
                 }}
                 onCancel={() => modals.setActionOpen(false)}
+                onAfterClose={workflow.resetActionError}
             />
 
             {modals.seoOpen && (

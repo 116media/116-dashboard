@@ -22,6 +22,7 @@ interface ITagActionModalProps {
     loading: boolean;
     onCancel: () => void;
     onConfirm: () => void;
+    onAfterClose?: () => void;
     tag: ITagEntity | null;
     action: TagAction | null;
     error: Failure | null | undefined;
@@ -47,7 +48,8 @@ const TagActionModal: FC<ITagActionModalProps> = ({
     loading,
     error,
     onConfirm,
-    onCancel
+    onCancel,
+    onAfterClose
 }) => {
     const config = action ? TAG_ACTION_CONFIG[action] : undefined;
 
@@ -62,6 +64,7 @@ const TagActionModal: FC<ITagActionModalProps> = ({
             title={config.title}
             onConfirm={onConfirm}
             danger={config.danger}
+            onAfterClose={onAfterClose}
             description={config.description}
         />
     );

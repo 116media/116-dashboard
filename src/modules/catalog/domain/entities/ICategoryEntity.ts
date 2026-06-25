@@ -17,6 +17,8 @@ import type { ICategoryPricingEntity } from "@/modules/catalog/domain/entities/I
  * @property {boolean} isFree - Whether content in this category is free
  * @property {boolean} isActive - Whether the category is currently active
  * @property {boolean} isGossip - Whether this is the gossip fallback source for the homepage feed
+ * @property {boolean} isExclusive - Whether this category is the currently featured exclusive show (video categories only, at most one at a time)
+ * @property {string | null} posterUrl - Resolved URL of the show's poster image, or null when no poster is set
  * @property {ICategoryPricingEntity[]} pricing - Configured pricing tiers
  */
 export interface ICategoryEntity {
@@ -33,5 +35,7 @@ export interface ICategoryEntity {
     isFree: boolean;
     isActive: boolean;
     isGossip: boolean;
+    isExclusive: boolean;
+    posterUrl: string | null;
     pricing: ICategoryPricingEntity[];
 }

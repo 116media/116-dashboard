@@ -22,6 +22,7 @@ import ActionModal from "@/shared/presentation/ui/ActionModal";
  * @property {(values: IRejectVideoCredentials) => void} [onRejectSubmit] - Submit handler for the reject modal
  * @property {(values: IUnpromoteVideoCredentials) => void} [onUnpromoteSubmit] - Submit handler for the unpromote modal
  * @property {() => void} onCancel - Cancel/close handler
+ * @property {() => void} [onAfterClose] - Callback invoked after the modal close animation completes
  */
 interface IVideoWorkflowModalProps {
     open: boolean;
@@ -33,6 +34,7 @@ interface IVideoWorkflowModalProps {
     onRejectSubmit?: (values: IRejectVideoCredentials) => void;
     onUnpromoteSubmit?: (values: IUnpromoteVideoCredentials) => void;
     onCancel: () => void;
+    onAfterClose?: () => void;
 }
 
 /**
@@ -58,7 +60,8 @@ const VideoWorkflowModal: FC<IVideoWorkflowModalProps> = ({
     onConfirm,
     onRejectSubmit,
     onUnpromoteSubmit,
-    onCancel
+    onCancel,
+    onAfterClose
 }) => {
     const config = action ? VIDEO_ACTION_CONFIG[action] : undefined;
 
@@ -103,6 +106,7 @@ const VideoWorkflowModal: FC<IVideoWorkflowModalProps> = ({
             title={config.title}
             onConfirm={onConfirm}
             danger={config.danger}
+            onAfterClose={onAfterClose}
             confirmLabel={config.confirmLabel}
             description={config.description}
         />

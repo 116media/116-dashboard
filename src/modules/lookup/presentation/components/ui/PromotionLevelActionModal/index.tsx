@@ -22,6 +22,7 @@ interface IPromotionLevelActionModalProps {
     loading: boolean;
     onCancel: () => void;
     onConfirm: () => void;
+    onAfterClose?: () => void;
     promotionLevel: IPromotionLevelEntity | null;
     action: PromotionLevelAction | null;
     error: Failure | null | undefined;
@@ -47,7 +48,8 @@ const PromotionLevelActionModal: FC<IPromotionLevelActionModalProps> = ({
     loading,
     error,
     onConfirm,
-    onCancel
+    onCancel,
+    onAfterClose
 }) => {
     const config = action ? PROMOTION_LEVEL_ACTION_CONFIG[action] : undefined;
 
@@ -62,6 +64,7 @@ const PromotionLevelActionModal: FC<IPromotionLevelActionModalProps> = ({
             title={config.title}
             onConfirm={onConfirm}
             danger={config.danger}
+            onAfterClose={onAfterClose}
             description={config.description}
         />
     );

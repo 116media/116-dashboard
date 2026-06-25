@@ -79,5 +79,17 @@ export const ShortsNotification = {
         type: "success",
         title: "Miniature uploadée",
         description: "La miniature a été uploadée avec succès."
+    } as INotificationConfig,
+
+    /**
+     * Success notification for short video file upload.
+     *
+     * @description
+     * Displays when the video file has been uploaded for a short video.
+     */
+    uploadVideoSuccess: {
+        type: "success",
+        title: "Vidéo uploadée",
+        description: "Le fichier vidéo a été uploadé avec succès."
     } as INotificationConfig
 } as const;

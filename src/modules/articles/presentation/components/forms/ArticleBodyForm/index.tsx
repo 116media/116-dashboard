@@ -80,7 +80,6 @@ const ArticleBodyForm: FC<IArticleBodyFormProps> = ({
                     disabled={!onCoverUpload}
                     onUpload={handleCoverUpload}
                     onRemove={handleCoverRemove}
-                    value={form.getFieldValue("coverImageUrl")}
                 />
             </Item>
         </Form>

@@ -31,6 +31,7 @@ const LYRICS_ACTION_CONFIG: Record<
  * @property {Failure | null | undefined} error - Backend error to display
  * @property {() => void} onConfirm - Confirm handler
  * @property {() => void} onCancel - Cancel/close handler
+ * @property {() => void} [onAfterClose] - Called once the modal has fully closed; resets the action error
  */
 interface ILyricsActionModalProps {
     open: boolean;
@@ -40,6 +41,7 @@ interface ILyricsActionModalProps {
     error?: Failure | null | undefined;
     onConfirm: () => void;
     onCancel: () => void;
+    onAfterClose?: () => void;
 }
 
 /**
@@ -59,7 +61,8 @@ const LyricsActionModal: FC<ILyricsActionModalProps> = ({
     loading,
     error,
     onConfirm,
-    onCancel
+    onCancel,
+    onAfterClose
 }) => {
     const config = action ? LYRICS_ACTION_CONFIG[action] : undefined;
 
@@ -76,6 +79,7 @@ const LyricsActionModal: FC<ILyricsActionModalProps> = ({
             danger={config.danger}
             confirmLabel={config.confirmLabel}
             description={config.description}
+            onAfterClose={onAfterClose}
         />
     );
 };

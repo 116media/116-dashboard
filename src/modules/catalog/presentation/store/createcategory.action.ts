@@ -24,6 +24,7 @@ export const createCategoryAction = createAsyncThunk<
         description: string;
         isFree: boolean;
         isGossip: boolean;
+        isExclusive: boolean;
     },
     { rejectValue: Failure }
 >(ActionType.CreateCategory, async (data, { rejectWithValue }) => {

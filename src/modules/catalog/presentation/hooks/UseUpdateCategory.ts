@@ -2,6 +2,7 @@ import type { FormInstance } from "antd";
 import { Form } from "antd";
 import { useEffect, useState } from "react";
 import type { ICategoryEntity } from "@/modules/catalog/domain/entities/ICategoryEntity";
+import { useUploadCategoryPoster } from "@/modules/catalog/presentation/hooks/UseUploadCategoryPoster";
 import type { IUpdateCategoryCredentials } from "@/modules/catalog/presentation/model/IUpdateCategoryCredentials";
 import {
     resetUpdateCategoryAction,
@@ -25,6 +26,9 @@ interface IUseUpdateCategory {
     loading: boolean;
     error: Failure | null | undefined;
     success: string | null;
+    posterUrl: string | null | undefined;
+    posterFile: File | null;
+    setPosterFile: (file: File | null) => void;
     onSubmit: (values: IUpdateCategoryCredentials) => Promise<void>;
     resetUpdate: () => void;
 }
@@ -33,11 +37,13 @@ interface IUseUpdateCategory {
  * Custom hook for the edit category form logic.
  *
  * @description
- * Manages form state, pre-population from initial values,
- * submission, and success feedback for updating a category.
+ * Pre-populates the form from the selected category, then on submit updates the JSON metadata and,
+ * only if a new poster was selected, uploads it via the dedicated endpoint. The poster file is
+ * captured locally and uploaded on save, so cancelling leaves no orphaned upload.
  *
  * @param category - The category to edit (used for pre-population and ID)
- * @returns Form instance, loading/error state, success message, and submit handler
+ * @param onSuccess - Optional callback invoked after a successful update
+ * @returns Form instance, loading/error state, current poster URL, captured file, and handlers
  */
 export const useUpdateCategory = (
     category: ICategoryEntity | null,
@@ -46,16 +52,15 @@ export const useUpdateCategory = (
     const dispatch = useAppDispatch();
     const [form] = useForm<IUpdateCategoryCredentials>();
     const [success, setSuccess] = useState<string | null>(null);
+    const [posterUrl, setPosterUrl] = useState<string | null | undefined>(undefined);
+    const [posterFile, setPosterFile] = useState<File | null>(null);
+    const { onUpload: uploadPoster, loading: posterUploading } = useUploadCategoryPoster();
 
     const { loading, error } = useAppSelector(({ catalog: { updateCategory } }) => updateCategory);
 
     useEffect(() => {
-        if (category) {
-            form.setFieldsValue({
-                name: category.name
-            });
-        }
-    }, [category, form]);
+        setPosterUrl(category?.posterUrl);
+    }, [category]);
 
     const onSubmit = async (values: IUpdateCategoryCredentials): Promise<void> => {
         if (!category) return;
@@ -67,24 +72,43 @@ export const useUpdateCategory = (
                     name: values.name,
                     slug: generateSlug(values.name),
                     description: values.description,
-                    isGossip: values.isGossip ?? false
+                    isGossip: values.isGossip ?? false,
+                    isExclusive: values.isExclusive ?? false
                 }
             })
         );
 
-        if (updateCategoryAction.fulfilled.match(result)) {
-            setSuccess(CategoriesNotification.updateSuccess.description);
-            showNotification(CategoriesNotification.updateSuccess);
-            onSuccess?.();
+        if (!updateCategoryAction.fulfilled.match(result)) return;
+
+        if (posterFile) {
+            const url = await uploadPoster(category.id, posterFile);
+            if (url === null) return;
+            setPosterUrl(url);
         }
+
+        setSuccess(CategoriesNotification.updateSuccess.description);
+        showNotification(CategoriesNotification.updateSuccess);
+        setPosterFile(null);
+        onSuccess?.();
     };
 
     const resetUpdate = () => {
         setSuccess(null);
+        setPosterUrl(undefined);
+        setPosterFile(null);
         form.resetFields();
         dispatch(resetUpdateCategoryAction());
-        form.resetFields();
     };
 
-    return { form, loading, error, success, onSubmit, resetUpdate };
+    return {
+        form,
+        loading: loading || posterUploading,
+        error,
+        success,
+        posterUrl,
+        posterFile,
+        setPosterFile,
+        onSubmit,
+        resetUpdate
+    };
 };

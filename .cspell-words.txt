@@ -17,6 +17,7 @@ activé
 activée
 actualités
 actuel
+actuelle
 actuellement
 addcategorypricing
 additemtoorder
@@ -71,6 +72,7 @@ attente
 Aucun
 Aucune
 Authentification
+automatiquement
 autoplay
 Autorisation
 autorisée
@@ -207,6 +209,7 @@ deletetag
 deletevideo
 destructures
 Deutsch
+deviendra
 devrez
 Dhivehi
 dili
@@ -222,6 +225,7 @@ Durée
 déconnecter
 déconnecté
 Déconnexion
+défini
 définir
 définitivement
 déposer
@@ -241,6 +245,7 @@ eloko
 encryptor
 Enregistrer
 enregistré
+enregistrée
 Entreprise
 Entrer
 Entrez
@@ -254,6 +259,7 @@ Espèces
 Eswatini
 euskara
 euskera
+exclusivité
 Exemple
 existants
 Expiré
@@ -406,6 +412,7 @@ l'accès
 l'adresse
 L'appareil
 L'identifiant
+L'émission
 l'étape
 Laisser
 latine
@@ -416,6 +423,7 @@ Leste
 Letzeburgesch
 libphonenumber
 lietuvių
+lightbox
 Limburgan
 Limburgish
 Limburgs
@@ -558,6 +566,8 @@ removeitemtier
 removepackageslot
 removepermission
 Remplacer
+remplacera
+remplacée
 rempli
 Remplissez
 renseigné
@@ -574,6 +584,7 @@ restauré
 restaurée
 restorepermission
 restorerole
+retiré
 retirée
 Retour
 retrait
@@ -614,6 +625,7 @@ serialisation
 seront
 serveur
 Sesotho
+setexclusivecategory
 Setswana
 seule
 Shona
@@ -722,9 +734,12 @@ updatevideo
 updatevideoseo
 updatevideotags
 uploadarticleimage
+uploadcategoryposter
 uploadshorth
 uploadshortthumbnail
+uploadshortvideo
 uploadvideothumbnail
+uploadé
 uploadée
 upsells
 upserts
@@ -780,6 +795,7 @@ Zhōngwén
 éditoriales
 éditoriaux
 égal
+Émission
 Événements
 Êtes
 être

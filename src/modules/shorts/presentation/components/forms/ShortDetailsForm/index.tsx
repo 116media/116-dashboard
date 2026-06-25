@@ -11,7 +11,6 @@ import ErrorAlert from "@/shared/presentation/ui/ErrorAlert";
 import FileUploader from "@/shared/presentation/ui/FileUploader";
 import { VIDEO_PRESET } from "@/shared/presentation/ui/FileUploader/presets";
 import { SelectOptionDetail } from "@/shared/presentation/ui/SelectOptions";
-import VideoPlayer from "@/shared/presentation/ui/VideoPlayer";
 
 const { Item } = Form;
 
@@ -30,9 +29,9 @@ interface IShortDetailsFormProps {
  * @component
  *
  * @description
- * Renders title, video select (from active videos), and optional
- * video file replacement using the shared FileUploader in deferred
- * mode. Shows a video preview for the current or new file.
+ * Renders title and video select (from active videos) for the JSON metadata update. A replacement
+ * video file is captured locally and uploaded only when the form is saved; the uploader previews
+ * the newly selected file, or the current video when none is selected.
  */
 const ShortDetailsForm: FC<IShortDetailsFormProps> = ({
     form,
@@ -93,19 +92,15 @@ const ShortDetailsForm: FC<IShortDetailsFormProps> = ({
                 />
             </Item>
 
-            <Item label="Remplacer le fichier vidéo">
+            <Item label="Fichier vidéo">
                 <FileUploader
                     mode="deferred"
-                    showPreview={false}
+                    value={previewUrl ?? currentVideoUrl}
                     preset={VIDEO_PRESET}
                     onFileSelect={onVideoFileChange}
                     onRemove={() => onVideoFileChange(null)}
                 />
             </Item>
-
-            {(previewUrl || currentVideoUrl) && (
-                <VideoPlayer src={previewUrl ?? currentVideoUrl} maxHeight={400} />
-            )}
         </Form>
     );
 };

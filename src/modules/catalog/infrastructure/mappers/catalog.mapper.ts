@@ -61,6 +61,8 @@ export const CatalogMapper = {
             isFree: dto.isFree,
             isActive: dto.isActive,
             isGossip: dto.isGossip,
+            isExclusive: dto.isExclusive,
+            posterUrl: dto.posterUrl ?? null,
             pricing: dto.pricing.map(CatalogMapper.categoryPricingFromDto)
         };
     },

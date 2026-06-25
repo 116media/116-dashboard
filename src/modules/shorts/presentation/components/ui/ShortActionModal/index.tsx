@@ -42,6 +42,7 @@ const SHORT_ACTION_CONFIG: Record<
  * @property {Failure | null | undefined} error - Backend error to display
  * @property {() => void} onConfirm - Confirm handler
  * @property {() => void} onCancel - Cancel/close handler
+ * @property {() => void} [onAfterClose] - Callback fired after the modal close transition completes
  */
 interface IShortActionModalProps {
     open: boolean;
@@ -51,6 +52,7 @@ interface IShortActionModalProps {
     error?: Failure | null | undefined;
     onConfirm: () => void;
     onCancel: () => void;
+    onAfterClose?: () => void;
 }
 
 /**
@@ -73,7 +75,8 @@ const ShortActionModal: FC<IShortActionModalProps> = ({
     loading,
     error,
     onConfirm,
-    onCancel
+    onCancel,
+    onAfterClose
 }) => {
     const config = action ? SHORT_ACTION_CONFIG[action] : undefined;
 
@@ -88,6 +91,7 @@ const ShortActionModal: FC<IShortActionModalProps> = ({
             title={config.title}
             onConfirm={onConfirm}
             danger={config.danger}
+            onAfterClose={onAfterClose}
             confirmLabel={config.confirmLabel}
             description={config.description}
         />

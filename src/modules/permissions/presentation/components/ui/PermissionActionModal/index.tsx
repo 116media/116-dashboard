@@ -16,6 +16,7 @@ import ActionModal from "@/shared/presentation/ui/ActionModal";
  * @property {Failure | null | undefined} error - Backend error
  * @property {() => void} onConfirm - Confirm handler
  * @property {() => void} onCancel - Cancel/close handler
+ * @property {() => void} [onAfterClose] - Callback fired after the modal close transition completes
  */
 interface IPermissionActionModalProps {
     open: boolean;
@@ -25,6 +26,7 @@ interface IPermissionActionModalProps {
     action: PermissionAction | null;
     error: Failure | null | undefined;
     permission: IPermissionEntity | null;
+    onAfterClose?: () => void;
 }
 
 /**
@@ -46,7 +48,8 @@ const PermissionActionModal: FC<IPermissionActionModalProps> = ({
     loading,
     error,
     onConfirm,
-    onCancel
+    onCancel,
+    onAfterClose
 }) => {
     const config = action ? PERMISSION_ACTION_CONFIG[action] : undefined;
 
@@ -61,6 +64,7 @@ const PermissionActionModal: FC<IPermissionActionModalProps> = ({
             title={config.title}
             onConfirm={onConfirm}
             danger={config.danger}
+            onAfterClose={onAfterClose}
             description={config.description}
         />
     );

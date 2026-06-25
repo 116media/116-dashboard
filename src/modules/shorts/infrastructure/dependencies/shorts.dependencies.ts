@@ -8,6 +8,7 @@ import { GetAllShortsUseCase } from "@/modules/shorts/application/usecases/getal
 import { GetShortByIdUseCase } from "@/modules/shorts/application/usecases/getshortbyid.usecase";
 import { UpdateShortUseCase } from "@/modules/shorts/application/usecases/updateshort.usecase";
 import { UploadShortThumbnailUseCase } from "@/modules/shorts/application/usecases/uploadshortthumbnail.usecase";
+import { UploadShortVideoUseCase } from "@/modules/shorts/application/usecases/uploadshortvideo.usecase";
 import { ShortsRepositoryImpl } from "@/modules/shorts/infrastructure/repositories/shorts.repository.impl";
 
 /**
@@ -38,6 +39,7 @@ export function registerShortsDependencies(container: AwilixContainer): void {
         deactivateShortUseCase: asClass(DeactivateShortUseCase).transient(),
 
         // Commands — Media
-        uploadShortThumbnailUseCase: asClass(UploadShortThumbnailUseCase).transient()
+        uploadShortThumbnailUseCase: asClass(UploadShortThumbnailUseCase).transient(),
+        uploadShortVideoUseCase: asClass(UploadShortVideoUseCase).transient()
     });
 }

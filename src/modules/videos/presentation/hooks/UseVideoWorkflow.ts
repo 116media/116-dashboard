@@ -1,13 +1,34 @@
 import type { AsyncThunk } from "@reduxjs/toolkit";
 import type { IRejectVideoCredentials } from "@/modules/videos/presentation/model/IRejectVideoCredentials";
 import type { IUnpromoteVideoCredentials } from "@/modules/videos/presentation/model/IUnpromoteVideoCredentials";
-import { approveVideoAction } from "@/modules/videos/presentation/store/approvevideo.action";
-import { archiveVideoAction } from "@/modules/videos/presentation/store/archivevideo.action";
-import { deleteVideoAction } from "@/modules/videos/presentation/store/deletevideo.action";
-import { publishVideoAction } from "@/modules/videos/presentation/store/publishvideo.action";
-import { rejectVideoAction } from "@/modules/videos/presentation/store/rejectvideo.action";
-import { submitVideoAction } from "@/modules/videos/presentation/store/submitvideo.action";
-import { unpromoteVideoAction } from "@/modules/videos/presentation/store/unpromotevideo.action";
+import {
+    approveVideoAction,
+    resetApproveVideoAction
+} from "@/modules/videos/presentation/store/approvevideo.action";
+import {
+    archiveVideoAction,
+    resetArchiveVideoAction
+} from "@/modules/videos/presentation/store/archivevideo.action";
+import {
+    deleteVideoAction,
+    resetDeleteVideoAction
+} from "@/modules/videos/presentation/store/deletevideo.action";
+import {
+    publishVideoAction,
+    resetPublishVideoAction
+} from "@/modules/videos/presentation/store/publishvideo.action";
+import {
+    rejectVideoAction,
+    resetRejectVideoAction
+} from "@/modules/videos/presentation/store/rejectvideo.action";
+import {
+    resetSubmitVideoAction,
+    submitVideoAction
+} from "@/modules/videos/presentation/store/submitvideo.action";
+import {
+    resetUnpromoteVideoAction,
+    unpromoteVideoAction
+} from "@/modules/videos/presentation/store/unpromotevideo.action";
 import { VideosNotification } from "@/modules/videos/presentation/utils/notification/videos.notification";
 import type { Failure } from "@/shared/domain/failures/failure";
 import { useAppDispatch, useAppSelector } from "@/shared/presentation/store/store";
@@ -28,6 +49,7 @@ interface IUseVideoWorkflow {
     onArchive: (id: string) => Promise<void>;
     onDelete: (id: string) => Promise<void>;
     onUnpromote: (params: { slug: string; data: IUnpromoteVideoCredentials }) => Promise<boolean>;
+    resetActionError: () => void;
 }
 
 /**
@@ -156,6 +178,16 @@ export const useVideoWorkflow = (reload: () => void): IUseVideoWorkflow => {
         return false;
     };
 
+    const resetActionError = () => {
+        dispatch(resetSubmitVideoAction());
+        dispatch(resetApproveVideoAction());
+        dispatch(resetPublishVideoAction());
+        dispatch(resetRejectVideoAction());
+        dispatch(resetArchiveVideoAction());
+        dispatch(resetDeleteVideoAction());
+        dispatch(resetUnpromoteVideoAction());
+    };
+
     return {
         loading,
         error,
@@ -165,6 +197,7 @@ export const useVideoWorkflow = (reload: () => void): IUseVideoWorkflow => {
         onReject,
         onArchive,
         onDelete,
-        onUnpromote
+        onUnpromote,
+        resetActionError
     };
 };

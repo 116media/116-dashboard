@@ -120,6 +120,7 @@ const PackagesListContainer: FC = () => {
                     })
                 }
                 onCancel={() => modals.setActionOpen(false)}
+                onAfterClose={actions.resetActionError}
             />
 
             <PackageSlotsPanel

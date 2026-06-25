@@ -114,7 +114,9 @@ const CategoriesListContainer: FC = () => {
                         form={createCategory.form}
                         error={createCategory.error}
                         formContext="CREATE"
+                        posterFile={createCategory.posterFile}
                         onSubmit={createCategory.onSubmit}
+                        onPosterFileChange={createCategory.setPosterFile}
                     />
                 </CreateEditModal>
             )}
@@ -147,7 +149,10 @@ const CategoriesListContainer: FC = () => {
                         form={updateCategory.form}
                         error={updateCategory.error}
                         initialValues={modals.selectedEntity}
+                        posterFile={updateCategory.posterFile}
+                        posterUrl={updateCategory.posterUrl ?? modals.selectedEntity?.posterUrl}
                         onSubmit={updateCategory.onSubmit}
+                        onPosterFileChange={updateCategory.setPosterFile}
                     />
                 </CreateEditModal>
             )}
@@ -161,10 +166,12 @@ const CategoriesListContainer: FC = () => {
                 onConfirm={() =>
                     modals.handleActionConfirm({
                         activate: actions.onActivate,
-                        deactivate: actions.onDeactivate
+                        deactivate: actions.onDeactivate,
+                        setExclusive: actions.onSetExclusive
                     })
                 }
                 onCancel={() => modals.setActionOpen(false)}
+                onAfterClose={actions.resetActionError}
             />
 
             <CategoryPricingPanel

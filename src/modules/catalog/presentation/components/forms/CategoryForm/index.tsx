@@ -10,13 +10,19 @@ import type { Failure } from "@/shared/domain/failures/failure";
 import type { FormContext } from "@/shared/domain/types/pagination";
 import { useAppSelector } from "@/shared/presentation/store/store";
 import ErrorAlert from "@/shared/presentation/ui/ErrorAlert";
-import { IconDollarOutlined, IconTagOutlined } from "@/shared/presentation/ui/Icons";
+import FileUploader from "@/shared/presentation/ui/FileUploader";
+import { IMAGE_PRESET } from "@/shared/presentation/ui/FileUploader/presets";
+import {
+    IconDollarOutlined,
+    IconStarOutlined,
+    IconTagOutlined
+} from "@/shared/presentation/ui/Icons";
 import SwitchField from "@/shared/presentation/ui/SwitchField";
 
 const { Item } = Form;
 const { TextArea } = Input;
 
-/**s
+/**
  * Props for the CategoryForm component.
  *
  * @interface ICategoryFormProps
@@ -24,14 +30,20 @@ const { TextArea } = Input;
  * @property {Failure | null | undefined} error - API error to display
  * @property {FormContext} formContext - "CREATE" or "EDIT" mode
  * @property {ICategoryEntity} [initialValues] - Pre-populated values for edit mode
+ * @property {File | null} [posterFile] - Locally captured poster file (edit mode)
+ * @property {string | null} [posterUrl] - Current poster URL (edit mode)
  * @property {(values: ICreateCategoryCredentials) => void} onSubmit - Form submission handler
+ * @property {(file: File | null) => void} [onPosterFileChange] - Captures the poster file locally
  */
 interface ICategoryFormProps {
     form: FormInstance;
     formContext: FormContext;
     error: Failure | null | undefined;
     initialValues?: ICategoryEntity | null;
+    posterFile?: File | null;
+    posterUrl?: string | null;
     onSubmit: (values: ICreateCategoryCredentials) => void;
+    onPosterFileChange?: (file: File | null) => void;
 }
 
 /**
@@ -40,11 +52,9 @@ interface ICategoryFormProps {
  * @component
  *
  * @description
- * Renders name, description, and isFree fields with client-side
- * validation matching the backend constraints. Pre-populates from
- * `initialValues` when in EDIT mode. Displays API errors via
- * `ErrorAlert`. The `contentTypeId` is handled separately by the
- * container and is not part of this form.
+ * Renders the category fields with client-side validation matching the backend. In edit mode it
+ * also exposes the exclusive toggle (video categories) and a poster uploader; the poster file is
+ * captured locally and uploaded by the parent on save.
  *
  * @param {ICategoryFormProps} props - Component props
  * @returns {JSX.Element} The category form
@@ -54,7 +64,10 @@ const CategoryForm: FC<ICategoryFormProps> = ({
     error,
     formContext,
     initialValues,
-    onSubmit
+    posterFile,
+    posterUrl,
+    onSubmit,
+    onPosterFileChange
 }) => {
     const { data: contentTypes } = useAppSelector(
         ({ lookup: { getContentTypes } }) => getContentTypes
@@ -81,6 +94,15 @@ const CategoryForm: FC<ICategoryFormProps> = ({
     );
 
     const isArticleType = selectedContentType?.name === "Article";
+    const isVideoType = selectedContentType?.name === "Video";
+
+    // An inactive category cannot be made exclusive (backend: CannotMakeInactiveExclusive).
+    const isExclusiveDisabled = formContext === "EDIT" && initialValues?.isActive === false;
+
+    const posterPreviewUrl = useMemo(
+        () => (posterFile ? URL.createObjectURL(posterFile) : null),
+        [posterFile]
+    );
 
     useEffect(() => {
         if (formContext === "EDIT" && initialValues) {
@@ -89,6 +111,7 @@ const CategoryForm: FC<ICategoryFormProps> = ({
                 name: initialValues.name,
                 isFree: initialValues.isFree,
                 isGossip: initialValues.isGossip,
+                isExclusive: initialValues.isExclusive,
                 description: initialValues.description,
                 contentTypeId: initialValues.contentTypeId
             });
@@ -104,7 +127,9 @@ const CategoryForm: FC<ICategoryFormProps> = ({
             name="category_form"
             validateTrigger={["onSubmit", "onBlur"]}
             initialValues={
-                formContext === "CREATE" ? { isFree: false, isGossip: false } : undefined
+                formContext === "CREATE"
+                    ? { isFree: false, isGossip: false, isExclusive: false }
+                    : undefined
             }
         >
             <ErrorAlert error={error} showIcon closable banner={false} />
@@ -159,6 +184,28 @@ const CategoryForm: FC<ICategoryFormProps> = ({
                     />
                 </Item>
             )}
+
+            {isVideoType && (
+                <Item name="isExclusive" valuePropName="checked">
+                    <SwitchField
+                        title="Émission exclusive"
+                        disabled={isExclusiveDisabled}
+                        icon={<IconStarOutlined />}
+                        description="Cette catégorie sera en contenu exclusive sur l'accueil."
+                    />
+                </Item>
+            )}
+
+            <Item label="Affiche">
+                <FileUploader
+                    mode="deferred"
+                    aspectRatio={16 / 9}
+                    preset={IMAGE_PRESET}
+                    value={posterPreviewUrl ?? posterUrl}
+                    onFileSelect={(file) => onPosterFileChange?.(file)}
+                    onRemove={() => onPosterFileChange?.(null)}
+                />
+            </Item>
         </Form>
     );
 };

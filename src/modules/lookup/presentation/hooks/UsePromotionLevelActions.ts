@@ -1,6 +1,12 @@
 import type { AsyncThunk } from "@reduxjs/toolkit";
-import { activatePromotionLevelAction } from "@/modules/lookup/presentation/store/activatepromotionlevel.action";
-import { deactivatePromotionLevelAction } from "@/modules/lookup/presentation/store/deactivatepromotionlevel.action";
+import {
+    activatePromotionLevelAction,
+    resetActivatePromotionLevelAction
+} from "@/modules/lookup/presentation/store/activatepromotionlevel.action";
+import {
+    deactivatePromotionLevelAction,
+    resetDeactivatePromotionLevelAction
+} from "@/modules/lookup/presentation/store/deactivatepromotionlevel.action";
 import { PromotionLevelsNotification } from "@/modules/lookup/presentation/utils/notification/lookup.promotion-levels.notification";
 import type { Failure } from "@/shared/domain/failures/failure";
 import { useAppDispatch, useAppSelector } from "@/shared/presentation/store/store";
@@ -16,6 +22,7 @@ interface IUsePromotionLevelActions {
     error: Failure | null | undefined;
     onActivate: (id: string) => Promise<void>;
     onDeactivate: (id: string) => Promise<void>;
+    resetActionError: () => void;
 }
 
 /**
@@ -78,5 +85,10 @@ export const usePromotionLevelActions = (reload: () => void): IUsePromotionLevel
         );
     };
 
-    return { loading, error, onActivate, onDeactivate };
+    const resetActionError = () => {
+        dispatch(resetActivatePromotionLevelAction());
+        dispatch(resetDeactivatePromotionLevelAction());
+    };
+
+    return { loading, error, onActivate, onDeactivate, resetActionError };
 };

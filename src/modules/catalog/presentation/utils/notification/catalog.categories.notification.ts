@@ -91,5 +91,29 @@ export const CategoriesNotification = {
         type: "success",
         title: "Tarification supprimée",
         description: "La tarification a été supprimée de la catégorie avec succès."
+    } as INotificationConfig,
+
+    /**
+     * Success notification for marking a category as the exclusive show.
+     *
+     * @description
+     * Displays when a category has been set as the homepage exclusive show.
+     */
+    setExclusiveSuccess: {
+        type: "success",
+        title: "Catégorie exclusive définie",
+        description: "La catégorie a été définie comme émission exclusive avec succès."
+    } as INotificationConfig,
+
+    /**
+     * Success notification for uploading a category poster image.
+     *
+     * @description
+     * Displays when a category poster image has been uploaded successfully.
+     */
+    uploadPosterSuccess: {
+        type: "success",
+        title: "Affiche uploadée",
+        description: "L'affiche de la catégorie a été uploadée avec succès."
     } as INotificationConfig
 } as const;

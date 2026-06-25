@@ -23,5 +23,12 @@ export const CATEGORY_ACTION_CONFIG: Partial<Record<CategoryAction, ActionConfig
         description: "Êtes-vous sûr de vouloir désactiver cette catégorie ?",
         confirmLabel: "Désactiver",
         danger: true
+    },
+    setExclusive: {
+        title: "Mettre en exclusivité",
+        description:
+            "Cette catégorie deviendra le contenu exclusif de l'accueil et remplacera la catégorie exclusive actuelle.",
+        confirmLabel: "Confirmer",
+        danger: false
     }
 };

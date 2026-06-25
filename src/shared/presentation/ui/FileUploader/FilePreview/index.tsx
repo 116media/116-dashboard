@@ -1,7 +1,7 @@
-import { Button, Flex, Image, Skeleton, Typography } from "antd";
-import { type FC, useEffect, useState } from "react";
-import { IconCloseCircleOutlined, IconFilePdfOutlined } from "@/shared/presentation/ui/Icons";
-import { isImageUrl } from "../utils";
+import { Button, Flex, Typography } from "antd";
+import type { FC } from "react";
+import { IconCloseCircleOutlined } from "@/shared/presentation/ui/Icons";
+import FilePreviewMedia from "../FilePreviewMedia";
 import styles from "./index.module.scss";
 
 const { Text } = Typography;
@@ -10,6 +10,8 @@ interface IFilePreviewProps {
     url: string;
     label?: string;
     disabled?: boolean;
+    isVideo?: boolean;
+    isImage?: boolean;
     onRemove: () => void;
     fileName: string | null;
     fileSize: string | null;
@@ -21,27 +23,20 @@ interface IFilePreviewProps {
  * @component
  *
  * @description
- * Displays an image preview with lightbox for image files,
- * or a PDF/file icon with the file name for non-image files.
- * Shows an animated skeleton placeholder while the image loads
- * to avoid layout shift. Includes file metadata and a remove button.
+ * Shows file metadata and a remove button, then delegates the media body (video player, image,
+ * or file icon) to <see cref="FilePreviewMedia" />.
  */
 const FilePreview: FC<IFilePreviewProps> = ({
     url,
     label,
     fileName,
     fileSize,
+    isVideo = false,
+    isImage = false,
     disabled = false,
     onRemove
 }) => {
-    const isImage = isImageUrl(url);
-    const hasMeta = fileName || fileSize;
-    const [imageLoaded, setImageLoaded] = useState(false);
-
-    // biome-ignore lint/correctness/useExhaustiveDependencies: reset loading state when url changes
-    useEffect(() => {
-        setImageLoaded(false);
-    }, [url]);
+    const hasMeta = Boolean(fileName || fileSize);
 
     const removeButton = (
         <Button
@@ -81,28 +76,15 @@ const FilePreview: FC<IFilePreviewProps> = ({
 
             {!hasMeta && <Flex justify="flex-end">{removeButton}</Flex>}
 
-            {isImage ? (
-                <>
-                    {!imageLoaded && (
-                        <Skeleton.Image active className={styles.filePreview__skeleton} />
-                    )}
-                    <Image
-                        src={url}
-                        alt={label ?? "Aperçu"}
-                        className={styles.filePreview__image}
-                        style={imageLoaded ? undefined : { display: "none" }}
-                        onLoad={() => setImageLoaded(true)}
-                    />
-                </>
-            ) : (
-                <Flex justify="space-between" align="center">
-                    <div className={styles.filePreview__file}>
-                        <IconFilePdfOutlined className={styles.filePreview__fileIcon} />
-                        <Text>{fileName ?? "Fichier sélectionné"}</Text>
-                    </div>
-                    {!hasMeta && removeButton}
-                </Flex>
-            )}
+            <FilePreviewMedia
+                url={url}
+                label={label}
+                isVideo={isVideo}
+                isImage={isImage}
+                hasMeta={hasMeta}
+                fileName={fileName}
+                removeButton={removeButton}
+            />
         </Flex>
     );
 };

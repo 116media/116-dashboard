@@ -11,7 +11,7 @@ import { Colors } from "@/shared/presentation/constants/theme";
 import {
     IconCheckCircleFilled,
     IconStopOutlined,
-    IconYoutubeFilled
+    IconVideoCameraFilled
 } from "@/shared/presentation/ui/Icons";
 import StatusTag from "@/shared/presentation/ui/StatusTag";
 import type { ITableActionItem } from "@/shared/presentation/ui/TableActionDropdown";
@@ -60,7 +60,7 @@ export const shortsTableColumns = (
         render: (videoUrl: string | null) =>
             videoUrl ? (
                 <Link href={videoUrl} target="_blank" rel="noopener noreferrer">
-                    <IconYoutubeFilled style={{ color: Colors.Error, fontSize: 18 }} />
+                    <IconVideoCameraFilled style={{ color: Colors.BrandPrimary, fontSize: 18 }} />
                 </Link>
             ) : (
                 <IconStopOutlined style={{ color: Colors.Error, fontSize: 18 }} />

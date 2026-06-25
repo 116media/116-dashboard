@@ -3,7 +3,7 @@ import type { ICategoryEntity } from "@/modules/catalog/domain/entities/ICategor
 /**
  * Available action types for a category record.
  */
-export type CategoryAction = "edit" | "activate" | "deactivate" | "managePricing";
+export type CategoryAction = "edit" | "activate" | "deactivate" | "managePricing" | "setExclusive";
 
 interface ICategoryDropdownItem {
     key: CategoryAction;
@@ -27,6 +27,8 @@ interface ICategoryDropdownItem {
  * @remarks
  * - "edit" is restricted to SuperAdmin only.
  * - "activate" and "deactivate" are available to Admin and SuperAdmin.
+ * - "setExclusive" is SuperAdmin-only and limited to active video categories
+ *   that are not already the exclusive show.
  */
 export const CATEGORY_DROPDOWN_ITEMS: ICategoryDropdownItem[] = [
     {
@@ -38,6 +40,12 @@ export const CATEGORY_DROPDOWN_ITEMS: ICategoryDropdownItem[] = [
         key: "activate",
         label: "Activer",
         hidden: (record, _, isAdminOrSuperAdmin) => !isAdminOrSuperAdmin || record.isActive
+    },
+    {
+        key: "setExclusive",
+        label: "Mettre en exclusivité",
+        hidden: (record, isSuperAdmin) =>
+            !isSuperAdmin || !record.isVideoType || !record.isActive || record.isExclusive
     },
     {
         key: "managePricing",

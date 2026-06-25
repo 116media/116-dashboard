@@ -20,6 +20,8 @@ const { Paragraph } = Typography;
  * @property {Failure | null | undefined} error - Error from backend displayed via ErrorAlert
  * @property {() => void} onConfirm - Confirm handler
  * @property {() => void} onCancel - Cancel/close handler
+ * @property {() => void} [onAfterClose] - Called once the modal has fully closed; used to reset the
+ * Redux action error so a failure never leaks into the next time a confirm modal opens.
  */
 export interface IActionModalProps {
     open: boolean;
@@ -31,6 +33,7 @@ export interface IActionModalProps {
     error: Failure | null | undefined;
     onConfirm: () => void;
     onCancel: () => void;
+    onAfterClose?: () => void;
 }
 
 /**
@@ -55,10 +58,18 @@ const ActionModal: FC<IActionModalProps> = ({
     confirmLabel = "Confirmer",
     error,
     onConfirm,
-    onCancel
+    onCancel,
+    onAfterClose
 }) => {
     return (
-        <Modal open={open} centered title={title} footer={null} onCancel={onCancel}>
+        <Modal
+            centered
+            open={open}
+            title={title}
+            footer={null}
+            onCancel={onCancel}
+            afterClose={onAfterClose}
+        >
             <ErrorAlert error={error} banner showIcon closable={false} />
 
             {description && <Paragraph type="secondary">{description}</Paragraph>}

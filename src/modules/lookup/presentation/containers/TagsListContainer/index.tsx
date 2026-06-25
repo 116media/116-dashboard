@@ -139,6 +139,7 @@ const TagsListContainer: FC = () => {
                     })
                 }
                 onCancel={() => modals.setActionOpen(false)}
+                onAfterClose={tagActions.resetActionError}
             />
         </>
     );

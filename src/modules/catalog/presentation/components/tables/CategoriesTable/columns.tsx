@@ -89,6 +89,19 @@ export const categoriesTableColumns = (
             )
     },
     {
+        title: "Exclusive",
+        dataIndex: "isExclusive",
+        key: "isExclusive",
+        width: 110,
+        align: "center",
+        render: (isExclusive: boolean) =>
+            isExclusive ? (
+                <Tag color="gold">Exclusive</Tag>
+            ) : (
+                <IconStopOutlined style={{ color: Colors.Error, fontSize: 18 }} />
+            )
+    },
+    {
         title: "Statut",
         dataIndex: "isActive",
         key: "status",

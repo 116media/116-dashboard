@@ -22,6 +22,7 @@ import ActionModal from "@/shared/presentation/ui/ActionModal";
  * @property {(values: IRejectArticleCredentials) => void} [onRejectSubmit] - Submit handler for the reject modal
  * @property {(values: IUnpromoteArticleCredentials) => void} [onUnpromoteSubmit] - Submit handler for the unpromote modal
  * @property {() => void} onCancel - Cancel/close handler
+ * @property {() => void} [onAfterClose] - Callback invoked after the modal close animation completes
  */
 interface IArticleWorkflowModalProps {
     open: boolean;
@@ -33,6 +34,7 @@ interface IArticleWorkflowModalProps {
     onConfirm: () => void;
     onRejectSubmit?: (values: IRejectArticleCredentials) => void;
     onUnpromoteSubmit?: (values: IUnpromoteArticleCredentials) => void;
+    onAfterClose?: () => void;
 }
 
 /**
@@ -58,7 +60,8 @@ const ArticleWorkflowModal: FC<IArticleWorkflowModalProps> = ({
     onConfirm,
     onRejectSubmit,
     onUnpromoteSubmit,
-    onCancel
+    onCancel,
+    onAfterClose
 }) => {
     const config = action ? ARTICLE_ACTION_CONFIG[action] : undefined;
 
@@ -103,6 +106,7 @@ const ArticleWorkflowModal: FC<IArticleWorkflowModalProps> = ({
             onConfirm={onConfirm}
             error={error ?? null}
             danger={config.danger}
+            onAfterClose={onAfterClose}
             confirmLabel={config.confirmLabel}
             description={config.description}
         />

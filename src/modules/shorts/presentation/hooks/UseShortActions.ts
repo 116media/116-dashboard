@@ -1,7 +1,16 @@
 import type { AsyncThunk } from "@reduxjs/toolkit";
-import { activateShortAction } from "@/modules/shorts/presentation/store/activateshort.action";
-import { deactivateShortAction } from "@/modules/shorts/presentation/store/deactivateshort.action";
-import { deleteShortAction } from "@/modules/shorts/presentation/store/deleteshort.action";
+import {
+    activateShortAction,
+    resetActivateShortAction
+} from "@/modules/shorts/presentation/store/activateshort.action";
+import {
+    deactivateShortAction,
+    resetDeactivateShortAction
+} from "@/modules/shorts/presentation/store/deactivateshort.action";
+import {
+    deleteShortAction,
+    resetDeleteShortAction
+} from "@/modules/shorts/presentation/store/deleteshort.action";
 import { ShortsNotification } from "@/modules/shorts/presentation/utils/notification/shorts.notification";
 import type { Failure } from "@/shared/domain/failures/failure";
 import { useAppDispatch, useAppSelector } from "@/shared/presentation/store/store";
@@ -18,6 +27,7 @@ interface IUseShortActions {
     onActivate: (id: string) => Promise<void>;
     onDeactivate: (id: string) => Promise<void>;
     onDelete: (id: string) => Promise<void>;
+    resetActionError: () => void;
 }
 
 /**
@@ -73,5 +83,11 @@ export const useShortActions = (reload: () => void): IUseShortActions => {
         return dispatchAction(deleteShortAction, id, ShortsNotification.deleteSuccess);
     };
 
-    return { loading, error, onActivate, onDeactivate, onDelete };
+    const resetActionError = () => {
+        dispatch(resetActivateShortAction());
+        dispatch(resetDeactivateShortAction());
+        dispatch(resetDeleteShortAction());
+    };
+
+    return { loading, error, onActivate, onDeactivate, onDelete, resetActionError };
 };

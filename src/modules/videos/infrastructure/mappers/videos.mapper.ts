@@ -52,7 +52,6 @@ export const VideosMapper = {
             slug: dto.slug,
             description: dto.description,
             thumbnailUrl: dto.thumbnailUrl,
-            thumbnailStorageKey: dto.thumbnailStorageKey,
             authorId: dto.authorId,
             status: mapContentStatus(dto.status),
             rejectionReason: dto.rejectionReason,

@@ -186,6 +186,7 @@ const PermissionsListContainer: FC = () => {
                 error={permissionActions.error}
                 onConfirm={handleActionConfirm}
                 onCancel={() => setActionOpen(false)}
+                onAfterClose={permissionActions.resetActionError}
             />
         </div>
     );

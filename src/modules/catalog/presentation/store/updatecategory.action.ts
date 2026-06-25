@@ -17,7 +17,16 @@ export const resetUpdateCategoryAction = () =>
  */
 export const updateCategoryAction = createAsyncThunk<
     ICategoryEntity,
-    { id: string; data: { name: string; slug: string; description: string; isGossip: boolean } },
+    {
+        id: string;
+        data: {
+            name: string;
+            slug: string;
+            description: string;
+            isGossip: boolean;
+            isExclusive: boolean;
+        };
+    },
     { rejectValue: Failure }
 >(ActionType.UpdateCategory, async (params, { rejectWithValue }) => {
     const result = await container.cradle.updateCategoryUseCase.execute(params);

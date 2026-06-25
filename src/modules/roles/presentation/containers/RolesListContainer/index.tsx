@@ -230,6 +230,7 @@ const RolesListContainer: FC = () => {
                 error={roleActions.error}
                 onConfirm={handleActionConfirm}
                 onCancel={() => setActionOpen(false)}
+                onAfterClose={roleActions.resetActionError}
             />
 
             {bulkPermissionOpen && (

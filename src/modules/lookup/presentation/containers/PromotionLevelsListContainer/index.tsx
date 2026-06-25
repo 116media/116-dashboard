@@ -150,6 +150,7 @@ const PromotionLevelsListContainer: FC = () => {
                     })
                 }
                 onCancel={() => modals.setActionOpen(false)}
+                onAfterClose={actions.resetActionError}
             />
         </>
     );
