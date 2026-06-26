@@ -22,11 +22,13 @@ import { getAllPackagesAction } from "./getallpackages.action";
 import { getCategoryByIdAction } from "./getcategorybyid.action";
 import { getCustomerByIdAction } from "./getcustomerbyid.action";
 import { getPackageByIdAction } from "./getpackagebyid.action";
+import { pinCategoryToFeedAction } from "./pincategorytofeed.action";
 import { removeCategoryPricingAction } from "./removecategorypricing.action";
 import { removePackageSlotAction } from "./removepackageslot.action";
 import { setExclusiveCategoryAction } from "./setexclusivecategory.action";
 import { catalogInitialState } from "./state";
 import type { CatalogStateKey } from "./type";
+import { unpinCategoryFromFeedAction } from "./unpincategoryfromfeed.action";
 import { updateCategoryAction } from "./updatecategory.action";
 import { updateCategoryPricingAction } from "./updatecategorypricing.action";
 import { updateCustomerAction } from "./updatecustomer.action";
@@ -83,6 +85,14 @@ export const catalogSlice = createSlice({
             .addCase(setExclusiveCategoryAction.pending, ActionWrapperPending)
             .addCase(setExclusiveCategoryAction.fulfilled, ActionWrapperFulfilled)
             .addCase(setExclusiveCategoryAction.rejected, ActionWrapperRejected)
+            // pin category to feed
+            .addCase(pinCategoryToFeedAction.pending, ActionWrapperPending)
+            .addCase(pinCategoryToFeedAction.fulfilled, ActionWrapperFulfilled)
+            .addCase(pinCategoryToFeedAction.rejected, ActionWrapperRejected)
+            // unpin category from feed
+            .addCase(unpinCategoryFromFeedAction.pending, ActionWrapperPending)
+            .addCase(unpinCategoryFromFeedAction.fulfilled, ActionWrapperFulfilled)
+            .addCase(unpinCategoryFromFeedAction.rejected, ActionWrapperRejected)
 
             .addCase(uploadCategoryPosterAction.pending, ActionWrapperPending)
             .addCase(uploadCategoryPosterAction.fulfilled, ActionWrapperFulfilled)

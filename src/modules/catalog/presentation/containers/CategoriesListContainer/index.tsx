@@ -167,7 +167,9 @@ const CategoriesListContainer: FC = () => {
                     modals.handleActionConfirm({
                         activate: actions.onActivate,
                         deactivate: actions.onDeactivate,
-                        setExclusive: actions.onSetExclusive
+                        setExclusive: actions.onSetExclusive,
+                        pinToFeed: actions.onPinToFeed,
+                        unpinFromFeed: actions.onUnpinFromFeed
                     })
                 }
                 onCancel={() => modals.setActionOpen(false)}

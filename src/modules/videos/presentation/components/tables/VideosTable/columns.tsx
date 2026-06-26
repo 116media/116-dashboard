@@ -144,7 +144,6 @@ export const videosTableColumns = (
         dataIndex: "publishedAt",
         key: "publishedAt",
         width: 160,
-        fixed: "end",
         render: (date: string | null) =>
             date ? (
                 <Text type="secondary">{dayjs(date).format("DD/MM/YYYY HH:mm")}</Text>

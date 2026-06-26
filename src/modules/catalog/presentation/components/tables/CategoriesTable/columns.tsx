@@ -102,6 +102,19 @@ export const categoriesTableColumns = (
             )
     },
     {
+        title: "Fil d'actualité",
+        dataIndex: "isPinnedToFeed",
+        key: "isPinnedToFeed",
+        width: 130,
+        align: "center",
+        render: (isPinnedToFeed: boolean) =>
+            isPinnedToFeed ? (
+                <Tag color="blue">Épinglée</Tag>
+            ) : (
+                <IconStopOutlined style={{ color: Colors.Error, fontSize: 18 }} />
+            )
+    },
+    {
         title: "Statut",
         dataIndex: "isActive",
         key: "status",
