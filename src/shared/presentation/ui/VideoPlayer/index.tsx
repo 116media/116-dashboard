@@ -32,12 +32,26 @@ const HTML5_PLYR_OPTIONS: Plyr.Options = {
     }
 };
 
+/**
+ * Props for the VideoPlayer component.
+ *
+ * @interface IVideoPlayerProps
+ * @property {string | null} [src] - Direct video file URL to play with the HTML5 player; ignored when youtubeUrl is provided
+ * @property {string | null} [youtubeUrl] - YouTube URL or video id to embed; takes precedence over src
+ * @property {string | null} [poster] - Optional poster image shown before playback begins
+ * @property {number} [maxHeight] - Caps the player height in pixels and clips any overflow
+ * @property {() => void} [onReady] - Called once the underlying player has finished initializing
+ * @property {Plyr.Options["controls"]} [controls] - Overrides the Plyr controls array; defaults to the full control set
+ * @property {Plyr.Options["ratio"]} [ratio] - Overrides the player aspect ratio (e.g. "9:16" for vertical shorts); defaults to "16:9"
+ */
 interface IVideoPlayerProps {
     src?: string | null;
     youtubeUrl?: string | null;
     poster?: string | null;
     maxHeight?: number;
     onReady?: () => void;
+    controls?: Plyr.Options["controls"];
+    ratio?: Plyr.Options["ratio"];
 }
 
 /**
@@ -49,8 +63,25 @@ interface IVideoPlayerProps {
  * Renders a Plyr-powered player for both HTML5 video files and YouTube embeds.
  * Styles are applied via CSS custom properties in the companion SCSS module.
  */
-const VideoPlayer: FC<IVideoPlayerProps> = ({ src, youtubeUrl, poster, maxHeight, onReady }) => {
+const VideoPlayer: FC<IVideoPlayerProps> = ({
+    src,
+    youtubeUrl,
+    poster,
+    maxHeight,
+    onReady,
+    controls,
+    ratio
+}) => {
     const containerRef = useRef<HTMLDivElement>(null);
+
+    const options = useMemo<Plyr.Options>(() => {
+        const base = youtubeUrl ? SHARED_PLYR_OPTIONS : HTML5_PLYR_OPTIONS;
+        return {
+            ...base,
+            ...(controls ? { controls } : {}),
+            ...(ratio ? { ratio } : {})
+        };
+    }, [youtubeUrl, controls, ratio]);
 
     const source = useMemo<Plyr.SourceInfo | undefined>(() => {
         if (youtubeUrl) {
@@ -101,10 +132,7 @@ const VideoPlayer: FC<IVideoPlayerProps> = ({ src, youtubeUrl, poster, maxHeight
             className={styles.videoPlayer}
             style={maxHeight ? { maxHeight, overflow: "hidden" } : undefined}
         >
-            <PlyrReact
-                source={source}
-                options={youtubeUrl ? SHARED_PLYR_OPTIONS : HTML5_PLYR_OPTIONS}
-            />
+            <PlyrReact source={source} options={options} />
         </div>
     );
 };

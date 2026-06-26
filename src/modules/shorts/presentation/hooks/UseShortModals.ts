@@ -14,12 +14,16 @@ interface IUseShortModals {
     editOpen: boolean;
     actionOpen: boolean;
     thumbnailOpen: boolean;
+    previewOpen: boolean;
+    previewUrl: string | null;
     currentAction: ShortAction | null;
     selectedEntity: IShortVideoEntity | null;
     setCreateOpen: (open: boolean) => void;
     setEditOpen: (open: boolean) => void;
     setActionOpen: (open: boolean) => void;
     setThumbnailOpen: (open: boolean) => void;
+    handlePreviewVideo: (url: string) => void;
+    closePreview: () => void;
     handleAction: (action: ShortAction, entity: IShortVideoEntity) => void;
     handleActionConfirm: (
         actionMap: Record<string, (id: string) => Promise<void>>
@@ -43,6 +47,8 @@ export const useShortModals = (reload: () => void): IUseShortModals => {
     const [editOpen, setEditOpen] = useState(false);
     const [actionOpen, setActionOpen] = useState(false);
     const [thumbnailOpen, setThumbnailOpen] = useState(false);
+    const [previewOpen, setPreviewOpen] = useState(false);
+    const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
     const [currentAction, setCurrentAction] = useState<ShortAction | null>(null);
     const [selectedEntity, setSelectedEntity] = useState<IShortVideoEntity | null>(null);
@@ -88,17 +94,28 @@ export const useShortModals = (reload: () => void): IUseShortModals => {
         [selectedEntity, currentAction, reload]
     );
 
+    const handlePreviewVideo = useCallback((url: string) => {
+        setPreviewUrl(url);
+        setPreviewOpen(true);
+    }, []);
+
+    const closePreview = useCallback(() => setPreviewOpen(false), []);
+
     return {
         createOpen,
         editOpen,
         actionOpen,
         thumbnailOpen,
+        previewOpen,
+        previewUrl,
         currentAction,
         selectedEntity,
         setCreateOpen,
         setEditOpen,
         setActionOpen,
         setThumbnailOpen,
+        handlePreviewVideo,
+        closePreview,
         handleAction,
         handleActionConfirm
     };

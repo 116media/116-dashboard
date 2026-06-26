@@ -25,7 +25,7 @@ interface ILyricsDropdownItem {
  * - "viewVideo" is visible to all when a video is linked.
  */
 export const LYRICS_DROPDOWN_ITEMS: ILyricsDropdownItem[] = [
-    { key: "viewVideo", label: "Voir la vidéo", hidden: (r) => !r.videoId },
+    { key: "viewVideo", label: "Voir la vidéo associée", hidden: (r) => !r.videoId },
     { key: "edit", label: "Modifier", hidden: (_, __, isAdmin) => !isAdmin },
     { key: "seo", label: "Modifier le SEO", hidden: (_, __, isAdmin) => !isAdmin },
     { key: "delete", label: "Supprimer", danger: true, hidden: (_, isSuperAdmin) => !isSuperAdmin }
