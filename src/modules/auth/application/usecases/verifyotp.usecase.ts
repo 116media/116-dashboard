@@ -40,9 +40,7 @@ export class VerifyOtpUseCase implements IVerifyOtpUseCase {
     async execute(credentials: IVerifyOtpCredentials): Promise<Result<IVerifyOtpResponse>> {
         const result = await this.authRepository.verifyOtp(credentials);
 
-        if (result.ok) {
-            AuthStorageService.setOtpCode(credentials.otp);
-        }
+        if (result.ok) AuthStorageService.setOtpCode(credentials.otp);
 
         return result;
     }
