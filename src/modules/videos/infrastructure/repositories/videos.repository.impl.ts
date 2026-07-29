@@ -42,7 +42,7 @@ export class VideosRepositoryImpl implements IVideosRepositoryPort {
             });
             const paginated = response.data.videos;
             return ok({
-                items: paginated.items.map(VideosMapper.videoSummaryFromDto),
+                items: VideosMapper.videoSummaryListFromDto(paginated.items),
                 pageIndex: paginated.pageIndex,
                 pageSize: paginated.pageSize,
                 count: paginated.count
@@ -55,7 +55,7 @@ export class VideosRepositoryImpl implements IVideosRepositoryPort {
     async getActiveVideos(): Promise<Result<IVideoSummaryEntity[]>> {
         try {
             const response = await apiClient.api.adminGetActiveVideos();
-            return ok(response.data.videos.map(VideosMapper.videoSummaryFromDto));
+            return ok(VideosMapper.videoSummaryListFromDto(response.data.videos));
         } catch (error) {
             return err(ProblemMapper.toFailure(error));
         }
