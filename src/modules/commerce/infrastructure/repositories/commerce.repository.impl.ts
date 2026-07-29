@@ -147,7 +147,7 @@ export class CommerceRepositoryImpl implements ICommerceRepositoryPort {
             });
             const paginated = response.data.orders;
             return ok({
-                items: paginated.items.map(CommerceMapper.orderSummaryFromDto),
+                items: CommerceMapper.orderSummaryListFromDto(paginated.items),
                 pageIndex: paginated.pageIndex,
                 pageSize: paginated.pageSize,
                 count: paginated.count
@@ -185,7 +185,7 @@ export class CommerceRepositoryImpl implements ICommerceRepositoryPort {
             });
             const paginated = response.data.orders;
             return ok({
-                items: paginated.items.map(CommerceMapper.orderSummaryFromDto),
+                items: CommerceMapper.orderSummaryListFromDto(paginated.items),
                 pageIndex: paginated.pageIndex,
                 pageSize: paginated.pageSize,
                 count: paginated.count
@@ -206,7 +206,7 @@ export class CommerceRepositoryImpl implements ICommerceRepositoryPort {
             });
             const paginated = response.data.orders;
             return ok({
-                items: paginated.items.map(CommerceMapper.orderSummaryFromDto),
+                items: CommerceMapper.orderSummaryListFromDto(paginated.items),
                 pageIndex: paginated.pageIndex,
                 pageSize: paginated.pageSize,
                 count: paginated.count
@@ -229,7 +229,7 @@ export class CommerceRepositoryImpl implements ICommerceRepositoryPort {
             });
             const paginated = response.data.payments;
             return ok({
-                items: paginated.items.map(CommerceMapper.paymentSummaryFromDto),
+                items: CommerceMapper.paymentSummaryListFromDto(paginated.items),
                 pageIndex: paginated.pageIndex,
                 pageSize: paginated.pageSize,
                 count: paginated.count
