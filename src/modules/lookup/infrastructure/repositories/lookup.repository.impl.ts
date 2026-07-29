@@ -36,7 +36,7 @@ export class LookupRepositoryImpl implements ILookupRepositoryPort {
             const response = await apiClient.api.adminGetAllContentTypes(
                 search ? { search } : undefined
             );
-            return ok(response.data.contentTypes.map(LookupMapper.contentTypeFromDto));
+            return ok(LookupMapper.contentTypeListFromDto(response.data.contentTypes));
         } catch (error) {
             return err(ProblemMapper.toFailure(error));
         }
@@ -88,7 +88,7 @@ export class LookupRepositoryImpl implements ILookupRepositoryPort {
             const response = await apiClient.api.adminGetAllPricingTiers(
                 search ? { search } : undefined
             );
-            return ok(response.data.pricingTiers.map(LookupMapper.pricingTierFromDto));
+            return ok(LookupMapper.pricingTierListFromDto(response.data.pricingTiers));
         } catch (error) {
             return err(ProblemMapper.toFailure(error));
         }
@@ -140,7 +140,7 @@ export class LookupRepositoryImpl implements ILookupRepositoryPort {
             const response = await apiClient.api.adminGetAllPromotionLevels(
                 search ? { search } : undefined
             );
-            return ok(response.data.promotionLevels.map(LookupMapper.promotionLevelFromDto));
+            return ok(LookupMapper.promotionLevelListFromDto(response.data.promotionLevels));
         } catch (error) {
             return err(ProblemMapper.toFailure(error));
         }
@@ -190,7 +190,7 @@ export class LookupRepositoryImpl implements ILookupRepositoryPort {
     async getAllTags(search?: string): Promise<Result<ITagEntity[]>> {
         try {
             const response = await apiClient.api.adminGetAllTags(search ? { search } : undefined);
-            return ok(response.data.tags.map(LookupMapper.tagFromDto));
+            return ok(LookupMapper.tagListFromDto(response.data.tags));
         } catch (error) {
             return err(ProblemMapper.toFailure(error));
         }
