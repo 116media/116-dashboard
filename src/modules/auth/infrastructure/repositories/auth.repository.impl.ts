@@ -93,7 +93,7 @@ export class AuthRepositoryImpl implements IAuthRepositoryPort {
 
     async signOut(): Promise<Result<ISignOutResponse>> {
         try {
-            const response = await apiClient.api.adminSignOut({ refreshToken: null });
+            const response = await apiClient.api.adminSignOut({});
             return ok(AuthMapper.signOutResponseFromDto(response.data));
         } catch (error) {
             return err(ProblemMapper.toFailure(error));
