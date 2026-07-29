@@ -40,7 +40,7 @@ export class CatalogRepositoryImpl implements ICatalogRepositoryPort {
             });
             const paginated = response.data.categories;
             return ok({
-                items: paginated.items.map(CatalogMapper.categoryFromDto),
+                items: CatalogMapper.categoryListFromDto(paginated.items),
                 pageIndex: paginated.pageIndex,
                 pageSize: paginated.pageSize,
                 count: paginated.count
@@ -191,7 +191,7 @@ export class CatalogRepositoryImpl implements ICatalogRepositoryPort {
             });
             const paginated = response.data.customers;
             return ok({
-                items: paginated.items.map(CatalogMapper.customerFromDto),
+                items: CatalogMapper.customerListFromDto(paginated.items),
                 pageIndex: paginated.pageIndex,
                 pageSize: paginated.pageSize,
                 count: paginated.count
@@ -242,7 +242,7 @@ export class CatalogRepositoryImpl implements ICatalogRepositoryPort {
             });
             const paginated = response.data.packages;
             return ok({
-                items: paginated.items.map(CatalogMapper.packageFromDto),
+                items: CatalogMapper.packageListFromDto(paginated.items),
                 pageIndex: paginated.pageIndex,
                 pageSize: paginated.pageSize,
                 count: paginated.count
