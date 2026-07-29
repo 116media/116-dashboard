@@ -48,6 +48,16 @@ export const SessionMapper = {
     },
 
     /**
+     * Maps a list of SessionDto from the API to ISession domain entities.
+     *
+     * @param {SessionDto[]} dtos - Session data list from API
+     * @returns {ISession[]} Mapped session entities
+     */
+    sessionListFromDto(dtos: SessionDto[]): ISession[] {
+        return dtos.map(SessionMapper.sessionFromDto);
+    },
+
+    /**
      * Maps an AdminRevokeSessionResponse to an IRevokeSessionResponse domain entity.
      *
      * @param {AdminRevokeSessionResponse} response - Revoke session response from API
