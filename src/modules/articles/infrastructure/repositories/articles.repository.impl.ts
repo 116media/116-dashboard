@@ -40,7 +40,7 @@ export class ArticlesRepositoryImpl implements IArticlesRepositoryPort {
             });
             const paginated = response.data.articles;
             return ok({
-                items: paginated.items.map(ArticlesMapper.articleSummaryFromDto),
+                items: ArticlesMapper.articleSummaryListFromDto(paginated.items),
                 pageIndex: paginated.pageIndex,
                 pageSize: paginated.pageSize,
                 count: paginated.count
