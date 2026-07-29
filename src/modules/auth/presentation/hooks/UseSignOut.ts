@@ -1,5 +1,4 @@
 import { Modal } from "antd";
-import { useNavigate } from "react-router";
 import { signOutAction } from "@/modules/auth/presentation/store/signout.action";
 import { LOGIN_PATH } from "@/shared/presentation/constants/paths";
 import { persistor, useAppDispatch, useAppSelector } from "@/shared/presentation/store/store";
@@ -21,13 +20,16 @@ interface IUseSignOut {
  * @returns Loading state and sign-out handler
  */
 export const useSignOut = (): IUseSignOut => {
-    const navigate = useNavigate();
     const dispatch = useAppDispatch();
     const { loading } = useAppSelector(({ auth: { signOut } }) => signOut);
 
-    const performLogout = () => {
-        persistor.purge();
-        navigate(LOGIN_PATH, { replace: true });
+    // Purge persisted state, then hard-replace to login. A soft `navigate` leaves the
+    // in-memory Redux store intact (only localStorage is purged), so the user stayed
+    // "logged in" until a manual refresh. A full reload rehydrates from the now-empty
+    // store — matching the session-expiry / decryption-failure logout paths.
+    const performLogout = async () => {
+        await persistor.purge();
+        window.location.replace(LOGIN_PATH);
     };
 
     const onSignOut = () => {
@@ -45,7 +47,7 @@ export const useSignOut = (): IUseSignOut => {
                         description: result.payload.detail
                     });
                 }
-                performLogout();
+                await performLogout();
             }
         });
     };
