@@ -31,7 +31,7 @@ export class LyricsRepositoryImpl implements ILyricsRepositoryPort {
             });
             const paginated = response.data.lyrics;
             return ok({
-                items: paginated.items.map(LyricsMapper.lyricsFromDto),
+                items: LyricsMapper.lyricsListFromDto(paginated.items),
                 pageIndex: paginated.pageIndex,
                 pageSize: paginated.pageSize,
                 count: paginated.count
