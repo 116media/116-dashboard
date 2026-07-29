@@ -48,5 +48,15 @@ export const ShortsMapper = {
             createdBy: dto.createdBy,
             updatedBy: dto.updatedBy
         };
+    },
+
+    /**
+     * Maps a list of ShortVideoDto to IShortVideoEntity domain entities.
+     *
+     * @param {ShortVideoDto[]} dtos - Short video data list from API
+     * @returns {IShortVideoEntity[]} Mapped short video entities
+     */
+    shortListFromDto(dtos: ShortVideoDto[]): IShortVideoEntity[] {
+        return dtos.map(ShortsMapper.shortFromDto);
     }
 } as const;
