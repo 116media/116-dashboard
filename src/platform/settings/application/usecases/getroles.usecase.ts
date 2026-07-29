@@ -35,6 +35,6 @@ export class GetRolesUseCase implements IGetRolesUseCase {
      * @returns {Promise<Result<IRoleWithPermissions[]>>} `ok(IRoleWithPermissions[])` on success, `err(Failure)` on failure
      */
     async execute(): Promise<Result<IRoleWithPermissions[]>> {
-        return this.settingsRepository.getRoles();
+        return this.settingsRepository.getOwnRoles();
     }
 }
