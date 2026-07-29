@@ -36,6 +36,16 @@ export const LookupMapper = {
     },
 
     /**
+     * Maps a list of ContentTypeDto to IContentTypeEntity domain entities.
+     *
+     * @param {ContentTypeDto[]} dtos - The raw DTO list from the API response
+     * @returns {IContentTypeEntity[]} The mapped domain entities
+     */
+    contentTypeListFromDto(dtos: ContentTypeDto[]): IContentTypeEntity[] {
+        return dtos.map(LookupMapper.contentTypeFromDto);
+    },
+
+    /**
      * Maps a single PricingTierDto to an IPricingTierEntity domain entity.
      *
      * @param {PricingTierDto} dto - The raw DTO from the API response
@@ -52,6 +62,16 @@ export const LookupMapper = {
             createdBy: dto.createdBy,
             updatedBy: dto.updatedBy
         };
+    },
+
+    /**
+     * Maps a list of PricingTierDto to IPricingTierEntity domain entities.
+     *
+     * @param {PricingTierDto[]} dtos - The raw DTO list from the API response
+     * @returns {IPricingTierEntity[]} The mapped domain entities
+     */
+    pricingTierListFromDto(dtos: PricingTierDto[]): IPricingTierEntity[] {
+        return dtos.map(LookupMapper.pricingTierFromDto);
     },
 
     /**
@@ -72,6 +92,16 @@ export const LookupMapper = {
     },
 
     /**
+     * Maps a list of PromotionLevelDto to IPromotionLevelEntity domain entities.
+     *
+     * @param {PromotionLevelDto[]} dtos - The raw DTO list from the API response
+     * @returns {IPromotionLevelEntity[]} The mapped domain entities
+     */
+    promotionLevelListFromDto(dtos: PromotionLevelDto[]): IPromotionLevelEntity[] {
+        return dtos.map(LookupMapper.promotionLevelFromDto);
+    },
+
+    /**
      * Maps a single TagDto to an ITagEntity domain entity.
      *
      * @param {TagDto} dto - The raw DTO from the API response
@@ -83,5 +113,15 @@ export const LookupMapper = {
             name: dto.name,
             slug: dto.slug
         };
+    },
+
+    /**
+     * Maps a list of TagDto to ITagEntity domain entities.
+     *
+     * @param {TagDto[]} dtos - The raw DTO list from the API response
+     * @returns {ITagEntity[]} The mapped domain entities
+     */
+    tagListFromDto(dtos: TagDto[]): ITagEntity[] {
+        return dtos.map(LookupMapper.tagFromDto);
     }
 } as const;
