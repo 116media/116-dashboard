@@ -11,7 +11,7 @@ import { apiClient } from "@/shared/infrastructure/api/client";
 import { ProblemMapper } from "@/shared/infrastructure/mappers/problem.mapper";
 
 export class SettingsRepositoryImpl implements ISettingsRepositoryPort {
-    async getProfile(): Promise<Result<IUser>> {
+    async getOwnProfile(): Promise<Result<IUser>> {
         try {
             const response = await apiClient.api.adminGetOwnProfile();
             return ok(SettingsMapper.profileFromDto(response.data.user));
@@ -20,15 +20,9 @@ export class SettingsRepositoryImpl implements ISettingsRepositoryPort {
         }
     }
 
-    async updateAccount(data: IUpdateAccountCredentials): Promise<Result<IUser>> {
+    async updateOwnProfile(data: IUpdateAccountCredentials): Promise<Result<IUser>> {
         try {
-            const response = await apiClient.api.adminUpdateOwnProfile({
-                userName: data.userName,
-                countryName: data.countryName,
-                partialPhoneNumber: data.phonePartial,
-                countryIsoCode: data.phoneISOCode,
-                countryDialCode: data.phoneDialCode
-            });
+            const response = await apiClient.api.adminUpdateOwnProfile(data);
             return ok(SettingsMapper.profileFromDto(response.data.user));
         } catch (error) {
             return err(ProblemMapper.toFailure(error));
@@ -53,10 +47,10 @@ export class SettingsRepositoryImpl implements ISettingsRepositoryPort {
         }
     }
 
-    async getRoles(): Promise<Result<IRoleWithPermissions[]>> {
+    async getOwnRoles(): Promise<Result<IRoleWithPermissions[]>> {
         try {
             const response = await apiClient.api.adminGetOwnRoles();
-            return ok(response.data.roles.map(SettingsMapper.roleWithPermissionsFromDto));
+            return ok(SettingsMapper.roleWithPermissionsListFromDto(response.data.roles));
         } catch (error) {
             return err(ProblemMapper.toFailure(error));
         }
