@@ -35,6 +35,6 @@ export class GetProfileUseCase implements IGetProfileUseCase {
      * @returns {Promise<Result<IUser>>} `ok(IUser)` on success, `err(Failure)` on failure
      */
     async execute(): Promise<Result<IUser>> {
-        return this.settingsRepository.getProfile();
+        return this.settingsRepository.getOwnProfile();
     }
 }
