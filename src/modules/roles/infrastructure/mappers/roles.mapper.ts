@@ -40,6 +40,16 @@ export const RolesMapper = {
     },
 
     /**
+     * Maps a list of RoleDto to IRoleEntity domain entities.
+     *
+     * @param {RoleDto[]} dtos - The raw DTOs from the API response
+     * @returns {IRoleEntity[]} The mapped domain entities
+     */
+    roleListFromDto(dtos: RoleDto[]): IRoleEntity[] {
+        return dtos.map(RolesMapper.roleFromDto);
+    },
+
+    /**
      * Maps a PermissionDto to an IPermissionEntity.
      *
      * @param {PermissionDto} dto - The raw permission DTO
@@ -62,6 +72,16 @@ export const RolesMapper = {
     },
 
     /**
+     * Maps a list of PermissionDto to IPermissionEntity domain entities.
+     *
+     * @param {PermissionDto[]} dtos - The raw permission DTOs
+     * @returns {IPermissionEntity[]} The mapped permission entities
+     */
+    permissionListFromDto(dtos: PermissionDto[]): IPermissionEntity[] {
+        return dtos.map(RolesMapper.permissionFromDto);
+    },
+
+    /**
      * Maps the paginated roles response to a domain result.
      *
      * @param {AdminGetAllRolesResponse} response - The API response
@@ -69,7 +89,7 @@ export const RolesMapper = {
      */
     paginatedResultFromDto(response: AdminGetAllRolesResponse): IRolePaginatedResult {
         return {
-            items: response.roles.items.map(RolesMapper.roleFromDto),
+            items: RolesMapper.roleListFromDto(response.roles.items),
             pageIndex: response.roles.pageIndex,
             pageSize: response.roles.pageSize,
             count: response.roles.count
@@ -85,7 +105,7 @@ export const RolesMapper = {
     roleWithPermissionsFromDto(response: AdminGetRoleByIdResponse): IRoleWithPermissions {
         return {
             ...RolesMapper.roleFromDto(response.role),
-            permissions: response.permissions.map(RolesMapper.permissionFromDto)
+            permissions: RolesMapper.permissionListFromDto(response.permissions)
         };
     },
 
@@ -107,7 +127,7 @@ export const RolesMapper = {
             updatedAt: dto.updatedAt,
             createdBy: dto.createdBy,
             updatedBy: dto.updatedBy,
-            permissions: dto.permissions.map(RolesMapper.permissionFromDto)
+            permissions: RolesMapper.permissionListFromDto(dto.permissions)
         };
     }
 } as const;

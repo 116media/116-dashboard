@@ -44,5 +44,15 @@ export const LyricsMapper = {
             createdBy: dto.createdBy,
             updatedBy: dto.updatedBy
         };
+    },
+
+    /**
+     * Maps a list of LyricsDto to ILyricsEntity domain entities.
+     *
+     * @param {LyricsDto[]} dtos - Lyrics data list from API
+     * @returns {ILyricsEntity[]} Mapped lyrics entities
+     */
+    lyricsListFromDto(dtos: LyricsDto[]): ILyricsEntity[] {
+        return dtos.map(LyricsMapper.lyricsFromDto);
     }
 } as const;

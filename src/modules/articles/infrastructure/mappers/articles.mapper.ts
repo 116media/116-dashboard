@@ -42,6 +42,16 @@ export const ArticlesMapper = {
     },
 
     /**
+     * Maps a list of ArticleImageDto to IArticleImageEntity domain entities.
+     *
+     * @param {ArticleImageDto[]} dtos - Article image data list from API
+     * @returns {IArticleImageEntity[]} Mapped article image entities
+     */
+    articleImageListFromDto(dtos: ArticleImageDto[]): IArticleImageEntity[] {
+        return dtos.map(ArticlesMapper.articleImageFromDto);
+    },
+
+    /**
      * Maps TagDto to ITagEntity domain entity.
      *
      * @param {TagDto} dto - Tag data from API
@@ -53,6 +63,16 @@ export const ArticlesMapper = {
             name: dto.name,
             slug: dto.slug
         };
+    },
+
+    /**
+     * Maps a list of TagDto to ITagEntity domain entities.
+     *
+     * @param {TagDto[]} dtos - Tag data list from API
+     * @returns {ITagEntity[]} Mapped tag entities
+     */
+    tagListFromDto(dtos: TagDto[]): ITagEntity[] {
+        return dtos.map(ArticlesMapper.tagFromDto);
     },
 
     /**
@@ -85,8 +105,8 @@ export const ArticlesMapper = {
             promotedUntil: dto.promotedUntil,
             promotionLevelId: dto.promotionLevelId ?? null,
             promotionLevelName: dto.promotionLevelName ?? null,
-            images: dto.images.map(ArticlesMapper.articleImageFromDto),
-            tags: dto.tags.map(ArticlesMapper.tagFromDto),
+            images: ArticlesMapper.articleImageListFromDto(dto.images),
+            tags: ArticlesMapper.tagListFromDto(dto.tags),
             readTimeInMinutes: dto.readTimeInMinutes,
             createdAt: dto.createdAt,
             updatedAt: dto.updatedAt,
@@ -134,5 +154,15 @@ export const ArticlesMapper = {
             createdBy: dto.createdBy,
             updatedBy: dto.updatedBy
         };
+    },
+
+    /**
+     * Maps a list of ArticleSummaryDto to IArticleSummaryEntity domain entities.
+     *
+     * @param {ArticleSummaryDto[]} dtos - Article summary data list from API
+     * @returns {IArticleSummaryEntity[]} Mapped article summary entities
+     */
+    articleSummaryListFromDto(dtos: ArticleSummaryDto[]): IArticleSummaryEntity[] {
+        return dtos.map(ArticlesMapper.articleSummaryFromDto);
     }
 } as const;

@@ -41,9 +41,7 @@ export class ResetPasswordUseCase implements IResetPasswordUseCase {
     async execute(credentials: IResetPasswordCredentials): Promise<Result<IResetPasswordResponse>> {
         const result = await this.authRepository.resetPassword(credentials);
 
-        if (result.ok) {
-            AuthStorageService.clearOtpCode();
-        }
+        if (result.ok) AuthStorageService.clearOtpCode();
 
         return result;
     }

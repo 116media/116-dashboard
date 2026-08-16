@@ -41,6 +41,16 @@ export const CatalogMapper = {
     },
 
     /**
+     * Maps a list of CategoryPricingDto to ICategoryPricingEntity domain entities.
+     *
+     * @param {CategoryPricingDto[]} dtos - Category pricing data list from API
+     * @returns {ICategoryPricingEntity[]} Mapped category pricing entities
+     */
+    categoryPricingListFromDto(dtos: CategoryPricingDto[]): ICategoryPricingEntity[] {
+        return dtos.map(CatalogMapper.categoryPricingFromDto);
+    },
+
+    /**
      * Maps CategoryDto to ICategoryEntity domain entity.
      *
      * @param {CategoryDto} dto - Category data from API
@@ -65,8 +75,18 @@ export const CatalogMapper = {
             isPinnedToFeed: dto.isPinnedToFeed,
             pinnedToFeedAt: dto.pinnedToFeedAt ?? null,
             posterUrl: dto.posterUrl ?? null,
-            pricing: dto.pricing.map(CatalogMapper.categoryPricingFromDto)
+            pricing: CatalogMapper.categoryPricingListFromDto(dto.pricing)
         };
+    },
+
+    /**
+     * Maps a list of CategoryDto to ICategoryEntity domain entities.
+     *
+     * @param {CategoryDto[]} dtos - Category data list from API
+     * @returns {ICategoryEntity[]} Mapped category entities with nested pricing tiers
+     */
+    categoryListFromDto(dtos: CategoryDto[]): ICategoryEntity[] {
+        return dtos.map(CatalogMapper.categoryFromDto);
     },
 
     /**
@@ -91,6 +111,16 @@ export const CatalogMapper = {
     },
 
     /**
+     * Maps a list of CustomerDto to ICustomerEntity domain entities.
+     *
+     * @param {CustomerDto[]} dtos - Customer data list from API
+     * @returns {ICustomerEntity[]} Mapped customer entities with audit timestamps
+     */
+    customerListFromDto(dtos: CustomerDto[]): ICustomerEntity[] {
+        return dtos.map(CatalogMapper.customerFromDto);
+    },
+
+    /**
      * Maps PackageSlotDto to IPackageSlotEntity domain entity.
      *
      * @param {PackageSlotDto} dto - Package slot data from API
@@ -107,6 +137,16 @@ export const CatalogMapper = {
     },
 
     /**
+     * Maps a list of PackageSlotDto to IPackageSlotEntity domain entities.
+     *
+     * @param {PackageSlotDto[]} dtos - Package slot data list from API
+     * @returns {IPackageSlotEntity[]} Mapped package slot entities
+     */
+    packageSlotListFromDto(dtos: PackageSlotDto[]): IPackageSlotEntity[] {
+        return dtos.map(CatalogMapper.packageSlotFromDto);
+    },
+
+    /**
      * Maps PackageDto to IPackageEntity domain entity.
      *
      * @param {PackageDto} dto - Package data from API
@@ -119,11 +159,21 @@ export const CatalogMapper = {
             description: dto.description,
             calculatedPriceUsd: dto.calculatedPriceUsd,
             isActive: dto.isActive,
-            slots: dto.slots.map(CatalogMapper.packageSlotFromDto),
+            slots: CatalogMapper.packageSlotListFromDto(dto.slots),
             createdAt: dto.createdAt,
             updatedAt: dto.updatedAt,
             createdBy: dto.createdBy,
             updatedBy: dto.updatedBy
         };
+    },
+
+    /**
+     * Maps a list of PackageDto to IPackageEntity domain entities.
+     *
+     * @param {PackageDto[]} dtos - Package data list from API
+     * @returns {IPackageEntity[]} Mapped package entities with nested slots
+     */
+    packageListFromDto(dtos: PackageDto[]): IPackageEntity[] {
+        return dtos.map(CatalogMapper.packageFromDto);
     }
 } as const;

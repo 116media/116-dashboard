@@ -33,7 +33,7 @@ export class ShortsRepositoryImpl implements IShortsRepositoryPort {
             });
             const paginated = response.data.shortVideos;
             return ok({
-                items: paginated.items.map(ShortsMapper.shortFromDto),
+                items: ShortsMapper.shortListFromDto(paginated.items),
                 pageIndex: paginated.pageIndex,
                 pageSize: paginated.pageSize,
                 count: paginated.count

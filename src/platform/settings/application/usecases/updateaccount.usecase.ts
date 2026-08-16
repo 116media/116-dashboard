@@ -36,6 +36,6 @@ export class UpdateAccountUseCase implements IUpdateAccountUseCase {
      * @returns {Promise<Result<IUser>>} `ok(IUser)` with the updated profile on success, `err(Failure)` on failure
      */
     async execute(data: IUpdateAccountCredentials): Promise<Result<IUser>> {
-        return this.settingsRepository.updateAccount(data);
+        return this.settingsRepository.updateOwnProfile(data);
     }
 }

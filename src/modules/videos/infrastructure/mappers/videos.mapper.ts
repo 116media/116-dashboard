@@ -38,6 +38,16 @@ export const VideosMapper = {
     },
 
     /**
+     * Maps a list of TagDto to ITagEntity domain entities.
+     *
+     * @param {TagDto[]} dtos - Tag data list from API
+     * @returns {ITagEntity[]} Mapped tag entities
+     */
+    tagListFromDto(dtos: TagDto[]): ITagEntity[] {
+        return dtos.map(VideosMapper.tagFromDto);
+    },
+
+    /**
      * Maps VideoDetailDto to IVideoEntity domain entity.
      *
      * @param {VideoDetailDto} dto - Full video detail data from API
@@ -69,7 +79,7 @@ export const VideosMapper = {
             promotedUntil: dto.promotedUntil,
             promotionLevelId: dto.promotionLevelId ?? null,
             promotionLevelName: dto.promotionLevelName ?? null,
-            tags: dto.tags.map(VideosMapper.tagFromDto),
+            tags: VideosMapper.tagListFromDto(dto.tags),
             author: dto.author
                 ? {
                       userName: dto.author.userName,
@@ -125,5 +135,15 @@ export const VideosMapper = {
             createdBy: dto.createdBy,
             updatedBy: dto.updatedBy
         };
+    },
+
+    /**
+     * Maps a list of VideoSummaryDto to IVideoSummaryEntity domain entities.
+     *
+     * @param {VideoSummaryDto[]} dtos - Video summary data list from API
+     * @returns {IVideoSummaryEntity[]} Mapped video summary entities
+     */
+    videoSummaryListFromDto(dtos: VideoSummaryDto[]): IVideoSummaryEntity[] {
+        return dtos.map(VideosMapper.videoSummaryFromDto);
     }
 } as const;

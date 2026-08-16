@@ -36,6 +36,16 @@ export const PermissionsMapper = {
     },
 
     /**
+     * Maps a list of PermissionDto to IPermissionEntity domain entities.
+     *
+     * @param {PermissionDto[]} dtos - The raw DTOs from the API response
+     * @returns {IPermissionEntity[]} The mapped domain entities
+     */
+    permissionListFromDto(dtos: PermissionDto[]): IPermissionEntity[] {
+        return dtos.map(PermissionsMapper.permissionFromDto);
+    },
+
+    /**
      * Maps the paginated permissions response to a domain result.
      *
      * @param {AdminGetAllPermissionsResponse} response - The API response
@@ -43,7 +53,7 @@ export const PermissionsMapper = {
      */
     paginatedResultFromDto(response: AdminGetAllPermissionsResponse): IPermissionPaginatedResult {
         return {
-            items: response.permissions.items.map(PermissionsMapper.permissionFromDto),
+            items: PermissionsMapper.permissionListFromDto(response.permissions.items),
             pageIndex: response.permissions.pageIndex,
             pageSize: response.permissions.pageSize,
             count: response.permissions.count

@@ -11,15 +11,15 @@ export interface ISettingsRepositoryPort {
      *
      * @returns `ok(IUser)` on success, `err(Failure)` on failure
      */
-    getProfile(): Promise<Result<IUser>>;
+    getOwnProfile(): Promise<Result<IUser>>;
 
     /**
-     * Updates the user's account information (name, country, phone).
+     * Updates the user's own account information (name, country, phone).
      *
      * @param data - Updated account fields
      * @returns `ok(IUser)` with the updated profile on success, `err(Failure)` on failure
      */
-    updateAccount(data: IUpdateAccountCredentials): Promise<Result<IUser>>;
+    updateOwnProfile(data: IUpdateAccountCredentials): Promise<Result<IUser>>;
 
     /**
      * Uploads a new avatar image for the user.
@@ -42,5 +42,5 @@ export interface ISettingsRepositoryPort {
      *
      * @returns `ok(IRoleWithPermissions[])` on success, `err(Failure)` on failure
      */
-    getRoles(): Promise<Result<IRoleWithPermissions[]>>;
+    getOwnRoles(): Promise<Result<IRoleWithPermissions[]>>;
 }

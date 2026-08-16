@@ -20,10 +20,14 @@ export const SettingsMapper = {
             description: dto.description,
             isActive: dto.isActive,
             isDeleted: dto.isDeleted,
-            permissions: dto.permissions.map(AuthMapper.permissionFromDto),
+            permissions: AuthMapper.permissionListFromDto(dto.permissions),
             createdAt: dto.createdAt,
             updatedAt: dto.updatedAt
         };
+    },
+
+    roleWithPermissionsListFromDto(dtos: RoleWithPermissionsDto[]): IRoleWithPermissions[] {
+        return dtos.map(SettingsMapper.roleWithPermissionsFromDto);
     },
 
     changePasswordResponseFromDto(response: AdminChangePasswordResponse): IChangePasswordResponse {

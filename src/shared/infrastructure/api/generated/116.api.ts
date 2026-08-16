@@ -10,6 +10,14 @@
  * ---------------------------------------------------------------
  */
 
+export enum EnumShareChannel {
+  Facebook = "Facebook",
+  X = "X",
+  WhatsApp = "WhatsApp",
+  Clipboard = "Clipboard",
+  WebShare = "WebShare",
+}
+
 export enum EnumPlatform {
   Windows = "Windows",
   Mac = "Mac",
@@ -1104,6 +1112,15 @@ export interface ArticleCommentDto {
   userId: string;
   body?: string | null;
   isDeleted: boolean;
+  author?: AuthorDto | null;
+  /** @format uuid */
+  parentCommentId?: string | null;
+  /** @format int32 */
+  replyCount: number;
+  replies?: ArticleCommentDto[] | null;
+  /** @format int32 */
+  likeCount: number;
+  isLiked: boolean;
 }
 
 export interface ArticleCommentDtoPaginatedResult {
@@ -1165,6 +1182,8 @@ export interface ArticleDetailDto {
   /** @format uuid */
   orderItemId?: string | null;
   author?: AuthorDto | null;
+  isLiked: boolean;
+  isBookmarked: boolean;
 }
 
 export interface ArticleImageDto {
@@ -1221,6 +1240,8 @@ export interface ArticleSummaryDto {
   shareCount: number;
   /** @format int32 */
   bookmarkCount: number;
+  isLiked: boolean;
+  isBookmarked: boolean;
 }
 
 export interface ArticleSummaryDtoPaginatedResult {
@@ -1261,6 +1282,11 @@ export interface BrowserMetrics {
   unknown: number;
 }
 
+export interface CategoryColorsDto {
+  background: string;
+  foreground: string;
+}
+
 export interface CategoryDto {
   /** @format uuid */
   id: string;
@@ -1278,6 +1304,7 @@ export interface CategoryDto {
   /** @format date-time */
   pinnedToFeedAt?: string | null;
   posterUrl?: string | null;
+  colors?: CategoryColorsDto | null;
   pricing: CategoryPricingDto[];
 }
 
@@ -1651,6 +1678,7 @@ export interface PlaylistDto {
   name: string;
   /** @format int32 */
   videoCount: number;
+  thumbnailUrls: string[];
 }
 
 export interface PricingTierDto {
@@ -1696,6 +1724,14 @@ export interface PublicAddArticleCommentRequest {
 
 export interface PublicAddArticleCommentResponse {
   comment: ArticleCommentDto;
+}
+
+export interface PublicAddCommentReplyRequest {
+  body: string;
+}
+
+export interface PublicAddCommentReplyResponse {
+  reply: ArticleCommentDto;
 }
 
 export interface PublicAddVideoToPlaylistRequest {
@@ -1815,8 +1851,16 @@ export interface PublicGetOwnSessionsResponse {
   sessions: SessionDto[];
 }
 
+export interface PublicGetPopularArticlesResponse {
+  articles: ArticleSummaryDto[];
+}
+
 export interface PublicGetPopularTagsResponse {
   tags: TagDto[];
+}
+
+export interface PublicGetPopularVideosResponse {
+  videos: VideoSummaryDto[];
 }
 
 export interface PublicGetPromotedArticlesResponse {
@@ -1843,6 +1887,11 @@ export interface PublicGetPublishedVideosResponse {
   videos: VideoSummaryDtoPaginatedResult;
 }
 
+export interface PublicGetShortsFeedResponse {
+  items: ShortVideoDto[];
+  nextCursor?: string | null;
+}
+
 export interface PublicGetVideoBySlugResponse {
   video: VideoDetailDto;
 }
@@ -1856,6 +1905,10 @@ export interface PublicGetVideoPromotionFeedResponse {
   spot2: VideoPromotionSpotDto;
   spot3: VideoPromotionSpot3Dto;
   freeVideoStrip: VideoSummaryDto[];
+}
+
+export interface PublicLikeArticleCommentResponse {
+  isSuccess: boolean;
 }
 
 export interface PublicLikeArticleResponse {
@@ -1886,6 +1939,7 @@ export interface PublicRateVideoResponse {
 
 export interface PublicRecordShortVideoViewResponse {
   isSuccess: boolean;
+  isCounted: boolean;
 }
 
 export interface PublicRefreshTokenRequest {
@@ -1939,12 +1993,24 @@ export interface PublicSetPasswordResponse {
   isSuccess: boolean;
 }
 
+export interface PublicShareArticleRequest {
+  shareChannel?: string | null;
+}
+
 export interface PublicShareArticleResponse {
   isSuccess: boolean;
 }
 
+export interface PublicShareShortVideoRequest {
+  shareChannel?: string | null;
+}
+
 export interface PublicShareShortVideoResponse {
   isSuccess: boolean;
+}
+
+export interface PublicShareVideoRequest {
+  shareChannel?: string | null;
 }
 
 export interface PublicShareVideoResponse {
@@ -1990,6 +2056,10 @@ export interface PublicUnbookmarkArticleResponse {
 }
 
 export interface PublicUnbookmarkShortVideoResponse {
+  isSuccess: boolean;
+}
+
+export interface PublicUnlikeArticleCommentResponse {
   isSuccess: boolean;
 }
 
@@ -2119,6 +2189,7 @@ export interface ShortVideoDto {
   thumbnailUrl?: string | null;
   /** @format uuid */
   videoId?: string | null;
+  videoSlug?: string | null;
   hasFullVideo: boolean;
   isActive: boolean;
   /** @format int32 */
@@ -2131,6 +2202,8 @@ export interface ShortVideoDto {
   bookmarkCount: number;
   authorId: string;
   author?: AuthorDto | null;
+  isLiked: boolean;
+  isBookmarked: boolean;
 }
 
 export interface ShortVideoDtoPaginatedResult {
@@ -2148,6 +2221,60 @@ export interface TagDto {
   id: string;
   name: string;
   slug: string;
+}
+
+export interface UserArticleActivityDto {
+  article: ArticleSummaryDto;
+  /** @format date-time */
+  lastInteractedAt: string;
+  /** @format int32 */
+  interactionCount: number;
+  lastShareChannel?: EnumShareChannel | null;
+}
+
+export interface UserArticleActivityDtoPaginatedResult {
+  /** @format int32 */
+  pageIndex: number;
+  /** @format int32 */
+  pageSize: number;
+  /** @format int64 */
+  count: number;
+  items: UserArticleActivityDto[];
+}
+
+export interface UserBookmarkedArticleDto {
+  article: ArticleSummaryDto;
+  /** @format date-time */
+  bookmarkedAt: string;
+}
+
+export interface UserBookmarkedArticleDtoPaginatedResult {
+  /** @format int32 */
+  pageIndex: number;
+  /** @format int32 */
+  pageSize: number;
+  /** @format int64 */
+  count: number;
+  items: UserBookmarkedArticleDto[];
+}
+
+export interface UserCommentedArticleDto {
+  article: ArticleSummaryDto;
+  latestComment: ArticleCommentDto;
+  /** @format int32 */
+  commentCount: number;
+  /** @format date-time */
+  lastCommentedAt: string;
+}
+
+export interface UserCommentedArticleDtoPaginatedResult {
+  /** @format int32 */
+  pageIndex: number;
+  /** @format int32 */
+  pageSize: number;
+  /** @format int64 */
+  count: number;
+  items: UserCommentedArticleDto[];
 }
 
 export interface UserResponseDto {
@@ -2172,6 +2299,45 @@ export interface UserResponseDto {
   countryDialCode?: string | null;
   partialPhoneNumber?: string | null;
   fullPhoneNumber?: string | null;
+}
+
+export interface UserShortVideoActivityDto {
+  shortVideo: ShortVideoDto;
+  /** @format date-time */
+  lastInteractedAt: string;
+  /** @format int32 */
+  interactionCount: number;
+}
+
+export interface UserShortVideoActivityDtoPaginatedResult {
+  /** @format int32 */
+  pageIndex: number;
+  /** @format int32 */
+  pageSize: number;
+  /** @format int64 */
+  count: number;
+  items: UserShortVideoActivityDto[];
+}
+
+export interface UserVideoActivityDto {
+  video: VideoSummaryDto;
+  /** @format date-time */
+  lastInteractedAt: string;
+  /** @format int32 */
+  interactionCount: number;
+  /** @format int32 */
+  ratedStars?: number | null;
+  lastShareChannel?: EnumShareChannel | null;
+}
+
+export interface UserVideoActivityDtoPaginatedResult {
+  /** @format int32 */
+  pageIndex: number;
+  /** @format int32 */
+  pageSize: number;
+  /** @format int64 */
+  count: number;
+  items: UserVideoActivityDto[];
 }
 
 export interface VideoDetailDto {
@@ -2221,6 +2387,9 @@ export interface VideoDetailDto {
   /** @format uuid */
   orderItemId?: string | null;
   author?: AuthorDto | null;
+  isRated: boolean;
+  /** @format int32 */
+  ratedStars?: number | null;
 }
 
 export interface VideoFeedSectionDto {
@@ -2232,7 +2401,13 @@ export interface VideoInPlaylistDto {
   /** @format uuid */
   videoId: string;
   title: string;
+  slug: string;
+  categoryName: string;
   thumbnailUrl?: string | null;
+  /** @format date-time */
+  publishedAt?: string | null;
+  /** @format int32 */
+  shareCount: number;
   /** @format double */
   ratingAverage: number;
   /** @format int32 */
@@ -10337,7 +10512,8 @@ export class Api<
       }),
 
     /**
-     * @description Returns a paginated list of articles bookmarked by the authenticated user.
+     * @description Returns a paginated list of published articles the authenticated user has shared,
+     * grouped per article with the user's own share count and latest share channel, newest first.
      * 
      * **Authentication Requirements:**
      * 
@@ -10351,15 +10527,15 @@ export class Api<
      * - Returns 429 Too Many Requests if rate limit is exceeded
      *
      * @tags public::articles
-     * @name PublicGetMyArticleBookmarks
-     * @summary Get my bookmarked articles
-     * @request GET:/api/v1/public/articles/bookmarks
+     * @name PublicGetOwnSharedArticles
+     * @summary Get my shared articles
+     * @request GET:/api/v1/public/articles/shared
      * @secure
-     * @response `200` `ArticleSummaryDtoPaginatedResult` OK
+     * @response `200` `UserArticleActivityDtoPaginatedResult` OK
      * @response `401` `ProblemDetails` Unauthorized
      * @response `429` `ProblemDetails` Too Many Requests
      */
-    publicGetMyArticleBookmarks: (
+    publicGetOwnSharedArticles: (
       query?: {
         /**
          * @format int32
@@ -10374,8 +10550,248 @@ export class Api<
       },
       params: RequestParams = {},
     ) =>
-      this.request<ArticleSummaryDtoPaginatedResult, ProblemDetails>({
+      this.request<UserArticleActivityDtoPaginatedResult, ProblemDetails>({
+        path: `/api/v1/public/articles/shared`,
+        method: "GET",
+        query: query,
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * @description Returns a paginated list of published articles currently liked by the authenticated user,
+     * newest like first.
+     * 
+     * **Authentication Requirements:**
+     * 
+     * - User must be authenticated with a valid access token
+     * - User must have an active account
+     * 
+     * **Response Codes:**
+     * 
+     * - Returns 200 OK on success
+     * - Returns 401 Unauthorized if access token is invalid or expired
+     * - Returns 429 Too Many Requests if rate limit is exceeded
+     *
+     * @tags public::articles
+     * @name PublicGetOwnLikedArticles
+     * @summary Get my liked articles
+     * @request GET:/api/v1/public/articles/liked
+     * @secure
+     * @response `200` `UserArticleActivityDtoPaginatedResult` OK
+     * @response `401` `ProblemDetails` Unauthorized
+     * @response `429` `ProblemDetails` Too Many Requests
+     */
+    publicGetOwnLikedArticles: (
+      query?: {
+        /**
+         * @format int32
+         * @default 0
+         */
+        pageIndex?: number;
+        /**
+         * @format int32
+         * @default 10
+         */
+        pageSize?: number;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<UserArticleActivityDtoPaginatedResult, ProblemDetails>({
+        path: `/api/v1/public/articles/liked`,
+        method: "GET",
+        query: query,
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * @description Returns a paginated list of the authenticated user's own non-deleted comments on a
+     * specific published article, newest first.
+     * 
+     * **Authentication Requirements:**
+     * 
+     * - User must be authenticated with a valid access token
+     * - User must have an active account
+     * 
+     * **Response Codes:**
+     * 
+     * - Returns 200 OK on success
+     * - Returns 401 Unauthorized if access token is invalid or expired
+     * - Returns 404 Not Found if the article does not exist or is not published
+     * - Returns 429 Too Many Requests if rate limit is exceeded
+     *
+     * @tags public::articles
+     * @name PublicGetOwnCommentsForArticle
+     * @summary Get my comments for an article
+     * @request GET:/api/v1/public/articles/{id}/comments/me
+     * @secure
+     * @response `200` `ArticleCommentDtoPaginatedResult` OK
+     * @response `401` `ProblemDetails` Unauthorized
+     * @response `404` `ProblemDetails` Not Found
+     * @response `429` `ProblemDetails` Too Many Requests
+     */
+    publicGetOwnCommentsForArticle: (
+      id: string,
+      query?: {
+        /**
+         * @format int32
+         * @default 0
+         */
+        pageIndex?: number;
+        /**
+         * @format int32
+         * @default 20
+         */
+        pageSize?: number;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<ArticleCommentDtoPaginatedResult, ProblemDetails>({
+        path: `/api/v1/public/articles/${id}/comments/me`,
+        method: "GET",
+        query: query,
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * @description Returns a paginated list of published articles the authenticated user has commented on,
+     * grouped per article with the latest comment and total comment count, newest activity first.
+     * 
+     * **Authentication Requirements:**
+     * 
+     * - User must be authenticated with a valid access token
+     * - User must have an active account
+     * 
+     * **Response Codes:**
+     * 
+     * - Returns 200 OK on success
+     * - Returns 401 Unauthorized if access token is invalid or expired
+     * - Returns 429 Too Many Requests if rate limit is exceeded
+     *
+     * @tags public::articles
+     * @name PublicGetOwnCommentedArticles
+     * @summary Get my commented articles
+     * @request GET:/api/v1/public/articles/commented
+     * @secure
+     * @response `200` `UserCommentedArticleDtoPaginatedResult` OK
+     * @response `401` `ProblemDetails` Unauthorized
+     * @response `429` `ProblemDetails` Too Many Requests
+     */
+    publicGetOwnCommentedArticles: (
+      query?: {
+        /**
+         * @format int32
+         * @default 0
+         */
+        pageIndex?: number;
+        /**
+         * @format int32
+         * @default 10
+         */
+        pageSize?: number;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<UserCommentedArticleDtoPaginatedResult, ProblemDetails>({
+        path: `/api/v1/public/articles/commented`,
+        method: "GET",
+        query: query,
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * @description Returns a paginated list of articles bookmarked by the authenticated user.
+     * 
+     * **Authentication Requirements:**
+     * 
+     * - User must be authenticated with a valid access token
+     * - User must have an active account
+     * 
+     * **Response Codes:**
+     * 
+     * - Returns 200 OK on success
+     * - Returns 401 Unauthorized if access token is invalid or expired
+     * - Returns 429 Too Many Requests if rate limit is exceeded
+     *
+     * @tags public::articles
+     * @name PublicGetOwnArticleBookmarks
+     * @summary Get my bookmarked articles
+     * @request GET:/api/v1/public/articles/bookmarks
+     * @secure
+     * @response `200` `UserBookmarkedArticleDtoPaginatedResult` OK
+     * @response `401` `ProblemDetails` Unauthorized
+     * @response `429` `ProblemDetails` Too Many Requests
+     */
+    publicGetOwnArticleBookmarks: (
+      query?: {
+        /**
+         * @format int32
+         * @default 0
+         */
+        pageIndex?: number;
+        /**
+         * @format int32
+         * @default 10
+         */
+        pageSize?: number;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<UserBookmarkedArticleDtoPaginatedResult, ProblemDetails>({
         path: `/api/v1/public/articles/bookmarks`,
+        method: "GET",
+        query: query,
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * @description Returns a paginated list of non-deleted replies to a top-level comment, each
+     * enriched with the replier's author profile.
+     * 
+     * **Authentication Requirements:**
+     * 
+     * - No authentication required — anonymous access is permitted
+     * 
+     * **Response Codes:**
+     * 
+     * - Returns 200 OK on success
+     * - Returns 429 Too Many Requests if rate limit is exceeded
+     *
+     * @tags public::articles
+     * @name PublicGetCommentReplies
+     * @summary List replies to a comment
+     * @request GET:/api/v1/public/articles/comments/{commentId}/replies
+     * @secure
+     * @response `200` `ArticleCommentDtoPaginatedResult` OK
+     * @response `429` `ProblemDetails` Too Many Requests
+     */
+    publicGetCommentReplies: (
+      commentId: string,
+      query?: {
+        /**
+         * @format int32
+         * @default 0
+         */
+        pageIndex?: number;
+        /**
+         * @format int32
+         * @default 10
+         */
+        pageSize?: number;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<ArticleCommentDtoPaginatedResult, ProblemDetails>({
+        path: `/api/v1/public/articles/comments/${commentId}/replies`,
         method: "GET",
         query: query,
         secure: true,
@@ -10469,6 +10885,79 @@ export class Api<
         body: data,
         secure: true,
         type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * @description Removes the authenticated user's like from a comment. Idempotent — unliking a
+     * comment that is not liked has no effect and still returns success.
+     * 
+     * **Authentication Requirements:**
+     * 
+     * - User must be authenticated with a valid access token
+     * - User must have an active account
+     * 
+     * **Response Codes:**
+     * 
+     * - Returns 200 OK on success
+     * - Returns 401 Unauthorized if access token is invalid or expired
+     * - Returns 404 Not Found if the comment does not exist
+     * - Returns 429 Too Many Requests if rate limit is exceeded
+     *
+     * @tags public::articles
+     * @name PublicUnlikeArticleComment
+     * @summary Unlike an article comment
+     * @request DELETE:/api/v1/public/articles/comments/{commentId}/likes
+     * @secure
+     * @response `200` `PublicUnlikeArticleCommentResponse` OK
+     * @response `401` `ProblemDetails` Unauthorized
+     * @response `404` `ProblemDetails` Not Found
+     * @response `429` `ProblemDetails` Too Many Requests
+     */
+    publicUnlikeArticleComment: (
+      commentId: string,
+      params: RequestParams = {},
+    ) =>
+      this.request<PublicUnlikeArticleCommentResponse, ProblemDetails>({
+        path: `/api/v1/public/articles/comments/${commentId}/likes`,
+        method: "DELETE",
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * @description Records that the authenticated user has liked a comment. Idempotent — liking a
+     * comment that is already liked has no effect and still returns success.
+     * 
+     * **Authentication Requirements:**
+     * 
+     * - User must be authenticated with a valid access token
+     * - User must have an active account
+     * 
+     * **Response Codes:**
+     * 
+     * - Returns 200 OK on success
+     * - Returns 401 Unauthorized if access token is invalid or expired
+     * - Returns 404 Not Found if the comment does not exist
+     * - Returns 429 Too Many Requests if rate limit is exceeded
+     *
+     * @tags public::articles
+     * @name PublicLikeArticleComment
+     * @summary Like an article comment
+     * @request POST:/api/v1/public/articles/comments/{commentId}/likes
+     * @secure
+     * @response `200` `PublicLikeArticleCommentResponse` OK
+     * @response `401` `ProblemDetails` Unauthorized
+     * @response `404` `ProblemDetails` Not Found
+     * @response `429` `ProblemDetails` Too Many Requests
+     */
+    publicLikeArticleComment: (commentId: string, params: RequestParams = {}) =>
+      this.request<PublicLikeArticleCommentResponse, ProblemDetails>({
+        path: `/api/v1/public/articles/comments/${commentId}/likes`,
+        method: "POST",
+        secure: true,
         format: "json",
         ...params,
       }),
@@ -10649,11 +11138,17 @@ export class Api<
      * @response `404` `ProblemDetails` Not Found
      * @response `429` `ProblemDetails` Too Many Requests
      */
-    publicShareArticle: (id: string, params: RequestParams = {}) =>
+    publicShareArticle: (
+      id: string,
+      data: PublicShareArticleRequest,
+      params: RequestParams = {},
+    ) =>
       this.request<PublicShareArticleResponse, ProblemDetails>({
         path: `/api/v1/public/articles/${id}/shares`,
         method: "POST",
+        body: data,
         secure: true,
+        type: ContentType.Json,
         format: "json",
         ...params,
       }),
@@ -10742,6 +11237,51 @@ export class Api<
       }),
 
     /**
+     * @description Posts a single-level reply to an existing top-level comment on an article.
+     * 
+     * Replies to replies are rejected — only one level of threading is supported.
+     * 
+     * **Authentication Requirements:**
+     * 
+     * - User must be authenticated with a valid access token
+     * - User must have an active account
+     * 
+     * **Response Codes:**
+     * 
+     * - Returns 201 Created on success
+     * - Returns 400 Bad Request if the body is invalid or the parent is itself a reply
+     * - Returns 401 Unauthorized if access token is invalid or expired
+     * - Returns 404 Not Found if the article or parent comment does not exist
+     * - Returns 429 Too Many Requests if rate limit is exceeded
+     *
+     * @tags public::articles
+     * @name PublicAddCommentReply
+     * @summary Reply to an article comment
+     * @request POST:/api/v1/public/articles/{id}/comments/{commentId}/replies
+     * @secure
+     * @response `201` `PublicAddCommentReplyResponse` Created
+     * @response `400` `ProblemDetails` Bad Request
+     * @response `401` `ProblemDetails` Unauthorized
+     * @response `404` `ProblemDetails` Not Found
+     * @response `429` `ProblemDetails` Too Many Requests
+     */
+    publicAddCommentReply: (
+      id: string,
+      commentId: string,
+      data: PublicAddCommentReplyRequest,
+      params: RequestParams = {},
+    ) =>
+      this.request<PublicAddCommentReplyResponse, ProblemDetails>({
+        path: `/api/v1/public/articles/${id}/comments/${commentId}/replies`,
+        method: "POST",
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
      * @description Retrieves a paginated list of all published articles for public consumption.
      * 
      * Supports optional filtering by category. Results are returned as a paginated list
@@ -10820,6 +11360,56 @@ export class Api<
       this.request<PublicGetPromotedArticlesResponse, ProblemDetails>({
         path: `/api/v1/public/articles/promoted`,
         method: "GET",
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * @description Returns published articles ranked by a weighted engagement score
+     * (likes, comments, shares, bookmarks), tie-broken by publish date descending.
+     * 
+     * Results are cached server-side for 10 minutes to avoid running the
+     * ranking query on every request.
+     * 
+     * **Query Parameters:**
+     * 
+     * - `limit` (optional, default 10, max 50): maximum number of articles to return
+     * - `categoryId` (optional): rank only articles in this category
+     * - `excludeId` (optional): article id to omit, e.g. the article currently being viewed
+     * This endpoint is publicly accessible and does not require authentication.
+     * 
+     * **Response Codes:**
+     * 
+     * - Returns 200 OK with the list of popular articles on success
+     * - Returns 429 Too Many Requests if rate limit is exceeded
+     *
+     * @tags public::articles
+     * @name PublicGetPopularArticles
+     * @summary Get popular articles
+     * @request GET:/api/v1/public/articles/popular
+     * @secure
+     * @response `200` `PublicGetPopularArticlesResponse` OK
+     * @response `429` `ProblemDetails` Too Many Requests
+     */
+    publicGetPopularArticles: (
+      query?: {
+        /**
+         * @format int32
+         * @default 10
+         */
+        limit?: number;
+        /** @format uuid */
+        categoryId?: string;
+        /** @format uuid */
+        excludeId?: string;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<PublicGetPopularArticlesResponse, ProblemDetails>({
+        path: `/api/v1/public/articles/popular`,
+        method: "GET",
+        query: query,
         secure: true,
         format: "json",
         ...params,
@@ -12526,7 +13116,7 @@ export class Api<
      * - Returns 429 Too Many Requests if rate limit is exceeded
      *
      * @tags public::playlists
-     * @name PublicGetMyPlaylists
+     * @name PublicGetOwnPlaylists
      * @summary Get my playlists
      * @request GET:/api/v1/public/playlists
      * @secure
@@ -12534,7 +13124,7 @@ export class Api<
      * @response `401` `ProblemDetails` Unauthorized
      * @response `429` `ProblemDetails` Too Many Requests
      */
-    publicGetMyPlaylists: (params: RequestParams = {}) =>
+    publicGetOwnPlaylists: (params: RequestParams = {}) =>
       this.request<PlaylistDto[], ProblemDetails>({
         path: `/api/v1/public/playlists`,
         method: "GET",
@@ -12752,6 +13342,150 @@ export class Api<
       }),
 
     /**
+     * @description Returns a paginated list of active short videos shared by the authenticated user,
+     * grouped per short video with the user's own share count, newest share first.
+     * 
+     * **Authentication Requirements:**
+     * 
+     * - User must be authenticated with a valid access token
+     * - User must have an active account
+     * 
+     * **Response Codes:**
+     * 
+     * - Returns 200 OK on success
+     * - Returns 401 Unauthorized if access token is invalid or expired
+     * - Returns 429 Too Many Requests if rate limit is exceeded
+     *
+     * @tags public::shorts
+     * @name PublicGetOwnSharedShortVideos
+     * @summary Get my shared short videos
+     * @request GET:/api/v1/public/shorts/shared
+     * @secure
+     * @response `200` `UserShortVideoActivityDtoPaginatedResult` OK
+     * @response `401` `ProblemDetails` Unauthorized
+     * @response `429` `ProblemDetails` Too Many Requests
+     */
+    publicGetOwnSharedShortVideos: (
+      query?: {
+        /**
+         * @format int32
+         * @default 0
+         */
+        pageIndex?: number;
+        /**
+         * @format int32
+         * @default 10
+         */
+        pageSize?: number;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<UserShortVideoActivityDtoPaginatedResult, ProblemDetails>({
+        path: `/api/v1/public/shorts/shared`,
+        method: "GET",
+        query: query,
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * @description Returns a paginated list of active short videos currently liked by the authenticated
+     * user, newest like first.
+     * 
+     * **Authentication Requirements:**
+     * 
+     * - User must be authenticated with a valid access token
+     * - User must have an active account
+     * 
+     * **Response Codes:**
+     * 
+     * - Returns 200 OK on success
+     * - Returns 401 Unauthorized if access token is invalid or expired
+     * - Returns 429 Too Many Requests if rate limit is exceeded
+     *
+     * @tags public::shorts
+     * @name PublicGetOwnLikedShortVideos
+     * @summary Get my liked short videos
+     * @request GET:/api/v1/public/shorts/liked
+     * @secure
+     * @response `200` `UserShortVideoActivityDtoPaginatedResult` OK
+     * @response `401` `ProblemDetails` Unauthorized
+     * @response `429` `ProblemDetails` Too Many Requests
+     */
+    publicGetOwnLikedShortVideos: (
+      query?: {
+        /**
+         * @format int32
+         * @default 0
+         */
+        pageIndex?: number;
+        /**
+         * @format int32
+         * @default 10
+         */
+        pageSize?: number;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<UserShortVideoActivityDtoPaginatedResult, ProblemDetails>({
+        path: `/api/v1/public/shorts/liked`,
+        method: "GET",
+        query: query,
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * @description Returns a paginated list of active short videos currently bookmarked by the authenticated
+     * user, newest bookmark first.
+     * 
+     * **Authentication Requirements:**
+     * 
+     * - User must be authenticated with a valid access token
+     * - User must have an active account
+     * 
+     * **Response Codes:**
+     * 
+     * - Returns 200 OK on success
+     * - Returns 401 Unauthorized if access token is invalid or expired
+     * - Returns 429 Too Many Requests if rate limit is exceeded
+     *
+     * @tags public::shorts
+     * @name PublicGetOwnBookmarkedShortVideos
+     * @summary Get my bookmarked short videos
+     * @request GET:/api/v1/public/shorts/bookmarked
+     * @secure
+     * @response `200` `UserShortVideoActivityDtoPaginatedResult` OK
+     * @response `401` `ProblemDetails` Unauthorized
+     * @response `429` `ProblemDetails` Too Many Requests
+     */
+    publicGetOwnBookmarkedShortVideos: (
+      query?: {
+        /**
+         * @format int32
+         * @default 0
+         */
+        pageIndex?: number;
+        /**
+         * @format int32
+         * @default 10
+         */
+        pageSize?: number;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<UserShortVideoActivityDtoPaginatedResult, ProblemDetails>({
+        path: `/api/v1/public/shorts/bookmarked`,
+        method: "GET",
+        query: query,
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
      * @description Removes the authenticated user's like from a short video.
      * 
      * **Authentication Requirements:**
@@ -12920,11 +13654,17 @@ export class Api<
      * @response `404` `ProblemDetails` Not Found
      * @response `429` `ProblemDetails` Too Many Requests
      */
-    publicShareShortVideo: (id: string, params: RequestParams = {}) =>
+    publicShareShortVideo: (
+      id: string,
+      data: PublicShareShortVideoRequest,
+      params: RequestParams = {},
+    ) =>
       this.request<PublicShareShortVideoResponse, ProblemDetails>({
         path: `/api/v1/public/shorts/${id}/shares`,
         method: "POST",
+        body: data,
         secure: true,
+        type: ContentType.Json,
         format: "json",
         ...params,
       }),
@@ -12956,6 +13696,54 @@ export class Api<
       this.request<PublicRecordShortVideoViewResponse, ProblemDetails>({
         path: `/api/v1/public/shorts/${id}/views`,
         method: "POST",
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * @description Returns a cursor-paginated, seeded pseudo-random feed of active short videos.
+     * The ordering is stable for a given cursor session, so paging never drifts or repeats items.
+     * 
+     * **Pagination:**
+     * 
+     * - Omit the cursor to start a fresh randomized session; the first page returns a `nextCursor`.
+     * - Pass the returned `nextCursor` to fetch the following page.
+     * - A null `nextCursor` means the feed is exhausted.
+     * 
+     * **Authentication Requirements:**
+     * 
+     * - No authentication required (public endpoint).
+     * - When authenticated, each item carries the caller's `isLiked` / `isBookmarked` flags.
+     * 
+     * **Response Codes:**
+     * 
+     * - Returns 200 OK with the feed page on success.
+     * - Returns 429 Too Many Requests if rate limit is exceeded.
+     *
+     * @tags public::shorts
+     * @name GetShortsFeed
+     * @summary Get the randomized short videos feed
+     * @request GET:/api/v1/public/shorts/feed
+     * @secure
+     * @response `200` `PublicGetShortsFeedResponse` OK
+     * @response `429` `ProblemDetails` Too Many Requests
+     */
+    getShortsFeed: (
+      query?: {
+        cursor?: string;
+        /**
+         * @format int32
+         * @default 10
+         */
+        pageSize?: number;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<PublicGetShortsFeedResponse, ProblemDetails>({
+        path: `/api/v1/public/shorts/feed`,
+        method: "GET",
+        query: query,
         secure: true,
         format: "json",
         ...params,
@@ -13089,9 +13877,25 @@ export class Api<
      * Supports optional search filtering via the `search` query parameter.
      * The search performs a case-insensitive partial match on both tag name and slug.
      * 
+     * Supports optional content-type filtering via the `contentType` query parameter.
+     * When set, only tags associated with that content type are returned.
+     * 
+     * Supports an optional `limit` query parameter that caps the number of tags
+     * returned after ordering by name.
+     * 
+     * Unfiltered results (no `search` term) are cached server-side for 10 minutes,
+     * keyed by content type and limit; requests carrying a `search` term bypass the cache.
+     * 
      * **Query Parameters:**
      * 
      * - `search` (optional): filter tags by name or slug (e.g. `?search=fally`)
+     * - `contentType` (optional): restrict to tags used by a content type; accepts
+     * `article` or `video` (e.g. `?contentType=article`). Omit to return all tags.
+     * Unrecognized values are ignored and all tags are returned.
+     * 
+     * - `limit` (optional): maximum number of tags to return (e.g. `?limit=50`).
+     * Omit to return all matching tags.
+     * 
      * This endpoint is publicly accessible and does not require authentication.
      * 
      * **Response Codes:**
@@ -13110,11 +13914,110 @@ export class Api<
     publicGetAllTags: (
       query?: {
         search?: string;
+        contentType?: string;
+        /** @format int32 */
+        limit?: number;
       },
       params: RequestParams = {},
     ) =>
       this.request<PublicGetAllTagsResponse, ProblemDetails>({
         path: `/api/v1/public/tags`,
+        method: "GET",
+        query: query,
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * @description Returns a paginated list of published videos the authenticated user has shared, grouped
+     * per video with the user's own share count and latest share channel, newest share first.
+     * 
+     * **Authentication Requirements:**
+     * 
+     * - User must be authenticated with a valid access token
+     * - User must have an active account
+     * 
+     * **Response Codes:**
+     * 
+     * - Returns 200 OK on success
+     * - Returns 401 Unauthorized if access token is invalid or expired
+     * - Returns 429 Too Many Requests if rate limit is exceeded
+     *
+     * @tags public::videos
+     * @name PublicGetOwnSharedVideos
+     * @summary Get my shared videos
+     * @request GET:/api/v1/public/videos/shared
+     * @secure
+     * @response `200` `UserVideoActivityDtoPaginatedResult` OK
+     * @response `401` `ProblemDetails` Unauthorized
+     * @response `429` `ProblemDetails` Too Many Requests
+     */
+    publicGetOwnSharedVideos: (
+      query?: {
+        /**
+         * @format int32
+         * @default 0
+         */
+        pageIndex?: number;
+        /**
+         * @format int32
+         * @default 10
+         */
+        pageSize?: number;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<UserVideoActivityDtoPaginatedResult, ProblemDetails>({
+        path: `/api/v1/public/videos/shared`,
+        method: "GET",
+        query: query,
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * @description Returns a paginated list of published videos the authenticated user has rated, exposing
+     * the user's own star rating, newest interaction first.
+     * 
+     * **Authentication Requirements:**
+     * 
+     * - User must be authenticated with a valid access token
+     * - User must have an active account
+     * 
+     * **Response Codes:**
+     * 
+     * - Returns 200 OK on success
+     * - Returns 401 Unauthorized if access token is invalid or expired
+     * - Returns 429 Too Many Requests if rate limit is exceeded
+     *
+     * @tags public::videos
+     * @name PublicGetOwnRatedVideos
+     * @summary Get my rated videos
+     * @request GET:/api/v1/public/videos/rated
+     * @secure
+     * @response `200` `UserVideoActivityDtoPaginatedResult` OK
+     * @response `401` `ProblemDetails` Unauthorized
+     * @response `429` `ProblemDetails` Too Many Requests
+     */
+    publicGetOwnRatedVideos: (
+      query?: {
+        /**
+         * @format int32
+         * @default 0
+         */
+        pageIndex?: number;
+        /**
+         * @format int32
+         * @default 10
+         */
+        pageSize?: number;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<UserVideoActivityDtoPaginatedResult, ProblemDetails>({
+        path: `/api/v1/public/videos/rated`,
         method: "GET",
         query: query,
         secure: true,
@@ -13144,11 +14047,17 @@ export class Api<
      * @response `404` `ProblemDetails` Not Found
      * @response `429` `ProblemDetails` Too Many Requests
      */
-    publicShareVideo: (id: string, params: RequestParams = {}) =>
+    publicShareVideo: (
+      id: string,
+      data: PublicShareVideoRequest,
+      params: RequestParams = {},
+    ) =>
       this.request<PublicShareVideoResponse, ProblemDetails>({
         path: `/api/v1/public/videos/${id}/shares`,
         method: "POST",
+        body: data,
         secure: true,
+        type: ContentType.Json,
         format: "json",
         ...params,
       }),
@@ -13304,8 +14213,9 @@ export class Api<
     /**
      * @description Retrieves a paginated list of all published videos for public consumption.
      * 
-     * Supports optional filtering by category. Results are returned as a paginated list
-     * with summary information suitable for video feed and browsing views.
+     * Supports optional filtering by category, tag slug, and search term. Results are
+     * returned as a paginated list with summary information suitable for video feed
+     * and browsing views.
      * 
      * **Authentication Requirements:**
      * 
@@ -13339,6 +14249,7 @@ export class Api<
         search?: string;
         /** @format uuid */
         categoryId?: string;
+        tagSlug?: string;
       },
       params: RequestParams = {},
     ) =>
@@ -13379,6 +14290,60 @@ export class Api<
       this.request<PublicGetPromotedVideosResponse, ProblemDetails>({
         path: `/api/v1/public/videos/promoted`,
         method: "GET",
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * @description Returns published videos ranked by a weighted engagement score
+     * (rating volume weighted by rating quality, plus shares),
+     * tie-broken by publish date descending.
+     * 
+     * YouTube view/like/comment figures are not used; ranking is based only on the
+     * platform's own engagement (ratings and shares).
+     * 
+     * Results are cached server-side for 10 minutes to avoid running the
+     * ranking query on every request.
+     * 
+     * **Query Parameters:**
+     * 
+     * - `limit` (optional, default 10, max 50): maximum number of videos to return
+     * - `categoryId` (optional): rank only videos in this category
+     * - `excludeId` (optional): video id to omit, e.g. the video currently being viewed
+     * This endpoint is publicly accessible and does not require authentication.
+     * 
+     * **Response Codes:**
+     * 
+     * - Returns 200 OK with the list of popular videos on success
+     * - Returns 429 Too Many Requests if rate limit is exceeded
+     *
+     * @tags public::videos
+     * @name GetPopularVideos
+     * @summary Get popular videos
+     * @request GET:/api/v1/public/videos/popular
+     * @secure
+     * @response `200` `PublicGetPopularVideosResponse` OK
+     * @response `429` `ProblemDetails` Too Many Requests
+     */
+    getPopularVideos: (
+      query?: {
+        /**
+         * @format int32
+         * @default 10
+         */
+        limit?: number;
+        /** @format uuid */
+        categoryId?: string;
+        /** @format uuid */
+        excludeId?: string;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<PublicGetPopularVideosResponse, ProblemDetails>({
+        path: `/api/v1/public/videos/popular`,
+        method: "GET",
+        query: query,
         secure: true,
         format: "json",
         ...params,

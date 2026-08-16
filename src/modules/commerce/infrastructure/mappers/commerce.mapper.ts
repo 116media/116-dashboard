@@ -62,12 +62,22 @@ export const CommerceMapper = {
      * @param {ItemTierDto} dto - Pricing tier snapshot data from API
      * @returns {IItemTierEntity} Mapped item tier entity
      */
-    itemTierFromDto(dto: ItemTierDto & { id?: string }): IItemTierEntity {
+    itemTierFromDto(dto: ItemTierDto): IItemTierEntity {
         return {
-            id: dto.id ?? "",
+            id: dto.id,
             tierName: dto.tierName,
             priceSnapshotUsd: dto.priceSnapshotUsd
         };
+    },
+
+    /**
+     * Maps a list of ItemTierDto to IItemTierEntity domain entities.
+     *
+     * @param {ItemTierDto[]} dtos - Pricing tier snapshot data list from API
+     * @returns {IItemTierEntity[]} Mapped item tier entities
+     */
+    itemTierListFromDto(dtos: ItemTierDto[]): IItemTierEntity[] {
+        return dtos.map(CommerceMapper.itemTierFromDto);
     },
 
     /**
@@ -90,8 +100,18 @@ export const CommerceMapper = {
             promoPriceUsd: dto.promoPriceUsd,
             socialBoost: dto.socialBoost,
             isBonus: dto.isBonus,
-            tiers: dto.tiers.map(CommerceMapper.itemTierFromDto)
+            tiers: CommerceMapper.itemTierListFromDto(dto.tiers)
         };
+    },
+
+    /**
+     * Maps a list of OrderItemDto to IOrderItemEntity domain entities.
+     *
+     * @param {OrderItemDto[]} dtos - Order item data list from API
+     * @returns {IOrderItemEntity[]} Mapped order item entities with nested tier snapshots
+     */
+    orderItemListFromDto(dtos: OrderItemDto[]): IOrderItemEntity[] {
+        return dtos.map(CommerceMapper.orderItemFromDto);
     },
 
     /**
@@ -145,6 +165,16 @@ export const CommerceMapper = {
     },
 
     /**
+     * Maps a list of ContentOrderSummaryDto to IOrderSummaryEntity domain entities.
+     *
+     * @param {ContentOrderSummaryDto[]} dtos - Order summary data list from API
+     * @returns {IOrderSummaryEntity[]} Mapped order summary entities with audit timestamps
+     */
+    orderSummaryListFromDto(dtos: ContentOrderSummaryDto[]): IOrderSummaryEntity[] {
+        return dtos.map(CommerceMapper.orderSummaryFromDto);
+    },
+
+    /**
      * Maps ContentOrderDetailDto to IOrderDetailEntity domain entity.
      *
      * @param {ContentOrderDetailDto} dto - Full order detail data from API
@@ -160,7 +190,7 @@ export const CommerceMapper = {
             status,
             hasPayment: status === OrderStatus.PendingPayment || status === OrderStatus.Paid,
             totalAmountUsd: dto.totalAmountUsd,
-            items: dto.items.map(CommerceMapper.orderItemFromDto),
+            items: CommerceMapper.orderItemListFromDto(dto.items),
             payment: dto.payment ? CommerceMapper.paymentFromDto(dto.payment) : null,
             createdAt: dto.createdAt,
             createdBy: dto.createdBy,
@@ -192,5 +222,15 @@ export const CommerceMapper = {
             updatedAt: dto.updatedAt,
             updatedBy: dto.updatedBy
         };
+    },
+
+    /**
+     * Maps a list of PaymentSummaryDto to IPaymentSummaryEntity domain entities.
+     *
+     * @param {PaymentSummaryDto[]} dtos - Payment summary data list from API
+     * @returns {IPaymentSummaryEntity[]} Mapped payment summary entities with order and customer info
+     */
+    paymentSummaryListFromDto(dtos: PaymentSummaryDto[]): IPaymentSummaryEntity[] {
+        return dtos.map(CommerceMapper.paymentSummaryFromDto);
     }
 } as const;

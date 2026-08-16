@@ -52,6 +52,16 @@ export const AuthMapper = {
     },
 
     /**
+     * Maps a list of RoleDto to IRole domain entities.
+     *
+     * @param {RoleDto[]} dtos - Role data list from API
+     * @returns {IRole[]} Mapped role entities
+     */
+    roleListFromDto(dtos: RoleDto[]): IRole[] {
+        return dtos.map(AuthMapper.roleFromDto);
+    },
+
+    /**
      * Maps PermissionDto to IPermission domain entity.
      *
      * @param {PermissionDto} dto - Permission data from API
@@ -65,6 +75,16 @@ export const AuthMapper = {
             description: dto.description,
             isActive: dto.isActive
         };
+    },
+
+    /**
+     * Maps a list of PermissionDto to IPermission domain entities.
+     *
+     * @param {PermissionDto[]} dtos - Permission data list from API
+     * @returns {IPermission[]} Mapped permission entities
+     */
+    permissionListFromDto(dtos: PermissionDto[]): IPermission[] {
+        return dtos.map(AuthMapper.permissionFromDto);
     },
 
     /**
@@ -96,8 +116,8 @@ export const AuthMapper = {
             id: dto.id,
             email: dto.email,
             userName: dto.userName,
-            roles: dto.roles.map(this.roleFromDto),
-            permissions: dto.permissions?.map(this.permissionFromDto),
+            roles: AuthMapper.roleListFromDto(dto.roles),
+            permissions: AuthMapper.permissionListFromDto(dto.permissions),
             authProvider: dto.authProvider,
             isVerified: dto.isVerified,
             isActive: dto.isActive,
