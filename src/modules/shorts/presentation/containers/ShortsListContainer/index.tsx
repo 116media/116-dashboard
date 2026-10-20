@@ -1,5 +1,5 @@
 import { Table } from "antd";
-import type { FC } from "react";
+import { type FC, Fragment } from "react";
 import { useAuthorization } from "@/modules/auth/presentation/hooks/UseAuthorization";
 import ShortDetailsForm from "@/modules/shorts/presentation/components/forms/ShortDetailsForm";
 import ShortVideoForm from "@/modules/shorts/presentation/components/forms/ShortVideoForm";
@@ -74,7 +74,7 @@ const ShortsListContainer: FC = () => {
     );
 
     return (
-        <>
+        <Fragment>
             <ErrorAlert banner showIcon closable error={list.error} onClose={list.reload} />
 
             <PageHeader
@@ -212,7 +212,7 @@ const ShortsListContainer: FC = () => {
                 src={modals.previewUrl}
                 onClose={modals.closePreview}
             />
-        </>
+        </Fragment>
     );
 };
 
