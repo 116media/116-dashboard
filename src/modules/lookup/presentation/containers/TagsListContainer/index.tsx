@@ -1,5 +1,5 @@
 import { Table } from "antd";
-import type { FC } from "react";
+import { type FC, Fragment } from "react";
 import { useAuthorization } from "@/modules/auth/presentation/hooks/UseAuthorization";
 import type { ITagEntity } from "@/modules/lookup/domain/entities/ITagEntity";
 import TagForm from "@/modules/lookup/presentation/components/forms/TagForm";
@@ -41,7 +41,7 @@ const TagsListContainer: FC = () => {
     );
 
     return (
-        <>
+        <Fragment>
             <ErrorAlert banner showIcon closable error={list.error} onClose={list.reload} />
 
             <PageHeader
@@ -141,7 +141,7 @@ const TagsListContainer: FC = () => {
                 onCancel={() => modals.setActionOpen(false)}
                 onAfterClose={tagActions.resetActionError}
             />
-        </>
+        </Fragment>
     );
 };
 
