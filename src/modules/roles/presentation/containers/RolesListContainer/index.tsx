@@ -1,5 +1,5 @@
 import { Table } from "antd";
-import { type FC, useCallback, useState } from "react";
+import { type FC, Fragment, useCallback, useState } from "react";
 import { useAuthorization } from "@/modules/auth/presentation/hooks/UseAuthorization";
 import type { IRoleEntity } from "@/modules/roles/domain/entities/IRole";
 import RoleForm from "@/modules/roles/presentation/components/forms/RoleForm";
@@ -124,7 +124,7 @@ const RolesListContainer: FC = () => {
     );
 
     return (
-        <>
+        <Fragment>
             <ErrorAlert
                 banner
                 showIcon
@@ -264,7 +264,7 @@ const RolesListContainer: FC = () => {
                 onConfirm={handlePermissionConfirm}
                 onCancel={() => setPermissionOpen(false)}
             />
-        </>
+        </Fragment>
     );
 };
 
