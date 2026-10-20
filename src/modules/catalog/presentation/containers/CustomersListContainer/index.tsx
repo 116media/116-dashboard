@@ -1,5 +1,5 @@
 import { Table } from "antd";
-import type { FC } from "react";
+import { type FC, Fragment } from "react";
 import { useAuthorization } from "@/modules/auth/presentation/hooks/UseAuthorization";
 import CustomerForm from "@/modules/catalog/presentation/components/forms/CustomerForm";
 import { customersTableColumns } from "@/modules/catalog/presentation/components/tables/CustomersTable/columns";
@@ -38,7 +38,7 @@ const CustomersListContainer: FC = () => {
     );
 
     return (
-        <>
+        <Fragment>
             <ErrorAlert banner showIcon closable error={list.error} onClose={list.reload} />
 
             <PageHeader
@@ -135,7 +135,7 @@ const CustomersListContainer: FC = () => {
                     />
                 </CreateEditModal>
             )}
-        </>
+        </Fragment>
     );
 };
 
