@@ -1,5 +1,5 @@
 import { Table } from "antd";
-import type { FC } from "react";
+import { type FC, Fragment } from "react";
 import { useAuthorization } from "@/modules/auth/presentation/hooks/UseAuthorization";
 import type { IPricingTierEntity } from "@/modules/lookup/domain/entities/IPricingTierEntity";
 import PricingTierForm from "@/modules/lookup/presentation/components/forms/PricingTierForm";
@@ -43,7 +43,7 @@ const PricingTiersListContainer: FC = () => {
     );
 
     return (
-        <>
+        <Fragment>
             <ErrorAlert banner showIcon closable error={list.error} onClose={list.reload} />
 
             <PageHeader
@@ -152,7 +152,7 @@ const PricingTiersListContainer: FC = () => {
                 onCancel={() => modals.setActionOpen(false)}
                 onAfterClose={actions.resetActionError}
             />
-        </>
+        </Fragment>
     );
 };
 
