@@ -1,6 +1,6 @@
 import type { FormInstance } from "antd";
 import { Button, Form, Input, Typography } from "antd";
-import type { FC } from "react";
+import { type FC, Fragment } from "react";
 import { BackToLoginButton } from "@/modules/auth/presentation/components/ui/BackToLoginButton";
 import FormHeader from "@/modules/auth/presentation/components/ui/FormHeader";
 import type { IVerifyOtpCredentials } from "@/modules/auth/presentation/model/IVerifyOtpCredentials";
@@ -67,9 +67,9 @@ export const VerifyOtpForgotPasswordForm: FC<IVerifyOtpForgotPasswordFormProps> 
             <FormHeader
                 title="Tapez le code de vérification"
                 subtitle={
-                    <>
+                    <Fragment>
                         Le code de vérification vient d'être envoyé à votre e-mail: <b>{email}</b>.
-                    </>
+                    </Fragment>
                 }
             />
 
