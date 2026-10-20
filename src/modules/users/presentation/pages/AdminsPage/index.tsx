@@ -1,5 +1,5 @@
 import { Typography } from "antd";
-import type { FC } from "react";
+import { type FC, Fragment } from "react";
 import { APP_NAME } from "@/shared/infrastructure/constants/common";
 
 const { Title } = Typography;
@@ -12,10 +12,10 @@ const { Title } = Typography;
  */
 const AdminsPage: FC = () => {
     return (
-        <>
+        <Fragment>
             <title>{`Administrateurs | ${APP_NAME}`}</title>
             <Title level={3}>Administrateurs</Title>
-        </>
+        </Fragment>
     );
 };
 
