@@ -1,5 +1,5 @@
 import { Button, Card, Empty, Flex, InputNumber, Popconfirm, Space, Typography } from "antd";
-import { type FC, useState } from "react";
+import { type FC, Fragment, useState } from "react";
 import type { ICategoryPricingEntity } from "@/modules/catalog/domain/entities/ICategoryPricingEntity";
 import { IconDeleteFilled, IconEditOutlined } from "@/shared/presentation/ui/Icons";
 import styles from "./index.module.scss";
@@ -87,7 +87,7 @@ const CategoryPricingList: FC<ICategoryPricingListProps> = ({
 
                         <Flex gap={6}>
                             {editingId === item.tierId ? (
-                                <>
+                                <Fragment>
                                     <Button
                                         size="small"
                                         type="primary"
@@ -99,9 +99,9 @@ const CategoryPricingList: FC<ICategoryPricingListProps> = ({
                                     <Button size="small" onClick={() => setEditingId(null)}>
                                         Annuler
                                     </Button>
-                                </>
+                                </Fragment>
                             ) : (
-                                <>
+                                <Fragment>
                                     <Button
                                         ghost
                                         type="primary"
@@ -122,7 +122,7 @@ const CategoryPricingList: FC<ICategoryPricingListProps> = ({
                                             icon={<IconDeleteFilled />}
                                         />
                                     </Popconfirm>
-                                </>
+                                </Fragment>
                             )}
                         </Flex>
                     </Flex>
