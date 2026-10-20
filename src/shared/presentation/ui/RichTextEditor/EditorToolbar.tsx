@@ -1,7 +1,7 @@
 import type { Editor } from "@tiptap/react";
 import { Button, Divider, Flex, Input, Popover, Tooltip } from "antd";
 import type { FC } from "react";
-import { useRef, useState } from "react";
+import { Fragment, useRef, useState } from "react";
 import {
     IconAlignCenterOutlined,
     IconAlignLeftOutlined,
@@ -150,7 +150,7 @@ const EditorToolbar: FC<IEditorToolbarProps> = ({ editor, onImageUpload, mode = 
 
             {/* Headings */}
             {!isSimple && (
-                <>
+                <Fragment>
                     {btn(
                         "H1",
                         () => editor.chain().focus().toggleHeading({ level: 1 }).run(),
@@ -171,7 +171,7 @@ const EditorToolbar: FC<IEditorToolbarProps> = ({ editor, onImageUpload, mode = 
                     )}
 
                     <Divider orientation="vertical" />
-                </>
+                </Fragment>
             )}
 
             {/* Alignment */}
@@ -216,7 +216,7 @@ const EditorToolbar: FC<IEditorToolbarProps> = ({ editor, onImageUpload, mode = 
                 "Liste numérotée"
             )}
             {!isSimple && (
-                <>
+                <Fragment>
                     {btn(
                         "❝",
                         () => editor.chain().focus().toggleBlockquote().run(),
@@ -299,7 +299,7 @@ const EditorToolbar: FC<IEditorToolbarProps> = ({ editor, onImageUpload, mode = 
                             <Button size="small" type="text" icon={<IconYoutubeFilled />} />
                         </Tooltip>
                     </Popover>
-                </>
+                </Fragment>
             )}
         </Flex>
     );
