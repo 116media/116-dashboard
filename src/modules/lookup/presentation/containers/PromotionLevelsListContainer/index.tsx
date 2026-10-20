@@ -1,5 +1,5 @@
 import { Table } from "antd";
-import type { FC } from "react";
+import { type FC, Fragment } from "react";
 import { useAuthorization } from "@/modules/auth/presentation/hooks/UseAuthorization";
 import type { IPromotionLevelEntity } from "@/modules/lookup/domain/entities/IPromotionLevelEntity";
 import PromotionLevelForm from "@/modules/lookup/presentation/components/forms/PromotionLevelForm";
@@ -43,7 +43,7 @@ const PromotionLevelsListContainer: FC = () => {
     );
 
     return (
-        <>
+        <Fragment>
             <ErrorAlert banner showIcon closable error={list.error} onClose={list.reload} />
 
             <PageHeader
@@ -152,7 +152,7 @@ const PromotionLevelsListContainer: FC = () => {
                 onCancel={() => modals.setActionOpen(false)}
                 onAfterClose={actions.resetActionError}
             />
-        </>
+        </Fragment>
     );
 };
 
