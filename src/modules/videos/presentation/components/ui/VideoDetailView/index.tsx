@@ -1,5 +1,5 @@
 import { Button, Col, Flex, Row } from "antd";
-import type { FC } from "react";
+import { type FC, Fragment } from "react";
 import { useNavigate } from "react-router";
 import type { IVideoEntity } from "@/modules/videos/domain/entities/IVideoEntity";
 import VideoMetaSidebar from "@/modules/videos/presentation/components/ui/VideoMetaSidebar";
@@ -26,7 +26,7 @@ const VideoDetailView: FC<IVideoDetailViewProps> = ({ video }) => {
     const navigate = useNavigate();
 
     return (
-        <>
+        <Fragment>
             <Flex align="center" className={styles.videoDetail__back}>
                 <Button
                     type="link"
@@ -46,7 +46,7 @@ const VideoDetailView: FC<IVideoDetailViewProps> = ({ video }) => {
                     <VideoMetaSidebar video={video} />
                 </Col>
             </Row>
-        </>
+        </Fragment>
     );
 };
 
