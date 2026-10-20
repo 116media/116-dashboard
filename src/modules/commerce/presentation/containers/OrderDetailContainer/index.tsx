@@ -1,4 +1,4 @@
-import { type FC, useEffect } from "react";
+import { type FC, Fragment, useEffect } from "react";
 import { useParams } from "react-router";
 import { getAllCategoriesAction } from "@/modules/catalog/presentation/store/getallcategories.action";
 import type { IOrderDetailEntity } from "@/modules/commerce/domain/entities/IOrderDetailEntity";
@@ -79,7 +79,7 @@ const OrderDetailContainer: FC = () => {
     if (!order) return null;
 
     return (
-        <>
+        <Fragment>
             <OrderDetailView
                 order={order}
                 payment={detail.payment}
@@ -259,7 +259,7 @@ const OrderDetailContainer: FC = () => {
                     />
                 </CreateEditModal>
             )}
-        </>
+        </Fragment>
     );
 };
 
