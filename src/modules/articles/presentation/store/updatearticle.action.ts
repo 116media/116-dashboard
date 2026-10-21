@@ -23,7 +23,6 @@ export const updateArticleAction = createAsyncThunk<
         data: {
             categoryId: string;
             title: string;
-            slug: string;
             headline: string;
             body: string;
             coverImageUrl?: string | null;
