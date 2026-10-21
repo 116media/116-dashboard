@@ -14,7 +14,6 @@ import { VideosNotification } from "@/modules/videos/presentation/utils/notifica
 import type { Failure } from "@/shared/domain/failures/failure";
 import { useAppDispatch } from "@/shared/presentation/store/store";
 import { showNotification } from "@/shared/presentation/utils/notification/notification.utils";
-import { generateSlug } from "@/shared/presentation/utils/slug/slug.utils";
 
 const { useForm } = Form;
 
@@ -84,8 +83,7 @@ export const useCreateVideoWizard = (onSuccess: () => void): IUseCreateVideoWiza
 
         const result = await dispatch(
             createVideoAction({
-                ...values,
-                slug: generateSlug(values.title, { unique: true })
+                ...values
             })
         );
 
@@ -114,7 +112,6 @@ export const useCreateVideoWizard = (onSuccess: () => void): IUseCreateVideoWiza
                 data: {
                     categoryId: video.categoryId,
                     title: video.title,
-                    slug: video.slug,
                     description: values.description,
                     socialBoost: values.socialBoost ?? false
                 }
