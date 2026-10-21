@@ -50,7 +50,7 @@ export interface ICatalogRepositoryPort {
      * Creates a new category under the given content type.
      *
      * @param contentTypeId - The parent content type UUID
-     * @param data - Category name, slug, description, and free flag
+     * @param data - Category name, description, and free flag
      * @returns `ok(ICategoryEntity)` on success, `err(Failure)` on failure
      */
     createCategory(
