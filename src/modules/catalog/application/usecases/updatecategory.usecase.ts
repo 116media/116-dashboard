@@ -18,7 +18,7 @@ interface IUpdateCategoryUseCase
  * @implements {IUpdateCategoryUseCase}
  *
  * @description
- * Updates an existing category's name, slug, and description
+ * Updates an existing category's name and description
  * via the catalog repository.
  */
 export class UpdateCategoryUseCase implements IUpdateCategoryUseCase {
