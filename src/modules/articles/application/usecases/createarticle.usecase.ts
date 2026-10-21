@@ -17,7 +17,7 @@ interface ICreateArticleUseCase extends IResultUseCase<ICreateArticleCredentials
  * @implements {ICreateArticleUseCase}
  *
  * @description
- * Creates a new article with the specified category, title, slug,
+ * Creates a new article with the specified category, title,
  * and optional customer/order item associations via the articles repository.
  */
 export class CreateArticleUseCase implements ICreateArticleUseCase {
