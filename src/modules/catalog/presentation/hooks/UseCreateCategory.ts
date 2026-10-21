@@ -11,7 +11,6 @@ import { CategoriesNotification } from "@/modules/catalog/presentation/utils/not
 import type { Failure } from "@/shared/domain/failures/failure";
 import { useAppDispatch, useAppSelector } from "@/shared/presentation/store/store";
 import { showNotification } from "@/shared/presentation/utils/notification/notification.utils";
-import { generateSlug } from "@/shared/presentation/utils/slug/slug.utils";
 
 const { useForm } = Form;
 
@@ -51,10 +50,8 @@ export const useCreateCategory = (onSuccess?: () => void): IUseCreateCategory =>
     const { loading, error } = useAppSelector(({ catalog: { createCategory } }) => createCategory);
 
     const onSubmit = async (values: ICreateCategoryCredentials): Promise<void> => {
-        const slug = generateSlug(values.name);
         const result = await dispatch(
             createCategoryAction({
-                slug,
                 name: values.name,
                 isFree: values.isFree,
                 isGossip: values.isGossip ?? false,
