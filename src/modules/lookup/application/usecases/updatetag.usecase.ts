@@ -30,7 +30,7 @@ export class UpdateTagUseCase implements IUpdateTagUseCase {
     /**
      * Executes the update tag use case.
      *
-     * @param {{ id: string; data: { name: string; slug: string } }} input - Tag ID and update payload
+     * @param {{ id: string; data: { name: string } }} input - Tag ID and update payload
      * @returns {Promise<Result<ITagEntity>>} `ok(ITagEntity)` on success, `err(Failure)` on failure
      */
     async execute(input: { id: string; data: IUpdateTagCredentials }): Promise<Result<ITagEntity>> {
