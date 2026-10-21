@@ -4,7 +4,6 @@
  * @interface IUpdateArticleCredentials
  * @property {string} categoryId - Category the article belongs to (required)
  * @property {string} title - Article title (required)
- * @property {string} slug - URL-friendly slug (required)
  * @property {string} headline - Short headline or subtitle (required)
  * @property {string} body - Full article body content (required)
  * @property {string | null} [coverImageUrl] - Optional cover image URL
@@ -17,7 +16,6 @@
 export interface IUpdateArticleCredentials {
     categoryId: string;
     title: string;
-    slug: string;
     headline: string;
     body: string;
     coverImageUrl?: string | null;
