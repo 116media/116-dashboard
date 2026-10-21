@@ -17,7 +17,7 @@ interface ICreateVideoUseCase extends IResultUseCase<ICreateVideoCredentials, IV
  * @implements {ICreateVideoUseCase}
  *
  * @description
- * Creates a new video with the specified category, title, slug, description,
+ * Creates a new video with the specified category, title, description,
  * and optional customer/order item/scheduling associations via the videos repository.
  */
 export class CreateVideoUseCase implements ICreateVideoUseCase {
