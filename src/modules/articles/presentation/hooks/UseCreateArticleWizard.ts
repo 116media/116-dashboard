@@ -17,7 +17,6 @@ import { ArticlesNotification } from "@/modules/articles/presentation/utils/noti
 import type { Failure } from "@/shared/domain/failures/failure";
 import { useAppDispatch } from "@/shared/presentation/store/store";
 import { showNotification } from "@/shared/presentation/utils/notification/notification.utils";
-import { generateSlug } from "@/shared/presentation/utils/slug/slug.utils";
 
 const { useForm } = Form;
 
@@ -125,8 +124,7 @@ export const useCreateArticleWizard = (onSuccess: () => void): IUseCreateArticle
 
         const result = await dispatch(
             createArticleAction({
-                ...values,
-                slug: generateSlug(values.title, { unique: true })
+                ...values
             })
         );
 
@@ -155,7 +153,6 @@ export const useCreateArticleWizard = (onSuccess: () => void): IUseCreateArticle
                 data: {
                     categoryId: article.categoryId,
                     title: article.title,
-                    slug: article.slug,
                     headline: values.headline,
                     body: values.body,
                     coverImageUrl: values.coverImageUrl,
