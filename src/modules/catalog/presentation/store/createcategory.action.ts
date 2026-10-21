@@ -20,7 +20,6 @@ export const createCategoryAction = createAsyncThunk<
     {
         contentTypeId: string;
         name: string;
-        slug: string;
         description: string;
         isFree: boolean;
         isGossip: boolean;
