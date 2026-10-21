@@ -17,7 +17,7 @@ export const resetCreateTagAction = () =>
  */
 export const createTagAction = createAsyncThunk<
     ITagEntity,
-    { name: string; slug: string },
+    { name: string },
     { rejectValue: Failure }
 >(ActionType.CreateTag, async (data, { rejectWithValue }) => {
     const result = await container.cradle.createTagUseCase.execute(data);
