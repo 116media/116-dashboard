@@ -44,7 +44,7 @@ interface IArticleInfoFormProps {
  * @component
  *
  * @description
- * Renders category, title, slug, optional customer, and optional order item
+ * Renders category, title, optional customer, and optional order item
  * fields. Category and customer options are loaded from the Redux store.
  * This is the first step of the two-step article creation flow.
  *
