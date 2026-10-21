@@ -14,7 +14,6 @@ import { ShortsNotification } from "@/modules/shorts/presentation/utils/notifica
 import type { Failure } from "@/shared/domain/failures/failure";
 import { useAppDispatch, useAppSelector } from "@/shared/presentation/store/store";
 import { showNotification } from "@/shared/presentation/utils/notification/notification.utils";
-import { generateSlug } from "@/shared/presentation/utils/slug/slug.utils";
 
 const { useForm } = Form;
 
@@ -65,7 +64,6 @@ export const useCreateShort = (onSuccess?: () => void): IUseCreateShort => {
         const created = await dispatch(
             createShortAction({
                 title: values.title,
-                slug: generateSlug(values.title, { unique: true }),
                 videoId: values.videoId
             })
         );
