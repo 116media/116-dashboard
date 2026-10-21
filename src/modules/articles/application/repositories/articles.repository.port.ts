@@ -43,7 +43,7 @@ export interface IArticlesRepositoryPort {
     /**
      * Creates a new article draft.
      *
-     * @param data - Category, title, slug, and optional B2B fields
+     * @param data - Category, title, and optional B2B fields
      * @returns The created article entity
      */
     createArticle(data: ICreateArticleCredentials): Promise<Result<IArticleEntity>>;
