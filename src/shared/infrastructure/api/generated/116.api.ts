@@ -259,7 +259,6 @@ export interface AdminCreateArticleRequest {
   /** @format uuid */
   categoryId: string;
   title: string;
-  slug: string;
   /** @format uuid */
   customerId?: string | null;
   /** @format uuid */
@@ -272,7 +271,6 @@ export interface AdminCreateArticleResponse {
 
 export interface AdminCreateCategoryRequest {
   name: string;
-  slug: string;
   description: string;
   isFree: boolean;
   isGossip: boolean;
@@ -379,7 +377,6 @@ export interface AdminCreateRoleResponse {
 
 export interface AdminCreateShortVideoRequest {
   title: string;
-  slug: string;
   /** @format uuid */
   videoId?: string | null;
 }
@@ -390,7 +387,6 @@ export interface AdminCreateShortVideoResponse {
 
 export interface AdminCreateTagRequest {
   name: string;
-  slug: string;
 }
 
 export interface AdminCreateTagResponse {
@@ -401,7 +397,6 @@ export interface AdminCreateVideoRequest {
   /** @format uuid */
   categoryId: string;
   title: string;
-  slug: string;
   /** @format uuid */
   customerId?: string | null;
   /** @format uuid */
@@ -848,7 +843,6 @@ export interface AdminUpdateArticleRequest {
   /** @format uuid */
   categoryId: string;
   title: string;
-  slug: string;
   headline: string;
   body: string;
   /** @format uuid */
@@ -896,7 +890,6 @@ export interface AdminUpdateCategoryPricingResponse {
 
 export interface AdminUpdateCategoryRequest {
   name: string;
-  slug: string;
   description: string;
   isGossip: boolean;
   isExclusive: boolean;
@@ -1015,7 +1008,6 @@ export interface AdminUpdateShortVideoResponse {
 
 export interface AdminUpdateTagRequest {
   name: string;
-  slug: string;
 }
 
 export interface AdminUpdateTagResponse {
@@ -1026,7 +1018,6 @@ export interface AdminUpdateVideoRequest {
   /** @format uuid */
   categoryId: string;
   title: string;
-  slug: string;
   description: string;
   /** @format uuid */
   customerId?: string | null;
