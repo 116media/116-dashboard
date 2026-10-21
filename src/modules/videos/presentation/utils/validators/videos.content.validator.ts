@@ -39,21 +39,6 @@ export const VideosContentValidator = {
     ],
 
     /**
-     * Validates video slug field.
-     *
-     * @param {string} label - Display name for error messages
-     * @returns {Rule[]} Array of validation rules
-     *
-     * @remarks
-     * - Required field
-     * - Must not exceed 250 characters
-     */
-    slug: (label: string): Rule[] => [
-        ValidatorUtils.required(label),
-        ValidatorUtils.max(label, 250)
-    ],
-
-    /**
      * Validates video description field.
      *
      * @param {string} label - Display name for error messages
