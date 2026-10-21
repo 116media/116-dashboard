@@ -11,7 +11,6 @@ import { TagsNotification } from "@/modules/lookup/presentation/utils/notificati
 import type { Failure } from "@/shared/domain/failures/failure";
 import { useAppDispatch, useAppSelector } from "@/shared/presentation/store/store";
 import { showNotification } from "@/shared/presentation/utils/notification/notification.utils";
-import { generateSlug } from "@/shared/presentation/utils/slug/slug.utils";
 
 const { useForm } = Form;
 
@@ -34,9 +33,8 @@ interface IUseUpdateTag {
  *
  * @description
  * Manages form state, pre-population from initial values,
- * submission, and success feedback for updating a tag.
- * Auto-generates the slug from the name using `generateSlug`
- * with a unique suffix before dispatching the update action.
+ * submission, and success feedback for updating a tag. The slug is
+ * assigned by the backend at creation and never changes.
  *
  * @param tag - The tag to edit (used for pre-population and ID)
  * @returns Form instance, loading/error state, success message, and submit handler
@@ -59,11 +57,7 @@ export const useUpdateTag = (tag: ITagEntity | null, onSuccess?: () => void): IU
     const onSubmit = async (values: IUpdateTagCredentials): Promise<void> => {
         if (!tag) return;
 
-        const slug = generateSlug(values.name, { unique: true });
-
-        const result = await dispatch(
-            updateTagAction({ id: tag.id, data: { name: values.name, slug } })
-        );
+        const result = await dispatch(updateTagAction({ id: tag.id, data: { name: values.name } }));
 
         if (updateTagAction.fulfilled.match(result)) {
             setSuccess(TagsNotification.updateSuccess.description);
