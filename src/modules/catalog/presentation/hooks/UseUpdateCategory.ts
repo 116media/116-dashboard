@@ -12,7 +12,6 @@ import { CategoriesNotification } from "@/modules/catalog/presentation/utils/not
 import type { Failure } from "@/shared/domain/failures/failure";
 import { useAppDispatch, useAppSelector } from "@/shared/presentation/store/store";
 import { showNotification } from "@/shared/presentation/utils/notification/notification.utils";
-import { generateSlug } from "@/shared/presentation/utils/slug/slug.utils";
 
 const { useForm } = Form;
 
@@ -70,7 +69,6 @@ export const useUpdateCategory = (
                 id: category.id,
                 data: {
                     name: values.name,
-                    slug: generateSlug(values.name),
                     description: values.description,
                     isGossip: values.isGossip ?? false,
                     isExclusive: values.isExclusive ?? false
