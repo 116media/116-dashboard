@@ -1,5 +1,5 @@
 import { Table } from "antd";
-import { type FC, useEffect } from "react";
+import { type FC, Fragment, useEffect } from "react";
 import ArticleDetailsForm from "@/modules/articles/presentation/components/forms/ArticleDetailsForm";
 import { articlesTableColumns } from "@/modules/articles/presentation/components/tables/ArticlesTable/columns";
 import ArticleCreateWizard from "@/modules/articles/presentation/components/ui/ArticleCreateWizard";
@@ -58,7 +58,7 @@ const ArticlesListContainer: FC = () => {
     );
 
     return (
-        <>
+        <Fragment>
             <ErrorAlert banner showIcon closable error={list.error} onClose={list.reload} />
 
             <PageHeader
@@ -215,7 +215,7 @@ const ArticlesListContainer: FC = () => {
                     list.reload();
                 }}
             />
-        </>
+        </Fragment>
     );
 };
 

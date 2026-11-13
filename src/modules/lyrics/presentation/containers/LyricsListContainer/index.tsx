@@ -1,6 +1,6 @@
 import { Table } from "antd";
 import type { FC } from "react";
-import { useEffect } from "react";
+import { Fragment, useEffect } from "react";
 import { useAuthorization } from "@/modules/auth/presentation/hooks/UseAuthorization";
 import LyricsForm from "@/modules/lyrics/presentation/components/forms/LyricsForm";
 import { lyricsTableColumns } from "@/modules/lyrics/presentation/components/tables/LyricsTable/columns";
@@ -50,7 +50,7 @@ const LyricsListContainer: FC = () => {
     );
 
     return (
-        <>
+        <Fragment>
             <ErrorAlert banner showIcon closable error={list.error} onClose={list.reload} />
 
             <PageHeader
@@ -179,7 +179,7 @@ const LyricsListContainer: FC = () => {
                 onCancel={() => modals.setActionOpen(false)}
                 onAfterClose={actions.resetActionError}
             />
-        </>
+        </Fragment>
     );
 };
 

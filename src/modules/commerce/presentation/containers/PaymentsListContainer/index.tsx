@@ -1,5 +1,5 @@
 import { Button, Flex, Select, Table } from "antd";
-import type { FC } from "react";
+import { type FC, Fragment } from "react";
 import { useNavigate } from "react-router";
 import type { IPaymentSummaryEntity } from "@/modules/commerce/domain/entities/IPaymentSummaryEntity";
 import { paymentsTableColumns } from "@/modules/commerce/presentation/components/tables/PaymentsTable/columns";
@@ -43,7 +43,7 @@ const PaymentsListContainer: FC = () => {
     const { columns: tableColumns } = useResizableColumns(paymentsTableColumns(handleView));
 
     return (
-        <>
+        <Fragment>
             <ErrorAlert banner showIcon closable error={list.error} onClose={list.reload} />
 
             <PageHeader
@@ -97,7 +97,7 @@ const PaymentsListContainer: FC = () => {
                     onChange: list.onPageChange
                 }}
             />
-        </>
+        </Fragment>
     );
 };
 

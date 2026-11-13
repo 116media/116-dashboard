@@ -1,5 +1,5 @@
 import { Table } from "antd";
-import { type FC, useEffect } from "react";
+import { type FC, Fragment, useEffect } from "react";
 import { useAuthorization } from "@/modules/auth/presentation/hooks/UseAuthorization";
 import CategoryForm from "@/modules/catalog/presentation/components/forms/CategoryForm";
 import { categoriesTableColumns } from "@/modules/catalog/presentation/components/tables/CategoriesTable/columns";
@@ -52,7 +52,7 @@ const CategoriesListContainer: FC = () => {
     );
 
     return (
-        <>
+        <Fragment>
             <ErrorAlert banner showIcon closable error={list.error} onClose={list.reload} />
 
             <PageHeader
@@ -183,7 +183,7 @@ const CategoriesListContainer: FC = () => {
                 onClose={() => modals.setPricingOpen(false)}
                 onSuccess={modals.refreshSelectedEntity}
             />
-        </>
+        </Fragment>
     );
 };
 

@@ -1,5 +1,5 @@
 import { Button, Flex } from "antd";
-import type { FC } from "react";
+import { type FC, Fragment } from "react";
 import type { IPaymentEntity } from "@/modules/commerce/domain/entities/IPaymentEntity";
 import { IconFileTextOutlined } from "@/shared/presentation/ui/Icons";
 import styles from "../PaymentSection/index.module.scss";
@@ -46,7 +46,7 @@ const PaymentActions: FC<IPaymentActionsProps> = ({
     const isPending = payment.status === "Pending";
 
     return (
-        <>
+        <Fragment>
             {payment.receiptUrl && (
                 <Flex gap={8} align="flex-end">
                     <Button
@@ -66,18 +66,18 @@ const PaymentActions: FC<IPaymentActionsProps> = ({
                         <Button onClick={onAttachProof}>Attacher une preuve</Button>
                     )}
                     {payment.paymentProof && (
-                        <>
+                        <Fragment>
                             <Button type="primary" onClick={onVerify}>
                                 Vérifier le paiement
                             </Button>
                             <Button danger onClick={onReject}>
                                 Rejeter
                             </Button>
-                        </>
+                        </Fragment>
                     )}
                 </Flex>
             )}
-        </>
+        </Fragment>
     );
 };
 

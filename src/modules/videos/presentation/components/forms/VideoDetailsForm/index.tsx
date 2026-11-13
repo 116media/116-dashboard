@@ -1,7 +1,7 @@
 import type { FormInstance } from "antd";
 import { Form, Input, Select, Tag } from "antd";
 import type { FC } from "react";
-import { useMemo } from "react";
+import { Fragment, useMemo } from "react";
 import type { ICategoryEntity } from "@/modules/catalog/domain/entities/ICategoryEntity";
 import type { ICustomerEntity } from "@/modules/catalog/domain/entities/ICustomerEntity";
 import type { IUsePaidOrderItems } from "@/modules/commerce/presentation/hooks/UsePaidOrderItems";
@@ -148,7 +148,7 @@ const VideoDetailsForm: FC<IVideoDetailsFormProps> = ({ form, error, orderItems,
                     );
                     const locked = selectedOption !== undefined;
                     return (
-                        <>
+                        <Fragment>
                             {selectedOption?.isBonus && (
                                 <Item>
                                     <Tag color="purple">Commande bonus</Tag>
@@ -162,7 +162,7 @@ const VideoDetailsForm: FC<IVideoDetailsFormProps> = ({ form, error, orderItems,
                                     description="Promouvoir cette vidéo sur les réseaux sociaux."
                                 />
                             </Item>
-                        </>
+                        </Fragment>
                     );
                 }}
             </Item>

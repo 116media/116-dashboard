@@ -1,7 +1,7 @@
 import type { FormInstance } from "antd";
 import { Form, Input, Select, Tag } from "antd";
 import type { FC } from "react";
-import { useMemo } from "react";
+import { Fragment, useMemo } from "react";
 import type { IUpdateArticleCredentials } from "@/modules/articles/presentation/model/IUpdateArticleCredentials";
 import { ArticlesContentValidator } from "@/modules/articles/presentation/utils/validators/articles.content.validator";
 import type { ICategoryEntity } from "@/modules/catalog/domain/entities/ICategoryEntity";
@@ -170,7 +170,7 @@ const ArticleDetailsForm: FC<IArticleDetailsFormProps> = ({
                     );
                     const locked = selectedOption !== undefined;
                     return (
-                        <>
+                        <Fragment>
                             {selectedOption?.isBonus && (
                                 <Item>
                                     <Tag color="purple">Commande bonus</Tag>
@@ -184,7 +184,7 @@ const ArticleDetailsForm: FC<IArticleDetailsFormProps> = ({
                                     description="Promouvoir cet article sur les réseaux sociaux."
                                 />
                             </Item>
-                        </>
+                        </Fragment>
                     );
                 }}
             </Item>

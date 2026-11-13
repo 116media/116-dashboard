@@ -1,5 +1,5 @@
 import { Flex, Image, Skeleton, Typography } from "antd";
-import { type FC, type ReactNode, useEffect, useState } from "react";
+import { type FC, Fragment, type ReactNode, useEffect, useState } from "react";
 import { IconFilePdfOutlined, IconPlaySquareOutlined } from "@/shared/presentation/ui/Icons";
 import VideoPlayer from "@/shared/presentation/ui/VideoPlayer";
 import { isImageUrl } from "../utils";
@@ -52,7 +52,7 @@ const FilePreviewMedia: FC<IFilePreviewMediaProps> = ({
 
     if (isVideo) {
         return (
-            <>
+            <Fragment>
                 {!videoReady && (
                     <Skeleton.Node active className={styles.filePreviewMedia__skeleton}>
                         <IconPlaySquareOutlined className={styles.filePreviewMedia__skeletonIcon} />
@@ -61,13 +61,13 @@ const FilePreviewMedia: FC<IFilePreviewMediaProps> = ({
                 <div style={videoReady ? undefined : { display: "none" }}>
                     <VideoPlayer src={url} maxHeight={400} onReady={() => setVideoReady(true)} />
                 </div>
-            </>
+            </Fragment>
         );
     }
 
     if (isImage || isImageUrl(url)) {
         return (
-            <>
+            <Fragment>
                 {!imageLoaded && (
                     <Skeleton.Image active className={styles.filePreviewMedia__skeleton} />
                 )}
@@ -78,7 +78,7 @@ const FilePreviewMedia: FC<IFilePreviewMediaProps> = ({
                     style={imageLoaded ? undefined : { display: "none" }}
                     onLoad={() => setImageLoaded(true)}
                 />
-            </>
+            </Fragment>
         );
     }
 

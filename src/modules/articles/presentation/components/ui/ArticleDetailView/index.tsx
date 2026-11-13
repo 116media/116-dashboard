@@ -1,5 +1,5 @@
 import { Button, Col, Flex, Row } from "antd";
-import type { FC } from "react";
+import { type FC, Fragment } from "react";
 import { useNavigate } from "react-router";
 import type { IArticleEntity } from "@/modules/articles/domain/entities/IArticleEntity";
 import ArticleMetaSidebar from "@/modules/articles/presentation/components/ui/ArticleMetaSidebar";
@@ -27,7 +27,7 @@ const ArticleDetailView: FC<IArticleDetailViewProps> = ({ article }) => {
     const navigate = useNavigate();
 
     return (
-        <>
+        <Fragment>
             <Flex align="center" className={styles.articleDetail__back}>
                 <Button
                     type="link"
@@ -47,7 +47,7 @@ const ArticleDetailView: FC<IArticleDetailViewProps> = ({ article }) => {
                     <ArticleMetaSidebar article={article} />
                 </Col>
             </Row>
-        </>
+        </Fragment>
     );
 };
 

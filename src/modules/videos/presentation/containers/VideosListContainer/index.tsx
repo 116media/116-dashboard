@@ -1,5 +1,5 @@
 import { Table } from "antd";
-import { type FC, useEffect } from "react";
+import { type FC, Fragment, useEffect } from "react";
 import { useAuthorization } from "@/modules/auth/presentation/hooks/UseAuthorization";
 import { getAllCategoriesAction } from "@/modules/catalog/presentation/store/getallcategories.action";
 import { getAllCustomersAction } from "@/modules/catalog/presentation/store/getallcustomers.action";
@@ -90,7 +90,7 @@ const VideosListContainer: FC = () => {
     );
 
     return (
-        <>
+        <Fragment>
             <ErrorAlert banner showIcon closable error={list.error} onClose={list.reload} />
 
             <PageHeader
@@ -349,7 +349,7 @@ const VideosListContainer: FC = () => {
                     />
                 </CreateEditModal>
             )}
-        </>
+        </Fragment>
     );
 };
 
