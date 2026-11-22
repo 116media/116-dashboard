@@ -12,13 +12,13 @@ export const resetUpdateTagAction = () =>
  * Async thunk to update an existing tag.
  *
  * @description
- * Sends the tag ID, updated name, and auto-generated slug to the
+ * Sends the tag ID and updated name to the
  * backend via `updateTagUseCase`. Returns 409 if the new name
  * conflicts with an existing tag.
  */
 export const updateTagAction = createAsyncThunk<
     ITagEntity,
-    { id: string; data: { name: string; slug: string } },
+    { id: string; data: { name: string } },
     { rejectValue: Failure }
 >(ActionType.UpdateTag, async (params, { rejectWithValue }) => {
     const result = await container.cradle.updateTagUseCase.execute(params);

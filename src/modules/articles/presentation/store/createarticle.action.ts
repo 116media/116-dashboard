@@ -12,7 +12,7 @@ export const resetCreateArticleAction = () =>
  * Async thunk to create a new article.
  *
  * @description
- * Dispatches `createArticleUseCase` with category, title, slug, and optional customer data.
+ * Dispatches `createArticleUseCase` with category, title, and optional customer data.
  * On success, stores the created article in `articles.createArticle.data`.
  * On failure, stores the backend `Failure` in `articles.createArticle.error`.
  */
@@ -21,7 +21,6 @@ export const createArticleAction = createAsyncThunk<
     {
         categoryId: string;
         title: string;
-        slug: string;
         customerId?: string;
         orderItemId?: string;
     },

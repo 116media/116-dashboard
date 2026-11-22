@@ -3,7 +3,6 @@
  *
  * @interface ICreateShortCredentials
  * @property {string} title - Short video title (required)
- * @property {string} slug - URL-friendly slug (required)
  * @property {string} [videoId] - Optional parent full video identifier (creates a teaser)
  *
  * @description
@@ -12,6 +11,5 @@
  */
 export interface ICreateShortCredentials {
     title: string;
-    slug: string;
     videoId?: string;
 }

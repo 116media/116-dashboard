@@ -23,7 +23,6 @@ export const updateVideoAction = createAsyncThunk<
         data: {
             categoryId: string;
             title: string;
-            slug: string;
             description: string;
             customerId?: string | null;
             orderItemId?: string | null;

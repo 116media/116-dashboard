@@ -21,7 +21,6 @@ export const updateCategoryAction = createAsyncThunk<
         id: string;
         data: {
             name: string;
-            slug: string;
             description: string;
             isGossip: boolean;
             isExclusive: boolean;

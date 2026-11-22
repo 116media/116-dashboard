@@ -17,7 +17,7 @@ interface ICreateShortUseCase extends IResultUseCase<ICreateShortCredentials, IS
  * @implements {ICreateShortUseCase}
  *
  * @description
- * Creates a new short video with the specified title, slug, video file,
+ * Creates a new short video with the specified title, video file,
  * and optional videoId via the shorts repository.
  */
 export class CreateShortUseCase implements ICreateShortUseCase {

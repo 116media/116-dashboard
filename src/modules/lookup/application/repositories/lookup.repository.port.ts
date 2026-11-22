@@ -165,13 +165,12 @@ export interface ILookupRepositoryPort {
      *
      * @param {object} data - Tag creation payload
      * @param {string} data.name - Tag name
-     * @param {string} data.slug - URL-friendly identifier
      * @returns {Promise<Result<ITagEntity>>} `ok(ITagEntity)` on success, `err(Failure)` on failure
      */
     createTag(data: ICreateTagCredentials): Promise<Result<ITagEntity>>;
 
     /**
-     * Updates an existing tag's name and slug.
+     * Updates an existing tag's name.
      *
      * @param {string} id - Tag UUID
      * @param {object} data - Update payload

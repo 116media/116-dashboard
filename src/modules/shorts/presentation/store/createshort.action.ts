@@ -12,7 +12,7 @@ export const resetCreateShortAction = () =>
  * Async thunk to create a new short video draft.
  *
  * @description
- * Dispatches `createShortUseCase` with title, slug, and optional videoId. The video file is
+ * Dispatches `createShortUseCase` with title and optional videoId. The video file is
  * uploaded separately afterwards via `uploadShortVideoAction`.
  * On success, stores the created short video in `shorts.createShort.data`.
  * On failure, stores the backend `Failure` in `shorts.createShort.error`.
@@ -21,7 +21,6 @@ export const createShortAction = createAsyncThunk<
     IShortVideoEntity,
     {
         title: string;
-        slug: string;
         videoId?: string;
     },
     { rejectValue: Failure }

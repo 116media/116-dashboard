@@ -29,7 +29,7 @@ export class CreateTagUseCase implements ICreateTagUseCase {
     /**
      * Executes the create tag use case.
      *
-     * @param {{ name: string; slug: string }} data - Tag name
+     * @param {{ name: string }} data - Tag name
      * @returns {Promise<Result<ITagEntity>>} `ok(ITagEntity)` on success, `err(Failure)` on failure
      */
     async execute(data: ICreateTagCredentials): Promise<Result<ITagEntity>> {

@@ -38,7 +38,6 @@ export class CreateCategoryUseCase implements ICreateCategoryUseCase {
     async execute(params: ICreateCategoryCredentials): Promise<Result<ICategoryEntity>> {
         return this.catalogRepository.createCategory(params.contentTypeId, {
             name: params.name,
-            slug: params.slug,
             description: params.description,
             isFree: params.isFree,
             isGossip: params.isGossip ?? false,

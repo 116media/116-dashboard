@@ -12,7 +12,7 @@ export const resetCreateVideoAction = () =>
  * Async thunk to create a new video.
  *
  * @description
- * Dispatches `createVideoUseCase` with category, title, slug, description,
+ * Dispatches `createVideoUseCase` with category, title, description,
  * and optional customer/order/schedule data.
  * On success, stores the created video in `videos.createVideo.data`.
  * On failure, stores the backend `Failure` in `videos.createVideo.error`.
@@ -22,7 +22,6 @@ export const createVideoAction = createAsyncThunk<
     {
         categoryId: string;
         title: string;
-        slug: string;
         description: string;
         customerId?: string;
         orderItemId?: string;

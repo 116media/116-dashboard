@@ -33,9 +33,8 @@ interface ITagFormProps {
  * @component
  *
  * @description
- * Renders a name field with client-side validation. The slug
- * is auto-generated from the name via `generateSlug` in the
- * hook — the user never sees or edits it. Pre-populates from
+ * Renders a name field with client-side validation. The backend derives the
+ * slug from the name, so the form never carries one. Pre-populates from
  * `initialValues` when in EDIT mode.
  *
  * @param {ITagFormProps} props - Component props

@@ -51,7 +51,7 @@ export interface IVideosRepositoryPort {
     /**
      * Creates a new video draft.
      *
-     * @param data - Category, title, slug, description, and optional B2B/scheduling fields
+     * @param data - Category, title, description, and optional B2B/scheduling fields
      * @returns The created video entity
      */
     createVideo(data: ICreateVideoCredentials): Promise<Result<IVideoEntity>>;

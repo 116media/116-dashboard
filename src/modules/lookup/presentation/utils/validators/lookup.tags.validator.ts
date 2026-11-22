@@ -22,28 +22,5 @@ export const TagsValidator = {
      * - Required field
      * - Must not exceed 50 characters
      */
-    name: (label: string): Rule[] => [
-        ValidatorUtils.required(label),
-        ValidatorUtils.max(label, 50)
-    ],
-
-    /**
-     * Validates tag slug field.
-     *
-     * @param {string} label - Display name for error messages
-     * @returns {Rule[]} Array of validation rules
-     *
-     * @remarks
-     * - Required field
-     * - Must not exceed 50 characters
-     * - Must be lowercase with hyphens only
-     */
-    slug: (label: string): Rule[] => [
-        ValidatorUtils.required(label),
-        ValidatorUtils.max(label, 50),
-        {
-            pattern: /^[a-z0-9]+(-[a-z0-9]+)*$/,
-            message: `${label} doit être en minuscules avec des tirets`
-        }
-    ]
+    name: (label: string): Rule[] => [ValidatorUtils.required(label), ValidatorUtils.max(label, 50)]
 } as const;

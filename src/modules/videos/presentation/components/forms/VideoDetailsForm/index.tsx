@@ -38,7 +38,7 @@ interface IVideoDetailsFormProps {
  * @component
  *
  * @description
- * Renders category, title, slug, description, and social boost fields.
+ * Renders category, title, description, and social boost fields.
  * Category options are loaded from the catalog store.
  *
  * @param {IVideoDetailsFormProps} props - Component props

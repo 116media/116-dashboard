@@ -36,7 +36,7 @@ export interface IShortsRepositoryPort {
     /**
      * Creates a new short video draft (metadata only). The video file is uploaded separately.
      *
-     * @param data - Title, slug, and optional parent videoId
+     * @param data - Title and optional parent videoId
      * @returns The created short video entity
      */
     createShort(data: ICreateShortCredentials): Promise<Result<IShortVideoEntity>>;

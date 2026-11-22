@@ -10,7 +10,6 @@ import { ArticlesNotification } from "@/modules/articles/presentation/utils/noti
 import type { Failure } from "@/shared/domain/failures/failure";
 import { useAppDispatch, useAppSelector } from "@/shared/presentation/store/store";
 import { showNotification } from "@/shared/presentation/utils/notification/notification.utils";
-import { generateSlug } from "@/shared/presentation/utils/slug/slug.utils";
 
 const { useForm } = Form;
 
@@ -51,7 +50,6 @@ export const useCreateArticle = (onSuccess?: () => void): IUseCreateArticle => {
             createArticleAction({
                 categoryId: values.categoryId,
                 title: values.title,
-                slug: generateSlug(values.title, { unique: true }),
                 customerId: values.customerId,
                 orderItemId: values.orderItemId
             })

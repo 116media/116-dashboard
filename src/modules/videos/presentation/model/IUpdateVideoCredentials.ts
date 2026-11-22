@@ -4,7 +4,6 @@
  * @interface IUpdateVideoCredentials
  * @property {string} categoryId - Category the video belongs to (required)
  * @property {string} title - Video title (required)
- * @property {string} slug - URL-friendly slug (required)
  * @property {string} description - Video description (required)
  * @property {string | null} [customerId] - Optional customer who owns the video
  * @property {string | null} [orderItemId] - Optional order item linked to the video
@@ -15,7 +14,6 @@
 export interface IUpdateVideoCredentials {
     categoryId: string;
     title: string;
-    slug: string;
     description: string;
     customerId?: string | null;
     orderItemId?: string | null;

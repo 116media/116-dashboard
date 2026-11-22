@@ -56,7 +56,6 @@ export class ShortsRepositoryImpl implements IShortsRepositoryPort {
         try {
             const response = await apiClient.api.createShortVideo({
                 title: data.title,
-                slug: data.slug,
                 videoId: data.videoId
             });
             return ok(ShortsMapper.shortFromDto(response.data.shortVideo));
